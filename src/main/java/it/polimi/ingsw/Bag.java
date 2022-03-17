@@ -19,7 +19,10 @@ public class Bag {
         for (Color color : students.keySet()) {
             count += students.get(color);
 
-            if(color_index - count <= 0) return color;
+            if(color_index - count <= 0) {
+                students.put(color, students.get(color) - 1);
+                return color;
+            }
         }
 
         return null;
