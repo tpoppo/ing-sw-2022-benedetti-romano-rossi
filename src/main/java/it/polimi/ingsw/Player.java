@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Player {
-    final private Optional<Assistant> current_assistant;
+    private Optional<Assistant> current_assistant;
     final private int coins;
     final private SchoolBoard schoolBoard; //TODO
     final private ArrayList<Assistant> playerHand; //TODO
@@ -19,4 +19,21 @@ public class Player {
     public Professors getProfessors(){
         return null;
     }
+
+    public SchoolBoard getSchoolBoard() {
+        return schoolBoard;
+    }
+
+    public Optional<Assistant> getCurrentAssistant() {
+        return current_assistant;
+    }
+
+    public void setCurrentAssistant(Optional<Assistant> current_assistant) {
+        this.current_assistant = current_assistant;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
+
 }
