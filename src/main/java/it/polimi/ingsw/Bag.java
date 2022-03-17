@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.exceptions.EmptyBagException;
+
 import java.util.Random;
 
 public class Bag {
@@ -11,8 +13,10 @@ public class Bag {
         this.students = students;
     }
 
-    public Color drawStudent(){
+    public Color drawStudent() throws EmptyBagException {
         int size = students.values().stream().reduce(0, Integer::sum);
+        if(size == 0) throw new EmptyBagException();
+
         int color_index = rng.nextInt(size);
 
         int count = 0;
@@ -25,6 +29,7 @@ public class Bag {
             }
         }
 
+        // This line should never be reached, but the compiler requests its presence
         return null;
     }
 }

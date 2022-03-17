@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.exceptions.EmptyBagException;
+
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -33,7 +35,7 @@ public abstract class Game {
 
     public void nextTurn(){}
 
-    public void fillClouds(){
+    public void fillClouds() throws EmptyBagException {
         for (Students cloud : clouds) {
             for (int i=0; i < CLOUD_SPACE; i++) {
                 Color drawnColor = bag.drawStudent();
