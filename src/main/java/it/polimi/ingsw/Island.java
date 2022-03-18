@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import java.util.List;
 
 public class Island {
-    final private int num_towers;
+    private int num_towers;
     private Player owner;
     private boolean mother_nature;
     private Students students;
@@ -16,7 +16,13 @@ public class Island {
     }
 
     public void merge(Island island){
-
+        num_towers += island.num_towers;
+        mother_nature |= island.mother_nature;
+        for(Students.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
+            Color key = entry.getKey();
+            int value = entry.getValue();
+            students.put(key, students.get(key) + value);
+        }
     }
 
     public void merge(List<Island> islands){
