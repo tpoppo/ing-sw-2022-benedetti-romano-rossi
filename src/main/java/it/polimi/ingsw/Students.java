@@ -1,8 +1,10 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.interfaces.Movable;
+
 import java.util.HashMap;
 
-public class Students extends HashMap<Color, Integer> {
+public class Students extends HashMap<Color, Integer> implements Movable {
     public Students(int greens, int blues, int yellows, int pinks, int reds){
         this.put(Color.GREEN, greens);
         this.put(Color.BLUE, blues);
@@ -17,5 +19,10 @@ public class Students extends HashMap<Color, Integer> {
         this.put(Color.YELLOW, 0);
         this.put(Color.PINK, 0);
         this.put(Color.RED, 0);
+    }
+
+    @Override
+    public Object moveTo(Object to, Color color) {
+        return null;
     }
 }

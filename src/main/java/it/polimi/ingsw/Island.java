@@ -15,6 +15,13 @@ public class Island {
         this.students = students;
     }
 
+    public Island(){
+        num_towers = 0;
+        owner = null;
+        mother_nature = false;
+        students = new Students();
+    }
+
     public void merge(Island island){
         num_towers += island.num_towers;
         mother_nature |= island.mother_nature;

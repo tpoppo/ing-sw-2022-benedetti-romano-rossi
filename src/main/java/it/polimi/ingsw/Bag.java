@@ -2,19 +2,23 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.exceptions.EmptyBagException;
 
+import java.util.Map;
 import java.util.Random;
 
 public class Bag {
-    final static int MAX_STUDENTS = 126;
+    final static int MAX_STUDENTS = 130;
     final private Students students;
     private Random rng;
 
     public Bag(Students students) {
         this.students = students;
     }
+    public Bag(){
+        students = new Students(24, 24, 24, 24, 24);
+    }
 
     public Color drawStudent() throws EmptyBagException {
-        int size = students.values().stream().reduce(0, Integer::sum);
+        int size = capacity();
         if(size == 0) throw new EmptyBagException();
 
         int color_index = rng.nextInt(size);
@@ -31,5 +35,14 @@ public class Bag {
 
         // This line should never be reached, but the compiler requests its presence
         return null;
+    }
+
+    // Returns the number of students in the bag, no matter the color
+    public int capacity(){
+        return students.values().stream().reduce(0, Integer::sum);
+    }
+
+    public Students getStudents() {
+        return students;
     }
 }
