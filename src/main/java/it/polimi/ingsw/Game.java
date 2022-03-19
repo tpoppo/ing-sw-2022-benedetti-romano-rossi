@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.exceptions.EmptyBagException;
-import it.polimi.ingsw.exceptions.EmptyEntranceException;
+import it.polimi.ingsw.exceptions.EmptyMovableException;
 import it.polimi.ingsw.exceptions.MoveMotherNatureException;
 
 import java.io.*;
@@ -21,12 +21,12 @@ public class Game {
     private Bag bag;
     final private ArrayList<Students> clouds;
     final private ArrayList<Player> players;
-    final private ArrayList<Character> characters;
+    // final private ArrayList<Character> characters;
     final private int num_players;
     private GameConfig gameConfig;
     private GameModifiers gameModifiers;
 
-    public Game(boolean expert_mode, Lobby lobby) throws FileNotFoundException, EmptyBagException {
+    public Game(boolean expert_mode, Lobby lobby) throws FileNotFoundException, EmptyBagException, EmptyMovableException {
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
 
@@ -89,7 +89,7 @@ public class Game {
 
         // 8: Each player takes the # of towers of its color
         for(Player player : players){
-            player.getSchoolBoard().setNum_towers(gameConfig.NUM_TOWERS);
+            player.getSchoolBoard().setNumTowers(gameConfig.NUM_TOWERS);
         }
 
         // 9: Each player takes a deck of the # of assistants
@@ -174,47 +174,58 @@ public class Game {
         first_player = play_order.peek();
     }
 
-    public void moveStudent(Color color, Island island) throws EmptyEntranceException {
+    public void moveStudent(Color color, Island island) throws EmptyMovableException {
         // remove a student from the entrance
-        SchoolBoard schoolboard = play_order.peek().getSchoolBoard();
-        Students students = schoolboard.getEntranceStudents();
-        int color_cnt = students.get(color) - 1;
-        if(color_cnt < 0){
-            throw new EmptyEntranceException();
-        }
-        students.put(color, color_cnt);
-        schoolboard.setEntranceStudents(students);
+        SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
+        Students entrance_students = schoolboard.getEntranceStudents();
+        Students island_students = island.getStudents();
+        entrance_students.moveTo(island_students, color);
 
-        // add a student to the given island
-        students = island.getStudents();
-        color_cnt = students.get(color) + 1;
-        students.put(color, color_cnt);
-        island.setStudents(students);
+        schoolboard.setEntranceStudents(entrance_students);
+        island.setStudents(island_students);
     }
 
-    public void moveStudent(Color color) throws EmptyEntranceException {
-        // remove a student from the entrance
-        SchoolBoard schoolboard = play_order.peek().getSchoolBoard();
-        Students students = schoolboard.getEntranceStudents();
-        int color_cnt = students.get(color) - 1;
-        if(color_cnt < 0){
-            throw new EmptyEntranceException();
-        }
-        students.put(color, color_cnt);
-        schoolboard.setEntranceStudents(students);
+    /*
+        It moves the student from the entrance to the dining room
+        It also moves the professor is needed
+     */
+    public void moveStudent(Color color) throws EmptyMovableException {
 
-        // add a student to the given island
-        students = schoolboard.getDiningStudents();
-        color_cnt = students.get(color) + 1;
-        students.put(color, color_cnt);
-        schoolboard.setDiningStudents(students);
+        // move the student from the entrance to the dining room
+        SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
+        Students entrance_students = schoolboard.getEntranceStudents();
+        Students dining_students = schoolboard.getDiningStudents();
+        entrance_students.moveTo(dining_students, color);
+
+        schoolboard.setEntranceStudents(entrance_students);
+        schoolboard.setDiningStudents(dining_students);
+
+        // check whether the professor has changed
+        for(Player player : players){
+            if(player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
+                Professors professorsFrom = player.getProfessors();
+                Professors professorsTo = getCurrentPlayer().getProfessors();
+                try {
+                    professorsFrom.moveTo(professorsTo, color);
+                } catch (EmptyMovableException e) {
+                    e.printStackTrace(); // It should be impossible
+                }
+                getCurrentPlayer().getSchoolBoard().setProfessors(professorsFrom);
+                player.getSchoolBoard().setProfessors(professorsTo);
+            }
+        }
+
     }
 
+    /*
+        It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
+        The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
+     */
     public void moveMotherNature(Island island) throws MoveMotherNatureException {
         int next_position = islands.indexOf(island);
         int current_position = findMotherNaturePosition();
         int distance = (next_position - current_position + islands.size()) % islands.size();
-        Player current_player = play_order.peek();
+        Player current_player = getCurrentPlayer();
         if(distance > current_player.getCurrentAssistant().get().getSteps()){
             throw new MoveMotherNatureException();
         }
@@ -224,6 +235,9 @@ public class Game {
 
     private Player conquerIsland(Island island){ return null; }
 
+    /*
+        It merges the islands if two consecutive islands are under the same players.
+     */
     private void mergeIslands(){
         int current_position = 0;
         while(current_position < islands.size() && islands.size() >= 2){
@@ -236,7 +250,9 @@ public class Game {
             }
         }
     }
-
+    /*
+        It moves students from the selected cloud to the player's entrance
+     */
     public void chooseCloud(Students cloud){
         Students students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
 
@@ -249,17 +265,58 @@ public class Game {
         cloud.clear();
     }
 
-    public boolean checkVictory(){ return false; }
+    /*
+        checkVictory returns true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table.
+     */
+    public boolean checkVictory(){
+        // last tower has been built
+        for(Player player : players){
+            if(player.getSchoolBoard().getNumTowers() == 0) return true;
+        }
+        // groups of islands <= 3
+        return islands.size() <= 3;
+    }
+    /*
+        It returns true if the bag is empty or if the hand of a player is empty.
+     */
+    public boolean checkEndGame(){
+        if(bag.capacity() == 0) return true; // empty bag
+        for(Player player : players){
+            if(player.getPlayerHand().isEmpty()) return true; // empty hand
+        }
+        return false;
+    }
 
+    /*
+       winner returns the winner of the game. It assumes that the game has ended.
+       The player who has built the most Towers on Islands wins the game. In case of a tie, the player who controls the most Professors wins the game.
+     */
+    public Player winner(){
+        ArrayList<Player> candidate_winner = new ArrayList<>(players);
+        // sort based on (1) the smallest NumTowers, and if they are equal based on (2) the highest number of professors.
+        candidate_winner.sort((a, b) -> {
+            if(a.getSchoolBoard().getNumTowers() == b.getSchoolBoard().getNumTowers()){
+                return Integer.compare(b.getProfessors().size(), a.getProfessors().size());
+            }
+            return Integer.compare(a.getSchoolBoard().getNumTowers(), b.getSchoolBoard().getNumTowers());
+        });
+        return candidate_winner.get(0);
+    }
+
+    /*
+        It returns the position of MotherNature in the islands arraylist.
+     */
     private int findMotherNaturePosition(){
         for(int i=0; i<islands.size(); i++) {
             if(islands.get(i).hasMotherNature()) return i;
         }
         return -1; // shouldn't happen
     }
-
+    /*
+        It returns the current player if it exists, otherwise it returns null.
+     */
     private Player getCurrentPlayer(){
-        if(play_order.isEmpty()) return null; //TODO Is it a reasonable result? Do we prefer to return first_player?
+        if(play_order.isEmpty()) return null;
         return play_order.peek();
     }
 }

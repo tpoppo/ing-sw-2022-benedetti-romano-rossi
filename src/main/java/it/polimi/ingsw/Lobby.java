@@ -16,7 +16,7 @@ public class Lobby {
     }
 
     public void addPlayer(Player player) throws FullLobbyException {
-        if(players.size() == max_players) throw new FullLobbyException("FullLobbyException: The lobby is full");
+        if(players.size() == max_players) throw new FullLobbyException();
         players.add(player);
     }
 

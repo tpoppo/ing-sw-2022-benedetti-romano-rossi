@@ -33,7 +33,7 @@ public class Player {
     }
 
     public Professors getProfessors(){
-        return null;
+        return getSchoolBoard().getProfessors();
     }
 
     public SchoolBoard getSchoolBoard() {

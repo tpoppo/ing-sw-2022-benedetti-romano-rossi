@@ -6,4 +6,39 @@ public class GameModifiers {
     private int buff_influence;
     private Optional<Color> inhibit_color;
     private boolean inhibit_towers;
+    private int professor_modifier; // reduce the number of student needed to get the control of the professor
+
+
+    public int getBuff_influence() {
+        return buff_influence;
+    }
+
+    public void setBuffInfluence(int buff_influence) {
+        this.buff_influence = buff_influence;
+    }
+
+    public Optional<Color> getInhibit_color() {
+        return inhibit_color;
+    }
+
+    public void setInhibitColor(Optional<Color> inhibit_color) {
+        this.inhibit_color = inhibit_color;
+    }
+
+    public boolean isInhibitTowers() {
+        return inhibit_towers;
+    }
+
+    public void setInhibitTowers(boolean inhibit_towers) {
+        this.inhibit_towers = inhibit_towers;
+    }
+
+    public int getProfessorModifier() {
+        return professor_modifier;
+    }
+
+    public void setProfessorModifier(int professor_modifier) {
+        this.professor_modifier = professor_modifier;
+    }
+
 }

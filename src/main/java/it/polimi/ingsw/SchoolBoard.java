@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 public class SchoolBoard {
     private int num_towers;
-    final private Professors professors;
+    private Professors professors;
     private Students dining_students;
     private Students entrance_students;
 
@@ -13,11 +13,11 @@ public class SchoolBoard {
         this.entrance_students = entrance_students;
     }
 
-    public int getNum_towers() {
+    public int getNumTowers() {
         return num_towers;
     }
 
-    public void setNum_towers(int num_towers) {
+    public void setNumTowers(int num_towers) {
         this.num_towers = num_towers;
     }
 
@@ -37,5 +37,8 @@ public class SchoolBoard {
         this.entrance_students = entrance_students;
     }
 
+    public Professors getProfessors() {return (Professors) professors.clone();}
+
+    public void setProfessors(Professors professors) {this.professors = professors;}
 
 }
