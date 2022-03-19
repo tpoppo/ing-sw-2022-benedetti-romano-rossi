@@ -1,7 +1,6 @@
 package it.polimi.ingsw;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.exceptions.EmptyEntranceException;
 import it.polimi.ingsw.exceptions.MoveMotherNatureException;
@@ -10,13 +9,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
 public class Game {
     final private boolean expert_mode;
-    final private Player first_player;
-    final private Queue<Player> play_order;
+    private Player first_player;
+    private Queue<Player> play_order;
     final private ArrayList<Island> islands;
     private Bag bag;
     final private ArrayList<Students> clouds;
@@ -124,11 +124,55 @@ public class Game {
         }
     }
 
-    public void beginPlanning(){}
+    // Computes the player_order for the planning phase based on the first_player
+    public void beginPlanning(){
+        int first_player_index = players.indexOf(first_player);
+
+        play_order = new LinkedList<Player>();
+
+        // Adding players to the queue starting from the first_player and the ones who follow him
+        for(int i=first_player_index; i<players.size(); i++)
+            play_order.add(players.get(i));
+
+        // Adding the players prior to first_player to the queue
+        for(int i=0; i<first_player_index; i++)
+            play_order.add(players.get(i));
+    }
 
     public void playAssistant(Assistant assistant){}
 
-    public void endPlanning(){}
+    public void endPlanning(){
+        ArrayList<Player> new_play_order = new ArrayList<Player>(players);
+
+        // The old play_order is copied to an array list so that we can use indexOf() later
+        ArrayList<Player> copy_play_order = new ArrayList<Player>(play_order);
+
+        // Computing the new player order
+        new_play_order.sort((o1, o2) -> {
+            int power1, power2;
+
+            // Not checking if the currentAssistant is set as it should've been chosen in the previous method
+            power1 = o1.getCurrentAssistant().get().getPower();
+            power2 = o2.getCurrentAssistant().get().getPower();
+
+            // Comparing elements first by the power of their assistant
+            int first_compare = Integer.compare(power1, power2);
+
+            // If the assistants powers' are different the result is returned
+            if(first_compare != 0)
+                return first_compare;
+
+            // If the assistants powers' are equal, the priority should be given to the one who played their assistant first
+            // (that is the first player among the two in the player order of the planning phase)
+            return Integer.compare(copy_play_order.indexOf(o1), copy_play_order.indexOf(o2));
+        });
+
+        // Copying the new play_order to the official queue
+        play_order = new LinkedList<Player>(new_play_order);
+
+        // Saving the first player of the new queue for the planning phase of the next turn
+        first_player = play_order.peek();
+    }
 
     public void moveStudent(Color color, Island island) throws EmptyEntranceException {
         // remove a student from the entrance
@@ -194,8 +238,8 @@ public class Game {
     }
 
     public void chooseCloud(Students cloud){
-
         Students students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
+
         for(Students.Entry<Color, Integer> entry : cloud.entrySet()) {
             Color key = entry.getKey();
             int value = entry.getValue();
@@ -206,7 +250,6 @@ public class Game {
     }
 
     public boolean checkVictory(){ return false; }
-
 
     private int findMotherNaturePosition(){
         for(int i=0; i<islands.size(); i++) {
@@ -219,5 +262,4 @@ public class Game {
         if(play_order.isEmpty()) return null; //TODO Is it a reasonable result? Do we prefer to return first_player?
         return play_order.peek();
     }
-
 }

@@ -44,8 +44,8 @@ public class Player {
         return current_assistant;
     }
 
-    public void setCurrentAssistant(Optional<Assistant> current_assistant) {
-        this.current_assistant = current_assistant;
+    public void setCurrentAssistant(Assistant current_assistant) {
+        this.current_assistant = Optional.ofNullable(current_assistant);
     }
 
     public int getCoins() {
