@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.exceptions.AssistantAlreadyPlayedException;
 import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.exceptions.EmptyMovableException;
 import it.polimi.ingsw.exceptions.MoveMotherNatureException;
@@ -8,10 +9,7 @@ import it.polimi.ingsw.exceptions.MoveMotherNatureException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
     final private boolean expert_mode;
@@ -112,8 +110,12 @@ public class Game {
         first_player = players.get(rng.nextInt(players.size()));
     }
 
-    public void nextTurn(){}
+    // Manages the progress of the play_order queue
+    public void nextTurn(){
+        play_order.poll();  // FIXME: is it better to use remove()?
+    }
 
+    // Places the # of students on each cloud
     public void fillClouds() throws EmptyBagException {
         for (Students cloud : clouds) {
             for (int i=0; i < gameConfig.CLOUD_SPACE; i++) {
@@ -125,6 +127,7 @@ public class Game {
     }
 
     // Computes the player_order for the planning phase based on the first_player
+    // Removes current_assistant from each player
     public void beginPlanning(){
         int first_player_index = players.indexOf(first_player);
 
@@ -137,10 +140,36 @@ public class Game {
         // Adding the players prior to first_player to the queue
         for(int i=0; i<first_player_index; i++)
             play_order.add(players.get(i));
+
+        // Removes the current_assistant from each player
+        for(Player player : players)
+            player.setCurrentAssistant(null);
     }
 
-    public void playAssistant(Assistant assistant){}
+    public void playAssistant(Assistant assistant) throws AssistantAlreadyPlayedException {
+        boolean assistant_already_played = false;
+        Player current_player = getCurrentPlayer();
+        assert current_player != null;  // FIXME: do we like this?
 
+        // checks if exists a player who've already played the chosen assistant
+        for(Player player : players){
+            if(player.getCurrentAssistant().isPresent() && player.getCurrentAssistant().get().equals(assistant))
+                assistant_already_played = true;
+        }
+
+        // if the assistant has already been played and the player has other assistant, the chosen assistant cannot be played
+        if(assistant_already_played && current_player.getPlayerHand().size() > 1)
+            throw new AssistantAlreadyPlayedException();
+
+        Objects.requireNonNull(getCurrentPlayer()).setCurrentAssistant(assistant);
+
+        // Removes the chosen assistant from the player_hand
+        ArrayList<Assistant> updated_player_hand = new ArrayList<>(getCurrentPlayer().getPlayerHand());
+        updated_player_hand.remove(assistant);
+        getCurrentPlayer().setPlayerHand(updated_player_hand);
+    }
+
+    // Computes the player_order for the action phase and sets the first_player for the new round
     public void endPlanning(){
         ArrayList<Player> new_play_order = new ArrayList<Player>(players);
 
@@ -152,6 +181,8 @@ public class Game {
             int power1, power2;
 
             // Not checking if the currentAssistant is set as it should've been chosen in the previous method
+            // FIXME: do we want to do the check and eventually throw an exception?
+            //  - (it shouldn't happen normally... could it be a problem if we contemplate disconnections?)
             power1 = o1.getCurrentAssistant().get().getPower();
             power2 = o2.getCurrentAssistant().get().getPower();
 
@@ -316,7 +347,7 @@ public class Game {
         It returns the current player if it exists, otherwise it returns null.
      */
     private Player getCurrentPlayer(){
-        if(play_order.isEmpty()) return null;
+        if(play_order.isEmpty()) return null;   // FIXME: ridondante?
         return play_order.peek();
     }
 }
