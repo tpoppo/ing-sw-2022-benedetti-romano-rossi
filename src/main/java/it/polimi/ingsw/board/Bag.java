@@ -1,8 +1,7 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.board;
 
 import it.polimi.ingsw.exceptions.EmptyBagException;
 
-import java.util.Map;
 import java.util.Random;
 
 public class Bag {

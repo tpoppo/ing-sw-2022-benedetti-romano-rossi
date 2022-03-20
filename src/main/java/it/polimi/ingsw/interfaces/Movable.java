@@ -1,6 +1,6 @@
 package it.polimi.ingsw.interfaces;
 
-import it.polimi.ingsw.Color;
+import it.polimi.ingsw.board.Color;
 import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 public interface Movable<T> {

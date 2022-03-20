@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.characters;
 
 public class Character {
     final private int cost;

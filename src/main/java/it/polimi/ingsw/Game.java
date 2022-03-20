@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.board.*;
 import it.polimi.ingsw.exceptions.AssistantAlreadyPlayedException;
 import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.exceptions.EmptyMovableException;
@@ -112,7 +113,7 @@ public class Game {
 
     // Manages the progress of the play_order queue
     public void nextTurn(){
-        play_order.poll();  // FIXME: is it better to use remove()?
+        play_order.remove();  // FIXME: is it better to use poll()?
     }
 
     // Places the # of students on each cloud
@@ -161,12 +162,12 @@ public class Game {
         if(assistant_already_played && current_player.getPlayerHand().size() > 1)
             throw new AssistantAlreadyPlayedException();
 
-        Objects.requireNonNull(getCurrentPlayer()).setCurrentAssistant(assistant);
+        current_player.setCurrentAssistant(assistant);
 
         // Removes the chosen assistant from the player_hand
-        ArrayList<Assistant> updated_player_hand = new ArrayList<>(getCurrentPlayer().getPlayerHand());
+        ArrayList<Assistant> updated_player_hand = new ArrayList<>(current_player.getPlayerHand());
         updated_player_hand.remove(assistant);
-        getCurrentPlayer().setPlayerHand(updated_player_hand);
+        current_player.setPlayerHand(updated_player_hand);
     }
 
     // Computes the player_order for the action phase and sets the first_player for the new round
@@ -343,11 +344,11 @@ public class Game {
         }
         return -1; // shouldn't happen
     }
+
     /*
         It returns the current player if it exists, otherwise it returns null.
      */
     private Player getCurrentPlayer(){
-        if(play_order.isEmpty()) return null;   // FIXME: ridondante?
         return play_order.peek();
     }
 }

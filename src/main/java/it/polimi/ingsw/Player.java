@@ -1,5 +1,9 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.board.Assistant;
+import it.polimi.ingsw.board.Professors;
+import it.polimi.ingsw.board.SchoolBoard;
+
 import java.util.ArrayList;
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.board;
 
 public class SchoolBoard {
     private int num_towers;

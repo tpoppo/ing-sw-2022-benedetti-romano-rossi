@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.board.Color;
+
 import java.util.Optional;
 
 public class GameModifiers {

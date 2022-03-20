@@ -1,17 +1,17 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.board;
 
 import java.util.ArrayList;
 
 public class Assistant {
     final private int power;
     final private int steps;
-    final private int id;
+    final private int ID;
     final private int wizard;
 
     public Assistant(int power, int steps, int id, int wizard) {
         this.power = power;
         this.steps = steps;
-        this.id = id;
+        this.ID = id;
         this.wizard = wizard;
     }
 
@@ -32,7 +32,7 @@ public class Assistant {
         return steps;
     }
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return ID;
     }
 }

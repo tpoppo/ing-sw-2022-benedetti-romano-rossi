@@ -1,4 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.board;
+
+import it.polimi.ingsw.Player;
 
 import java.util.List;
 
