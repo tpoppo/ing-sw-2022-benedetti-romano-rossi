@@ -11,9 +11,9 @@ public class Player {
     private Optional<Assistant> current_assistant;
     final private String username;
     final private int coins;
-    final private SchoolBoard schoolBoard; //TODO
+    final private SchoolBoard schoolBoard;
     private ArrayList<Assistant> playerHand; //TODO
-    final private int wizard;
+    private int wizard;
 
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
         this.username = username;
@@ -50,6 +50,10 @@ public class Player {
 
     public void setCurrentAssistant(Assistant current_assistant) {
         this.current_assistant = Optional.ofNullable(current_assistant);
+    }
+
+    public void setWizard(int wizard){
+        this.wizard = wizard;
     }
 
     public int getCoins() {
