@@ -13,6 +13,13 @@ public class SchoolBoard {
         this.entrance_students = entrance_students;
     }
 
+    public SchoolBoard(int num_towers){
+        this.num_towers = num_towers;
+        professors = new Professors();
+        dining_students = new Students();
+        entrance_students = new Students();
+    }
+
     public int getNumTowers() {
         return num_towers;
     }

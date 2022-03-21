@@ -21,7 +21,21 @@ public class Assistant {
 
     // Returns all the assistant of the specified wizard
     static public ArrayList<Assistant> getAssistants(int wizard){
-        return null;
+        ArrayList<Assistant> assistants = new ArrayList<Assistant>();
+
+        // FIXME: WizardID starts from 1
+        // Inserting all the assistant cards
+        assistants.add(new Assistant(1, 1, 10 * (wizard - 1) + 1, wizard));
+        assistants.add(new Assistant(2, 1, 10 * (wizard - 1) + 2, wizard));
+        assistants.add(new Assistant(3, 2, 10 * (wizard - 1) + 3, wizard));
+        assistants.add(new Assistant(4, 2, 10 * (wizard - 1) + 4, wizard));
+        assistants.add(new Assistant(5, 3, 10 * (wizard - 1) + 5, wizard));
+        assistants.add(new Assistant(6, 3, 10 * (wizard - 1) + 6, wizard));
+        assistants.add(new Assistant(7, 4, 10 * (wizard - 1) + 7, wizard));
+        assistants.add(new Assistant(8, 4, 10 * (wizard - 1) + 8, wizard));
+        assistants.add(new Assistant(9, 5, 10 * (wizard - 1) + 9, wizard));
+        assistants.add(new Assistant(10, 5, 10 * (wizard - 1) + 10, wizard));
+        return assistants;
     }
 
     public int getPower() {

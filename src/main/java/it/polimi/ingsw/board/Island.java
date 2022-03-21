@@ -35,7 +35,9 @@ public class Island {
     }
 
     public void merge(List<Island> islands){
-
+        for(Island island_to_merge : islands){
+            merge(island_to_merge);
+        }
     }
 
     public boolean hasMotherNature(){
