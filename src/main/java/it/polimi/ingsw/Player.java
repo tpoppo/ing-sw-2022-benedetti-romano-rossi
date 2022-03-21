@@ -24,6 +24,15 @@ public class Player {
         this.wizard = wizard;
     }
 
+    public Player(String username, int wizard, int num_towers){
+        this.username = username;
+        current_assistant = Optional.empty();
+        coins = 1;
+        schoolBoard = new SchoolBoard(num_towers);
+        playerHand = Assistant.getAssistants(wizard);
+        this.wizard = wizard;
+    }
+
     public void setPlayerHand(ArrayList<Assistant> playerHand) {
         this.playerHand = playerHand;
     }

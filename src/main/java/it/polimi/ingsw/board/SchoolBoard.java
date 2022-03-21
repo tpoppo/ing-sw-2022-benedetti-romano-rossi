@@ -28,6 +28,10 @@ public class SchoolBoard {
         this.num_towers = num_towers;
     }
 
+    public Professors getProfessors() {return (Professors) professors.clone();}
+
+    public void setProfessors(Professors professors) {this.professors = professors;}
+
     public Students getDiningStudents() {
         return (Students) dining_students.clone();
     }
@@ -43,9 +47,4 @@ public class SchoolBoard {
     public void setEntranceStudents(Students entrance_students) {
         this.entrance_students = entrance_students;
     }
-
-    public Professors getProfessors() {return (Professors) professors.clone();}
-
-    public void setProfessors(Professors professors) {this.professors = professors;}
-
 }

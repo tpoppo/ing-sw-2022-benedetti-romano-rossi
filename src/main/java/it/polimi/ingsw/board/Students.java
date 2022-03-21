@@ -22,6 +22,10 @@ public class Students extends HashMap<Color, Integer> implements Movable<Student
         this.put(Color.RED, 0);
     }
 
+    public Students(Students students) {
+        super(students);
+    }
+
     @Override
     public void moveTo(Students to, Color color) throws EmptyMovableException {
         if(get(color) == 0){

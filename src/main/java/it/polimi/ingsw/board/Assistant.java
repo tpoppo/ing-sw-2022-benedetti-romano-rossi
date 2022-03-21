@@ -8,15 +8,13 @@ public class Assistant {
     final private int ID;
     final private int wizard;
 
-    public Assistant(int power, int steps, int id, int wizard) {
+
+    //FIXME should it be private or public?
+    private Assistant(int power, int steps, int id, int wizard) {
         this.power = power;
         this.steps = steps;
         this.ID = id;
         this.wizard = wizard;
-    }
-
-    public int getWizard() {
-        return wizard;
     }
 
     // Returns all the assistant of the specified wizard
@@ -38,15 +36,13 @@ public class Assistant {
         return assistants;
     }
 
-    public int getPower() {
-        return power;
+    public int getWizard() {
+        return wizard;
     }
 
-    public int getSteps() {
-        return steps;
-    }
+    public int getPower() { return power; }
 
-    public int getID() {
-        return ID;
-    }
+    public int getSteps() { return steps; }
+
+    public int getID() { return ID; }
 }

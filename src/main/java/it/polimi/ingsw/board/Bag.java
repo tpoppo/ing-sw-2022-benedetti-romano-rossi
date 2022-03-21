@@ -10,8 +10,9 @@ public class Bag {
     private Random rng;
 
     public Bag(Students students) {
-        this.students = students;
+        this.students = new Students(students);
     }
+
     public Bag(){
         students = new Students(24, 24, 24, 24, 24);
     }
