@@ -206,6 +206,12 @@ public class Game {
         first_player = play_order.peek();
     }
 
+    /**
+     * It moves the student from the entrance to the given island
+     * @param color
+     * @param island
+     * @throws EmptyMovableException
+     */
     public void moveStudent(Color color, Island island) throws EmptyMovableException {
         // remove a student from the entrance
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
@@ -217,9 +223,11 @@ public class Game {
         island.setStudents(island_students);
     }
 
-    /*
-        It moves the student from the entrance to the dining room
-        It also moves the professor is needed
+    /**
+     * It moves the student from the entrance to the dining room
+     * It also moves the professor is needed
+     * @param color
+     * @throws EmptyMovableException
      */
     public void moveStudent(Color color) throws EmptyMovableException {
 
@@ -231,6 +239,15 @@ public class Game {
 
         schoolboard.setEntranceStudents(entrance_students);
         schoolboard.setDiningStudents(dining_students);
+
+        // [Expert Mode] it checks whether to add a coin or not
+        if(expert_mode){
+            final HashSet<Integer> coin_positions = new HashSet<>(Arrays.asList(2, 5, 8));
+            if(coin_positions.contains(dining_students.get(color))){
+                Player player = getCurrentPlayer();
+                player.setCoins(player.getCoins() + 1);
+            }
+        }
 
         // check whether the professor has changed
         for(Player player : players){
@@ -249,9 +266,9 @@ public class Game {
 
     }
 
-    /*
-        It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
-        The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
+    /**
+     * It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
+     * The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
      */
     public void moveMotherNature(Island island) throws MoveMotherNatureException {
         int next_position = islands.indexOf(island);
@@ -267,8 +284,8 @@ public class Game {
 
     private Player conquerIsland(Island island){ return null; }
 
-    /*
-        It merges the islands if two consecutive islands are under the same players.
+    /**
+     * It merges the islands if two consecutive islands are under the same players.
      */
     private void mergeIslands(){
         int current_position = 0;
@@ -283,8 +300,9 @@ public class Game {
         }
     }
 
-    /*
-        It moves students from the selected cloud to the player's entrance
+    /**
+     * It moves students from the selected cloud to the player's entrance
+     * @param cloud
      */
     public void chooseCloud(Students cloud){
         Students students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
@@ -298,8 +316,9 @@ public class Game {
         cloud.clear();
     }
 
-    /*
-        checkVictory returns true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table.
+    /**
+     * checkVictory returns true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table.
+     * @return true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table
      */
     public boolean checkVictory(){
         // last tower has been built
@@ -309,8 +328,9 @@ public class Game {
         // groups of islands <= 3
         return islands.size() <= 3;
     }
-    /*
-        It returns true if the bag is empty or if the hand of a player is empty.
+    /**
+     * checkEndGame returns true if the bag is empty or if the hand of a player is empty.
+     * @return true if the bag is empty or if the hand of a player is empty
      */
     public boolean checkEndGame(){
         if(bag.capacity() == 0) return true; // empty bag
@@ -320,9 +340,10 @@ public class Game {
         return false;
     }
 
-    /*
-       winner returns the winner of the game. It assumes that the game has ended.
-       The player who has built the most Towers on Islands wins the game. In case of a tie, the player who controls the most Professors wins the game.
+    /**
+     * winner returns the winner of the game. It assumes that the game has ended.
+     * The player who has built the most Towers on Islands wins the game. In case of a tie, the player who controls the most Professors wins the game.
+     * @return the winner of the game
      */
     public Player winner(){
         ArrayList<Player> candidate_winner = new ArrayList<>(players);
@@ -336,8 +357,8 @@ public class Game {
         return candidate_winner.get(0);
     }
 
-    /*
-        It returns the position of MotherNature in the islands arraylist.
+    /**
+     * It returns the position of MotherNature in the islands arraylist.
      */
     private int findMotherNaturePosition(){
         for(int i=0; i<islands.size(); i++) {
@@ -346,8 +367,8 @@ public class Game {
         return -1; // shouldn't happen
     }
 
-    /*
-        It returns the current player if it exists, otherwise it returns null.
+    /**
+     * It returns the current player if it exists, otherwise it returns null.
      */
     private Player getCurrentPlayer(){
         return play_order.peek();

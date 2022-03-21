@@ -1,8 +1,10 @@
 package it.polimi.ingsw.characters;
 
+import it.polimi.ingsw.Game;
+
 public class Character {
-    final private int cost;
-    final private boolean activated;
+    private int cost;
+    private boolean activated;
 
     public Character(int cost, boolean activated) {
         this.cost = cost;
@@ -14,9 +16,18 @@ public class Character {
         return cost;
     }
 
-    public void activate(){}
+    public void activate(Game game){
+        activated = true;
+        onActivation(game);
+        cost++;
+    }
 
-    public void deactivate(){}
+    public void deactivate(Game game){
+        activated = false;
+        onDeactivation(game);
+    }
 
-    public void onActivation(){}
+    private void onActivation(Game game){}
+
+    private void onDeactivation(Game game){}
 }

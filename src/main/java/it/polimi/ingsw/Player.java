@@ -10,7 +10,7 @@ import java.util.Optional;
 public class Player {
     private Optional<Assistant> current_assistant;
     final private String username;
-    final private int coins;
+    private int coins;
     final private SchoolBoard schoolBoard;
     private ArrayList<Assistant> playerHand; //TODO
     private int wizard;
@@ -67,6 +67,10 @@ public class Player {
 
     public int getCoins() {
         return coins;
+    }
+
+    public void setCoins(int coins){
+        this.coins = coins;
     }
 
 }
