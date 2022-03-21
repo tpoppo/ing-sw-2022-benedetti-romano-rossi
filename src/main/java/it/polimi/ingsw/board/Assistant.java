@@ -33,6 +33,7 @@ public class Assistant {
         assistants.add(new Assistant(8, 4, 10 * (wizard - 1) + 8, wizard));
         assistants.add(new Assistant(9, 5, 10 * (wizard - 1) + 9, wizard));
         assistants.add(new Assistant(10, 5, 10 * (wizard - 1) + 10, wizard));
+
         return assistants;
     }
 

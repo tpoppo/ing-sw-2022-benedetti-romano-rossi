@@ -282,6 +282,7 @@ public class Game {
             }
         }
     }
+
     /*
         It moves students from the selected cloud to the player's entrance
      */
