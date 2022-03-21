@@ -1,33 +1,45 @@
 package it.polimi.ingsw.characters;
 
 import it.polimi.ingsw.Game;
+import it.polimi.ingsw.PlayerChoices;
+import it.polimi.ingsw.Requirements;
+import it.polimi.ingsw.board.Students;
 
-public class Character {
+abstract class Character {
     private int cost;
     private boolean activated;
 
-    public Character(int cost, boolean activated) {
+    public Character(int cost){
         this.cost = cost;
-        this.activated = activated;
+        activated = false;
     }
-
 
     public int getCost(){
         return cost;
     }
 
-    public void activate(Game game){
+    public void activate(Game game, PlayerChoices playerChoices){
         activated = true;
-        onActivation(game);
+        onActivation(game, playerChoices);
         cost++;
     }
 
-    public void deactivate(Game game){
+    public void deactivate(Game game, PlayerChoices playerChoices){
         activated = false;
-        onDeactivation(game);
+        onDeactivation(game, playerChoices);
     }
 
-    private void onActivation(Game game){}
+    // Tells which students are on top of the card
+    public Students getStudents(){
+        return new Students();
+    }
 
-    private void onDeactivation(Game game){}
+    // Returns the character requirements
+    public Requirements require(){
+        return Requirements.NOTHING;
+    }
+
+    abstract void onActivation(Game game, PlayerChoices playerChoices);
+
+    abstract void onDeactivation(Game game, PlayerChoices playerChoices);
 }

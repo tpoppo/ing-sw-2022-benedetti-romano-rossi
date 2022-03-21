@@ -25,7 +25,7 @@ public class Game {
     private GameConfig gameConfig;
     private GameModifiers gameModifiers;
 
-    public Game(boolean expert_mode, Lobby lobby) throws FileNotFoundException, EmptyBagException, EmptyMovableException {
+    public Game(boolean expert_mode, Lobby lobby) throws EmptyBagException, EmptyMovableException {
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
 
