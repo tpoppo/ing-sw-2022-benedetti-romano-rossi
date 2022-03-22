@@ -13,8 +13,8 @@ import it.polimi.ingsw.exceptions.EmptyMovableException;
 import java.util.ArrayList;
 
 public class Recruiter extends Character{
-
     Students students;
+
     Recruiter(Game game){
         super(1);
         students = new Students();

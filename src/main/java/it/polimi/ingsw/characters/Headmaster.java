@@ -5,7 +5,7 @@ import it.polimi.ingsw.PlayerChoices;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class Headmaster extends Character{
-    public Headmaster(Game game) {
+    public Headmaster() {
         super(2);
     }
 

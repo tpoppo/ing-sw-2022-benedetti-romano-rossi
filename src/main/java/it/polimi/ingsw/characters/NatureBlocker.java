@@ -8,10 +8,12 @@ import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class NatureBlocker extends  Character{
     int tiles;
+
     public NatureBlocker(){
         super(2);
         tiles = 4;
     }
+
     @Override
     void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         if(tiles <= 0) throw new BadPlayerChoiceException();

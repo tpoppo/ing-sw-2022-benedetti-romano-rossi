@@ -12,7 +12,7 @@ import it.polimi.ingsw.exceptions.EmptyMovableException;
 public class Thief extends Character{
     final private int THEFT_COUNT = 3;
 
-    public Thief(Game game) {
+    public Thief() {
         super(3);
     }
 

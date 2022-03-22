@@ -11,7 +11,7 @@ import it.polimi.ingsw.exceptions.EmptyMovableException;
 import java.util.ArrayList;
 
 public class Bard extends Character{
-    public Bard(Game game) {
+    public Bard() {
         super(1);
     }
 

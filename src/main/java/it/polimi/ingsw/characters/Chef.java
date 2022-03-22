@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Chef extends Character{
     Students students;
+
     Chef(Game game){
         super(2);
         students = new Students();

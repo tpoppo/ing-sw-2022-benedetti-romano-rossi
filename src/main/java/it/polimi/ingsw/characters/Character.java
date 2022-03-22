@@ -6,13 +6,32 @@ import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
-abstract class Character {
+abstract public class Character {
     private int cost;
     private boolean activated;
 
     public Character(int cost){
         this.cost = cost;
         activated = false;
+    }
+
+    public static Character createCharacter(Characters character_to_create, Game game){
+        switch (character_to_create){
+            case CHEF: return new Chef(game);
+            case BARD: return new Bard();
+            case COLORBLIND: return new Colorblind();
+            case CONQUEROR: return new Conqueror();
+            case DEMOLISHER: return new Demolisher();
+            case HEADMASTER: return new Headmaster();
+            case INFLUENCER: return new Influencer();
+            case JUGGLER: return new Juggler(game);
+            case NATUREBLOCKER: return new NatureBlocker();
+            case NATUREMOVER: return new NatureMover();
+            case RECRUITER: return new Recruiter(game);
+            case THIEF: return new Thief();
+        }
+        // This line should never be reached
+        return null;
     }
 
     public int getCost(){

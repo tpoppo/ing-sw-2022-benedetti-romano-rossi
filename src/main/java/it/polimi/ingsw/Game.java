@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.board.*;
+import it.polimi.ingsw.characters.Character;
+import it.polimi.ingsw.characters.Characters;
 import it.polimi.ingsw.exceptions.AssistantAlreadyPlayedException;
 import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.exceptions.EmptyMovableException;
@@ -20,20 +22,19 @@ public class Game {
     private Bag bag;
     final private ArrayList<Students> clouds;
     final private ArrayList<Player> players;
-    // final private ArrayList<Character> characters;
+    final private ArrayList<Character> characters;
     final private int num_players;
     private GameConfig gameConfig;
     private GameModifiers gameModifiers;
 
     public Game(boolean expert_mode, Lobby lobby) throws EmptyBagException, EmptyMovableException {
-
-        gameModifiers = new GameModifiers();
-
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
+        gameModifiers = new GameModifiers();
+        characters = new ArrayList<>();
 
         // Adding all the players from the lobby to the game
-        players = new ArrayList<Player>(lobby.getPlayers());
+        players = new ArrayList<>(lobby.getPlayers());
 
         // Importing game config from file (the file is chosen based on the # of players playing)
         String file_path = "src/main/resources/" + num_players + "PlayersGame.json";
@@ -77,7 +78,7 @@ public class Game {
         bag = new Bag();
 
         // 5: Placing the # of clouds on the table
-        clouds = new ArrayList<Students>();
+        clouds = new ArrayList<>();
         for(int i = 0; i < gameConfig.NUM_CLOUDS; i++)
             clouds.add(new Students());
 
@@ -105,7 +106,7 @@ public class Game {
                 Color drawnColor = bag.drawStudent();
 
                 Students entranceStudents = player.getSchoolBoard().getEntranceStudents();
-                bag.getStudents().moveTo(entranceStudents, drawnColor);
+                entranceStudents.add(drawnColor);
                 player.getSchoolBoard().setEntranceStudents(entranceStudents);
             }
         }
@@ -114,12 +115,26 @@ public class Game {
         first_player = players.get(rng.nextInt(players.size()));
 
         // EXPERT MODE:
-        // Each player takes 1 coin
+        // Each player takes 1 coin, 3 random characters are chosen
         if(expert_mode) {
             for (Player player : players)
                 player.setCoins(1);
 
             // TODO: Scelta 3 character randomicamente
+            int count = 0;
+            ArrayList<Characters> drawnCharacters = new ArrayList<>();
+            do{
+                Characters candidate_character = Characters.randomCharacter();
+
+                if(!drawnCharacters.contains(candidate_character)){
+                    drawnCharacters.add(candidate_character);
+                    count++;
+                }
+            }while(count < gameConfig.NUM_CHARACTERS);
+
+            for(Characters drawnCharacter : drawnCharacters){
+                characters.add(Character.createCharacter(drawnCharacter, this));
+            }
         }
     }
 
@@ -144,7 +159,7 @@ public class Game {
     public void beginPlanning(){
         int first_player_index = players.indexOf(first_player);
 
-        play_order = new LinkedList<Player>();
+        play_order = new LinkedList<>();
 
         // Adding players to the queue starting from the first_player and the ones who follow him
         for(int i=first_player_index; i<players.size(); i++)
@@ -184,10 +199,10 @@ public class Game {
 
     // Computes the player_order for the action phase and sets the first_player for the new round
     public void endPlanning(){
-        ArrayList<Player> new_play_order = new ArrayList<Player>(players);
+        ArrayList<Player> new_play_order = new ArrayList<>(players);
 
         // The old play_order is copied to an array list so that we can use indexOf() later
-        ArrayList<Player> copy_play_order = new ArrayList<Player>(play_order);
+        ArrayList<Player> copy_play_order = new ArrayList<>(play_order);
 
         // Computing the new player order
         new_play_order.sort((o1, o2) -> {
@@ -212,7 +227,7 @@ public class Game {
         });
 
         // Copying the new play_order to the official queue
-        play_order = new LinkedList<Player>(new_play_order);
+        play_order = new LinkedList<>(new_play_order);
 
         // Saving the first player of the new queue for the planning phase of the next turn
         first_player = play_order.peek();
@@ -269,7 +284,7 @@ public class Game {
             }
         }
 
-        Professors professorsFrom = null;
+        Professors professorsFrom;
         Professors professorsTo = getCurrentPlayer().getProfessors();
 
         if(playerFrom == null){
@@ -296,16 +311,18 @@ public class Game {
         int next_position = islands.indexOf(island);
         int current_position = findMotherNaturePosition();
         int distance = (next_position - current_position + islands.size()) % islands.size();
+
         Player current_player = getCurrentPlayer();
         if(distance > current_player.getCurrentAssistant().get().getSteps()){
             throw new MoveMotherNatureException();
         }
+
         islands.get(current_position).setMotherNature(false);
         islands.get(next_position).setMotherNature(true);
     }
 
     private Player conquerIsland(Island island){
-        HashMap<Player, Integer> influence = new HashMap<Player, Integer>();
+        HashMap<Player, Integer> influence = new HashMap<>();
         int towers_on_island = island.getNumTowers();
 
         // FIXME: probably redundant
@@ -337,7 +354,7 @@ public class Game {
             max_influence = Math.max(max_influence, influence.get(player));
 
         // Retrieving all players that have the max_influence
-        ArrayList<Player> candidate_owner  = new ArrayList<Player>();
+        ArrayList<Player> candidate_owner  = new ArrayList<>();
         for(Player player : players){
             if(influence.get(player) == max_influence) candidate_owner.add(player);
         }

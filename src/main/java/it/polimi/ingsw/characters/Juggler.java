@@ -11,8 +11,8 @@ import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 public class Juggler extends Character{
-
     Students students;
+
     public Juggler(Game game){
         super(1);
         students = new Students();

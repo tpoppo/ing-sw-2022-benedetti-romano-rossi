@@ -9,7 +9,7 @@ import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 public class Conqueror extends Character{
     private Island chosen_island;
 
-    public Conqueror(Game game) {
+    public Conqueror() {
         super(2);
     }
 

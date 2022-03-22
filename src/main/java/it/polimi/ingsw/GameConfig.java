@@ -8,8 +8,9 @@ public class GameConfig {
     final public int NUM_ENTRANCE_STUDENTS;
     final public int NUM_STUDENTS_MOVES;
     final public int NUM_ISLANDS;
+    final public int NUM_CHARACTERS;
 
-    public GameConfig(int cloud_space, int num_towers, int num_clouds, int num_assistants, int num_entrance_students, int num_students_moves, int num_islands) {
+    public GameConfig(int cloud_space, int num_towers, int num_clouds, int num_assistants, int num_entrance_students, int num_students_moves, int num_islands, int num_characters) {
         CLOUD_SPACE = cloud_space;
         NUM_TOWERS = num_towers;
         NUM_CLOUDS = num_clouds;
@@ -17,5 +18,6 @@ public class GameConfig {
         NUM_ENTRANCE_STUDENTS = num_entrance_students;
         NUM_STUDENTS_MOVES = num_students_moves;
         NUM_ISLANDS = num_islands;
+        NUM_CHARACTERS = num_characters;
     }
 }

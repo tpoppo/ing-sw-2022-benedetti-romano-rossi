@@ -4,7 +4,7 @@ import it.polimi.ingsw.Game;
 import it.polimi.ingsw.PlayerChoices;
 
 public class Influencer extends Character{
-    public Influencer(Game game) {
+    public Influencer() {
         super(2);
     }
 

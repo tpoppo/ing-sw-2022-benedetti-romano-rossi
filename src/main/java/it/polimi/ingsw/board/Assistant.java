@@ -8,7 +8,6 @@ public class Assistant {
     final private int ID;
     final private int wizard;
 
-
     //FIXME should it be private or public?
     private Assistant(int power, int steps, int id, int wizard) {
         this.power = power;
