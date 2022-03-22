@@ -7,6 +7,7 @@ import it.polimi.ingsw.board.Color;
 import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.exceptions.EmptyBagException;
+import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
@@ -31,9 +32,14 @@ public class Barman extends Character{
             throw new BadPlayerChoiceException();
         }
         Color color = colors.get(0);
-        if(students.get(color) <= 0){ // Invalid input. There must be at least one student of that color on this card.
+        Students dining_students = game.getCurrentPlayer().getSchoolBoard().getDiningStudents();
+
+        try {
+            students.moveTo(dining_students, color);
+        } catch (EmptyMovableException e) { // Invalid input. There must be at least one student of that color on this card.
             throw new BadPlayerChoiceException();
         }
+        game.getCurrentPlayer().getSchoolBoard().setDiningStudents(dining_students);
 
         try {
             color = game.drawStudentFromBag();
@@ -55,7 +61,7 @@ public class Barman extends Character{
 
     @Override
     public Requirements require(){
-        return Requirements.SWAP_CARD_ENTRANCE;
+        return Requirements.CARD_STUDENT;
     }
 
 }

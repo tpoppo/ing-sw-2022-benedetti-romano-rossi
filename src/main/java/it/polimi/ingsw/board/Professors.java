@@ -17,7 +17,7 @@ public class Professors extends HashSet<Color> implements Movable<Professors> {
 
     @Override
     public void moveTo(Professors to, Color color) throws EmptyMovableException {
-        if(contains(color)){
+        if(!contains(color)){
             throw new EmptyMovableException();
         }
         remove(color);

@@ -8,6 +8,7 @@ import it.polimi.ingsw.board.Island;
 import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.exceptions.EmptyBagException;
+import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
@@ -34,9 +35,14 @@ public class Recruiter extends Character{
             throw new BadPlayerChoiceException();
         }
         Color color = colors.get(0);
-        Students students = island.getStudents();
-        students.put(color, students.get(color) + 1);
-        island.setStudents(students);
+        Students island_students = island.getStudents();
+        try {
+            students.moveTo(island_students, color);
+        } catch (EmptyMovableException e) {  // not enough students on the card.
+            throw new BadPlayerChoiceException();
+        }
+
+        island.setStudents(island_students);
     }
 
     @Override

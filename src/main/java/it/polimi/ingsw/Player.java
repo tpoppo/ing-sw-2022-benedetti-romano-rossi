@@ -24,11 +24,11 @@ public class Player {
         this.wizard = wizard;
     }
 
-    public Player(String username, int wizard, int num_towers){
+    public Player(String username, int wizard){
         this.username = username;
         current_assistant = Optional.empty();
         coins = 0;
-        schoolBoard = new SchoolBoard(num_towers);
+        schoolBoard = new SchoolBoard(0);
         playerHand = Assistant.getAssistants(wizard);
         this.wizard = wizard;
     }

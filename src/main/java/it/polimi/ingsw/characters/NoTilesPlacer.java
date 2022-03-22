@@ -4,7 +4,6 @@ import it.polimi.ingsw.Game;
 import it.polimi.ingsw.PlayerChoices;
 import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Island;
-import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class NoTilesPlacer extends  Character{

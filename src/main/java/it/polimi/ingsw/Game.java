@@ -26,6 +26,9 @@ public class Game {
     private GameModifiers gameModifiers;
 
     public Game(boolean expert_mode, Lobby lobby) throws EmptyBagException, EmptyMovableException {
+
+        gameModifiers = new GameModifiers();
+
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
 
@@ -39,7 +42,7 @@ public class Game {
 
         // Parsing the json
         try {
-            gameConfig = gson.fromJson(Files.readAllLines(Paths.get(file_path)).toString(), GameConfig.class);
+            gameConfig = gson.fromJson(Files.newBufferedReader(Paths.get(file_path)), GameConfig.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,11 +64,11 @@ public class Game {
         bag = new Bag(subset);
 
         for(int i=0; i<islands.size(); i++){
-            if(i != mother_nature_position && i != mother_nature_position + islands.size() / 2) {
+            if(i != mother_nature_position && i != (mother_nature_position + islands.size() / 2) % islands.size()) {
                 Color drawnColor = bag.drawStudent();
 
                 Students islandStudents = islands.get(i).getStudents();
-                bag.getStudents().moveTo(islandStudents, drawnColor);
+                islandStudents.add(drawnColor);
                 islands.get(i).setStudents(islandStudents);
             }
         }
@@ -259,19 +262,29 @@ public class Game {
         }
 
         // check whether the professor has changed
+        Player playerFrom = null;
         for(Player player : players){
-            if(player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
-                Professors professorsFrom = player.getProfessors();
-                Professors professorsTo = getCurrentPlayer().getProfessors();
-                try {
-                    professorsFrom.moveTo(professorsTo, color);
-                } catch (EmptyMovableException e) {
-                    e.printStackTrace(); // It should be impossible
-                }
-                getCurrentPlayer().getSchoolBoard().setProfessors(professorsFrom);
-                player.getSchoolBoard().setProfessors(professorsTo);
+            if(player.getProfessors().contains(color) && player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
+                playerFrom = player;
             }
         }
+
+        Professors professorsFrom = null;
+        Professors professorsTo = getCurrentPlayer().getProfessors();
+
+        if(playerFrom == null){
+            professorsFrom = new Professors();
+            professorsFrom.add(color);
+        }else{
+            professorsFrom = playerFrom.getProfessors();
+        }
+        try {
+            professorsFrom.moveTo(professorsTo, color);
+        } catch (EmptyMovableException e) {
+            e.printStackTrace(); // It should be impossible
+        }
+        getCurrentPlayer().getSchoolBoard().setProfessors(professorsFrom);
+        if(playerFrom != null) playerFrom.getSchoolBoard().setProfessors(professorsTo);
 
     }
 

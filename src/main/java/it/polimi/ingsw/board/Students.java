@@ -34,4 +34,12 @@ public class Students extends HashMap<Color, Integer> implements Movable<Student
         put(color, get(color)-1);
         to.put(color, to.get(color)+1);
     }
+
+    public void add(Color color, int delta){
+        this.put(color, this.get(color) + delta);
+    }
+
+    public void add(Color color){
+        this.add(color, 1);
+    }
 }
