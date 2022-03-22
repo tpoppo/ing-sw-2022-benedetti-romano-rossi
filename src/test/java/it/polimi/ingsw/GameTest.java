@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class GameTest {
 
@@ -37,7 +38,7 @@ public class GameTest {
         Player first_player = game.getCurrentPlayer();
         game.nextTurn();
         game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
-        assertFalse(game.getCurrentPlayer().equals(first_player));
+        assertNotEquals(game.getCurrentPlayer(), first_player);
 
         game.endPlanning();
 
