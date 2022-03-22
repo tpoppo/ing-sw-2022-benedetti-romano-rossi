@@ -20,6 +20,11 @@ public class SchoolBoard {
         entrance_students = new Students();
     }
 
+    // Adds (or remove if argument is negative) the num_towers from this.num_towers
+    public void addTowers(int num_towers){
+        this.num_towers += num_towers;
+    }
+
     public int getNumTowers() {
         return num_towers;
     }

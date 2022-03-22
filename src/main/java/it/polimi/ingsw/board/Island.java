@@ -63,4 +63,12 @@ public class Island {
     public void setOwner(Player owner) {
         this.owner = owner;
     }
+
+    public int getNumTowers() {
+        return num_towers;
+    }
+
+    public void setNumTowers(int num_towers) {
+        this.num_towers = num_towers;
+    }
 }

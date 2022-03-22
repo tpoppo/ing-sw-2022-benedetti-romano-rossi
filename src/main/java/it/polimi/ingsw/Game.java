@@ -109,6 +109,15 @@ public class Game {
 
         // 11: Randomly determining the first player
         first_player = players.get(rng.nextInt(players.size()));
+
+        // EXPERT MODE:
+        // Each player takes 1 coin
+        if(expert_mode) {
+            for (Player player : players)
+                player.setCoins(1);
+
+            // TODO: Scelta 3 character randomicamente
+        }
     }
 
     // Manages the progress of the play_order queue
@@ -282,7 +291,68 @@ public class Game {
         islands.get(next_position).setMotherNature(true);
     }
 
-    private Player conquerIsland(Island island){ return null; }
+    private Player conquerIsland(Island island){
+        HashMap<Player, Integer> influence = new HashMap<Player, Integer>();
+        int towers_on_island = island.getNumTowers();
+
+        // FIXME: probably redundant
+        for(Player player : players)
+            influence.put(player, 0);
+
+        // Computing the influence for each player
+        for(Player player : players){
+            int student_influence = 0;
+            int tower_influence = 0;
+
+            // Students influence
+            for(Color professor_color : player.getProfessors()){
+                if(!gameModifiers.getInhibitColor().isPresent() && !gameModifiers.getInhibitColor().get().equals(professor_color))
+                    student_influence += island.getStudents().get(professor_color);
+            }
+
+            // Towers influence
+            if(island.getOwner().equals(player) && !gameModifiers.isInhibitTowers())
+                tower_influence = towers_on_island;
+
+            // Also adding the gameModifier here
+            influence.put(player, student_influence + tower_influence + gameModifiers.getBuffInfluence());
+        }
+
+        // Computing max_influence value
+        int max_influence = 0;
+        for(Player player : players)
+            max_influence = Math.max(max_influence, influence.get(player));
+
+        // Retrieving all players that have the max_influence
+        ArrayList<Player> candidate_owner  = new ArrayList<Player>();
+        for(Player player : players){
+            if(influence.get(player) == max_influence) candidate_owner.add(player);
+        }
+
+        // Conquest is to be made only if there's only one candidate owner
+        if(candidate_owner.size() == 1){
+            Player new_owner = candidate_owner.get(0);
+
+            if(island.getOwner() == null) {
+                island.setOwner(new_owner);
+                island.setNumTowers(1);
+                new_owner.getSchoolBoard().addTowers(-1);
+            }else if(new_owner.equals(island.getOwner())){
+                island.setNumTowers(towers_on_island + 1);
+                new_owner.getSchoolBoard().addTowers(-1);
+            }else{
+                Player old_owner = island.getOwner();
+
+                island.setOwner(new_owner);
+                new_owner.getSchoolBoard().addTowers(-towers_on_island);
+                old_owner.getSchoolBoard().addTowers(towers_on_island);
+            }
+
+            return new_owner;
+        }
+
+        return island.getOwner();
+    }
 
     /**
      * It merges the islands if two consecutive islands are under the same players.
@@ -388,6 +458,8 @@ public class Game {
 
     public ArrayList<Island> getIslands() {
         return islands;
+    }
+
     /**
      * Draw a student from a bag
      * @return color drawn

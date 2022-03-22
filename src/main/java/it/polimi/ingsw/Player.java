@@ -27,7 +27,7 @@ public class Player {
     public Player(String username, int wizard, int num_towers){
         this.username = username;
         current_assistant = Optional.empty();
-        coins = 1;
+        coins = 0;
         schoolBoard = new SchoolBoard(num_towers);
         playerHand = Assistant.getAssistants(wizard);
         this.wizard = wizard;
@@ -72,5 +72,6 @@ public class Player {
     public void setCoins(int coins){
         this.coins = coins;
     }
+
 
 }

@@ -11,7 +11,7 @@ public class GameModifiers {
     private int professor_modifier; // reduce the number of student needed to get the control of the professor
     private int extra_steps;
 
-    public int getBuff_influence() {
+    public int getBuffInfluence() {
         return buff_influence;
     }
 
@@ -19,7 +19,7 @@ public class GameModifiers {
         this.buff_influence = buff_influence;
     }
 
-    public Optional<Color> getInhibit_color() {
+    public Optional<Color> getInhibitColor() {
         return inhibit_color;
     }
 
