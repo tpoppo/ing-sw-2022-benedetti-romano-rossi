@@ -43,7 +43,7 @@ public class Bag {
     }
 
     public Students getStudents() {
-        return students;
+        return new Students(students);
     }
 
     public void setStudents(Students students) {

@@ -242,7 +242,7 @@ public class Game {
 
         // [Expert Mode] it checks whether to add a coin or not
         if(expert_mode){
-            final HashSet<Integer> coin_positions = new HashSet<>(Arrays.asList(2, 5, 8));
+            final HashSet<Integer> coin_positions = new HashSet<>(Arrays.asList(3, 6, 9));
             if(coin_positions.contains(dining_students.get(color))){
                 Player player = getCurrentPlayer();
                 player.setCoins(player.getCoins() + 1);
@@ -388,5 +388,11 @@ public class Game {
 
     public ArrayList<Island> getIslands() {
         return islands;
+    /**
+     * Draw a student from a bag
+     * @return color drawn
+     */
+    public Color drawStudentFromBag() throws EmptyBagException {
+        return bag.drawStudent();
     }
 }

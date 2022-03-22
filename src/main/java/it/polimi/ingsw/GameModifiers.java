@@ -43,4 +43,11 @@ public class GameModifiers {
         this.professor_modifier = professor_modifier;
     }
 
+    public int getExtraSteps() {
+        return extra_steps;
+    }
+
+    public void setExtraSteps(int extra_steps) {
+        this.extra_steps = extra_steps;
+    }
 }
