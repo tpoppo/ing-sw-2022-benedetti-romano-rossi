@@ -1,11 +1,10 @@
 package it.polimi.ingsw.board;
 
 import it.polimi.ingsw.exceptions.EmptyMovableException;
-import it.polimi.ingsw.interfaces.Movable;
 
 import java.util.HashMap;
 
-public class Students extends HashMap<Color, Integer> implements Movable<Students> {
+public class Students extends HashMap<Color, Integer> {
     public Students(int greens, int blues, int yellows, int pinks, int reds){
         this.put(Color.GREEN, greens);
         this.put(Color.BLUE, blues);
@@ -26,7 +25,6 @@ public class Students extends HashMap<Color, Integer> implements Movable<Student
         super(students);
     }
 
-    @Override
     public void moveTo(Students to, Color color) throws EmptyMovableException {
         if(get(color) == 0){
             throw new EmptyMovableException();

@@ -1,11 +1,10 @@
 package it.polimi.ingsw.board;
 
 import it.polimi.ingsw.exceptions.EmptyMovableException;
-import it.polimi.ingsw.interfaces.Movable;
 
 import java.util.HashSet;
 
-public class Professors extends HashSet<Color> implements Movable<Professors> {
+public class Professors extends HashSet<Color> {
 
     public Professors(){
         super();
@@ -15,7 +14,6 @@ public class Professors extends HashSet<Color> implements Movable<Professors> {
         super(professors);
     }
 
-    @Override
     public void moveTo(Professors to, Color color) throws EmptyMovableException {
         if(!contains(color)){
             throw new EmptyMovableException();
