@@ -6,9 +6,9 @@ import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Island;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
-public class NoTilesPlacer extends  Character{
+public class NatureBlocker extends  Character{
     int tiles;
-    public NoTilesPlacer(){
+    public NatureBlocker(){
         super(2);
         tiles = 4;
     }

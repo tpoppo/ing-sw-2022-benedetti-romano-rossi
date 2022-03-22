@@ -11,11 +11,12 @@ import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
-public class Barman extends Character{
+public class Chef extends Character{
     Students students;
-    Barman(Game game){
+    Chef(Game game){
         super(2);
         students = new Students();
+
         for(int i=0; i<4; i++){
             try {
                 Color color = game.drawStudentFromBag();
@@ -24,13 +25,14 @@ public class Barman extends Character{
         }
     }
 
-
     @Override
     void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         ArrayList<Color> colors = playerChoices.getStudent();
+
         if(colors.size() != 1){ // Invalid input. There must be only one color in playerChoices
             throw new BadPlayerChoiceException();
         }
+
         Color color = colors.get(0);
         Students dining_students = game.getCurrentPlayer().getSchoolBoard().getDiningStudents();
 

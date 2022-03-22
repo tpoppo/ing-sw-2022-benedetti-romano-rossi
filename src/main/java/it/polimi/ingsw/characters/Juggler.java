@@ -16,6 +16,7 @@ public class Juggler extends Character{
     public Juggler(Game game){
         super(1);
         students = new Students();
+
         for(int i=0; i<6; i++){
             try {
                 Color color = game.drawStudentFromBag();
@@ -44,7 +45,6 @@ public class Juggler extends Character{
             try {
                 entrance_students.moveTo(card_student, playerChoices.getStudent().get(i));
                 card_student.moveTo(entrance_students, playerChoices.getStudent().get(i+1));
-
             } catch (EmptyMovableException e) {
                 throw  new BadPlayerChoiceException(); // shouldn't be reachable
             }

@@ -18,6 +18,7 @@ public class Recruiter extends Character{
     Recruiter(Game game){
         super(1);
         students = new Students();
+
         for(int i=0; i<4; i++){
             try {
                 Color color = game.drawStudentFromBag();
@@ -26,15 +27,17 @@ public class Recruiter extends Character{
         }
     }
 
-
     @Override
     void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         Island island = playerChoices.getIsland();
         ArrayList<Color> colors = playerChoices.getStudent();
+
         if(students.size() != 1){
             throw new BadPlayerChoiceException();
         }
+
         Color color = colors.get(0);
+
         Students island_students = island.getStudents();
         try {
             students.moveTo(island_students, color);

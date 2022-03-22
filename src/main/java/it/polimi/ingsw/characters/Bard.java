@@ -10,8 +10,8 @@ import it.polimi.ingsw.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
-public class Swapper extends Character{
-    public Swapper(Game game) {
+public class Bard extends Character{
+    public Bard(Game game) {
         super(1);
     }
 

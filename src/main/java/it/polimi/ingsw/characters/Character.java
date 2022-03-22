@@ -10,7 +10,6 @@ abstract class Character {
     private int cost;
     private boolean activated;
 
-
     public Character(int cost){
         this.cost = cost;
         activated = false;
