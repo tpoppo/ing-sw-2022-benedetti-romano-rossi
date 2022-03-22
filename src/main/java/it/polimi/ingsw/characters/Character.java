@@ -4,13 +4,16 @@ import it.polimi.ingsw.Game;
 import it.polimi.ingsw.PlayerChoices;
 import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Students;
+import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 abstract class Character {
     private int cost;
     private boolean activated;
+    private Game game;
 
-    public Character(int cost){
+    public Character(int cost, Game game){
         this.cost = cost;
+        this.game = game;
         activated = false;
     }
 
@@ -18,7 +21,7 @@ abstract class Character {
         return cost;
     }
 
-    public void activate(Game game, PlayerChoices playerChoices){
+    public void activate(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         activated = true;
         onActivation(game, playerChoices);
         cost++;
@@ -39,7 +42,7 @@ abstract class Character {
         return Requirements.NOTHING;
     }
 
-    abstract void onActivation(Game game, PlayerChoices playerChoices);
+    abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
 
     abstract void onDeactivation(Game game, PlayerChoices playerChoices);
 }

@@ -370,7 +370,23 @@ public class Game {
     /**
      * It returns the current player if it exists, otherwise it returns null.
      */
-    private Player getCurrentPlayer(){
+    public Player getCurrentPlayer(){
         return play_order.peek();
+    }
+
+    public GameModifiers getGameModifiers() {
+        return gameModifiers;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Bag getBag() {
+        return bag;
+    }
+
+    public ArrayList<Island> getIslands() {
+        return islands;
     }
 }
