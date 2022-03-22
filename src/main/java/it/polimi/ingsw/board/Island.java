@@ -9,12 +9,14 @@ public class Island {
     private Player owner;
     private boolean mother_nature;
     private Students students;
+    private int no_entry_tiles;
 
-    public Island(int num_towers, Player owner, boolean mother_nature, Students students) {
+    public Island(int num_towers, Player owner, boolean mother_nature, Students students, int no_entry_tiles) {
         this.num_towers = num_towers;
         this.owner = owner;
         this.mother_nature = mother_nature;
         this.students = students;
+        this.no_entry_tiles = no_entry_tiles;
     }
 
     public Island(){
@@ -22,6 +24,7 @@ public class Island {
         owner = null;
         mother_nature = false;
         students = new Students();
+        no_entry_tiles = 0;
     }
 
     public void merge(Island island){
@@ -62,6 +65,14 @@ public class Island {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public int getNoEntryTiles() {
+        return no_entry_tiles;
+    }
+
+    public void setNoEntryTiles(int no_entry_tiles) {
+        this.no_entry_tiles = no_entry_tiles;
     }
 
     public int getNumTowers() {

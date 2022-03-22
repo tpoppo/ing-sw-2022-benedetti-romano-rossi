@@ -6,7 +6,7 @@ import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class Headmaster extends Character{
     public Headmaster(Game game) {
-        super(2, game);
+        super(2);
     }
 
     @Override
@@ -15,7 +15,7 @@ public class Headmaster extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    void onDeactivation(Game game, PlayerChoices playerChoices) {
         game.getGameModifiers().setProfessorModifier(0);
     }
 }

@@ -13,7 +13,7 @@ public class Thief extends Character{
     final private int THEFT_COUNT = 3;
 
     public Thief(Game game) {
-        super(3, game);
+        super(3);
     }
 
     @Override

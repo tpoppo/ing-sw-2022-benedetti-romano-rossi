@@ -8,5 +8,9 @@ public enum Color {
     GREEN,
     BLUE,
     YELLOW,
-    PINK
+    PINK;
+
+    public static ArrayList<Color> getColors(){
+        return new ArrayList<>(Arrays.asList(RED, GREEN, BLUE, YELLOW, PINK));
+    }
 }

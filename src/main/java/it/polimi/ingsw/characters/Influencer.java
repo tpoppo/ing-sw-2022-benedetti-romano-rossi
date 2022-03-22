@@ -5,7 +5,7 @@ import it.polimi.ingsw.PlayerChoices;
 
 public class Influencer extends Character{
     public Influencer(Game game) {
-        super(2, game);
+        super(2);
     }
 
     @Override

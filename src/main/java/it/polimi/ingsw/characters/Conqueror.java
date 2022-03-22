@@ -10,7 +10,7 @@ public class Conqueror extends Character{
     private Island chosen_island;
 
     public Conqueror(Game game) {
-        super(2, game);
+        super(2);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Swapper extends Character{
     public Swapper(Game game) {
-        super(1, game);
+        super(1);
     }
 
     @Override

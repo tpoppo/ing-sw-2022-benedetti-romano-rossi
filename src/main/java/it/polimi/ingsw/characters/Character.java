@@ -9,11 +9,10 @@ import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 abstract class Character {
     private int cost;
     private boolean activated;
-    private Game game;
 
-    public Character(int cost, Game game){
+
+    public Character(int cost){
         this.cost = cost;
-        this.game = game;
         activated = false;
     }
 
@@ -42,7 +41,14 @@ abstract class Character {
         return Requirements.NOTHING;
     }
 
+    // Returns the character requirements
+    public int getNoEntryTiles(){
+        return 0;
+    }
+
     abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
 
     abstract void onDeactivation(Game game, PlayerChoices playerChoices);
+
+
 }

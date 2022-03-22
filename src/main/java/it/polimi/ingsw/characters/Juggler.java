@@ -3,6 +3,7 @@ package it.polimi.ingsw.characters;
 import it.polimi.ingsw.Game;
 import it.polimi.ingsw.Player;
 import it.polimi.ingsw.PlayerChoices;
+import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Color;
 import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
@@ -60,4 +61,10 @@ public class Juggler extends Character{
     public Students getStudents(){
         return new Students(students);
     }
+
+    @Override
+    public Requirements require(){
+        return Requirements.SWAP_CARD_ENTRANCE;
+    }
+
 }

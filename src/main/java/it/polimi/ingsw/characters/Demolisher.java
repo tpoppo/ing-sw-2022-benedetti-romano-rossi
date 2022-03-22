@@ -6,7 +6,7 @@ import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class Demolisher extends Character{
     public Demolisher(Game game) {
-        super(3, game);
+        super(3);
     }
 
     @Override

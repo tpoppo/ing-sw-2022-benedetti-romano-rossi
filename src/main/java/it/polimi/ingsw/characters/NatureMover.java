@@ -12,7 +12,7 @@ public class NatureMover extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    void onActivation(Game game, PlayerChoices playerChoices) {
         GameModifiers gameModifiers = game.getGameModifiers();
         gameModifiers.setExtraSteps(2);
     }

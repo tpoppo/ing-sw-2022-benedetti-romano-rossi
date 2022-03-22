@@ -4,11 +4,12 @@ import it.polimi.ingsw.Game;
 import it.polimi.ingsw.PlayerChoices;
 import it.polimi.ingsw.Requirements;
 import it.polimi.ingsw.board.Color;
+import it.polimi.ingsw.board.Students;
 import it.polimi.ingsw.exceptions.BadPlayerChoiceException;
 
 public class Colorblind extends Character{
     public Colorblind(Game game) {
-        super(3, game);
+        super(3);
     }
 
     @Override
@@ -27,4 +28,5 @@ public class Colorblind extends Character{
     void onDeactivation(Game game, PlayerChoices playerChoices){
         game.getGameModifiers().setInhibitColor(null);
     }
+
 }
