@@ -36,6 +36,7 @@ public class Lobby {
         players.add(player);
     }
 
+    // FIXME: Maybe it's better to have this in the Game class
     public void chooseWizard(int desired_wizard, Player player) throws WizardNotAvailableException {
         if(!available_wizards.contains(desired_wizard)) throw new WizardNotAvailableException();
 

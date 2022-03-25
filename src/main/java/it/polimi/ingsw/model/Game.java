@@ -27,6 +27,11 @@ public class Game {
     private GameConfig gameConfig;
     private GameModifiers gameModifiers;
 
+    // TODO:
+    //  - Add money cap (?)
+    //  - Add student cap on dining_room
+    //  - Conqueror behaviour (?)
+
     public Game(boolean expert_mode, Lobby lobby) throws EmptyBagException, EmptyMovableException {
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
@@ -279,7 +284,7 @@ public class Game {
         // check whether the professor has changed
         Player playerFrom = null;
         for(Player player : players){
-            // FIXME: playerFrom è sempre != null
+            // FIXME: problema nel caso in cui il current_player sia già in possesso del professore
             if(player.getProfessors().contains(color) && player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
                 playerFrom = player;
             }
