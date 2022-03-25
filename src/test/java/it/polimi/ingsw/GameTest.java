@@ -1,10 +1,13 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.board.*;
-import it.polimi.ingsw.exceptions.AssistantAlreadyPlayedException;
-import it.polimi.ingsw.exceptions.EmptyBagException;
-import it.polimi.ingsw.exceptions.EmptyMovableException;
-import it.polimi.ingsw.exceptions.FullLobbyException;
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.board.*;
+import it.polimi.ingsw.model.exceptions.AssistantAlreadyPlayedException;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
+import it.polimi.ingsw.model.exceptions.EmptyMovableException;
+import it.polimi.ingsw.model.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -119,5 +122,4 @@ public class GameTest {
         assertEquals(dining_students, schoolboard.getDiningStudents());
         assertEquals(entrance_students, schoolboard.getEntranceStudents());
     }
-
 }
