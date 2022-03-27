@@ -17,9 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
-    private final int ROUND_PLAYED = (int) 2e9;
-
-    @RepeatedTest(200)
+    @RepeatedTest(100)
     public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
         Lobby lobby = new Lobby(2);
         Player player0 = new Player("Player 1", 1);
@@ -30,7 +28,7 @@ public class GameTest {
         lobby.addPlayer(player1);
 
         Game game = new Game(true, lobby);
-        for(int t=0; t<ROUND_PLAYED; t++) {
+        while(true) {
             // planning phase
             game.fillClouds();
             game.getClouds().forEach((x) -> assertTrue(x.count() == 3));
@@ -63,7 +61,11 @@ public class GameTest {
                             (key_value) -> {
                                 return key_value.getKey() != null && key_value.getValue() > 0;
                             }).map((key_value) -> key_value.getKey()).findFirst();
-                    game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                    if(rng.nextBoolean()){
+                        game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                    }else{
+                        game.moveStudent(color.get());
+                    }
                 }
                 assertEquals(4, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
 

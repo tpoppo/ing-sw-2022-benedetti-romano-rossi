@@ -346,7 +346,7 @@ public class Game {
 
             // Students influence
             for(Color professor_color : player.getProfessors()){
-                if(!gameModifiers.getInhibitColor().isPresent() && !gameModifiers.getInhibitColor().get().equals(professor_color))
+                if(!gameModifiers.getInhibitColor().isPresent() || !gameModifiers.getInhibitColor().get().equals(professor_color))
                     student_influence += island.getStudents().get(professor_color);
             }
 

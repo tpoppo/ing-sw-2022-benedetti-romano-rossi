@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.board.Color;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class GameModifiers {
@@ -10,6 +11,14 @@ public class GameModifiers {
     private boolean inhibit_towers;
     private int professor_modifier; // reduce the number of student needed to get the control of the professor
     private int extra_steps;
+
+    public GameModifiers(){
+        buff_influence = 0;
+        inhibit_color = Optional.empty();
+        inhibit_towers = false;
+        professor_modifier = 0;
+        extra_steps = 0;
+    }
 
     public int getBuffInfluence() {
         return buff_influence;
