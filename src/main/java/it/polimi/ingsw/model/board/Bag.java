@@ -39,7 +39,7 @@ public class Bag {
 
     // Returns the number of students in the bag, no matter the color
     public int capacity(){
-        return students.values().stream().reduce(0, Integer::sum);
+        return students.count();
     }
 
     public Students getStudents() {

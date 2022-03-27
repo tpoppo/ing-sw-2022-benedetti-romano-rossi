@@ -14,11 +14,7 @@ public class Students extends HashMap<Color, Integer> {
     }
 
     public Students(){
-        this.put(Color.GREEN, 0);
-        this.put(Color.BLUE, 0);
-        this.put(Color.YELLOW, 0);
-        this.put(Color.PINK, 0);
-        this.put(Color.RED, 0);
+        clear();
     }
 
     public Students(Students students) {
@@ -39,5 +35,19 @@ public class Students extends HashMap<Color, Integer> {
 
     public void add(Color color){
         this.add(color, 1);
+    }
+
+    // Returns the number of students, no matter the color
+    public int count(){
+        return values().stream().reduce(0, Integer::sum);
+    } // FIXME: we don't like this name
+
+    @Override
+    public void clear() {
+        put(Color.GREEN, 0);
+        put(Color.BLUE, 0);
+        put(Color.YELLOW, 0);
+        put(Color.PINK, 0);
+        put(Color.RED, 0);
     }
 }

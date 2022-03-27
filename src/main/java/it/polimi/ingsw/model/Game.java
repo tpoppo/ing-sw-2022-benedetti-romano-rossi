@@ -20,7 +20,7 @@ public class Game {
     private Queue<Player> play_order;
     final private ArrayList<Island> islands;
     private Bag bag;
-    final private ArrayList<Students> clouds;
+    private ArrayList<Students> clouds;
     final private ArrayList<Player> players;
     final private ArrayList<Character> characters;
     final private int num_players;
@@ -153,8 +153,7 @@ public class Game {
         for (Students cloud : clouds) {
             for (int i=0; i < gameConfig.CLOUD_SPACE; i++) {
                 Color drawnColor = bag.drawStudent();
-
-                cloud.put(drawnColor, cloud.get(drawnColor) + 1);
+                cloud.add(drawnColor);
             }
         }
     }
@@ -245,12 +244,12 @@ public class Game {
      * @throws EmptyMovableException
      */
     public void moveStudent(Color color, Island island) throws EmptyMovableException {
-        // remove a student from the entrance
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
         Students entrance_students = schoolboard.getEntranceStudents();
         Students island_students = island.getStudents();
 
         entrance_students.moveTo(island_students, color);
+
         schoolboard.setEntranceStudents(entrance_students);
         island.setStudents(island_students);
     }
@@ -262,11 +261,10 @@ public class Game {
      * @throws EmptyMovableException
      */
     public void moveStudent(Color color) throws EmptyMovableException {
-
-        // move the student from the entrance to the dining room
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
         Students entrance_students = schoolboard.getEntranceStudents();
         Students dining_students = schoolboard.getDiningStudents();
+
         entrance_students.moveTo(dining_students, color);
 
         schoolboard.setEntranceStudents(entrance_students);
@@ -284,8 +282,9 @@ public class Game {
         // check whether the professor has changed
         Player playerFrom = null;
         for(Player player : players){
-            // FIXME: problema nel caso in cui il current_player sia già in possesso del professore
-            if(player.getProfessors().contains(color) && player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
+            if(player.getProfessors().contains(color)
+                    && player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()
+                    && !player.equals(playerFrom)){
                 playerFrom = player;
             }
         }
@@ -305,8 +304,8 @@ public class Game {
             e.printStackTrace(); // It should be impossible
         }
 
-        getCurrentPlayer().getSchoolBoard().setProfessors(professorsFrom); // FIXME: professorsTo (?)
-        if(playerFrom != null) playerFrom.getSchoolBoard().setProfessors(professorsTo); // FIXME: professorsFrom (?)
+        getCurrentPlayer().getSchoolBoard().setProfessors(professorsTo);
+        if(playerFrom != null) playerFrom.getSchoolBoard().setProfessors(professorsFrom);
     }
 
     /**
@@ -316,12 +315,10 @@ public class Game {
     public void moveMotherNature(Island island) throws MoveMotherNatureException {
         int next_position = islands.indexOf(island);
         int current_position = findMotherNaturePosition();
-        int distance = (next_position - current_position + islands.size()) % islands.size();
-        // FIXME: a questo punto non dovremmo aver già effettuato il controllo sulla distanza?
-        //  - lo vogliamo rifare?
+        int distance = (next_position - current_position + islands.size()) % islands.size();    // FIXME: should we do the distance check here?
 
         Player current_player = getCurrentPlayer();
-        if(distance > current_player.getCurrentAssistant().get().getSteps()){
+        if(distance > current_player.getCurrentAssistant().get().getSteps() || distance == 0){
             throw new MoveMotherNatureException();
         }
 
@@ -329,7 +326,12 @@ public class Game {
         islands.get(next_position).setMotherNature(true);
     }
 
-    private Player conquerIsland(Island island){
+    public Player conquerIsland(){
+        int mother_nature_position = findMotherNaturePosition();
+        return conquerIsland(islands.get(mother_nature_position));
+    }
+
+    public Player conquerIsland(Island island){
         HashMap<Player, Integer> influence = new HashMap<>();
         int towers_on_island = island.getNumTowers();
 
@@ -349,7 +351,7 @@ public class Game {
             }
 
             // Towers influence
-            if(island.getOwner().equals(player) && !gameModifiers.isInhibitTowers())
+            if(island.getOwner() != null && island.getOwner().equals(player) && !gameModifiers.isInhibitTowers())
                 tower_influence = towers_on_island;
 
             // Also adding the gameModifier here
@@ -395,18 +397,19 @@ public class Game {
     /**
      * It merges the islands if two consecutive islands are under the same players.
      */
-    private void mergeIslands(){
+    public void mergeIslands(){
         int current_position = 0;
 
-        while(current_position < islands.size() && islands.size() >= 2){ // FIXME: > 2 (?)
+        while(current_position < islands.size() && islands.size() >= 2){
             int next_position = (current_position + 1) % islands.size();
             Island current_island = islands.get(current_position);
             Island next_island = islands.get(next_position);
 
-            if(current_island.getOwner().equals(next_island.getOwner())){
+            if(current_island.getOwner() != null && current_island.getOwner().equals(next_island.getOwner())){
                 current_island.merge(next_island);
                 islands.remove(next_position);
             }
+            current_position++;
         }
     }
 
@@ -414,19 +417,19 @@ public class Game {
      * It moves students from the selected cloud to the player's entrance
      * @param cloud
      */
-    public void chooseCloud(Students cloud){
-        Students students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
+    public void chooseCloud(Students cloud) {
+        Students entrance_students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
 
-        for(Students.Entry<Color, Integer> entry : cloud.entrySet()) {
+        for (Students.Entry<Color, Integer> entry : cloud.entrySet()) {
             Color key = entry.getKey();
-            int value = entry.getValue();
+            int delta = entry.getValue();
 
-            students.put(key, students.get(key) + value);
+            entrance_students.add(key, delta);
         }
-
-        play_order.remove();
+        getCurrentPlayer().getSchoolBoard().setEntranceStudents(entrance_students);
         cloud.clear();
     }
+
 
     /**
      * checkVictory returns true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table.
@@ -501,6 +504,14 @@ public class Game {
 
     public ArrayList<Island> getIslands() {
         return islands;
+    }
+
+    public ArrayList<Students> getClouds() {
+        return new ArrayList<>(clouds);
+    }
+
+    public void setClouds(ArrayList<Students> clouds){
+        this.clouds = new ArrayList<>(clouds);
     }
 
     /**
