@@ -20,11 +20,7 @@ public class Island {
     }
 
     public Island(){
-        num_towers = 0;
-        owner = null;
-        mother_nature = false;
-        students = new Students();
-        no_entry_tiles = 0;
+        this(0, null, false, new Students(), 0);
     }
 
     public void merge(Island island){

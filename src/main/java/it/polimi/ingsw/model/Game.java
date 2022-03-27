@@ -312,15 +312,9 @@ public class Game {
      * It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
      * The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
      */
-    public void moveMotherNature(Island island) throws MoveMotherNatureException {
+    public void moveMotherNature(Island island) {
         int next_position = islands.indexOf(island);
         int current_position = findMotherNaturePosition();
-        int distance = (next_position - current_position + islands.size()) % islands.size();    // FIXME: should we do the distance check here?
-
-        Player current_player = getCurrentPlayer();
-        if(distance > current_player.getCurrentAssistant().get().getSteps() || distance == 0){
-            throw new MoveMotherNatureException();
-        }
 
         islands.get(current_position).setMotherNature(false);
         islands.get(next_position).setMotherNature(true);
