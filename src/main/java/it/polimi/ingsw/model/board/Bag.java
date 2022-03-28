@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.Random;
 
+
 public class Bag {
     final static int MAX_STUDENTS = 130;
     private Students students;
@@ -17,6 +18,11 @@ public class Bag {
         students = new Students(24, 24, 24, 24, 24);
     }
 
+    /**
+     * Draw a random student from the bag
+     * @return the drawn color
+     * @throws EmptyBagException if the bag is empty
+     */
     public Color drawStudent() throws EmptyBagException {
         int size = capacity();
         if(size == 0) throw new EmptyBagException();
