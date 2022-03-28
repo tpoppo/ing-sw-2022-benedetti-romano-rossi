@@ -25,8 +25,8 @@ public class Students extends HashMap<Color, Integer> {
         if(get(color) == 0){
             throw new EmptyMovableException();
         }
-        put(color, get(color)-1);
-        to.put(color, to.get(color)+1);
+        add(color, -1);
+        to.add(color, 1);
     }
 
     public void add(Color color, int delta){

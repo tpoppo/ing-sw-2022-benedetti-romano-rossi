@@ -26,6 +26,7 @@ public class Island {
     public void merge(Island island){
         num_towers += island.num_towers;
         mother_nature |= island.mother_nature;
+        no_entry_tiles += island.no_entry_tiles;
         for(Students.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
             Color key = entry.getKey();
             int value = entry.getValue();

@@ -3,12 +3,14 @@ package it.polimi.ingsw.model.board;
 import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IslandTest {
 
     @Test
-    public void checkConstructorSettersGetters() {
+    public void checkConstructorSettersGettersMerge() {
         Island island1 = new Island();
         Island island2 = new Island();
 
@@ -41,4 +43,50 @@ public class IslandTest {
         assertEquals(0, island1.getNoEntryTiles());
     }
 
+    @Test
+    public void Mergelist(){
+        ArrayList islands = new ArrayList();
+        Island island1 = new Island();
+        Island island2 = new Island();
+        Island island3 = new Island();
+
+        Students student1 = new Students(5, 3, 2, 0, 1);
+        Students student2 = new Students(1, 5, 2, 6, 4);
+        Students student3 = new Students(0, 3, 3, 2, 1);
+
+        Player player1 = new Player("Player1", 0);
+        Player player2 = new Player("Player2", 1);
+        Player player3 = new Player("Player3", 2);
+
+        island1.setMotherNature(false);
+        island1.setStudents(student1);
+        island1.setNumTowers(1);
+        island1.setOwner(player1);
+        island1.setNoEntryTiles(0);
+
+        island2.setMotherNature(true);
+        island2.setStudents(student2);
+        island2.setNumTowers(2);
+        island2.setOwner(player2);
+        island2.setNoEntryTiles(0);
+
+        island3.setMotherNature(false);
+        island3.setStudents(student3);
+        island3.setNumTowers(1);
+        island3.setOwner(player3);
+        island3.setNoEntryTiles(0);
+
+        islands.add(island2);
+        islands.add(island3);
+
+        island1.merge(islands);
+
+        Students sum_student = new Students(6, 11, 7, 8, 6);
+
+        assertEquals(true, island1.hasMotherNature());
+        assertEquals(sum_student, island1.getStudents());
+        assertEquals(4, island1.getNumTowers());
+        assertEquals(player1, island1.getOwner());
+        assertEquals(0, island1.getNoEntryTiles());
+    }
 }
