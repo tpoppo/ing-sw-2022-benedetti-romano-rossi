@@ -5,6 +5,6 @@
 !resources/
 !src/
 !javadoc/
-!UML/
+!deliverables/
 *.lock
 *.bak
