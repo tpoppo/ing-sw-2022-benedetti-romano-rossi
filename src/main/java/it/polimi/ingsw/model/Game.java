@@ -404,9 +404,7 @@ public class Game {
             if(current_island.getOwner() != null && current_island.getOwner().equals(next_island.getOwner())){
                 current_island.merge(next_island);
                 islands.remove(next_position);
-                continue;
-            }
-            current_position++;
+            }else current_position++;
         }
     }
 

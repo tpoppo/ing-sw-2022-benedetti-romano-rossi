@@ -10,23 +10,27 @@ public class Island {
     private boolean mother_nature;
     private Students students;
     private int no_entry_tiles;
+    private int num_islands;
 
-    public Island(int num_towers, Player owner, boolean mother_nature, Students students, int no_entry_tiles) {
+    public Island(int num_towers, Player owner, boolean mother_nature, Students students, int no_entry_tiles, int num_islands) {
         this.num_towers = num_towers;
         this.owner = owner;
         this.mother_nature = mother_nature;
         this.students = students;
         this.no_entry_tiles = no_entry_tiles;
+        this.num_islands = num_islands;
     }
 
     public Island(){
-        this(0, null, false, new Students(), 0);
+        this(0, null, false, new Students(), 0, 1);
     }
 
     public void merge(Island island){
         num_towers += island.num_towers;
         mother_nature |= island.mother_nature;
         no_entry_tiles += island.no_entry_tiles;
+        num_islands++;
+
         for(Students.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
             Color key = entry.getKey();
             int value = entry.getValue();
