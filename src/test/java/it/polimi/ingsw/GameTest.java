@@ -113,4 +113,139 @@ public class GameTest {
             }
         }
     }
+
+    @Test
+    public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
+        Lobby lobby = new Lobby(3);
+        Player player1 = new Player("Player 1", 1);
+        Player player2 = new Player("Player 2", 2);
+        Player player3 = new Player("Player 3", 3);
+        Random rng = new Random();
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+        lobby.addPlayer(player3);
+        Game game = new Game(true, lobby);
+        int i=0;
+        while(i<7){
+            i++;
+            game.fillClouds();
+            game.beginPlanning();
+
+            // player1
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            // player2
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            // player3
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            game.endPlanning();
+
+            if (game.checkEndGame()) {
+                //assertNotNull(game.winner());
+                return ;
+            }
+        }
+    }
+
+    @Test
+    public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException, EmptyMovableException {
+        Lobby lobby = new Lobby(3);
+        Player player1 = new Player("Player 1", 1);
+        Player player2 = new Player("Player 2", 2);
+        Player player3 = new Player("Player 3", 3);
+        Random rng = new Random();
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+        lobby.addPlayer(player3);
+        Game game = new Game(true, lobby);
+        int i=0;
+        while(i<8){
+            i++;
+            if(i==8){
+                assertThrows(EmptyBagException.class, () -> game.fillClouds());
+                return;
+            }
+            game.fillClouds();
+            game.beginPlanning();
+
+            // player1
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            // player2
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            // player3
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            game.nextTurn();
+
+            game.endPlanning();
+        }
+    }
+
+    // Test with all the owner equals
+    @Test
+    public void Merge() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+        Lobby lobby = new Lobby(2);
+        Player player1 = new Player("Player 1", 1);
+        Player player2 = new Player("Player 2", 2);
+        Random rng = new Random();
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+        ArrayList<Island> islands = game.getIslands();
+
+        //Set all the islands with the same Owner
+        for(Island island : islands){
+            island.setOwner(player1);
+        }
+        ArrayList<Island> expectedislands = new ArrayList<Island>();
+        expectedislands.add(islands.get(0));
+        game.mergeIslands();
+        assertEquals(expectedislands, islands);
+    }
+
+    //Test with first and last Owner equals
+    @Test
+    public void Merge2() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+        Lobby lobby = new Lobby(2);
+        Player player1 = new Player("Player 1", 1);
+        Player player2 = new Player("Player 2", 2);
+        Random rng = new Random();
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+        ArrayList<Island> islands = game.getIslands();
+
+        //Set player2 as Owner of the first and last island, player1 as Owner of all the other islands
+        int position = 0;
+        for(Island island : islands){
+            if(position == 0){
+                island.setOwner(player2);
+                position++;
+                continue;
+            }
+            if(position == islands.size()-1){
+                island.setOwner(player2);
+                position++;
+                continue;
+            }
+            island.setOwner(player1);
+            position++;
+        }
+        game.mergeIslands();
+        assertEquals(2, islands.size());
+        assertEquals(player1, islands.get(0).getOwner());
+        assertEquals(player2, islands.get(islands.size() - 1).getOwner());
+    }
 }
