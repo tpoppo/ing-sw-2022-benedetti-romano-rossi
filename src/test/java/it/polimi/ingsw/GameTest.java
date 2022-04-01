@@ -79,9 +79,6 @@ public class GameTest {
                 // conquering an island
                 game.conquerIsland();
 
-                // unify islands
-                game.mergeIslands();
-
                 // check victory immediately
                 if (game.checkVictory()) {
                     assertNotNull(game.winner());

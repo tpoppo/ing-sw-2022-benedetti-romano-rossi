@@ -125,7 +125,7 @@ public class Game {
             for (Player player : players)
                 player.setCoins(1);
 
-            // TODO: Scelta 3 character randomicamente
+            // Randomly choosing the characters
             int count = 0;
             ArrayList<Characters> drawnCharacters = new ArrayList<>();
             do{
@@ -382,6 +382,8 @@ public class Game {
                 old_owner.getSchoolBoard().addTowers(towers_on_island);
             }
 
+            mergeIslands();
+
             return new_owner;
         }
 
@@ -391,7 +393,7 @@ public class Game {
     /**
      * It merges the islands if two consecutive islands are under the same players.
      */
-    public void mergeIslands(){
+    private void mergeIslands(){
         int current_position = 0;
 
         while(current_position < islands.size() && islands.size() >= 2){
