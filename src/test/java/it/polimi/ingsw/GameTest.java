@@ -111,6 +111,101 @@ public class GameTest {
         }
     }
 
+    @RepeatedTest(100)
+    public void simpleRun2() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
+        Lobby lobby = new Lobby(3);
+        Player player1 = new Player("Player 1", 1);
+        Player player2 = new Player("Player 2", 2);
+        Player player3 = new Player("Player 3", 3);
+        Random rng = new Random();
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+        lobby.addPlayer(player3);
+
+        Game game = new Game(true, lobby);
+        while(true) {
+            // planning phase
+            game.fillClouds();
+            //game.getClouds().forEach((x) -> assertTrue(x.count() == 6));
+
+            game.beginPlanning();
+
+            // player1
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Player first_player = game.getCurrentPlayer();
+            game.nextTurn();
+
+            // player2
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            assertNotEquals(game.getCurrentPlayer(), first_player);
+            game.nextTurn();
+
+            // player3
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            assertNotEquals(game.getCurrentPlayer(), first_player);
+            game.nextTurn();
+
+            game.endPlanning();
+            assertTrue(game.getCurrentPlayer() != null);
+
+            ArrayList<Island> islands = game.getIslands();
+
+            // action phase
+            for (int player_id = 0; player_id < 3; player_id++) {
+                // step 1
+                for (int i = 0; i < 3; i++) {
+                    // move a random student from the player's entrance to a random island
+                    Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
+                    Optional<Color> color = students.entrySet().stream().filter(
+                            (key_value) -> {
+                                return key_value.getKey() != null && key_value.getValue() > 0;
+                            }).map((key_value) -> key_value.getKey()).findFirst();
+                    if(rng.nextBoolean()){
+                        game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                    }else{
+                        game.moveStudent(color.get());
+                    }
+                }
+                // step 2 - move mother nature
+                Island mother_nature_island = islands.stream().filter(Island::hasMotherNature).findFirst().get();
+                int curr_mother_nature_position = islands.indexOf(mother_nature_island);
+                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().get().getSteps()) + 1) % islands.size();
+
+                game.moveMotherNature(islands.get(next_mother_nature_position));
+
+                // conquering an island
+                game.conquerIsland();
+
+                // check victory immediately
+                if (game.checkVictory()) {
+                    assertNotNull(game.winner());
+                    return;
+                }
+
+                // step 3 - choose cloud tiles
+                ArrayList<Students> clouds = game.getClouds();
+
+                Students students = null;
+                do {
+                    students = clouds.get(rng.nextInt(clouds.size()));
+                } while (students.count() <= 0);
+                game.chooseCloud(students);
+
+                assertEquals(0, students.count());
+
+                // end phase
+                game.nextTurn();
+            }
+
+            // check victory end game
+            if (game.checkEndGame()) {
+                assertNotNull(game.winner());
+                return ;
+            }
+        }
+    }
+
     @Test
     public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         Lobby lobby = new Lobby(3);

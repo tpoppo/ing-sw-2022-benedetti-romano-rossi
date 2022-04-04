@@ -30,7 +30,7 @@ public class Recruiter extends Character{
         Island island = playerChoices.getIsland();
         ArrayList<Color> colors = playerChoices.getStudent();
 
-        if(students.size() != 1){
+        if(colors.size() != 1){
             throw new BadPlayerChoiceException();
         }
 
