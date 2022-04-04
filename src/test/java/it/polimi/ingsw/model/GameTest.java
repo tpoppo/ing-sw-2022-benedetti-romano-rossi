@@ -178,7 +178,7 @@ public class GameTest {
         while(true) {
             // planning phase
             if(game.fillClouds()){
-                game.getClouds().forEach((x) -> assertEquals(6, x.count()));
+                game.getClouds().forEach((x) -> assertEquals(4, x.count()));
             }
 
             game.beginPlanning();
