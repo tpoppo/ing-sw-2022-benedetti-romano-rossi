@@ -186,6 +186,8 @@ public class GameTest {
         }
     }
 
+    /*
+    These tests were done when game.mergeisland was public
     // Test with all the owner equals
     @Test
     public void Merge() throws FullLobbyException, EmptyMovableException, EmptyBagException {
@@ -244,5 +246,5 @@ public class GameTest {
         assertEquals(2, islands.size());
         assertEquals(player1, islands.get(0).getOwner());
         assertEquals(player2, islands.get(islands.size() - 1).getOwner());
-    }
+    }*/
 }
