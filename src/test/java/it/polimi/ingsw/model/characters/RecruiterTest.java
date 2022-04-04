@@ -39,17 +39,24 @@ public class RecruiterTest {
         PlayerChoices playerchoice = new PlayerChoices();
 
         Students student = new Students();
-        Island island = new Island();
-        island = islands.get(3);
+        Island island = islands.get(3);
 
-        playerchoice.setStudent(Color.RED);
+        island.setStudents(new Students());
+
+        Color color = null;
+        do{
+            color = Color.getColors().get((new Random()).nextInt(Color.getColors().size()));
+            if(recruiter.getStudents().getOrDefault(color, 0) == 0) color = null;
+        }while(color == null);
+
+        playerchoice.setStudent(color);
         playerchoice.setIsland(island);
-
         assertEquals(1, playerchoice.getStudent().size());
 
         recruiter.onActivation(game, playerchoice);
 
-        //Students expected_student = new Students(0, 0, 0, 0, 1);
-        //assertEquals(expected_student, islands.get(3).getStudents());
+        Students expected_student = new Students();
+        expected_student.add(color);
+        expected_student.forEach((key, value) -> assertEquals(value, islands.get(3).getStudents().getOrDefault(key, -1), "key: "+key));
     }
 }

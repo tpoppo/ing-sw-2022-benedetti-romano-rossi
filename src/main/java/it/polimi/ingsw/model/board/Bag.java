@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 public class Bag {
-    final static int MAX_STUDENTS = 130;
+    public final static int MAX_STUDENTS = 130;
     private Students students;
     private Random rng = new Random();
 

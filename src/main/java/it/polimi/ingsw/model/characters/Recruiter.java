@@ -21,7 +21,7 @@ public class Recruiter extends Character{
             try {
                 Color color = game.drawStudentFromBag();
                 students.put(color, students.get(color) + 1);
-            } catch (EmptyBagException e) {}
+            } catch (EmptyBagException ignored) {}
         }
     }
 
@@ -39,7 +39,7 @@ public class Recruiter extends Character{
         Students island_students = island.getStudents();
         try {
             students.moveTo(island_students, color);
-        } catch (EmptyMovableException e) {  // not enough students on the card.
+        } catch (EmptyMovableException e) {  // not enough students on this card.
             throw new BadPlayerChoiceException();
         }
 

@@ -148,14 +148,30 @@ public class Game {
         play_order.remove();  // FIXME: is it better to use poll()?
     }
 
-    // Places the # of students on each cloud
-    public void fillClouds() throws EmptyBagException {
+    //
+
+    /**
+     * Places the # of students on each cloud. If there are not enough students in the bag it returns false
+     * @return true if it was able to fill all the clouds, otherwise it returns false
+     */
+    public boolean fillClouds() {
+        // not enough students in bag
+        if(bag.capacity() < clouds.size() * gameConfig.CLOUD_SPACE) {
+            return false;
+        }
+
         for (Students cloud : clouds) {
             for (int i=0; i < gameConfig.CLOUD_SPACE; i++) {
-                Color drawnColor = bag.drawStudent();
+                Color drawnColor = null;
+                try {
+                    drawnColor = bag.drawStudent();
+                } catch (EmptyBagException e) {
+                    e.printStackTrace(); // shouldn't be possible
+                }
                 cloud.add(drawnColor);
             }
         }
+        return true;
     }
 
     // Computes the player_order for the planning phase based on the first_player
@@ -503,6 +519,10 @@ public class Game {
 
     public ArrayList<Students> getClouds() {
         return new ArrayList<>(clouds);
+    }
+
+    public ArrayList<Character> getCharacters() {
+        return new ArrayList<>(characters);
     }
 
     public void setClouds(ArrayList<Students> clouds){

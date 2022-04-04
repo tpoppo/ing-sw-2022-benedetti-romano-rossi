@@ -29,7 +29,7 @@ public class Island {
         num_towers += island.num_towers;
         mother_nature |= island.mother_nature;
         no_entry_tiles += island.no_entry_tiles;
-        num_islands++;
+        num_islands += island.num_islands;
 
         for(Students.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
             Color key = entry.getKey();
@@ -83,4 +83,9 @@ public class Island {
     public void setNumTowers(int num_towers) {
         this.num_towers = num_towers;
     }
+
+    public int getNumIslands() {return num_islands;}
+
+    public void setNumIslands(int num_islands) {this.num_islands = num_islands;}
+
 }
