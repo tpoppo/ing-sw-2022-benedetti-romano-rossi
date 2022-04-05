@@ -258,7 +258,7 @@ public class GameTest {
         }
     }
 
-    @Test
+    @RepeatedTest(100)
     public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         Lobby lobby = new Lobby(3);
         Player player1 = new Player("Player 1", 1);
@@ -296,7 +296,7 @@ public class GameTest {
         }
     }
 
-    @Test
+    @RepeatedTest(100)
     public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException, EmptyMovableException {
         Lobby lobby = new Lobby(3);
         Player player1 = new Player("Player 1", 1);

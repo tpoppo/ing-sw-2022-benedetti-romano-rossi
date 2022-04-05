@@ -23,6 +23,9 @@ public class ProfessorsTest {
 
         assertEquals(true, professor1.contains(Color.RED));
         assertEquals(false, professor2.contains(Color.RED));
+
+        Professors professor3 = new Professors(professor1);
+        assertEquals(professor1, professor3);
     }
 
     @Test

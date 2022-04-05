@@ -25,12 +25,14 @@ public class IslandTest {
         island1.setNumTowers(1);
         island1.setOwner(player1);
         island1.setNoEntryTiles(0);
+        island1.setNumIslands(1);
 
         island2.setMotherNature(false);
         island2.setStudents(student2);
         island2.setNumTowers(2);
         island2.setOwner(player2);
         island2.setNoEntryTiles(0);
+        island2.setNumIslands(1);
 
         Students sum_student = new Students(3, 3, 3, 3, 2);
 
@@ -41,6 +43,7 @@ public class IslandTest {
         assertEquals(3, island1.getNumTowers());
         assertEquals(player1, island1.getOwner());
         assertEquals(0, island1.getNoEntryTiles());
+        assertEquals(2, island1.getNumIslands());
     }
 
     @Test

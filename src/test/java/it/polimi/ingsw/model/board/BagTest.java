@@ -16,14 +16,19 @@ public class BagTest {
             color = bag.drawStudent();
         }
         assertEquals(0, bag.capacity());
+        Bag bag2 = new Bag();
+        Students student = new Students(2, 3, 1, 0, 4);
+        bag2.setStudents(student);
+        assertEquals(student, bag2.getStudents());
     }
 
+    @Test
     public void BagException() throws EmptyBagException {
         Bag bag = new Bag();
         Color color = null;
         for(int i=0; i<24*5; i++){
             color = bag.drawStudent();
         }
-        assertThrows(EmptyMovableException.class, bag::drawStudent);
+        assertThrows(EmptyBagException.class, bag::drawStudent);
     }
 }
