@@ -12,7 +12,7 @@ public class Player {
     final private String username;
     private int coins;
     final private SchoolBoard schoolBoard;
-    private ArrayList<Assistant> playerHand; //TODO
+    private ArrayList<Assistant> playerHand;
     private int wizard;
 
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
@@ -72,6 +72,4 @@ public class Player {
     public void setCoins(int coins){
         this.coins = coins;
     }
-
-
 }

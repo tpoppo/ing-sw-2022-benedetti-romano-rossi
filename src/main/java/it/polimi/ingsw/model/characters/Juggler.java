@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.characters;
 
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Students;
-import it.polimi.ingsw.model.exceptions.BadPlayerChoiceException;
-import it.polimi.ingsw.model.exceptions.EmptyBagException;
-import it.polimi.ingsw.model.exceptions.EmptyMovableException;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
+import it.polimi.ingsw.utils.exceptions.EmptyBagException;
+import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 public class Juggler extends Character{
     Students students;

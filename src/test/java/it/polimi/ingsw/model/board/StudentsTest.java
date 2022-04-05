@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.exceptions.EmptyMovableException;
+import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

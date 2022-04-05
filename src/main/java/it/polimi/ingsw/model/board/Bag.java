@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.exceptions.EmptyBagException;
+import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 
 import java.util.Random;
 

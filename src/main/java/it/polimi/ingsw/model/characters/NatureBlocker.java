@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.characters;
 
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.model.exceptions.BadPlayerChoiceException;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class NatureBlocker extends  Character{
     int tiles;

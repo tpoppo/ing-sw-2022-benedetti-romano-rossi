@@ -1,13 +1,16 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.model.GameConfig;
+import it.polimi.ingsw.model.GameModifiers;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.characters.Characters;
-import it.polimi.ingsw.model.exceptions.AssistantAlreadyPlayedException;
-import it.polimi.ingsw.model.exceptions.EmptyBagException;
-import it.polimi.ingsw.model.exceptions.EmptyMovableException;
-import it.polimi.ingsw.model.exceptions.MoveMotherNatureException;
+import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
+import it.polimi.ingsw.utils.exceptions.EmptyBagException;
+import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -30,9 +33,8 @@ public class Game {
     // TODO:
     //  - Add money cap (?)
     //  - Add student cap on dining_room
-    //  - Conqueror behaviour (?)
 
-    public Game(boolean expert_mode, Lobby lobby) throws EmptyBagException, EmptyMovableException {
+    public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
         this.num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
         gameModifiers = new GameModifiers();

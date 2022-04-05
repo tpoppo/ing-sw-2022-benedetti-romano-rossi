@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
-import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.utils.exceptions.*;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class GameTest {
 
     @RepeatedTest(100)
     public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
-        Lobby lobby = new Lobby(2);
+        LobbyHandler lobby = new LobbyHandler(2);
         Player player0 = new Player("Player 1", 1);
         Player player1 = new Player("Player 2", 2);
         Random rng = new Random();
@@ -185,7 +186,7 @@ public class GameTest {
     //FIXME: it does not work. It loops indefinitely
     // @RepeatedTest(100)
     public void simpleRun2() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
-        Lobby lobby = new Lobby(3);
+        LobbyHandler lobby = new LobbyHandler(3);
         Player player1 = new Player("Player 1", 1);
         Player player2 = new Player("Player 2", 2);
         Player player3 = new Player("Player 3", 3);
@@ -281,7 +282,7 @@ public class GameTest {
 
     @RepeatedTest(100)
     public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
-        Lobby lobby = new Lobby(3);
+        LobbyHandler lobby = new LobbyHandler(3);
         Player player1 = new Player("Player 1", 1);
         Player player2 = new Player("Player 2", 2);
         Player player3 = new Player("Player 3", 3);
@@ -319,7 +320,7 @@ public class GameTest {
 
     @RepeatedTest(100)
     public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException, EmptyMovableException {
-        Lobby lobby = new Lobby(3);
+        LobbyHandler lobby = new LobbyHandler(3);
         Player player1 = new Player("Player 1", 1);
         Player player2 = new Player("Player 2", 2);
         Player player3 = new Player("Player 3", 3);

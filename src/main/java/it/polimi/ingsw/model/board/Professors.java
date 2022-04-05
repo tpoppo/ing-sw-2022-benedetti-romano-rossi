@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.exceptions.EmptyMovableException;
+import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 import java.util.HashSet;
 

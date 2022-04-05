@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.exceptions.EmptyBagException;
-import it.polimi.ingsw.model.exceptions.EmptyMovableException;
+import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

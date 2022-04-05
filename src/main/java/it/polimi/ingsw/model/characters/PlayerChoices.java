@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.characters;
 
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.model.exceptions.BadPlayerChoiceException;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 import java.util.ArrayList;
 

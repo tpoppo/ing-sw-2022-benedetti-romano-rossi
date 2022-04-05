@@ -1,18 +1,18 @@
 package it.polimi.ingsw.controller;
 
-public class Controller {
-    private static Controller instance;
+public class Server {
+    private static Server instance;
     final private int PORT;
 
     private MenuManager menuManager;
     private NetworkManager networkManager;
 
-    private Controller(){
+    private Server(){
         PORT = 1234;
     }
 
-    public static Controller getInstance(){
-        if(instance == null) instance = new Controller();
+    public static Server getInstance(){
+        if(instance == null) instance = new Server();
         return instance;
     }
 

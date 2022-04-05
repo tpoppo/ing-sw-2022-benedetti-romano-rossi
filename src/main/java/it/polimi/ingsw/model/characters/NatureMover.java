@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.characters;
 
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.GameModifiers;
 
 public class NatureMover extends Character{

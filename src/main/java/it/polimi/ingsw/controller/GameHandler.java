@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Game;
-
 public class GameHandler {
     private Game model;
     private GameState current_state;

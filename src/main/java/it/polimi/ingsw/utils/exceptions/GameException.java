@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.exceptions;
+package it.polimi.ingsw.utils.exceptions;
 
 public class GameException extends Exception{
     final private String info;
