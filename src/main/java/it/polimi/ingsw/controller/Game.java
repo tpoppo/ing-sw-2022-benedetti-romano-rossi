@@ -33,6 +33,7 @@ public class Game {
     // TODO:
     //  - Add money cap (?)
     //  - Add student cap on dining_room
+    // -  Add activateCharacter
 
     public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
         this.num_players = lobby.getPlayers().size();
@@ -489,7 +490,7 @@ public class Game {
     /**
      * It returns the position of MotherNature in the islands arraylist.
      */
-    private int findMotherNaturePosition(){
+    public int findMotherNaturePosition(){
         for(int i=0; i<islands.size(); i++) {
             if(islands.get(i).hasMotherNature()) return i;
         }
@@ -529,6 +530,10 @@ public class Game {
 
     public void setClouds(ArrayList<Students> clouds){
         this.clouds = new ArrayList<>(clouds);
+    }
+
+    public boolean getExpertMode() {
+        return expert_mode;
     }
 
     /**

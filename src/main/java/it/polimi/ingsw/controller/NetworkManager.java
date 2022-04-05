@@ -9,6 +9,9 @@ public class NetworkManager {
     private final int ID;
     private HandlerType current_handler;
     private ConcurrentLinkedQueue<ClientMessage> message_queue;
+    private LobbyHandler lobby_handler;
+    private GameHandler game_handler;
+
 
     // not thread safe
     private NetworkManager(){
@@ -20,4 +23,13 @@ public class NetworkManager {
     public synchronized NetworkManager createNetworkManager(){
         return new NetworkManager();
     }
+
+    public LobbyHandler getLobbyHandler() {
+        return lobby_handler;
+    }
+
+    public GameHandler getGameHandler() {
+        return game_handler;
+    }
+
 }
