@@ -41,7 +41,12 @@ public class Game {
         characters = new ArrayList<>();
 
         // Adding all the players from the lobby to the game
-        players = new ArrayList<>(lobby.getPlayers());
+        players = new ArrayList<>();
+
+        ArrayList<LobbyPlayer> lobbyPlayers = lobby.getPlayers();
+        for(LobbyPlayer lobbyPlayer : lobbyPlayers){
+            players.add(new Player(lobbyPlayer));
+        }
 
         // Importing game config from file (the file is chosen based on the # of players playing)
         String file_path = "src/main/resources/" + num_players + "PlayersGame.json";
@@ -149,8 +154,6 @@ public class Game {
     public void nextTurn(){
         play_order.remove();  // FIXME: is it better to use poll()?
     }
-
-    //
 
     /**
      * Places the # of students on each cloud. If there are not enough students in the bag it returns false

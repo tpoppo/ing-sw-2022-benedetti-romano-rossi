@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.board.Assistant;
 import it.polimi.ingsw.model.board.Professors;
 import it.polimi.ingsw.model.board.SchoolBoard;
@@ -9,11 +10,11 @@ import java.util.Optional;
 
 public class Player {
     private Optional<Assistant> current_assistant;
-    final private String username;
+    private final String username;
     private int coins;
     final private SchoolBoard schoolBoard;
     private ArrayList<Assistant> playerHand;
-    private int wizard;
+    private final int wizard;
 
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
         this.username = username;
@@ -29,8 +30,12 @@ public class Player {
         current_assistant = Optional.empty();
         coins = 0;
         schoolBoard = new SchoolBoard(0);
-        playerHand = Assistant.getAssistants(wizard);
         this.wizard = wizard;
+        playerHand = Assistant.getAssistants(this.wizard);
+    }
+
+    public Player(LobbyPlayer player){
+        this(player.getUsername(), player.getWizard().get()); // this should always be != null (as every lobbyPlayer must choose a wizard when entering the lobby)
     }
 
     public void setPlayerHand(ArrayList<Assistant> playerHand) {
@@ -59,10 +64,6 @@ public class Player {
 
     public void setCurrentAssistant(Assistant current_assistant) {
         this.current_assistant = Optional.ofNullable(current_assistant);
-    }
-
-    public void setWizard(int wizard){
-        this.wizard = wizard;
     }
 
     public int getCoins() {

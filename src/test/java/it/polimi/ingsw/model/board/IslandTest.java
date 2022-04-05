@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.board;
 
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +18,8 @@ public class IslandTest {
         Students student1 = new Students(2, 3, 1, 0, 2);
         Students student2 = new Students(1, 0, 2, 3, 0);
 
-        Player player1 = new Player("Player1", 0);
-        Player player2 = new Player("Player2", 1);
+        Player player1 = new Player("Player1", 1);
+        Player player2 = new Player("Player2", 2);
 
         island1.setMotherNature(true);
         island1.setStudents(student1);
