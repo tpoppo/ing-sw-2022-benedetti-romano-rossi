@@ -291,32 +291,37 @@ public class Game {
         }
 
         // check whether the professor has changed
-        Player playerFrom = null;
-        for(Player player : players){
-            if(player.getProfessors().contains(color)
-                    && player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()
-                    && !player.equals(playerFrom)){
-                playerFrom = player;
+        Professors professorsTo = getCurrentPlayer().getProfessors();
+        boolean professor_in_game = false;
+        for(Player player : players) {
+            if (player.getProfessors().contains(color)) {
+                professor_in_game = true;
             }
         }
 
-        Professors professorsFrom;
-        Professors professorsTo = getCurrentPlayer().getProfessors();
 
-        if(playerFrom == null){
-            professorsFrom = new Professors();
-            professorsFrom.add(color);
+        if(!professor_in_game){
+            professorsTo.add(color);
         }else{
-            professorsFrom = playerFrom.getProfessors();
+            Player playerFrom = null;
+            for(Player player : players){
+                if(player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()
+                        && player.getProfessors().contains(color)
+                        && !player.equals(getCurrentPlayer())) {
+                    playerFrom = player;
+                }
+            }
+            if(playerFrom != null){
+                Professors professorsFrom = playerFrom.getProfessors();
+                try {
+                    professorsFrom.moveTo(professorsTo, color);
+                } catch (EmptyMovableException e) {
+                    e.printStackTrace(); // It should be impossible
+                }
+                playerFrom.getSchoolBoard().setProfessors(professorsFrom);
+            }
         }
-        try {
-            professorsFrom.moveTo(professorsTo, color);
-        } catch (EmptyMovableException e) {
-            e.printStackTrace(); // It should be impossible
-        }
-
         getCurrentPlayer().getSchoolBoard().setProfessors(professorsTo);
-        if(playerFrom != null) playerFrom.getSchoolBoard().setProfessors(professorsFrom);
     }
 
     /**

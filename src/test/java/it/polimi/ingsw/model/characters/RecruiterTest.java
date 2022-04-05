@@ -34,7 +34,7 @@ public class RecruiterTest {
         Game game = new Game(true, lobby);
 
         ArrayList<Island> islands = game.getIslands();
-        Recruiter recruiter = new Recruiter(game);
+        Recruiter recruiter = (Recruiter) Character.createCharacter(Characters.RECRUITER, game);
 
         PlayerChoices playerchoice = new PlayerChoices();
 
@@ -45,7 +45,7 @@ public class RecruiterTest {
 
         Color color = null;
         do{
-            color = Color.getColors().get((new Random()).nextInt(Color.getColors().size()));
+            color = Color.getRandomColor();
             if(recruiter.getStudents().getOrDefault(color, 0) == 0) color = null;
         }while(color == null);
 
@@ -59,4 +59,5 @@ public class RecruiterTest {
         expected_student.add(color);
         expected_student.forEach((key, value) -> assertEquals(value, islands.get(3).getStudents().getOrDefault(key, -1), "key: "+key));
     }
+
 }

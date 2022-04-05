@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Lobby;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.exceptions.*;
@@ -53,6 +50,25 @@ public class GameTest {
             students_cnt += character.getStudents().count();
         }
         assertEquals(students_cnt, Bag.MAX_STUDENTS);
+
+        // only one mother nature
+        int mother_nature_cnt = 0;
+        for(Island island : game.getIslands()){
+            mother_nature_cnt += island.hasMotherNature() ? 1 : 0;
+        }
+        assertEquals(mother_nature_cnt, 1);
+
+        // at most one professor for each color
+        for(Color color : Color.getColors()){
+            boolean has_professor = false;
+            for(Player player : game.getPlayers()){
+                Professors professors = player.getSchoolBoard().getProfessors();
+                if(has_professor) assertFalse(professors.contains(color));
+                has_professor |= professors.contains(color);
+            }
+        }
+
+
     }
 
     @RepeatedTest(100)
@@ -125,9 +141,11 @@ public class GameTest {
                 int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().get().getSteps()) + 1) % islands.size();
 
                 game.moveMotherNature(islands.get(next_mother_nature_position));
+                checkInvariant(game);
 
                 // conquering an island
                 game.conquerIsland();
+                checkInvariant(game);
 
                 // check victory immediately
                 if (game.checkVictory()) {
@@ -145,12 +163,14 @@ public class GameTest {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
                 game.chooseCloud(students);
+                checkInvariant(game);
 
                 assertEquals(0, students.count());
                 assertEquals(7, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
 
                 // end phase
                 game.nextTurn();
+                checkInvariant(game);
             }
 
             // check victory end game
@@ -158,6 +178,7 @@ public class GameTest {
                 assertNotNull(game.winner());
                 return ;
             }
+            checkInvariant(game);
         }
     }
 
