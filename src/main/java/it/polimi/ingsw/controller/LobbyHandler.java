@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 
@@ -9,7 +8,7 @@ import java.util.Arrays;
 
 public class LobbyHandler {
     private int max_players;
-    private ArrayList<Player> players;
+    private ArrayList<LobbyPlayer> players;
     private ArrayList<Integer> available_wizards;
 
     public LobbyHandler(int max_players){
@@ -19,22 +18,22 @@ public class LobbyHandler {
     }
 
     public LobbyHandler(){
-        new LobbyHandler(3);
+        this(3);
     }
 
-    public void chooseWizard(int desired_wizard, Player player) throws WizardNotAvailableException {
+    public void chooseWizard(int desired_wizard, LobbyPlayer player) throws WizardNotAvailableException {
         if(!available_wizards.contains(desired_wizard)) throw new WizardNotAvailableException();
 
         player.setWizard(desired_wizard);
         available_wizards.remove(desired_wizard);
     }
 
-    public void addPlayer(Player player) throws FullLobbyException {
+    public void addPlayer(LobbyPlayer player) throws FullLobbyException {
         if(players.size() == max_players) throw new FullLobbyException();
         players.add(player);
     }
 
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<LobbyPlayer> getPlayers() {
         return players;
     }
 }

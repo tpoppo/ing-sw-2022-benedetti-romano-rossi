@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.characters;
 
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
@@ -23,8 +24,10 @@ public class RecruiterTest {
     @Test
     public void Recruiter() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(2);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        player1.setWizard(1);
+        player2.setWizard(2);
         Random rng = new Random();
 
         lobby.addPlayer(player1);

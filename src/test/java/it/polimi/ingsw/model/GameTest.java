@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.*;
@@ -75,8 +76,10 @@ public class GameTest {
     @RepeatedTest(100)
     public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(2);
-        Player player0 = new Player("Player 1", 1);
-        Player player1 = new Player("Player 2", 2);
+        LobbyPlayer player0 = new LobbyPlayer("Player 1");
+        LobbyPlayer player1 = new LobbyPlayer("Player 2");
+        player0.setWizard(1);
+        player1.setWizard(2);
         Random rng = new Random();
 
         lobby.addPlayer(player0);
@@ -187,9 +190,12 @@ public class GameTest {
     // @RepeatedTest(100)
     public void simpleRun2() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
         LobbyHandler lobby = new LobbyHandler(3);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
-        Player player3 = new Player("Player 3", 3);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        LobbyPlayer player3 = new LobbyPlayer("Player 3");
+        player1.setWizard(1);
+        player2.setWizard(2);
+        player3.setWizard(3);
         Random rng = new Random();
 
         lobby.addPlayer(player1);
@@ -283,9 +289,12 @@ public class GameTest {
     @RepeatedTest(100)
     public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(3);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
-        Player player3 = new Player("Player 3", 3);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        LobbyPlayer player3 = new LobbyPlayer("Player 3");
+        player1.setWizard(1);
+        player2.setWizard(2);
+        player3.setWizard(3);
         Random rng = new Random();
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
@@ -321,9 +330,12 @@ public class GameTest {
     @RepeatedTest(100)
     public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException, EmptyMovableException {
         LobbyHandler lobby = new LobbyHandler(3);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
-        Player player3 = new Player("Player 3", 3);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        LobbyPlayer player3 = new LobbyPlayer("Player 3");
+        player1.setWizard(1);
+        player2.setWizard(2);
+        player3.setWizard(3);
         Random rng = new Random();
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
