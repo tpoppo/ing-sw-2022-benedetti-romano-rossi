@@ -4,18 +4,18 @@ import java.util.Optional;
 
 public class LobbyPlayer {
     private final String username;
-    private Optional<Integer> wizard;
+    private Integer wizard;
 
     public LobbyPlayer(String username){
         this.username = username;
-        wizard = Optional.empty();
+        wizard = null;
     }
 
     public void setWizard(int wizard) {
-        this.wizard = Optional.of(wizard);
+        this.wizard = wizard;
     }
 
-    public Optional<Integer> getWizard() {
+    public int getWizard() {
         return wizard;
     }
 

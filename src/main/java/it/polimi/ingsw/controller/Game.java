@@ -16,10 +16,10 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
-    final static public int MAX_COINS = 20;
-    final static public int MAX_DINING_STUDENTS = 8;
+    public static final int MAX_COINS = 20;
+    public static final int MAX_DINING_STUDENTS = 8;
 
-    final private boolean expert_mode;
+    private final boolean expert_mode;
     private Player first_player;
     private Queue<Player> play_order;
     private final ArrayList<Island> islands;

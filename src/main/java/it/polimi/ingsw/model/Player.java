@@ -35,7 +35,7 @@ public class Player {
     }
 
     public Player(LobbyPlayer player){
-        this(player.getUsername(), player.getWizard().get()); // this should always be != null (as every lobbyPlayer must choose a wizard when entering the lobby)
+        this(player.getUsername(), player.getWizard()); // this should always be != null (as every lobbyPlayer must choose a wizard when entering the lobby)
     }
 
     public void setPlayerHand(ArrayList<Assistant> playerHand) {
