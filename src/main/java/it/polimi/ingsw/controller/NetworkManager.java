@@ -13,8 +13,6 @@ public class NetworkManager {
     private GameHandler game_handler;
 
 
-    private LobbyHandler lobbyHandler;
-    private GameHandler gameHandler;
 
     // not thread safe
     private NetworkManager(int max_players){
@@ -23,16 +21,12 @@ public class NetworkManager {
         message_queue = new ConcurrentLinkedQueue<>();
 
         current_handler = HandlerType.LOBBY;
-        lobbyHandler = new LobbyHandler(max_players);
+        lobby_handler = new LobbyHandler(max_players);
     }
 
     // thread safe
     public static synchronized NetworkManager createNetworkManager(int max_players){
         return new NetworkManager(max_players);
-    }
-
-    public LobbyHandler getLobbyHandler() {
-        return lobbyHandler;
     }
 
     public LobbyHandler getLobbyHandler() {
