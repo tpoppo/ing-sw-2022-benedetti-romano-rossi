@@ -61,7 +61,7 @@ public class GameTest {
         assertEquals(mother_nature_cnt, 1);
 
         // at most one professor for each color
-        for(Color color : Color.getColors()){
+        for(Color color : Color.values()){
             boolean has_professor = false;
             for(Player player : game.getPlayers()){
                 Professors professors = player.getSchoolBoard().getProfessors();
@@ -70,11 +70,18 @@ public class GameTest {
             }
         }
 
+        //max coins & non negative coins
+        int total_coins = 0;
+        for(Player player : game.getPlayers()){
+            total_coins += player.getCoins();
+            assertTrue(player.getCoins() >= 0);
+        }
+        assertTrue(total_coins <= Game.MAX_COINS);
 
     }
 
-    @RepeatedTest(100)
-    public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
+    @RepeatedTest(200)
+    public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, FullDiningRoomException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player0 = new LobbyPlayer("Player 1");
         LobbyPlayer player1 = new LobbyPlayer("Player 2");
@@ -128,7 +135,9 @@ public class GameTest {
                     Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
                     Optional<Color> color = students.entrySet().stream().filter(
                             (key_value) -> {
-                                return key_value.getKey() != null && key_value.getValue() > 0;
+                                return key_value.getKey() != null
+                                        && key_value.getValue() > 0
+                                        && game.getCurrentPlayer().getSchoolBoard().getDiningStudents().get(key_value.getKey()) < Game.MAX_DINING_STUDENTS;
                             }).map((key_value) -> key_value.getKey()).findFirst();
                     if(rng.nextBoolean()){
                         game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
@@ -188,7 +197,7 @@ public class GameTest {
 
     //FIXME: it does not work. It loops indefinitely
     // @RepeatedTest(100)
-    public void simpleRun2() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
+    public void simpleRun2() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
         LobbyHandler lobby = new LobbyHandler(3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

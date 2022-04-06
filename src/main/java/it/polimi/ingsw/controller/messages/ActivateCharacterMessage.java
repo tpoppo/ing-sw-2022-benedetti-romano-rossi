@@ -7,13 +7,12 @@ import it.polimi.ingsw.controller.NetworkManager;
 import it.polimi.ingsw.controller.responses.ServerResponse;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
+import it.polimi.ingsw.model.characters.Character;
 
 public class ActivateCharacterMessage implements ClientMessage {
-    int character_position;
 
-    public ActivateCharacterMessage(int character_position) {
-        this.character_position = character_position;
+    public ActivateCharacterMessage() {
+
     }
 
     @Override
@@ -22,7 +21,7 @@ public class ActivateCharacterMessage implements ClientMessage {
         Game game = gameHandler.getModel();
 
         // Invalid state. It ust be (current_state=ACTIVATE_CHARACTER, action_completed=False)
-        if(gameHandler.getCurrentState() != GameState.ACTIVATE_CHARACTER && !gameHandler.isActionCompleted()){
+        if(gameHandler.getCurrentState() != GameState.ACTIVATE_CHARACTER || gameHandler.isActionCompleted()){
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 
@@ -37,12 +36,14 @@ public class ActivateCharacterMessage implements ClientMessage {
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 
-        // Invalid character_position value
-        if(character_position < 0 || character_position >= game.getCharacters().size()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+        // no other characters active
+        for(Character character : game.getCharacters()){
+            if(character.isActivated()){
+                return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+            }
         }
 
-        //TODO: activate character from game
+        // TODO: not finished
 
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing

@@ -7,7 +7,6 @@ import it.polimi.ingsw.controller.NetworkManager;
 import it.polimi.ingsw.controller.responses.ServerResponse;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
 
 public class ChooseCloudMessage implements ClientMessage {
 
@@ -22,8 +21,8 @@ public class ChooseCloudMessage implements ClientMessage {
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
 
-        // Invalid state. It ust be (current_state=CHOOSE_CLOUD, action_completed=False)
-        if(gameHandler.getCurrentState() != GameState.CHOOSE_CLOUD && !gameHandler.isActionCompleted()){
+        // Invalid state. It must be (current_state=CHOOSE_CLOUD, action_completed=False)
+        if(gameHandler.getCurrentState() != GameState.CHOOSE_CLOUD || gameHandler.isActionCompleted()){
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 

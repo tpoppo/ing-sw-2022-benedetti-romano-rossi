@@ -11,11 +11,9 @@ public enum Color {
     YELLOW,
     PINK;
 
-    public static ArrayList<Color> getColors(){
-        return new ArrayList<>(Arrays.asList(RED, GREEN, BLUE, YELLOW, PINK));
-    }
+    private static final Random rng = new Random();
 
     public static Color getRandomColor(){
-        return Color.getColors().get((new Random()).nextInt(Color.getColors().size()));
+        return values()[rng.nextInt(values().length)];
     }
 }

@@ -4,9 +4,10 @@ import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlayerChoices {
+public class PlayerChoices implements Serializable {
     private Island island;
     private ArrayList<Color> student;
 

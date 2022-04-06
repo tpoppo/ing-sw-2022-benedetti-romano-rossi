@@ -7,31 +7,28 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.characters.Characters;
-import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
-import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
+import it.polimi.ingsw.model.characters.PlayerChoices;
+import it.polimi.ingsw.utils.exceptions.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
-    private final boolean expert_mode;
+    final static public int MAX_COINS = 20;
+    final static public int MAX_DINING_STUDENTS = 8;
+
+    final private boolean expert_mode;
     private Player first_player;
     private Queue<Player> play_order;
     private final ArrayList<Island> islands;
     private Bag bag;
-    private ArrayList<Students> clouds;
+    private final ArrayList<Students> clouds;
     private final ArrayList<Player> players;
     private final ArrayList<Character> characters;
     private GameConfig gameConfig;
     private final GameModifiers gameModifiers;
-
-    // TODO:
-    //  - Add money cap (?)
-    //  - Add student cap on dining_room
-    //  -  Add activateCharacter
 
     public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
         int num_players = lobby.getPlayers().size();
@@ -275,10 +272,14 @@ public class Game {
      * @param color
      * @throws EmptyMovableException
      */
-    public void moveStudent(Color color) throws EmptyMovableException {
+    public void moveStudent(Color color) throws EmptyMovableException, FullDiningRoomException {
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
         Students entrance_students = schoolboard.getEntranceStudents();
         Students dining_students = schoolboard.getDiningStudents();
+
+        if(dining_students.getOrDefault(color, 0) >= MAX_DINING_STUDENTS){
+            throw new FullDiningRoomException();
+        }
 
         entrance_students.moveTo(dining_students, color);
 
@@ -289,8 +290,14 @@ public class Game {
         if(expert_mode){
             final HashSet<Integer> coin_positions = new HashSet<>(Arrays.asList(3, 6, 9));
             if(coin_positions.contains(dining_students.get(color))){
-                Player player = getCurrentPlayer();
-                player.setCoins(player.getCoins() + 1);
+                int total_coins = 0;
+                for(Player player : players){
+                    total_coins += player.getCoins();
+                }
+                if(total_coins < MAX_COINS){
+                    Player player = getCurrentPlayer();
+                    player.setCoins(player.getCoins() + 1);
+                }
             }
         }
 
@@ -494,6 +501,10 @@ public class Game {
             if(islands.get(i).hasMotherNature()) return i;
         }
         return -1; // shouldn't happen
+    }
+
+    public void activateCharacter(Character character, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+        character.activate(this, playerChoices);
     }
 
     /**

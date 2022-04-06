@@ -16,8 +16,9 @@ public enum Characters {
     RECRUITER,
     THIEF;
 
+    static Random rng = new Random();
+
     public static Characters randomCharacter(){
-        Random rng = new Random();
         return values()[rng.nextInt(values().length)];
     }
 }

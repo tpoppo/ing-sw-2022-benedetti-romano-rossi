@@ -24,8 +24,8 @@ public class MoveMotherNatureMessage implements ClientMessage{
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
 
-        // Invalid state. It ust be (current_state=MOVE_MOTHER_NATURE, action_completed=False)
-        if(gameHandler.getCurrentState() != GameState.MOVE_MOTHER_NATURE && !gameHandler.isActionCompleted()){
+        // Invalid state. It must be (current_state=MOVE_MOTHER_NATURE, action_completed=False)
+        if(gameHandler.getCurrentState() != GameState.MOVE_MOTHER_NATURE || gameHandler.isActionCompleted()){
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 

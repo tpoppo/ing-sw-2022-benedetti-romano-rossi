@@ -1,4 +1,6 @@
 package it.polimi.ingsw.controller.responses;
 
-abstract class ViewContent {
+import java.io.Serializable;
+
+abstract class ViewContent implements Serializable {
 }
