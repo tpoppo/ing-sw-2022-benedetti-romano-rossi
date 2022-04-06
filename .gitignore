@@ -6,5 +6,6 @@
 !src/
 !javadoc/
 !deliverables/
+!.github/
 *.lock
 *.bak
