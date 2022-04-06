@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.model.GameConfig;
 import it.polimi.ingsw.model.GameModifiers;
 import it.polimi.ingsw.model.Player;
@@ -12,31 +11,30 @@ import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
-    final private boolean expert_mode;
+    private final boolean expert_mode;
     private Player first_player;
     private Queue<Player> play_order;
-    final private ArrayList<Island> islands;
+    private final ArrayList<Island> islands;
     private Bag bag;
     private ArrayList<Students> clouds;
-    final private ArrayList<Player> players;
-    final private ArrayList<Character> characters;
-    final private int num_players;
+    private final ArrayList<Player> players;
+    private final ArrayList<Character> characters;
     private GameConfig gameConfig;
-    private GameModifiers gameModifiers;
+    private final GameModifiers gameModifiers;
 
     // TODO:
     //  - Add money cap (?)
     //  - Add student cap on dining_room
-    // -  Add activateCharacter
+    //  -  Add activateCharacter
 
     public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
-        this.num_players = lobby.getPlayers().size();
+        int num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
         gameModifiers = new GameModifiers();
         characters = new ArrayList<>();
@@ -62,7 +60,7 @@ public class Game {
         }
 
         // 1: Placing the # of islands on the table
-        islands = new ArrayList<Island>();
+        islands = new ArrayList<>();
         for(int i=0; i < gameConfig.NUM_ISLANDS; i++)
             islands.add(new Island());
 
@@ -163,7 +161,7 @@ public class Game {
     public boolean fillClouds() {
         for (Students cloud : clouds) {
             for (int i=0; i < gameConfig.CLOUD_SPACE; i++) {
-                Color drawnColor = null;
+                Color drawnColor;
                 try {
                     drawnColor = bag.drawStudent();
                 } catch (EmptyBagException e) {
@@ -342,12 +340,12 @@ public class Game {
         islands.get(next_position).setMotherNature(true);
     }
 
-    public Player conquerIsland(){
+    public void conquerIsland(){
         int mother_nature_position = findMotherNaturePosition();
-        return conquerIsland(islands.get(mother_nature_position));
+        conquerIsland(islands.get(mother_nature_position));
     }
 
-    public Player conquerIsland(Island island){
+    public void conquerIsland(Island island){
         HashMap<Player, Integer> influence = new HashMap<>();
         int towers_on_island = island.getNumTowers();
 
@@ -406,10 +404,8 @@ public class Game {
 
             mergeIslands();
 
-            return new_owner;
         }
 
-        return island.getOwner();
     }
 
     /**
@@ -437,7 +433,7 @@ public class Game {
     public void chooseCloud(Students cloud) {
         Students entrance_students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
 
-        for (Students.Entry<Color, Integer> entry : cloud.entrySet()) {
+        for (Map.Entry<Color, Integer> entry : cloud.entrySet()) {
             Color key = entry.getKey();
             int delta = entry.getValue();
 
@@ -529,10 +525,6 @@ public class Game {
 
     public ArrayList<Character> getCharacters() {
         return new ArrayList<>(characters);
-    }
-
-    public void setClouds(ArrayList<Students> clouds){
-        this.clouds = new ArrayList<>(clouds);
     }
 
     public boolean getExpertMode() {

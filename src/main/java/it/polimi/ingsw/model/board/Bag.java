@@ -8,7 +8,7 @@ import java.util.Random;
 public class Bag {
     public final static int MAX_STUDENTS = 130;
     private Students students;
-    private Random rng = new Random();
+    private final Random rng = new Random();
 
     public Bag(Students students) {
         this.students = new Students(students);

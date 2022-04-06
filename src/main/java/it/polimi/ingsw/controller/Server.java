@@ -62,6 +62,6 @@ public class Server {
         return networkManager;
     }
 
-    // TODO:
+    // FIXME: do we still need this?
     //  public NetworkManager reconnect(String username){}
 }

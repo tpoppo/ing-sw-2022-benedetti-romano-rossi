@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.board.Color;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class GameModifiers {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board;
 import it.polimi.ingsw.model.Player;
 
 import java.util.List;
+import java.util.Map;
 
 public class Island {
     private int num_towers;
@@ -31,7 +32,7 @@ public class Island {
         no_entry_tiles += island.no_entry_tiles;
         num_islands += island.num_islands;
 
-        for(Students.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
+        for(Map.Entry<Color, Integer> entry : island.getStudents().entrySet()) {
             Color key = entry.getKey();
             int value = entry.getValue();
             students.put(key, students.get(key) + value);

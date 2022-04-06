@@ -12,8 +12,6 @@ public class NetworkManager {
     private LobbyHandler lobby_handler;
     private GameHandler game_handler;
 
-
-
     // not thread safe
     private NetworkManager(int max_players){
         ID = count;
