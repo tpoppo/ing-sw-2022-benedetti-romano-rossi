@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.GameConfig;
-import it.polimi.ingsw.model.GameModifiers;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;

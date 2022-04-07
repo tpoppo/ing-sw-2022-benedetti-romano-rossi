@@ -8,17 +8,19 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class Server {
+public class Server{
     private static Server instance;
     final private int PORT;
     private ServerSocket serverSocket;
-    private Socket connection;
+    private Socket clientSocket;
 
     private MenuManager menuManager;
     private ArrayList<NetworkManager> networkManagers;
+    private ArrayList<LobbyPlayer> player_list;
 
     private Server(){
-        PORT = 42069;
+        PORT = 42069;   // nice
+        menuManager = MenuManager.getInstance();
 
         try {
             setupConnection();
@@ -34,12 +36,14 @@ public class Server {
 
     private void setupConnection() throws IOException {
         serverSocket = new ServerSocket(PORT);
-        connection = serverSocket.accept();
+
+        while(true)
+            new MessageHandler(serverSocket.accept()).start();
     }
 
     private void closeConnection() throws IOException {
         serverSocket.close();
-        connection.close();
+        clientSocket.close();
     }
 
     public NetworkManager createLobby(int max_players){
@@ -60,6 +64,38 @@ public class Server {
         });
 
         return networkManager;
+    }
+
+    public ArrayList<LobbyPlayer> getPlayerList() {
+        return player_list;
+    }
+
+    // Checks the uniqueness of the username
+    public boolean checkUsername(String username){
+        for(LobbyPlayer player : player_list)
+            if(player.getUsername().equals(username))
+                return false;
+        return true;
+    }
+
+    // Returns the networkManager containing the lobbyPlayer given
+    public NetworkManager findPlayerLocation(LobbyPlayer player){
+        for(NetworkManager networkManager : networkManagers){
+            // Searches the player inside the currentHandler
+            switch (networkManager.getCurrentHandler()){
+                case LOBBY:
+                    if(networkManager.getLobbyHandler().getPlayers().contains(player))
+                        return networkManager;
+                    break;
+                case GAME:
+                    if(networkManager.getGameHandler().getModel().getPlayers().contains(player)) // this should work, right?
+                        return networkManager;
+                    break;
+            }
+        }
+
+        // This line should never be reached
+        return null;
     }
 
     // FIXME: do we still need this?

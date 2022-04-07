@@ -9,7 +9,7 @@ import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
 
-public class PlayAssistantMessage implements ClientMessage{
+public class PlayAssistantMessage extends ClientMessage {
     int card_position;
 
     public PlayAssistantMessage(int card_position) {

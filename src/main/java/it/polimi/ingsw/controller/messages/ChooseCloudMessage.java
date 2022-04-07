@@ -8,7 +8,7 @@ import it.polimi.ingsw.controller.responses.ServerResponse;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 
-public class ChooseCloudMessage implements ClientMessage {
+public class ChooseCloudMessage extends ClientMessage {
 
     int cloud_position;
 

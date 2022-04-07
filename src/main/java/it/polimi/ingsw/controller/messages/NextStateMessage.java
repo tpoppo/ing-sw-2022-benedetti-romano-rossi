@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullDiningRoomException;
 
-public class NextStateMessage implements ClientMessage{
+public class NextStateMessage extends ClientMessage {
 
 
     @Override

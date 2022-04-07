@@ -9,7 +9,7 @@ import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
 
-public class ActivateCharacterMessage implements ClientMessage {
+public class ActivateCharacterMessage extends ClientMessage {
 
     public ActivateCharacterMessage() {
 

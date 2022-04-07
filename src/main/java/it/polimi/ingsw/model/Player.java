@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.board.SchoolBoard;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class Player {
+public class Player extends LobbyPlayer{
     private Optional<Assistant> current_assistant;
     private final String username;
     private int coins;
@@ -17,6 +17,7 @@ public class Player {
     private final int wizard;
 
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
+        super(username);
         this.username = username;
         this.current_assistant = Optional.ofNullable(current_assistant);
         this.coins = coins;
@@ -26,6 +27,7 @@ public class Player {
     }
 
     public Player(String username, int wizard){
+        super(username);
         this.username = username;
         current_assistant = Optional.empty();
         coins = 0;

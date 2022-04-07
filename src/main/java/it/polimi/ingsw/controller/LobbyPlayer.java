@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import java.util.Optional;
-
 public class LobbyPlayer {
     private final String username;
     private Integer wizard;

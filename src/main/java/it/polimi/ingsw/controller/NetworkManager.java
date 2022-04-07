@@ -1,15 +1,13 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.messages.ClientMessage;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NetworkManager {
     private static int count = 0;
     public final int ID;
     private HandlerType current_handler;
-    private ConcurrentLinkedQueue<ClientMessage> message_queue;
-    private LobbyHandler lobby_handler;
+    private final ConcurrentLinkedQueue<MessageEnvelope> message_queue;
+    private final LobbyHandler lobby_handler;
     private GameHandler game_handler;
 
     // not thread safe
@@ -27,6 +25,10 @@ public class NetworkManager {
         return new NetworkManager(max_players);
     }
 
+    public HandlerType getCurrentHandler() {
+        return current_handler;
+    }
+
     public LobbyHandler getLobbyHandler() {
         return lobby_handler;
     }
@@ -35,4 +37,7 @@ public class NetworkManager {
         return game_handler;
     }
 
+    public ConcurrentLinkedQueue<MessageEnvelope> getMessageQueue() {
+        return message_queue;
+    }
 }

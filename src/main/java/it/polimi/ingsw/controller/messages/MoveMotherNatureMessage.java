@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.board.Assistant;
 
 import java.util.Optional;
 
-public class MoveMotherNatureMessage implements ClientMessage{
+public class MoveMotherNatureMessage extends ClientMessage {
 
     int mother_nature_position;
 

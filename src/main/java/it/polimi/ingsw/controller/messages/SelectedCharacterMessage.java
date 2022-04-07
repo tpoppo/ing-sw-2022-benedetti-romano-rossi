@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
-public class SelectedCharacterMessage implements ClientMessage {
+public class SelectedCharacterMessage extends ClientMessage {
     int character_position;
     PlayerChoices player_choices;
     public SelectedCharacterMessage(int character_position, PlayerChoices player_choices) {

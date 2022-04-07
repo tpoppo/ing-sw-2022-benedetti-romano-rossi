@@ -14,7 +14,7 @@ import it.polimi.ingsw.utils.exceptions.FullDiningRoomException;
 
 import java.util.Optional;
 
-public class MoveStudentMessage implements ClientMessage {
+public class MoveStudentMessage extends ClientMessage {
 
     private final Color color;
     private final Integer island_position;
