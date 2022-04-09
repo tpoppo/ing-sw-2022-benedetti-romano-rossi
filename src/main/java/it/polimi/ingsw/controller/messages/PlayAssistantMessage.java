@@ -43,6 +43,7 @@ public class PlayAssistantMessage extends ClientMessage {
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 
+        game.nextTurn();
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
     }

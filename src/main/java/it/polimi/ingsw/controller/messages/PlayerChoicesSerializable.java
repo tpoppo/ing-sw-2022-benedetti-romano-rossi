@@ -1,22 +1,24 @@
-package it.polimi.ingsw.model.characters;
+package it.polimi.ingsw.controller.messages;
 
+import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.model.board.Island;
+import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlayerChoices {
-    private Island island;
+public class PlayerChoicesSerializable implements Serializable {
+    private Integer island;
     private ArrayList<Color> student;
 
-    public Island getIsland() throws BadPlayerChoiceException {
+    public Integer getIsland() throws BadPlayerChoiceException {
         if(island == null) throw new BadPlayerChoiceException();
         return island;
     }
 
-    public void setIsland(Island island) {
+    public void setIsland(Integer island) {
         this.island = island;
     }
 
@@ -33,4 +35,12 @@ public class PlayerChoices {
         if(student == null) student = new ArrayList<Color>();
         student.add(color);
     }
+
+    PlayerChoices toPlayerChoices(Game game){
+        PlayerChoices p = new PlayerChoices();
+        p.setStudent(new ArrayList<>(student));
+        p.setIsland(island == null ? null : game.getIslands().get(island));
+        return p;
+    }
+
 }

@@ -13,10 +13,8 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class SelectedCharacterMessage extends ClientMessage {
     int character_position;
-    PlayerChoices player_choices;
-    public SelectedCharacterMessage(int character_position, PlayerChoices player_choices) {
+    public SelectedCharacterMessage(int character_position) {
         this.character_position = character_position;
-        this.player_choices = player_choices;
     }
 
     @Override
@@ -58,11 +56,7 @@ public class SelectedCharacterMessage extends ClientMessage {
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
 
-        try {
-            game.activateCharacter(character, player_choices);
-        } catch (BadPlayerChoiceException e) {
-            return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
-        }
+        gameHandler.setSelectedCharacter(character);
 
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing

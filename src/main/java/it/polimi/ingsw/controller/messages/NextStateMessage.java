@@ -7,12 +7,8 @@ import it.polimi.ingsw.controller.NetworkManager;
 import it.polimi.ingsw.controller.responses.ServerResponse;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
-import it.polimi.ingsw.utils.exceptions.FullDiningRoomException;
 
 public class NextStateMessage extends ClientMessage {
-
 
     @Override
     public ServerResponse handle(NetworkManager network_manager, Player player) {
@@ -36,7 +32,42 @@ public class NextStateMessage extends ClientMessage {
                 gameHandler.setCurrentState(gameHandler.getSavedState());
                 gameHandler.setSavedState(null);
                 break;
+
+            case PLAY_ASSISTANT:
+                if(game.getPlayers() == null){
+                    game.endPlanning();
+                    gameHandler.setCurrentState(GameState.MOVE_STUDENT);
+                }
+                break;
+
+            case MOVE_STUDENT:
+                if(gameHandler.getStudentMoves() == 0){
+                    game.nextTurn();
+                    gameHandler.setStudentMoves(3);
+                    if(game.getPlayers() == null){
+                        gameHandler.setCurrentState(GameState.MOVE_MOTHER_NATURE);
+                    }
+                }else{
+                    gameHandler.setStudentMoves(gameHandler.getStudentMoves()-1);
+                }
+                break;
+
+            case MOVE_MOTHER_NATURE:
+                if(game.getPlayers() == null){
+                    gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
+                }
+                break;
+
             case CHOOSE_CLOUD:
+                if(game.getPlayers() == null){ // end of the turn
+                    /* TODO:
+                        if (game.checkEndGame()) ...
+                     */
+                    game.fillClouds();
+                    game.beginPlanning();
+                    gameHandler.setCurrentState(GameState.PLAY_ASSISTANT);
+                }
+                break;
 
         }
 

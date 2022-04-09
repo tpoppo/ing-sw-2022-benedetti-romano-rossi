@@ -16,7 +16,11 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <!-- (https://lucapirovano.dev/post/softeng-sonar-guide.html) Add here the directories that we must exclude from the code coverage -->
-    <sonar.coverage.exclusions>**/client/**/*, **/server/**/*,**/App.java</sonar.coverage.exclusions>
+    <sonar.coverage.exclusions>
+      **/client/**/*,
+      **/server/**/*,
+      **/App.java,
+    </sonar.coverage.exclusions>
   </properties>
 
   <dependencies>

@@ -8,10 +8,14 @@ import it.polimi.ingsw.controller.responses.ServerResponse;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.PlayerChoices;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class ActivateCharacterMessage extends ClientMessage {
 
-    public ActivateCharacterMessage() {
+    PlayerChoicesSerializable player_choices;
+    public ActivateCharacterMessage(PlayerChoicesSerializable player_choices) {
+        this.player_choices = player_choices;
 
     }
 
@@ -30,20 +34,13 @@ public class ActivateCharacterMessage extends ClientMessage {
         if(current_player == null || player != current_player) {
             return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
         }
+        Character character = gameHandler.getSelectedCharacter();
 
-        // The game must be in expert mode
-        if(!game.getExpertMode()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+        try {
+            game.activateCharacter(character, player_choices.toPlayerChoices(game));
+        } catch (BadPlayerChoiceException e) {
+            return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
         }
-
-        // no other characters active
-        for(Character character : game.getCharacters()){
-            if(character.isActivated()){
-                return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
-            }
-        }
-
-        // TODO: not finished
 
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing

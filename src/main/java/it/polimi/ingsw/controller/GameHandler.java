@@ -1,13 +1,14 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.characters.Character;
+
 public class GameHandler {
     private Game model;
     private GameState current_state;
     private GameState saved_state;
     private int student_moves;
-    private int selected_character;
+    private Character selected_character;
     private boolean action_completed;
-
 
     public Game getModel() {
         return model;
@@ -41,11 +42,11 @@ public class GameHandler {
         this.student_moves = student_moves;
     }
 
-    public int getSelectedCharacter() {
+    public Character getSelectedCharacter() {
         return selected_character;
     }
 
-    public void setSelectedCharacter(int selected_character) {
+    public void setSelectedCharacter(Character selected_character) {
         this.selected_character = selected_character;
     }
 

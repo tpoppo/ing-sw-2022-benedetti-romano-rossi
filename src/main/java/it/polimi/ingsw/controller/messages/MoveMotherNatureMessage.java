@@ -60,6 +60,13 @@ public class MoveMotherNatureMessage extends ClientMessage {
         game.moveMotherNature(game.getIslands().get(mother_nature_position));
         game.conquerIsland();
 
+        /*
+         TODO: check victory immediately
+          if (game.checkVictory()) {...}
+         */
+
+        game.nextTurn();
+
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
     }

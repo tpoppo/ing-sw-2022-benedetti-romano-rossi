@@ -38,6 +38,7 @@ public class ChooseCloudMessage extends ClientMessage {
         }
 
         game.chooseCloud(game.getClouds().get(cloud_position));
+        game.nextTurn();
 
         gameHandler.setActionCompleted(true);
         return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing

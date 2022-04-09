@@ -17,7 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
-
+    /**
+     * Check whether the invariants of the game are respected
+     * @param game the current game to check
+     */
     void checkInvariant(Game game){
 
         // adjacent islands must not have the same owner
@@ -77,7 +80,6 @@ public class GameTest {
             assertTrue(player.getCoins() >= 0);
         }
         assertTrue(total_coins <= Game.MAX_COINS);
-
     }
 
     @RepeatedTest(200)
