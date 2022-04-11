@@ -30,6 +30,7 @@ public class Bag {
         int color_index = rng.nextInt(size);
 
         int count = 0;
+
         for (Color color : students.keySet()) {
             count += students.get(color);
 

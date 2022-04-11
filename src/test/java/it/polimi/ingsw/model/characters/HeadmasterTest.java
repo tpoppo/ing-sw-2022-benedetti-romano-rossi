@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameModifiers;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
@@ -15,10 +16,10 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NatureMoverTest {
+public class HeadmasterTest {
 
     @Test
-    public void NatureMover() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void Headmaster() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -31,15 +32,14 @@ public class NatureMoverTest {
 
         Game game = new Game(true, lobby);
 
-        NatureMover NatureMover = new NatureMover();
+        Headmaster Headmaster = new Headmaster();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        NatureMover.onActivation(game, playerchoice);
-
+        Headmaster.onActivation(game, playerchoice);
         GameModifiers gameModifiers = game.getGameModifiers();
-        assertEquals(2, gameModifiers.getExtraSteps());
+        assertEquals(1, gameModifiers.getProfessorModifier());
 
-        NatureMover.onDeactivation(game, playerchoice);
-        assertEquals(0, gameModifiers.getExtraSteps());
+        Headmaster.onDeactivation(game, playerchoice);
+        assertEquals(0, gameModifiers.getProfessorModifier());
     }
 }
