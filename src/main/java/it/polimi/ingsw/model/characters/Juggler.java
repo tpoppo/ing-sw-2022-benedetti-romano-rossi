@@ -33,7 +33,7 @@ public class Juggler extends Character{
     void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
 
         // there must be an even number of students
-        if(playerChoices.getStudent().size() % 2 == 0){
+        if(playerChoices.getStudent().size() % 2 != 0){
             throw new BadPlayerChoiceException();
         }
         Player player = game.getCurrentPlayer();
