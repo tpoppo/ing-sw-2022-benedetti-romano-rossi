@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.exceptions.*;
 import org.junit.jupiter.api.RepeatedTest;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -100,7 +101,7 @@ public class GameTest {
         while(true) {
             // planning phase
             game.fillClouds();
-            game.getClouds().forEach((x) -> assertTrue(x.count() == 3));
+            game.getClouds().forEach((x) -> assertEquals(3, x.count()));
             checkInvariant(game);
 
             game.beginPlanning();
@@ -125,27 +126,47 @@ public class GameTest {
 
             game.endPlanning();
             checkInvariant(game);
-            assertTrue(game.getCurrentPlayer() != null);
+            assertNotNull(game.getCurrentPlayer());
 
             ArrayList<Island> islands = game.getIslands();
 
             // action phase
             for (int player_id = 0; player_id < 2; player_id++) {
+                assertEquals(7, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
                 // step 1
                 for (int i = 0; i < 3; i++) {
                     // move a random student from the player's entrance to a random island
                     Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
                     Optional<Color> color = students.entrySet().stream().filter(
                             (key_value) -> {
-                                return key_value.getKey() != null
-                                        && key_value.getValue() > 0
-                                        && game.getCurrentPlayer().getSchoolBoard().getDiningStudents().get(key_value.getKey()) < Game.MAX_DINING_STUDENTS;
-                            }).map((key_value) -> key_value.getKey()).findFirst();
-                    if(rng.nextBoolean()){
-                        game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                                return key_value.getKey() != null // is a valid color
+                                        && key_value.getValue() > 0 // is present (at least one element)
+                                        && game.getCurrentPlayer().getSchoolBoard().getDiningStudents().get(key_value.getKey()) < Game.MAX_DINING_STUDENTS; // there is enough space in the dining room for that color
+                            }).map(Map.Entry::getKey).findFirst();
+
+                    if(color.isPresent()){
+                        if(rng.nextBoolean()){
+                            game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                        }else{
+                            game.moveStudent(color.get());
+                        }
                     }else{
-                        game.moveStudent(color.get());
+                        /* Very Special Case (and very unlikely)
+                           Example:
+                            getEntranceStudents: {PINK=0, GREEN=0, RED=5, BLUE=0, YELLOW=0}
+                            getDiningStudents: {PINK=0, GREEN=1, RED=8, BLUE=1, YELLOW=1}
+                           Only one color in the entrance room and that color is full in the dining room.
+                         */
+                        // same as before, but without the dining room condition.
+                        Optional<Color> color_island = students.entrySet().stream().filter(
+                                (key_value) -> {
+                                    return key_value.getKey() != null // is a valid color
+                                            && key_value.getValue() > 0; // is present (at least one element)
+                                }).map(Map.Entry::getKey).findFirst();
+                        assertTrue(color_island.isPresent());
+                        game.moveStudent(color_island.get(), islands.get(rng.nextInt(islands.size())));
                     }
+
                 }
                 assertEquals(4, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
                 checkInvariant(game);
@@ -238,7 +259,7 @@ public class GameTest {
             game.nextTurn();
 
             game.endPlanning();
-            assertTrue(game.getCurrentPlayer() != null);
+            assertNotNull(game.getCurrentPlayer());
 
             ArrayList<Island> islands = game.getIslands();
 
@@ -250,14 +271,35 @@ public class GameTest {
                     Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
                     Optional<Color> color = students.entrySet().stream().filter(
                             (key_value) -> {
-                                return key_value.getKey() != null && key_value.getValue() > 0;
-                            }).map((key_value) -> key_value.getKey()).findFirst();
-                    if(rng.nextBoolean()){
-                        game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                                return key_value.getKey() != null // is a valid color
+                                        && key_value.getValue() > 0 // is present (at least one element)
+                                        && game.getCurrentPlayer().getSchoolBoard().getDiningStudents().get(key_value.getKey()) < Game.MAX_DINING_STUDENTS; // there is enough space in the dining room for that color
+                            }).map(Map.Entry::getKey).findFirst();
+
+                    if(color.isPresent()){
+                        if(rng.nextBoolean()){
+                            game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                        }else{
+                            game.moveStudent(color.get());
+                        }
                     }else{
-                        game.moveStudent(color.get());
+                        /* Very Special Case (and very unlikely)
+                           Example:
+                            getEntranceStudents: {PINK=0, GREEN=0, RED=5, BLUE=0, YELLOW=0}
+                            getDiningStudents: {PINK=0, GREEN=1, RED=8, BLUE=1, YELLOW=1}
+                           Only one color in the entrance room and that color is full in the dining room.
+                         */
+                        // same as before, but without the dining room condition.
+                        Optional<Color> color_island = students.entrySet().stream().filter(
+                                (key_value) -> {
+                                    return key_value.getKey() != null // is a valid color
+                                            && key_value.getValue() > 0; // is present (at least one element)
+                                }).map(Map.Entry::getKey).findFirst();
+                        assertTrue(color_island.isPresent());
+                        game.moveStudent(color_island.get(), islands.get(rng.nextInt(islands.size())));
                     }
                 }
+
                 // step 2 - move mother nature
                 Island mother_nature_island = islands.stream().filter(Island::hasMotherNature).findFirst().get();
                 int curr_mother_nature_position = islands.indexOf(mother_nature_island);
