@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.characters;
 
-
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameModifiers;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
+import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
@@ -16,12 +18,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ConquerorTest {
+public class NatureBlockerTest {
 
     @Test
-    public void Conqueror() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
+    public void NatureBlocker() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -34,14 +35,18 @@ public class ConquerorTest {
 
         Game game = new Game(true, lobby);
 
-        Conqueror conqueror = new Conqueror();
+        NatureBlocker natureblocker = new NatureBlocker();
+        PlayerChoices playerChoices = new PlayerChoices();
+
         ArrayList<Island> islands = game.getIslands();
-        PlayerChoices playerchoice = new PlayerChoices();
-        playerchoice.setIsland(islands.get(0));
+        Island island = islands.get(0);
+        island.setNoEntryTiles(2);
+        playerChoices.setIsland(island);
 
-        conqueror.onActivation(game, playerchoice);
-        assertEquals(true, islands.get(0).hasMotherNature());
+        natureblocker.onActivation(game, playerChoices);
 
-        conqueror.onDeactivation(game, playerchoice);
+        assertEquals(3, islands.get(0).getNoEntryTiles());
+
+        natureblocker.onDeactivation(game, playerChoices);
     }
 }
