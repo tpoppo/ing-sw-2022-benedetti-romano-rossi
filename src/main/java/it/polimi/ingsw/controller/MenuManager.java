@@ -8,6 +8,15 @@ public class MenuManager {
 
     private MenuManager(){
         message_queue = new ConcurrentLinkedQueue<>();
+
+        new Thread(() -> {
+            while (true) {
+                if (!message_queue.isEmpty()) {
+                    MessageEnvelope envelope = message_queue.remove();
+                    envelope.getMessage().handle(envelope.getSender());
+                }
+            }
+        }).start();
     }
 
     public static MenuManager getInstance(){

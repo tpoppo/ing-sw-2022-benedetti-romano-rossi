@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Player;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NetworkManager {
@@ -18,6 +20,16 @@ public class NetworkManager {
 
         current_handler = HandlerType.LOBBY;
         lobby_handler = new LobbyHandler(max_players);
+
+        new Thread(() -> {
+            while(true){
+                if(!message_queue.isEmpty()){
+                    MessageEnvelope envelope = message_queue.remove();
+                    Player player = game_handler.lobbyPlayerToPlayer(envelope.getSender());
+                    envelope.getMessage().handle(this, player);
+                }
+            }
+        }).start();
     }
 
     // thread safe
