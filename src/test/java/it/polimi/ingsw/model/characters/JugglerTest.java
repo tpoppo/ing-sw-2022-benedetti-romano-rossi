@@ -10,6 +10,7 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JugglerTest {
 
-    @Test
+    @RepeatedTest(50)
     public void Juggler() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
@@ -35,7 +36,7 @@ public class JugglerTest {
         game.beginPlanning();
 
         Students student = new Students(3, 2, 0, 4, 2);
-        game.getPlayers().get(0).getSchoolBoard().setEntranceStudents(student);
+        game.getCurrentPlayer().getSchoolBoard().setEntranceStudents(student);
 
         PlayerChoices playerchoice= new PlayerChoices();
         ArrayList<Color> change = new ArrayList<Color>();
@@ -46,11 +47,12 @@ public class JugglerTest {
         Color Jugglercolor = null;
         boolean choosen = false;
         for (Color color : Jugglerstudents.keySet()) {
-            if(Jugglerstudents.get(color) !=0 && choosen == false){
+            if(Jugglerstudents.get(color) !=0 && !choosen){
                 Jugglercolor = color;
                 choosen = true;
             }
         }
+
         change.add(Color.GREEN);
         change.add(Jugglercolor);
         playerchoice.setStudent(change);
@@ -60,6 +62,6 @@ public class JugglerTest {
         Students expected_student = new Students(2, 2, 0, 4, 2);
         expected_student.add(Jugglercolor);
 
-        //assertEquals(expected_student, game.getPlayers().get(0).getSchoolBoard().getEntranceStudents());
+        assertEquals(expected_student, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents());
     }
 }

@@ -32,9 +32,10 @@ public class Thief extends Character{
                 try {
                     diningStudents.moveTo(bagStudents, chosen_color);
                 } catch (EmptyMovableException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); // it should be unreachable
                 }
             }
+            player.getSchoolBoard().setDiningStudents(diningStudents);
         }
 
         game.getBag().setStudents(bagStudents);

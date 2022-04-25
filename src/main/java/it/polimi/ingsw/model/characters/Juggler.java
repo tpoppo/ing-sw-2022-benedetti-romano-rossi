@@ -39,12 +39,13 @@ public class Juggler extends Character{
         Player player = game.getCurrentPlayer();
         Students entrance_students = player.getSchoolBoard().getEntranceStudents();
         Students card_student = new Students(students);
+
         for(int i=0; i<playerChoices.getStudent().size(); i+=2){
             try {
                 entrance_students.moveTo(card_student, playerChoices.getStudent().get(i));
                 card_student.moveTo(entrance_students, playerChoices.getStudent().get(i+1));
             } catch (EmptyMovableException e) {
-                throw  new BadPlayerChoiceException(); // shouldn't be reachable
+                throw  new BadPlayerChoiceException(); // if can't swap the two color
             }
         }
         player.getSchoolBoard().setEntranceStudents(entrance_students);
