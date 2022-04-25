@@ -14,6 +14,7 @@ public class PlayAssistantMessage extends ClientMessage {
 
     public PlayAssistantMessage(int card_position) {
         this.card_position = card_position;
+        super.message_type = MessageType.GAME;
     }
 
     @Override

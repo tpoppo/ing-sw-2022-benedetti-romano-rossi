@@ -37,6 +37,11 @@ public class NetworkManager {
         return new NetworkManager(max_players);
     }
 
+    public void startGame(boolean expert_mode){
+        game_handler = new GameHandler(expert_mode, lobby_handler);
+        current_handler = HandlerType.GAME;
+    }
+
     public HandlerType getCurrentHandler() {
         return current_handler;
     }

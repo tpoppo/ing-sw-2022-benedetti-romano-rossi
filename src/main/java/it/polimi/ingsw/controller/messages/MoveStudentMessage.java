@@ -22,6 +22,7 @@ public class MoveStudentMessage extends ClientMessage {
     public MoveStudentMessage(Color color, Integer island_position) {
         this.color = color;
         this.island_position = island_position;
+        super.message_type = MessageType.GAME;
     }
 
     @Override

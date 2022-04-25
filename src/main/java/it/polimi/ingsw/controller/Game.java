@@ -29,6 +29,7 @@ public class Game {
     private GameConfig gameConfig;
     private final GameModifiers gameModifiers;
 
+    // FIXME: shouldn't we just give the list of LobbyPlayer (lobby.getPlayers()) instead of a LobbyHandler?
     public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
         int num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;

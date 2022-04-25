@@ -16,7 +16,7 @@ public class ActivateCharacterMessage extends ClientMessage {
     PlayerChoicesSerializable player_choices;
     public ActivateCharacterMessage(PlayerChoicesSerializable player_choices) {
         this.player_choices = player_choices;
-
+        super.message_type = MessageType.GAME;
     }
 
     @Override

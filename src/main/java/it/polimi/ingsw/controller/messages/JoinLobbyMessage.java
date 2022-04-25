@@ -10,6 +10,10 @@ import it.polimi.ingsw.model.Player;
 
 public class JoinLobbyMessage extends ClientMessage {
     int id;
+    JoinLobbyMessage(int id){
+        this.id = id;
+        super.message_type = MessageType.MENU;
+    }
 
     public ServerResponse handle(LobbyPlayer player) {
         Server server = Server.getInstance();

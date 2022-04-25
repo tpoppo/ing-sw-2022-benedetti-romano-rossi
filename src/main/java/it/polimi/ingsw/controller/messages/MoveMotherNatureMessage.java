@@ -17,6 +17,7 @@ public class MoveMotherNatureMessage extends ClientMessage {
 
     public MoveMotherNatureMessage(int mother_nature_position) {
         this.mother_nature_position = mother_nature_position;
+        super.message_type = MessageType.GAME;
     }
 
     @Override

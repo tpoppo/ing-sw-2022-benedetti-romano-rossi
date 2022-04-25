@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.Player;
 import java.io.Serializable;
 
 public abstract class ClientMessage implements Serializable {
-    private MessageType message_type;
+    protected MessageType message_type;
 
     public ServerResponse handle(NetworkManager network_manager, Player player){
         return new ServerResponse(StatusCode.BAD_REQUEST, null);

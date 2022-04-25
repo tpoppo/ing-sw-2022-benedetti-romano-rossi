@@ -40,7 +40,7 @@ public class MessageHandler extends Thread{
             while((message = (ClientMessage) inputStream.readObject()) != null){
                 MessageEnvelope envelope = new MessageEnvelope(player, message);
 
-                switch (message.getMessageType()){
+                switch(message.getMessageType()){
                     case MENU:
                         menuManager.message_queue.add(envelope);
                         break;

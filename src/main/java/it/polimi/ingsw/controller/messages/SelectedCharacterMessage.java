@@ -15,6 +15,7 @@ public class SelectedCharacterMessage extends ClientMessage {
     int character_position;
     public SelectedCharacterMessage(int character_position) {
         this.character_position = character_position;
+        super.message_type = MessageType.GAME;
     }
 
     @Override

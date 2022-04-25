@@ -9,6 +9,9 @@ import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 
 public class NextStateMessage extends ClientMessage {
+    public NextStateMessage() {
+        super.message_type = MessageType.GAME;
+    }
 
     @Override
     public ServerResponse handle(NetworkManager network_manager, Player player) {

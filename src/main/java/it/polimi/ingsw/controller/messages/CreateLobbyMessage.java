@@ -12,6 +12,7 @@ public class CreateLobbyMessage extends ClientMessage {
 
     public CreateLobbyMessage(int max_players) {
         this.max_players = max_players;
+        super.message_type = MessageType.MENU;
     }
 
     /**

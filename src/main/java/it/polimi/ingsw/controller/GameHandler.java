@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.utils.exceptions.EmptyBagException;
+import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 public class GameHandler {
     private Game model;
@@ -10,6 +12,21 @@ public class GameHandler {
     private int student_moves;
     private Character selected_character;
     private boolean action_completed;
+
+    public GameHandler(boolean expert_mode, LobbyHandler lobby_handler) {
+        try {
+            model = new Game(expert_mode, lobby_handler);
+        } catch (EmptyBagException | EmptyMovableException e) {
+            // can't create a game
+            // this shouldn't happen
+            e.printStackTrace();
+        }
+        current_state = GameState.PLAY_ASSISTANT;
+        saved_state = null;
+        student_moves = 0;
+        selected_character = null;
+        action_completed = false;
+    }
 
     // Given a lobbyPlayer, it finds the matching player (by username) in the current GameHandler
     // TODO: do we want a more generic method (maybe static) that requires a networkManager or even that
