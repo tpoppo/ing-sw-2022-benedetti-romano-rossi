@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DemolisherTest {
+
+    @Test
     public void Demolisher() throws FullLobbyException, EmptyMovableException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
