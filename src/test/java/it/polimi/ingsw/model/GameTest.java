@@ -217,9 +217,8 @@ public class GameTest {
             checkInvariant(game);
         }
     }
-
-    //FIXME: it does not work. It loops indefinitely
-    // @RepeatedTest(100)
+    
+    @RepeatedTest(100)
     public void simpleRun2() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
         LobbyHandler lobby = new LobbyHandler(3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
@@ -332,7 +331,7 @@ public class GameTest {
             }
 
             // check victory end game
-            if (game.checkEndGame()) {
+            if (game.checkEndGame() || game.getBag().capacity()<12) {
                 assertNotNull(game.winner());
                 return ;
             }
