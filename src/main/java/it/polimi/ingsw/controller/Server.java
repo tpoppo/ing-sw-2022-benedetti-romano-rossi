@@ -97,7 +97,4 @@ public class Server{
         // This line should never be reached
         return null;
     }
-
-    // FIXME: do we still need this?
-    //  public NetworkManager reconnect(String username){}
 }
