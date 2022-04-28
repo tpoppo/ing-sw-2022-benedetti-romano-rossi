@@ -14,7 +14,7 @@ public class Server{
     private ServerSocket serverSocket;
     private Socket clientSocket;
 
-    private MenuManager menuManager;
+    private final MenuManager menuManager;
     private ArrayList<NetworkManager> networkManagers;
     private ArrayList<LobbyPlayer> player_list;
 
