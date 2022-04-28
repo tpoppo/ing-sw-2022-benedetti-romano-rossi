@@ -21,10 +21,10 @@ public class CreateLobbyMessage extends ClientMessage {
      * @param player The caller (the current lobby player)
      * @return the status response.
      */
-    public ServerResponse handle(LobbyPlayer player) {
+    public StatusCode handle(LobbyPlayer player) {
         // We check whether max_players is 2 or 3?
-        if(max_players != 3 && max_players != 2){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null);
+        if(max_players != 3 && max_players != 2) {
+            return StatusCode.INVALID_ACTION;
         }
 
         Server server = Server.getInstance();
@@ -33,8 +33,9 @@ public class CreateLobbyMessage extends ClientMessage {
         try {
             lobby_handler.addPlayer(player);
         } catch (FullLobbyException e) { // It means that the lobby is full. It should be impossible.
-            return new ServerResponse(StatusCode.BAD_REQUEST, null);
+            return StatusCode.INVALID_ACTION;
         }
-        return new ServerResponse(StatusCode.OK, null);
+
+        return StatusCode.OK;
     }
 }

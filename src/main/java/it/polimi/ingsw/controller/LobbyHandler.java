@@ -37,4 +37,9 @@ public class LobbyHandler implements Serializable {
     public ArrayList<LobbyPlayer> getPlayers() {
         return players;
     }
+
+    public int getMaxPlayers() {
+        return max_players;
+    }
+
 }

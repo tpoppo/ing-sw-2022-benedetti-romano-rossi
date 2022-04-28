@@ -57,14 +57,14 @@ public class Server{
 
     public Optional<NetworkManager> joinLobby(int lobbyID, LobbyPlayer player){
         Optional<NetworkManager> networkManager = networkManagers.stream().filter(x -> x.ID == lobbyID).findFirst();
-
-        networkManager.ifPresent(x -> {
-            LobbyHandler lobbyHandler = x.getLobbyHandler();
+        if(networkManager.isPresent()){
+            LobbyHandler lobbyHandler = networkManager.get().getLobbyHandler();
             try {
                 lobbyHandler.addPlayer(player);
-            } catch (FullLobbyException ignored) {}
-        });
-
+            } catch (FullLobbyException ignored) {
+                return Optional.empty();
+            }
+        }
         return networkManager;
     }
 

@@ -1,15 +1,11 @@
 package it.polimi.ingsw.controller.messages;
 
-import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.GameHandler;
-import it.polimi.ingsw.controller.GameState;
-import it.polimi.ingsw.controller.NetworkManager;
-import it.polimi.ingsw.controller.responses.ServerResponse;
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
-import it.polimi.ingsw.model.characters.PlayerChoices;
-import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
+
+import java.util.Optional;
 
 public class SelectedCharacterMessage extends ClientMessage {
     int character_position;
@@ -19,48 +15,46 @@ public class SelectedCharacterMessage extends ClientMessage {
     }
 
     @Override
-    public ServerResponse handle(NetworkManager network_manager, Player player) {
+    public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
+        Optional<StatusCode> status_code = preamble_game_check(network_manager, lobby_player, GameState.CHOOSE_CLOUD);
+        if(status_code.isPresent()) return status_code.get();
+
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
+        Player player = gameHandler.lobbyPlayerToPlayer(lobby_player);
 
-        // Invalid state. It ust be (current_state=ACTIVATE_CHARACTER, action_completed=False)
-        if(gameHandler.getCurrentState() != GameState.ACTIVATE_CHARACTER || gameHandler.isActionCompleted()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
-        }
-
-        // Invalid player. Different players (from model and from socket)
-        Player current_player = game.getCurrentPlayer();
-        if(current_player == null || player != current_player) {
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
-        }
 
         // The game must be in expert mode
         if(!game.getExpertMode()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+            network_manager.addErrorMessage(lobby_player, "The game must be in expert mode");
+            return StatusCode.INVALID_ACTION;
         }
 
         // no other characters active
         for(Character character : game.getCharacters()){
             if(character.isActivated()){
-                return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+                network_manager.addErrorMessage(lobby_player, "At most one character can be activated each turn");
+                return StatusCode.INVALID_ACTION;
             }
         }
 
         // Invalid character_position value
         if(character_position < 0 || character_position >= game.getCharacters().size()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+            network_manager.addErrorMessage(lobby_player, "Invalid character position. It must be in range [0, "+game.getCharacters().size()+"). Given: "+ character_position);
+            return StatusCode.INVALID_ACTION;
         }
         Character character = game.getCharacters().get(character_position);
 
         // check if the player has enough money
         if(character.getCost() > player.getCoins()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+            network_manager.addErrorMessage(lobby_player, "Not enough money. Required: "+ character.getCost() + ". Available: "+ player.getCoins());
+            return StatusCode.INVALID_ACTION;
         }
 
         gameHandler.setSelectedCharacter(character);
 
         gameHandler.setActionCompleted(true);
-        return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
+        return StatusCode.OK;
     }
 
 }

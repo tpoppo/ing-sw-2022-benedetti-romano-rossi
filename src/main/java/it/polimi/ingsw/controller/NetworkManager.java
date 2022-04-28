@@ -29,8 +29,7 @@ public class NetworkManager {
             while(true){
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
-                    Player player = game_handler.lobbyPlayerToPlayer(envelope.getSender());
-                    envelope.getMessage().handle(this, player);
+                    envelope.getMessage().handle(this, envelope.getSender());
                 }
             }
         }).start();

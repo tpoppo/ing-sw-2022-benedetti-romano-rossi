@@ -49,7 +49,7 @@ public class Player extends LobbyPlayer implements Serializable {
         return playerHand;
     }
 
-    public int getWizard() {
+    public Integer getWizard() {
         return wizard;
     }
 
