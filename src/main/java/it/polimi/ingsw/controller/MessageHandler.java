@@ -8,6 +8,8 @@ import java.net.Socket;
 public class MessageHandler extends Thread{
     private final Socket clientSocket;
     private final MenuManager menuManager;
+    private NetworkManager networkManager;
+    private ViewContentCreator viewContentCreator;
     private final Server server;
     private LobbyPlayer player;
 
@@ -35,6 +37,9 @@ public class MessageHandler extends Thread{
             player = new LobbyPlayer(username);
             server.getPlayerList().add(player);
 
+            viewContentCreator = new ViewContentCreator(outputStream, networkManager, player);
+            viewContentCreator.start();
+
             // Receiving and handling the messages
             ClientMessage message;
             while((message = (ClientMessage) inputStream.readObject()) != null){
@@ -45,8 +50,9 @@ public class MessageHandler extends Thread{
                         menuManager.message_queue.add(envelope);
                         break;
                     case GAME:
-                        NetworkManager player_location = server.findPlayerLocation(player);
-                        player_location.getMessageQueue().add(envelope);
+                        if(networkManager == null)
+                            networkManager = server.findPlayerLocation(player);
+                        networkManager.getMessageQueue().add(envelope);
                         break;
                 }
             }

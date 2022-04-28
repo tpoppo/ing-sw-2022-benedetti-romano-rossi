@@ -15,12 +15,14 @@ public class Server{
     private Socket clientSocket;
 
     private final MenuManager menuManager;
-    private ArrayList<NetworkManager> networkManagers;
-    private ArrayList<LobbyPlayer> player_list;
+    private final ArrayList<NetworkManager> networkManagers;
+    private final ArrayList<LobbyPlayer> player_list;
 
     private Server(){
         PORT = 42069;   // nice
         menuManager = MenuManager.getInstance();
+        networkManagers = new ArrayList<>();
+        player_list = new ArrayList<>();
 
         try {
             setupConnection();
@@ -96,5 +98,17 @@ public class Server{
 
         // This line should never be reached
         return null;
+    }
+
+    // Returns all the networkManagers currently in the lobby state
+    public ArrayList<NetworkManager> getLobbies() {
+        ArrayList<NetworkManager> lobbies = new ArrayList<>();
+
+        for(NetworkManager networkManager : networkManagers){
+            if(networkManager.getCurrentHandler().equals(HandlerType.LOBBY))
+                lobbies.add(networkManager);
+        }
+
+        return lobbies;
     }
 }
