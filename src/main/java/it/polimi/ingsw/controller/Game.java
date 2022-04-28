@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Game {
+public class Game implements Serializable{
     public static final int MAX_COINS = 20;
     public static final int MAX_DINING_STUDENTS = 8;
 

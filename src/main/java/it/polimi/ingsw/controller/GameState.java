@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
-public enum GameState {
+import java.io.Serializable;
+
+public enum GameState implements Serializable {
     PLAY_ASSISTANT,
     MOVE_STUDENT,
     MOVE_MOTHER_NATURE,

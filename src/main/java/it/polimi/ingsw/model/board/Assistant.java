@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.board;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Assistant {
+public class Assistant implements Serializable {
     final private int power;
     final private int steps;
     final private int ID;

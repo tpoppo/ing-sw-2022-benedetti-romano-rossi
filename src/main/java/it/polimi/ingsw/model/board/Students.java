@@ -2,9 +2,10 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Students extends HashMap<Color, Integer> {
+public class Students extends HashMap<Color, Integer> implements Serializable {
     public Students(int greens, int blues, int yellows, int pinks, int reds){
         this.put(Color.GREEN, greens);
         this.put(Color.BLUE, blues);

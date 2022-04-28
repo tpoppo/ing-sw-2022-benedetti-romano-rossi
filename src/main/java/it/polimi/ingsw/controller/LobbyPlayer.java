@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
-public class LobbyPlayer {
+import java.io.Serializable;
+
+public class LobbyPlayer implements Serializable {
     private final String username;
     private Integer wizard;
 

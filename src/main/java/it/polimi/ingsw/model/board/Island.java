@@ -2,10 +2,11 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.Player;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Island {
+public class Island implements Serializable {
     private int num_towers;
     private Player owner;
     private boolean mother_nature;
