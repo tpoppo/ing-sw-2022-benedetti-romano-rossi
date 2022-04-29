@@ -1,9 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.*;
-import it.polimi.ingsw.controller.responses.ServerResponse;
-import it.polimi.ingsw.controller.responses.StatusCode;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
 

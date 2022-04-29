@@ -1,8 +1,11 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.view.ViewContent;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -12,10 +15,11 @@ public class NetworkManager {
     private HandlerType current_handler;
     private final ConcurrentLinkedQueue<MessageEnvelope> message_queue;
     private final HashMap<LobbyPlayer, String> errorMessages;
-    private final LobbyHandler lobby_handler;
+    private LobbyHandler lobby_handler;
     private GameHandler game_handler;
 
     // not thread safe
+    // default constructor for the NetworkManager, starts in the lobby state
     private NetworkManager(int max_players){
         ID = count;
         count++;
@@ -25,11 +29,31 @@ public class NetworkManager {
         current_handler = HandlerType.LOBBY;
         lobby_handler = new LobbyHandler(max_players);
 
+        handleMessages();
+    }
+
+    // constructor for Server.retrieveSavedState(), starts in the game state without passing through the lobby
+    private NetworkManager(GameHandler gameHandler){
+        ID = count;
+        count++;
+        message_queue = new ConcurrentLinkedQueue<>();
+        errorMessages = new HashMap<>();
+
+        current_handler = HandlerType.GAME;
+        this.game_handler = gameHandler;
+
+        handleMessages();
+    }
+
+    private void handleMessages(){
         new Thread(() -> {
             while(true){
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
-                    envelope.getMessage().handle(this, envelope.getSender());
+                    envelope.message().handle(this, envelope.sender());
+
+                    // saves the networkManager state for persistence
+                    saveState();
                 }
             }
         }).start();
@@ -38,6 +62,10 @@ public class NetworkManager {
     // thread safe
     public static synchronized NetworkManager createNetworkManager(int max_players){
         return new NetworkManager(max_players);
+    }
+
+    public static synchronized NetworkManager createNetworkManager(GameHandler gameHandler){
+        return new NetworkManager(gameHandler);
     }
 
     public void startGame(boolean expert_mode){
@@ -51,6 +79,22 @@ public class NetworkManager {
 
     public ViewContent createViewContent(LobbyPlayer lobbyPlayer){
         return new ViewContent(game_handler, lobby_handler, current_handler, errorMessages.get(lobbyPlayer));
+    }
+
+    public void saveState(){
+        String path = Consts.PATH_SAVES;
+        String fileName = path + "/SavedGame_" + ID + ".sav";
+
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             ObjectOutputStream outputStream = new ObjectOutputStream(fos)){
+            outputStream.reset();
+            outputStream.writeObject(game_handler);
+            outputStream.flush();
+            // FIXME: do we also need to save the message_queue?
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public HandlerType getCurrentHandler() {

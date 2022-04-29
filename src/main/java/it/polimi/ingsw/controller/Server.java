@@ -1,14 +1,21 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server{
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static Server instance;
     final private int PORT;
     private ServerSocket serverSocket;
@@ -19,10 +26,12 @@ public class Server{
     private final ArrayList<LobbyPlayer> player_list;
 
     private Server(){
-        PORT = 42069;   // nice
+        PORT = Consts.SERVER_PORT;
         menuManager = MenuManager.getInstance();
         networkManagers = new ArrayList<>();
         player_list = new ArrayList<>();
+
+        retrieveSavedState();
 
         try {
             setupConnection();
@@ -46,6 +55,35 @@ public class Server{
     private void closeConnection() throws IOException {
         serverSocket.close();
         clientSocket.close();
+    }
+
+    private void retrieveSavedState(){
+        String path = Consts.PATH_SAVES;
+
+        File directory = new File(path);
+
+        File[] files = directory.listFiles();
+        if(files != null){
+            for(File file : files){
+                try (FileInputStream fis = new FileInputStream(file);
+                     ObjectInputStream inputStream = new ObjectInputStream(fis)){
+
+                    NetworkManager networkManager;
+                    try {
+                        GameHandler gameHandler = (GameHandler) inputStream.readObject();
+
+                        networkManager = NetworkManager.createNetworkManager(gameHandler);
+                        networkManagers.add(networkManager);
+                    } catch (ClassNotFoundException e) {
+                        System.err.println("Invalid file format");
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                        throw new RuntimeException(e);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else LOGGER.log(Level.SEVERE, "Path does not lead to a directory", directory.getAbsolutePath());
     }
 
     public NetworkManager createLobby(int max_players){

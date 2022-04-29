@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.responses;
+package it.polimi.ingsw.controller.messages;
 
 public enum StatusCode {
     OK,

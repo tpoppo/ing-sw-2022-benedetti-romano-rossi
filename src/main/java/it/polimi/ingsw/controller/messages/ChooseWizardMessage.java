@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.*;
-import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 
 import java.util.Optional;

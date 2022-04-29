@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.*;
-import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;

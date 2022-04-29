@@ -29,7 +29,10 @@ public class MessageHandler extends Thread{
             String username = (String) inputStream.readObject();
             if(!server.checkUsername(username)) {
                 // FIXME: come mandiamo il messaggio di errore?
-                System.out.println("ERROR");
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+                out.println("ERROR: Username already taken");
+                out.close();
+                System.out.println("ERROR: Username already taken");
                 return;
             }
 
@@ -37,6 +40,7 @@ public class MessageHandler extends Thread{
             player = new LobbyPlayer(username);
             server.getPlayerList().add(player);
 
+            // Creates and starts the viewContentCreator
             viewContentCreator = new ViewContentCreator(outputStream, networkManager, player);
             viewContentCreator.start();
 

@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller.messages;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.controller.NetworkManager;
-import it.polimi.ingsw.controller.responses.StatusCode;
 
 import java.util.Optional;
 

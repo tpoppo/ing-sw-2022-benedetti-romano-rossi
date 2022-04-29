@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
 import it.polimi.ingsw.controller.*;
-import it.polimi.ingsw.controller.responses.StatusCode;
 import it.polimi.ingsw.model.Player;
 
 import java.io.Serializable;
@@ -27,7 +26,7 @@ public abstract class ClientMessage implements Serializable {
      * Check whether the game state is required_state and the player is valid (same player from the game and from the socket)
      *
      * @param network_manager current game
-     * @param player          current player (from the socket)
+     * @param lobby_player    current player (from the socket)
      * @param required_state  state required to take the action
      * @return empty if it is valid otherwise WRONG_PLAYER|WRONG_STATE
      */

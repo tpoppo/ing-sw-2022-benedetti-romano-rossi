@@ -13,7 +13,7 @@ public class MenuManager {
             while (true) {
                 if (!message_queue.isEmpty()) {
                     MessageEnvelope envelope = message_queue.remove();
-                    envelope.getMessage().handle(envelope.getSender());
+                    envelope.message().handle(envelope.sender());
                 }
             }
         }).start();
