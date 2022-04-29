@@ -15,8 +15,8 @@ public class StartGameMessage extends ClientMessage{
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        Optional<StatusCode> status_code = preamble_lobby_check(network_manager, lobby_player);
-        if(status_code.isPresent()) return status_code.get();
+        StatusCode status_code = preamble_lobby_check(network_manager, lobby_player);
+        if(status_code != StatusCode.EMPTY) return status_code;
 
         LobbyHandler lobby_handler = network_manager.getLobbyHandler();
         if(lobby_handler.getPlayers().size() <= 1){

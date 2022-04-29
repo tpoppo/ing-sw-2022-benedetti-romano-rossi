@@ -17,8 +17,8 @@ public class MoveMotherNatureMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        Optional<StatusCode> status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_MOTHER_NATURE);
-        if(status_code.isPresent()) return status_code.get();
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_MOTHER_NATURE);
+        if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();

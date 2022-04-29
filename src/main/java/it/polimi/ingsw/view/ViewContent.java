@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view;
-
 import it.polimi.ingsw.controller.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ViewContent {
+public class ViewContent implements Serializable{
     private final GameHandler gameHandler;
     private final LobbyHandler lobbyHandler;
     private final HandlerType currentHandler;
@@ -18,5 +18,25 @@ public class ViewContent {
         this.errorMessage = errorMessage;
 
         lobbies = Server.getInstance().getLobbies();
+    }
+
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
+    public LobbyHandler getLobbyHandler() {
+        return lobbyHandler;
+    }
+
+    public HandlerType getCurrentHandler() {
+        return currentHandler;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public ArrayList<NetworkManager> getLobbies() {
+        return new ArrayList<>(lobbies);
     }
 }
