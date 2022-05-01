@@ -34,20 +34,26 @@ public class Server{
         retrieveSavedState();
 
         try {
-            setupConnection();
+            serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static Server getInstance(){
-        if(instance == null) instance = new Server();
+        if(instance == null) {
+            instance = new Server();
+
+            try {
+                instance.startServer();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return instance;
     }
 
-    private void setupConnection() throws IOException {
-        serverSocket = new ServerSocket(PORT);
-
+    private void startServer() throws IOException {
         while(true)
             new MessageHandler(serverSocket.accept()).start();
     }
