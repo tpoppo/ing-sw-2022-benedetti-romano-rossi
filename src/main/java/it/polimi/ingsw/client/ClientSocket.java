@@ -11,8 +11,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientSocket {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
+
     private final String SERVER_ADDR = Consts.SERVER_ADDR;
     private final int SERVER_PORT = Consts.SERVER_PORT;
 
@@ -36,10 +40,11 @@ public class ClientSocket {
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
 
-
     }
 
     public void send(ClientMessage message) {
+        LOGGER.log(Level.FINEST, "Message sent: {0}", message);
+        
         try {
             output_stream.reset();
             output_stream.writeObject(message);
@@ -58,11 +63,10 @@ public class ClientSocket {
             output_stream.reset();
             output_stream.writeObject(username);
             output_stream.flush();
-            Scanner scanner = new Scanner(clientSocket.getInputStream());
-            String s = scanner.nextLine();
+            String s = (String) input_stream.readObject();
 
             if(s.charAt(0) == 'E') return false;
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         this.username = username;

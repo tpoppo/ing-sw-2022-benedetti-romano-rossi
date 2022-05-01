@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.controller.NetworkManager;
+import it.polimi.ingsw.controller.ReducedLobby;
 import it.polimi.ingsw.controller.messages.ChooseWizardMessage;
 import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
 import it.polimi.ingsw.controller.messages.JoinLobbyMessage;
@@ -31,7 +32,6 @@ public class CLI {
     }
 
     public void run(){
-
         String username;
         do {
             username = read_stream.nextLine();
@@ -50,8 +50,17 @@ public class CLI {
         print_stream.flush();
         ViewContent view = client_socket.getView();
 
+        System.err.println(view);
+
         // missing view
-        if(view == null) return ;
+        if(view == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return ;
+        }
 
         // print server errors
         if(view.getErrorMessage() != null) print_stream.println(view.getErrorMessage());
@@ -79,12 +88,11 @@ public class CLI {
     private void printMenu() {
         print_stream.println("MENU");
         ViewContent view = client_socket.getView();
-        ArrayList<NetworkManager> network_managers = view.getLobbies();
+        ArrayList<ReducedLobby> reduced_lobbies = view.getLobbies();
 
         print_stream.println("Lobby Available");
-        for(NetworkManager network_manager : network_managers){
-            LobbyHandler lobby_handler = network_manager.getLobbyHandler();
-            print_stream.printf("%d) %d/%d\n", network_manager.ID, lobby_handler.getPlayers().size(), lobby_handler.getMaxPlayers());
+        for(ReducedLobby reduced_lobby : reduced_lobbies){
+            print_stream.printf("%d) %d/%d\n", reduced_lobby.getID(), reduced_lobby.getNumPlayer(), reduced_lobby.getMaxPlayers());
         }
         print_stream.println("mc <max players> - create a new lobby");
         print_stream.println("mj <lobby id> - join the lobby with ID <lobby id>");

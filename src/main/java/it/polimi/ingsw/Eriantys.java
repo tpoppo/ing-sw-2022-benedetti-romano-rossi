@@ -4,14 +4,11 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.controller.Server;
 import it.polimi.ingsw.view.CLI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * Hello world!
  *
  */
-public class App 
+public class Eriantys
 {
     public static void main(String[] args ) {
 

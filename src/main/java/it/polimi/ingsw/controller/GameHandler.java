@@ -37,7 +37,7 @@ public class GameHandler implements Serializable {
         return model.getPlayers().stream()
                 .filter(player -> player.getUsername().equals(lobbyPlayer.getUsername()))
                 .reduce((a, b) -> {throw new IllegalStateException("Multiple elements: " + a + " " + b);})
-                .get();
+                .orElse(null);
     }
 
     public Game getModel() {

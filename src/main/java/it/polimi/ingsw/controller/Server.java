@@ -55,7 +55,7 @@ public class Server{
 
     private void startServer() throws IOException {
         while(true)
-            new MessageHandler(serverSocket.accept()).start();
+            new ConnectionCEO(serverSocket.accept());
     }
 
     private void closeConnection() throws IOException {

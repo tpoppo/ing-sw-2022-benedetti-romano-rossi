@@ -3,13 +3,15 @@ import it.polimi.ingsw.controller.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewContent implements Serializable{
     private final GameHandler gameHandler;
     private final LobbyHandler lobbyHandler;
     private final HandlerType currentHandler;
     private final String errorMessage;
-    private final ArrayList<NetworkManager> lobbies;
+    private final ArrayList<ReducedLobby> lobbies;
 
     public ViewContent(GameHandler gameHandler, LobbyHandler lobbyHandler, HandlerType currentHandler, String errorMessage) {
         this.gameHandler = gameHandler;
@@ -17,7 +19,15 @@ public class ViewContent implements Serializable{
         this.currentHandler = currentHandler;
         this.errorMessage = errorMessage;
 
-        lobbies = Server.getInstance().getLobbies();
+        this.lobbies = new ArrayList<>();
+
+        List<NetworkManager> lobbies = Server.getInstance().getLobbies();
+        lobbies = lobbies.stream().filter(x -> x.getCurrentHandler().equals(HandlerType.LOBBY)).collect(Collectors.toList());
+
+        for(NetworkManager lobby : lobbies) {
+            ReducedLobby reducedLobby = new ReducedLobby(lobby);
+            this.lobbies.add(reducedLobby);
+        }
     }
     public ViewContent(){
         this(null, null, null, null);
@@ -39,7 +49,18 @@ public class ViewContent implements Serializable{
         return errorMessage;
     }
 
-    public ArrayList<NetworkManager> getLobbies() {
+    public ArrayList<ReducedLobby> getLobbies() {
         return new ArrayList<>(lobbies);
+    }
+
+    @Override
+    public String toString() {
+        return "ViewContent{" +
+                "gameHandler=" + gameHandler +
+                ", lobbyHandler=" + lobbyHandler +
+                ", currentHandler=" + currentHandler +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", lobbies=" + lobbies +
+                '}';
     }
 }

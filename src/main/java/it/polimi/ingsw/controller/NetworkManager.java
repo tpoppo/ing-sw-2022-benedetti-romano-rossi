@@ -6,7 +6,10 @@ import it.polimi.ingsw.view.ViewContent;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NetworkManager {
@@ -17,6 +20,7 @@ public class NetworkManager {
     private final HashMap<LobbyPlayer, String> errorMessages;
     private LobbyHandler lobby_handler;
     private GameHandler game_handler;
+    private Set<ConnectionCEO> subscribers;
 
     // not thread safe
     // default constructor for the NetworkManager, starts in the lobby state
@@ -25,6 +29,7 @@ public class NetworkManager {
         count++;
         message_queue = new ConcurrentLinkedQueue<>();
         errorMessages = new HashMap<>();
+        subscribers = new HashSet<>();
 
         current_handler = HandlerType.LOBBY;
         lobby_handler = new LobbyHandler(max_players);
@@ -51,6 +56,16 @@ public class NetworkManager {
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
                     envelope.message().handle(this, envelope.sender());
+
+                    // sends view updated to subscribers
+                    for(ConnectionCEO subscriber : subscribers) {
+                        String errorMessage = errorMessages.get(subscriber.getPlayer());
+
+                        ViewContent viewContent = new ViewContent(
+                                game_handler, lobby_handler, current_handler, errorMessage
+                        );
+                        subscriber.sendViewContent(viewContent);
+                    }
 
                     // saves the networkManager state for persistence
                     saveState();
@@ -111,5 +126,13 @@ public class NetworkManager {
 
     public ConcurrentLinkedQueue<MessageEnvelope> getMessageQueue() {
         return message_queue;
+    }
+
+    public void subscribe(ConnectionCEO connectionCEO){
+        subscribers.add(connectionCEO);
+    }
+
+    public void unsubscribe(ConnectionCEO connectionCEO){
+        subscribers.remove(connectionCEO);
     }
 }

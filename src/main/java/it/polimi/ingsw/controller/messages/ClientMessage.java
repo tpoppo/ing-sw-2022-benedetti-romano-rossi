@@ -16,7 +16,7 @@ public abstract class ClientMessage implements Serializable {
         return StatusCode.NOT_IMPLEMENTED;
     }
 
-    public StatusCode handle(LobbyPlayer player) {
+    public StatusCode handle(ConnectionCEO connectionCEO, LobbyPlayer player) {
         return StatusCode.NOT_IMPLEMENTED;
     }
 

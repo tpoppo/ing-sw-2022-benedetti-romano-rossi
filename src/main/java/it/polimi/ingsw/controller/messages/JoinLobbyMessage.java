@@ -1,8 +1,6 @@
 package it.polimi.ingsw.controller.messages;
 
-import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.NetworkManager;
-import it.polimi.ingsw.controller.Server;
+import it.polimi.ingsw.controller.*;
 
 import java.util.Optional;
 
@@ -13,10 +11,18 @@ public class JoinLobbyMessage extends ClientMessage {
         super.message_type = MessageType.MENU;
     }
 
-    public StatusCode handle(LobbyPlayer player) {
+    public StatusCode handle(ConnectionCEO connectionCEO, LobbyPlayer player) {
         Server server = Server.getInstance();
         Optional<NetworkManager> network_manager = server.joinLobby(id, player);
-        return network_manager.isPresent() ? StatusCode.OK : StatusCode.INVALID_ACTION;
+        if(network_manager.isPresent()){
+            connectionCEO.setNetworkManager(network_manager.get());
+            MenuManager.getInstance().unsubscribe(connectionCEO);
+            network_manager.get().subscribe(connectionCEO);
+
+            return StatusCode.OK;
+        }
+
+        return StatusCode.INVALID_ACTION;
     }
 
     @Override
