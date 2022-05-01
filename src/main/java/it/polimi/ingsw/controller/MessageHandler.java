@@ -4,8 +4,11 @@ import it.polimi.ingsw.controller.messages.ClientMessage;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MessageHandler extends Thread{
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private final Socket clientSocket;
     private final MenuManager menuManager;
     private NetworkManager networkManager;
@@ -26,22 +29,31 @@ public class MessageHandler extends Thread{
             ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
 
             // The first message must contain the username chosen by the client
-            String username = (String) inputStream.readObject();
-            if(!server.checkUsername(username)) {
-                // FIXME: come mandiamo il messaggio di errore?
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
-                out.println("ERROR: Username already taken");
-                out.close();
-                System.out.println("ERROR: Username already taken");
-                return;
-            }
+            boolean logged_in = false;
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+            String username;
+            do{
+                username = (String) inputStream.readObject();
+                logged_in = true;
+                if(!server.checkUsername(username)) {
+                    logged_in = false;
+                    LOGGER.log(Level.INFO, "{0} can logged in. Username already taken", username);
+                    out.println("ERROR: Username already taken");
+                    out.close();
+                }
+            }while(!logged_in);
+
+            out.println("OK");
+            out.flush();
+            LOGGER.log(Level.INFO, "{0} logged in", username);
+
 
             // Creates a new lobbyPlayer and adds it to the global player list of the server
             player = new LobbyPlayer(username);
             server.getPlayerList().add(player);
 
             // Creates and starts the viewContentCreator
-            viewContentCreator = new ViewContentCreator(outputStream, networkManager, player);
+            viewContentCreator = new ViewContentCreator(outputStream, null, player);
             viewContentCreator.start();
 
             // Receiving and handling the messages
@@ -54,8 +66,11 @@ public class MessageHandler extends Thread{
                         menuManager.message_queue.add(envelope);
                         break;
                     case GAME:
-                        if(networkManager == null)
+                        if(networkManager == null){
                             networkManager = server.findPlayerLocation(player);
+                            viewContentCreator.setNetworkManager(networkManager);
+                        }
+
                         networkManager.getMessageQueue().add(envelope);
                         break;
                 }

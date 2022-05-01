@@ -81,8 +81,7 @@ public class Server{
                         networkManager = NetworkManager.createNetworkManager(gameHandler);
                         networkManagers.add(networkManager);
                     } catch (ClassNotFoundException e) {
-                        System.err.println("Invalid file format");
-                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                        LOGGER.log(Level.SEVERE, "Invalid file format: {0}", e);
                         throw new RuntimeException(e);
                     }
                 } catch (IOException e) {

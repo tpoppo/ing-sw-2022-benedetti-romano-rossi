@@ -4,6 +4,9 @@ import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class ClientMessage implements Serializable {
@@ -68,6 +71,25 @@ public abstract class ClientMessage implements Serializable {
         }
 
         return StatusCode.EMPTY;
+    }
+
+    public static ArrayList<Class<?>> getAllMessageClasses(){
+        return new ArrayList<>(List.of(ClientMessage.class.getPermittedSubclasses()));
+        /*
+        return new ArrayList<>(Arrays.asList(
+                    ActivateCharacterMessage.class,
+                    ChooseCloudMessage.class,
+                    ChooseWizardMessage.class,
+                    CreateLobbyMessage.class,
+                    JoinLobbyMessage.class,
+                    MoveMotherNatureMessage.class,
+                    MoveStudentMessage.class,
+                    NextStateMessage.class,
+                    PlayAssistantMessage.class,
+                    SelectedCharacterMessage.class,
+                    StartGameMessage.class
+        ));
+         */
     }
 
 }

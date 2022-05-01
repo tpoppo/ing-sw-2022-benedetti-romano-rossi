@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientSocket {
     private final String SERVER_ADDR = Consts.SERVER_ADDR;
@@ -34,15 +36,7 @@ public class ClientSocket {
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
 
-        new Thread(() -> {
-            while(true) {
-                try {
-                    while((view = (ViewContent) input_stream.readObject()) != null);
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+
     }
 
     public void send(ClientMessage message) {
@@ -59,16 +53,30 @@ public class ClientSocket {
         clientSocket.close();
     }
 
-    public void login(String username) {
+    public boolean login(String username) {
         try {
             output_stream.reset();
             output_stream.writeObject(username);
             output_stream.flush();
-            // FIXME: how do we check whether the user has logged in?
+            Scanner scanner = new Scanner(clientSocket.getInputStream());
+            String s = scanner.nextLine();
+
+            if(s.charAt(0) == 'E') return false;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         this.username = username;
+
+        new Thread(() -> {
+            while(true) {
+                try {
+                    while((view = (ViewContent) input_stream.readObject()) != null);
+                } catch (IOException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+        return true;
     }
 
     public String getUsername(){
@@ -78,5 +86,12 @@ public class ClientSocket {
     public ViewContent getView(){
         return view;
     }
+
+    /*
+    public ArrayList<Class<?>> getAvailableAction(){
+        for(Class message_class : ClientMessage.getAllMessageClasses()){
+        }
+    }
+    */
 
 }

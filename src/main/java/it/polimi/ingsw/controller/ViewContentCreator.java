@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 
 public class ViewContentCreator extends Thread{
     private final ObjectOutputStream outputStream;
-    private final NetworkManager networkManager;
+    private NetworkManager networkManager;
     private final LobbyPlayer player;
 
     public ViewContentCreator(ObjectOutputStream outputStream, NetworkManager networkManager, LobbyPlayer player) {
@@ -19,7 +19,12 @@ public class ViewContentCreator extends Thread{
     @Override
     public void run() {
         while(true){
-            ViewContent viewContent = networkManager.createViewContent(player);
+            ViewContent viewContent = null;
+            if(networkManager == null) {
+                viewContent = new ViewContent();
+            } else {
+                viewContent = networkManager.createViewContent(player);
+            }
 
             try {
                 outputStream.reset();
@@ -31,5 +36,9 @@ public class ViewContentCreator extends Thread{
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        this.networkManager = networkManager;
     }
 }

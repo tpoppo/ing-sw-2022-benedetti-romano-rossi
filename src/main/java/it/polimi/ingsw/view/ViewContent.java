@@ -19,6 +19,9 @@ public class ViewContent implements Serializable{
 
         lobbies = Server.getInstance().getLobbies();
     }
+    public ViewContent(){
+        this(null, null, null, null);
+    }
 
     public GameHandler getGameHandler() {
         return gameHandler;
