@@ -33,4 +33,12 @@ public class ActivateCharacterMessage extends ClientMessage {
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "ActivateCharacterMessage{" +
+                "player_choices=" + player_choices +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

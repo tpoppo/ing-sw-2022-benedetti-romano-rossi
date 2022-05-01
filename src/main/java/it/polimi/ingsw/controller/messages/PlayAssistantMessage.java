@@ -41,4 +41,12 @@ public class PlayAssistantMessage extends ClientMessage {
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "PlayAssistantMessage{" +
+                "card_position=" + card_position +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

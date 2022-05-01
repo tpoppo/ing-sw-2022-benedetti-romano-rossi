@@ -18,4 +18,12 @@ public class JoinLobbyMessage extends ClientMessage {
         Optional<NetworkManager> network_manager = server.joinLobby(id, player);
         return network_manager.isPresent() ? StatusCode.OK : StatusCode.INVALID_ACTION;
     }
+
+    @Override
+    public String toString() {
+        return "JoinLobbyMessage{" +
+                "id=" + id +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

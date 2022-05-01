@@ -34,4 +34,12 @@ public class ChooseCloudMessage extends ClientMessage {
         gameHandler.setActionCompleted(true);
         return StatusCode.INVALID_ACTION;
     }
+
+    @Override
+    public String toString() {
+        return "ChooseCloudMessage{" +
+                "cloud_position=" + cloud_position +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

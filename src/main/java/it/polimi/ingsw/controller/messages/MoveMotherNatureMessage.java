@@ -65,4 +65,12 @@ public class MoveMotherNatureMessage extends ClientMessage {
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "MoveMotherNatureMessage{" +
+                "mother_nature_position=" + mother_nature_position +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

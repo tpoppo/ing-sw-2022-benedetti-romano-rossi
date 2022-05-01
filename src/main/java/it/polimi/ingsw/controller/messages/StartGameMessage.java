@@ -34,4 +34,12 @@ public class StartGameMessage extends ClientMessage{
         network_manager.startGame(expert_mode);
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "StartGameMessage{" +
+                "expert_mode=" + expert_mode +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

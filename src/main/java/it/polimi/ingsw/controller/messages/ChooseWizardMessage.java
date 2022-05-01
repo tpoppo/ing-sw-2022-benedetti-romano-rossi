@@ -27,4 +27,11 @@ public class ChooseWizardMessage extends ClientMessage{
         return StatusCode.OK;
     }
 
+    @Override
+    public String toString() {
+        return "ChooseWizardMessage{" +
+                "wizard=" + wizard +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

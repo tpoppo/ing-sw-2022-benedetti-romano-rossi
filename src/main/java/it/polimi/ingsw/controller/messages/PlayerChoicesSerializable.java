@@ -43,4 +43,11 @@ public class PlayerChoicesSerializable implements Serializable {
         return p;
     }
 
+    @Override
+    public String toString() {
+        return "PlayerChoicesSerializable{" +
+                "island=" + island +
+                ", student=" + student +
+                '}';
+    }
 }

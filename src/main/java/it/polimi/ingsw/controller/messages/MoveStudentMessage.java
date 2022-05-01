@@ -59,4 +59,13 @@ public class MoveStudentMessage extends ClientMessage {
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "MoveStudentMessage{" +
+                "color=" + color +
+                ", island_position=" + island_position +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

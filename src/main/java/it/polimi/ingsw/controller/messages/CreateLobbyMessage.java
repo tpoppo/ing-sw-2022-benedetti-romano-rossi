@@ -35,4 +35,12 @@ public class CreateLobbyMessage extends ClientMessage {
 
         return StatusCode.OK;
     }
+
+    @Override
+    public String toString() {
+        return "CreateLobbyMessage{" +
+                "max_players=" + max_players +
+                ", message_type=" + message_type +
+                '}';
+    }
 }

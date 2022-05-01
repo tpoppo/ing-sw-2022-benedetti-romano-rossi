@@ -67,4 +67,8 @@ public class NextStateMessage extends ClientMessage {
         return StatusCode.OK;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

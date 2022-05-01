@@ -92,4 +92,10 @@ public abstract class ClientMessage implements Serializable {
          */
     }
 
+    @Override
+    public String toString() {
+        return "ClientMessage{" +
+                "message_type=" + message_type +
+                '}';
+    }
 }

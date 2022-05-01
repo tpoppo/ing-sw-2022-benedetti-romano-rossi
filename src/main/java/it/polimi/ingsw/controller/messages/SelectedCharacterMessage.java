@@ -56,4 +56,11 @@ public class SelectedCharacterMessage extends ClientMessage {
         return StatusCode.OK;
     }
 
+    @Override
+    public String toString() {
+        return "SelectedCharacterMessage{" +
+                "character_position=" + character_position +
+                ", message_type=" + message_type +
+                '}';
+    }
 }
