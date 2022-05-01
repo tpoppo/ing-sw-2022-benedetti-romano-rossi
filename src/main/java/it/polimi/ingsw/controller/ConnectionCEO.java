@@ -3,13 +3,12 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.controller.messages.ClientMessage;
 import it.polimi.ingsw.view.ViewContent;
 
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ConnectionCEO {
+public class ConnectionCEO extends Thread {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private final Socket clientSocket;
     private NetworkManager networkManager;
@@ -21,7 +20,10 @@ public class ConnectionCEO {
     public ConnectionCEO(Socket clientSocket){
         this.server = Server.getInstance();
         this.clientSocket = clientSocket;
+    }
 
+    @Override
+    public void run() {
         if(login()) {
             LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
 
@@ -30,6 +32,7 @@ public class ConnectionCEO {
         }
         else LOGGER.log(Level.INFO, "Connection failed");
     }
+
     private boolean login(){
         // The first message must contain the username chosen by the client
         boolean logged_in;

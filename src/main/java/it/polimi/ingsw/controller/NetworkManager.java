@@ -57,15 +57,7 @@ public class NetworkManager {
                     MessageEnvelope envelope = message_queue.remove();
                     envelope.message().handle(this, envelope.sender());
 
-                    // sends view updated to subscribers
-                    for(ConnectionCEO subscriber : subscribers) {
-                        String errorMessage = errorMessages.get(subscriber.getPlayer());
-
-                        ViewContent viewContent = new ViewContent(
-                                game_handler, lobby_handler, current_handler, errorMessage
-                        );
-                        subscriber.sendViewContent(viewContent);
-                    }
+                    refresh();
 
                     // saves the networkManager state for persistence
                     saveState();
@@ -128,11 +120,25 @@ public class NetworkManager {
         return message_queue;
     }
 
+    private void refresh(){
+        // sends view updated to subscribers
+        for(ConnectionCEO subscriber : subscribers) {
+            String errorMessage = errorMessages.get(subscriber.getPlayer());
+
+            ViewContent viewContent = new ViewContent(
+                    game_handler, lobby_handler, current_handler, errorMessage
+            );
+            subscriber.sendViewContent(viewContent);
+        }
+    }
+
     public void subscribe(ConnectionCEO connectionCEO){
         subscribers.add(connectionCEO);
+        refresh();
     }
 
     public void unsubscribe(ConnectionCEO connectionCEO){
         subscribers.remove(connectionCEO);
+        refresh();
     }
 }

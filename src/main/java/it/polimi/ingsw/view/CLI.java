@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.NetworkManager;
 import it.polimi.ingsw.controller.ReducedLobby;
 import it.polimi.ingsw.controller.messages.ChooseWizardMessage;
 import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
@@ -82,7 +81,7 @@ public class CLI {
 
         String input = new String(read_stream.nextLine());
         String out = parseInput(input);
-        print_stream.print(out);
+        print_stream.println(out);
     }
 
     private void printMenu() {
@@ -109,7 +108,7 @@ public class CLI {
         print_stream.printf("Players: %d/%d\n", players.size(), lobby_handler.getMaxPlayers());
         for(LobbyPlayer lobby_player : players){
             Integer wizard = lobby_player.getWizard();
-            print_stream.printf("%s (Wizard: %s)\n", lobby_player.getUsername(), wizard.toString());
+            print_stream.printf("%s (Wizard: %s)\n", lobby_player.getUsername(), wizard);
         }
         print_stream.println("ls <expert mode> - start the game");
         print_stream.println("lc <id> - choose wizard");

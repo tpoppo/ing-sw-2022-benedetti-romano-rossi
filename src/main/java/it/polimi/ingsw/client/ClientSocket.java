@@ -44,7 +44,7 @@ public class ClientSocket {
 
     public void send(ClientMessage message) {
         LOGGER.log(Level.FINEST, "Message sent: {0}", message);
-        
+
         try {
             output_stream.reset();
             output_stream.writeObject(message);
