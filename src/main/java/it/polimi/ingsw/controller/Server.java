@@ -83,7 +83,10 @@ public class Server{
                     throw new RuntimeException(e);
                 }
             }
-        }else LOGGER.log(Level.SEVERE, "Path does not lead to a directory", directory.getAbsolutePath());
+        }else {
+            if(!directory.mkdir())
+                LOGGER.log(Level.SEVERE, "Couldn't create directory in path {0}", directory.getAbsolutePath());
+        }
     }
 
     public NetworkManager createLobby(int max_players){
