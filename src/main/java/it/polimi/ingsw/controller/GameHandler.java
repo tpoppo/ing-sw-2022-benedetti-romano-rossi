@@ -5,7 +5,9 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
-public class GameHandler {
+import java.io.Serializable;
+
+public class GameHandler implements Serializable {
     private Game model;
     private GameState current_state;
     private GameState saved_state;

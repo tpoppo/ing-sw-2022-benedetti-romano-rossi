@@ -51,7 +51,7 @@ public class BardTest {
         swap_list.add(Color.BLUE);
         swap_list.add(Color.RED);
         playerChoices.setStudent(swap_list);
-        bard.onActivation(game, playerChoices);
+        bard.activate(game, playerChoices);
 
         Students expected_diningstudents = new Students(0, 2, 2, 1, 0);
         Students expected_entrancestudents = new Students(3, 0, 0, 1, 1);
@@ -59,6 +59,6 @@ public class BardTest {
         assertEquals(expected_diningstudents, game.getCurrentPlayer().getSchoolBoard().getDiningStudents());
         assertEquals(expected_entrancestudents, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents());
 
-        bard.onDeactivation(game, playerChoices);
+        bard.deactivate(game, playerChoices);
     }
 }

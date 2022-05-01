@@ -3,10 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class LobbyHandler {
+public class LobbyHandler implements Serializable {
     private int max_players;
     private ArrayList<LobbyPlayer> players;
     private ArrayList<Integer> available_wizards;
@@ -36,4 +37,9 @@ public class LobbyHandler {
     public ArrayList<LobbyPlayer> getPlayers() {
         return players;
     }
+
+    public int getMaxPlayers() {
+        return max_players;
+    }
+
 }

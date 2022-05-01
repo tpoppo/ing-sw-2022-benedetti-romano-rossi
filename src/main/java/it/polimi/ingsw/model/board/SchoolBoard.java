@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.board;
 
-public class SchoolBoard {
+import java.io.Serializable;
+
+public class SchoolBoard implements Serializable {
     private int num_towers;
     private Professors professors;
     private Students dining_students;

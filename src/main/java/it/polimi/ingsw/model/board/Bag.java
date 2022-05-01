@@ -2,10 +2,11 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 
+import java.io.Serializable;
 import java.util.Random;
 
 
-public class Bag {
+public class Bag implements Serializable {
     public final static int MAX_STUDENTS = 130;
     private Students students;
     private final Random rng = new Random();

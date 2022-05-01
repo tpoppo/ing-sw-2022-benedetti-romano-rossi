@@ -8,6 +8,8 @@ import java.net.Socket;
 public class MessageHandler extends Thread{
     private final Socket clientSocket;
     private final MenuManager menuManager;
+    private NetworkManager networkManager;
+    private ViewContentCreator viewContentCreator;
     private final Server server;
     private LobbyPlayer player;
 
@@ -27,13 +29,20 @@ public class MessageHandler extends Thread{
             String username = (String) inputStream.readObject();
             if(!server.checkUsername(username)) {
                 // FIXME: come mandiamo il messaggio di errore?
-                System.out.println("ERROR");
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+                out.println("ERROR: Username already taken");
+                out.close();
+                System.out.println("ERROR: Username already taken");
                 return;
             }
 
             // Creates a new lobbyPlayer and adds it to the global player list of the server
             player = new LobbyPlayer(username);
             server.getPlayerList().add(player);
+
+            // Creates and starts the viewContentCreator
+            viewContentCreator = new ViewContentCreator(outputStream, networkManager, player);
+            viewContentCreator.start();
 
             // Receiving and handling the messages
             ClientMessage message;
@@ -45,8 +54,9 @@ public class MessageHandler extends Thread{
                         menuManager.message_queue.add(envelope);
                         break;
                     case GAME:
-                        NetworkManager player_location = server.findPlayerLocation(player);
-                        player_location.getMessageQueue().add(envelope);
+                        if(networkManager == null)
+                            networkManager = server.findPlayerLocation(player);
+                        networkManager.getMessageQueue().add(envelope);
                         break;
                 }
             }

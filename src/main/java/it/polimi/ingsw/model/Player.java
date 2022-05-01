@@ -5,10 +5,11 @@ import it.polimi.ingsw.model.board.Assistant;
 import it.polimi.ingsw.model.board.Professors;
 import it.polimi.ingsw.model.board.SchoolBoard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class Player extends LobbyPlayer{
+public class Player extends LobbyPlayer implements Serializable {
     private Optional<Assistant> current_assistant;
     private final String username;
     private int coins;
@@ -48,7 +49,7 @@ public class Player extends LobbyPlayer{
         return playerHand;
     }
 
-    public int getWizard() {
+    public Integer getWizard() {
         return wizard;
     }
 

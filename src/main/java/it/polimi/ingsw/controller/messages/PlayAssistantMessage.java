@@ -1,13 +1,10 @@
 package it.polimi.ingsw.controller.messages;
 
-import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.GameHandler;
-import it.polimi.ingsw.controller.GameState;
-import it.polimi.ingsw.controller.NetworkManager;
-import it.polimi.ingsw.controller.responses.ServerResponse;
-import it.polimi.ingsw.controller.responses.StatusCode;
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
+
+import java.util.Optional;
 
 public class PlayAssistantMessage extends ClientMessage {
     int card_position;
@@ -18,34 +15,30 @@ public class PlayAssistantMessage extends ClientMessage {
     }
 
     @Override
-    public ServerResponse handle(NetworkManager network_manager, Player player) {
+    public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.ACTIVATE_CHARACTER);
+        if(status_code != StatusCode.EMPTY) return status_code;
+
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
+        Player player = gameHandler.lobbyPlayerToPlayer(lobby_player);
 
-        // Invalid state. It ust be (current_state=ACTIVATE_CHARACTER, action_completed=False)
-        if(gameHandler.getCurrentState() != GameState.ACTIVATE_CHARACTER && !gameHandler.isActionCompleted()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
-        }
-
-        // Invalid player. Different players (from model and from socket)
-        Player current_player = game.getCurrentPlayer();
-        if(current_player == null || player != current_player) {
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
-        }
 
         // Invalid card_position value
-        if(card_position < 0 || card_position >= current_player.getPlayerHand().size()){
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+        if(card_position < 0 || card_position >= player.getPlayerHand().size()){
+            network_manager.addErrorMessage(lobby_player, "Invalid card position. It must be in range [0, "+ player.getPlayerHand().size()+"). Given: "+ card_position);
+            return StatusCode.INVALID_ACTION;
         }
 
         try {
-            game.playAssistant(current_player.getPlayerHand().get(card_position));
+            game.playAssistant(player.getPlayerHand().get(card_position));
         } catch (AssistantAlreadyPlayedException e) {
-            return new ServerResponse(StatusCode.BAD_REQUEST, null); // TODO: viewContent missing
+            network_manager.addErrorMessage(lobby_player, "Assistant already in play.");
+            return StatusCode.INVALID_ACTION;
         }
 
         game.nextTurn();
         gameHandler.setActionCompleted(true);
-        return new ServerResponse(StatusCode.OK, null); // TODO: viewContent missing
+        return StatusCode.OK;
     }
 }

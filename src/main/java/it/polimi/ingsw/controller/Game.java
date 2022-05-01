@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Game {
+public class Game implements Serializable{
     public static final int MAX_COINS = 20;
     public static final int MAX_DINING_STUDENTS = 8;
 
@@ -148,7 +148,7 @@ public class Game {
 
     // Manages the progress of the play_order queue
     public void nextTurn(){
-        play_order.remove();  // FIXME: is it better to use poll()?
+        play_order.remove();
     }
 
     /**
@@ -355,10 +355,6 @@ public class Game {
     public void conquerIsland(Island island){
         HashMap<Player, Integer> influence = new HashMap<>();
         int towers_on_island = island.getNumTowers();
-
-        // FIXME: probably redundant
-        for(Player player : players)
-            influence.put(player, 0);
 
         // Computing the influence for each player
         for(Player player : players){

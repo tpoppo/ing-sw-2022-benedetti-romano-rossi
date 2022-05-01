@@ -2,9 +2,10 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
-public class Professors extends HashSet<Color> {
+public class Professors extends HashSet<Color> implements Serializable {
 
     public Professors(){
         super();

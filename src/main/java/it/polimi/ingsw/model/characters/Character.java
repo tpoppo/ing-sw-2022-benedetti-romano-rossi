@@ -4,7 +4,9 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
-abstract public class Character {
+import java.io.Serializable;
+
+abstract public class Character implements Serializable {
     private int cost;
     private boolean activated;
 

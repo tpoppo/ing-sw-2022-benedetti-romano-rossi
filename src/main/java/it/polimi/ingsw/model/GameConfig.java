@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class GameConfig {
+import java.io.Serializable;
+
+public class GameConfig implements Serializable {
     final public int CLOUD_SPACE;
     final public int NUM_TOWERS;
     final public int NUM_CLOUDS;
