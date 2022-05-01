@@ -33,7 +33,7 @@ public class PlayAssistantMessage extends ClientMessage {
         try {
             game.playAssistant(player.getPlayerHand().get(card_position));
         } catch (AssistantAlreadyPlayedException e) {
-            network_manager.addErrorMessage(lobby_player, "Assistant already in play.");
+            network_manager.addErrorMessage(lobby_player, "Assistant already in play");
             return StatusCode.INVALID_ACTION;
         }
 

@@ -43,7 +43,7 @@ public class ClientSocket {
     }
 
     public void send(ClientMessage message) {
-        LOGGER.log(Level.FINEST, "Message sent: {0}", message);
+        LOGGER.log(Level.INFO, "Message sent: {0}", message);
 
         try {
             output_stream.reset();
@@ -74,7 +74,8 @@ public class ClientSocket {
         new Thread(() -> {
             while(true) {
                 try {
-                    while((view = (ViewContent) input_stream.readObject()) != null);
+                    view = (ViewContent) input_stream.readObject();
+
                 } catch (IOException | ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -91,11 +92,5 @@ public class ClientSocket {
         return view;
     }
 
-    /*
-    public ArrayList<Class<?>> getAvailableAction(){
-        for(Class message_class : ClientMessage.getAllMessageClasses()){
-        }
-    }
-    */
 
 }

@@ -38,7 +38,7 @@ public abstract class ClientMessage implements Serializable {
 
         // You must be in game (check current_handler)
         if (gameHandler == null || network_manager.getCurrentHandler() != HandlerType.GAME) {
-            network_manager.addErrorMessage(lobby_player, "You are in the lobby, not in the game.");
+            network_manager.addErrorMessage(lobby_player, "You are in the lobby, not in the game");
             return StatusCode.WRONG_HANDLER;
         }
 
@@ -54,7 +54,7 @@ public abstract class ClientMessage implements Serializable {
         Player current_player = game.getCurrentPlayer();
         Player player = network_manager.getGameHandler().lobbyPlayerToPlayer(lobby_player);
         if (current_player == null || !current_player.equals(player)) {
-            network_manager.addErrorMessage(player, "It is not your turn.");
+            network_manager.addErrorMessage(player, "It is not your turn");
             return StatusCode.WRONG_PLAYER;
         }
 
@@ -66,7 +66,7 @@ public abstract class ClientMessage implements Serializable {
 
         // You must be in game (check current_handler)
         if (lobby_handler == null || network_manager.getCurrentHandler() != HandlerType.LOBBY) {
-            network_manager.addErrorMessage(lobby_player, "You are in game, not in the lobby.");
+            network_manager.addErrorMessage(lobby_player, "You are in game, not in the lobby");
             return StatusCode.WRONG_HANDLER;
         }
 
