@@ -175,7 +175,7 @@ public class GameTest {
                 // step 2 - move mother nature
                 Island mother_nature_island = islands.stream().filter(Island::hasMotherNature).findFirst().get();
                 int curr_mother_nature_position = islands.indexOf(mother_nature_island);
-                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().get().getSteps()) + 1) % islands.size();
+                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().getSteps()) + 1) % islands.size();
 
                 game.moveMotherNature(islands.get(next_mother_nature_position));
                 checkInvariant(game);
@@ -303,7 +303,7 @@ public class GameTest {
                 // step 2 - move mother nature
                 Island mother_nature_island = islands.stream().filter(Island::hasMotherNature).findFirst().get();
                 int curr_mother_nature_position = islands.indexOf(mother_nature_island);
-                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().get().getSteps()) + 1) % islands.size();
+                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().getSteps()) + 1) % islands.size();
 
                 game.moveMotherNature(islands.get(next_mother_nature_position));
 

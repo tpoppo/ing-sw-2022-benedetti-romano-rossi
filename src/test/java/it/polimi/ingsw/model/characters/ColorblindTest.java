@@ -40,9 +40,9 @@ public class ColorblindTest {
         colorblind.onActivation(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
-        assertEquals(Color.RED, gameModifiers.getInhibitColor().get());
+        assertEquals(Color.RED, gameModifiers.getInhibitColor());
 
         colorblind.onDeactivation(game, playerchoice);
-        assertEquals(null, gameModifiers.getInhibitColor().orElse(null));
+        assertEquals(null, gameModifiers.getInhibitColor());
     }
 }

@@ -26,7 +26,9 @@ public class LobbyHandler implements Serializable {
         if(!available_wizards.contains(desired_wizard)) throw new WizardNotAvailableException();
 
         player.setWizard(desired_wizard);
-        available_wizards.remove(desired_wizard);
+
+        // NOTE: remove(int) remove by index and remove(Object) remove by value
+        available_wizards.remove(Integer.valueOf(desired_wizard));
     }
 
     public void addPlayer(LobbyPlayer player) throws FullLobbyException {

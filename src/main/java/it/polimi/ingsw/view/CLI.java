@@ -1,14 +1,15 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.LobbyHandler;
-import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.ReducedLobby;
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.controller.messages.ChooseWizardMessage;
 import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
 import it.polimi.ingsw.controller.messages.JoinLobbyMessage;
 import it.polimi.ingsw.controller.messages.StartGameMessage;
+import it.polimi.ingsw.model.board.Color;
+import it.polimi.ingsw.model.board.Island;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -24,7 +25,7 @@ public class CLI {
     public CLI(ClientSocket client_socket, PrintStream print_stream, InputStream read_stream) {
         this.client_socket = client_socket;
         this.print_stream = print_stream;
-        this.read_stream = new Scanner(read_stream);
+        this.read_stream = new Scanner(new BufferedInputStream(read_stream));
     }
     public CLI(ClientSocket client_socket) {
         this(client_socket, System.out, System.in);
@@ -42,11 +43,18 @@ public class CLI {
         }
     }
 
-    private void renderState(){
+    private void renderState() {
+
+        // TODO: this solution is not great
         // clear the console
-        // For further references visit: https://stackoverflow.com/questions/2979383/how-to-clear-the-console
-        print_stream.print("\033[H\033[2J");
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        print_stream.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         print_stream.flush();
+
         ViewContent view = client_socket.getView();
 
         System.err.println(view);
@@ -79,9 +87,11 @@ public class CLI {
         }
         print_stream.print("> ");
 
-        String input = new String(read_stream.nextLine());
-        String out = parseInput(input);
-        print_stream.println(out);
+        if(read_stream.hasNextLine()) {
+            String input = new String(read_stream.nextLine());
+            String out = parseInput(input);
+            print_stream.println(out);
+        }
     }
 
     private void printMenu() {
@@ -117,6 +127,24 @@ public class CLI {
 
     private void printGame(){
         print_stream.println("GAME");
+        GameHandler gameHandler = client_socket.getView().getGameHandler();
+        Game game = gameHandler.getModel();
+        print_stream.printf("Current player: %s\n", game.getCurrentPlayer() == null ? "-" : game.getCurrentPlayer().getUsername());
+        print_stream.printf("Current state: %s-%s-%s-%d\n",
+                gameHandler.getCurrentState(),
+                gameHandler.isActionCompleted(),
+                gameHandler.getSavedState(),
+                gameHandler.getStudentMoves());
+        print_stream.println("Islands: ");
+        for(int i=0; i<game.getIslands().size(); i++){
+            Island island = game.getIslands().get(i);
+            print_stream.printf("%d-%d)\t%s\t%s\n",
+                    i,
+                    island.getNumIslands(),
+                    island.getStudents(),
+                    island.getOwner() == null ? "null" : island.getOwner().getUsername()
+            );
+        }
     }
 
     private String parseInput(String s){

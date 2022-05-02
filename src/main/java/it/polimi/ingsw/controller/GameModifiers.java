@@ -2,18 +2,19 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.board.Color;
 
+import java.io.Serializable;
 import java.util.Optional;
 
-public class GameModifiers {
+public class GameModifiers implements Serializable {
     private int buff_influence;
-    private Optional<Color> inhibit_color;
+    private Color inhibit_color;
     private boolean inhibit_towers;
     private int professor_modifier; // reduce the number of student needed to get the control of the professor
     private int extra_steps;
 
     public GameModifiers(){
         buff_influence = 0;
-        inhibit_color = Optional.empty();
+        inhibit_color = null;
         inhibit_towers = false;
         professor_modifier = 0;
         extra_steps = 0;
@@ -27,12 +28,12 @@ public class GameModifiers {
         this.buff_influence = buff_influence;
     }
 
-    public Optional<Color> getInhibitColor() {
+    public Color getInhibitColor() {
         return inhibit_color;
     }
 
     public void setInhibitColor(Color inhibit_color) {
-        this.inhibit_color = Optional.ofNullable(inhibit_color);
+        this.inhibit_color = inhibit_color;
     }
 
     public boolean isInhibitTowers() {

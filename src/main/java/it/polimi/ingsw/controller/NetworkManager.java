@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.messages.StatusCode;
 import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.view.ViewContent;
 
@@ -11,8 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NetworkManager {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static int count = 0;
     public final int ID;
     private HandlerType current_handler;
@@ -55,8 +59,10 @@ public class NetworkManager {
             while(true){
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
-                    envelope.message().handle(this, envelope.sender());
-
+                    StatusCode statusCode = envelope.message().handle(this, envelope.sender());
+                    if(statusCode == StatusCode.NOT_IMPLEMENTED){
+                        LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
+                    }
                     refresh();
 
                     // saves the networkManager state for persistence

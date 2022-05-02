@@ -25,12 +25,11 @@ public class MoveMotherNatureMessage extends ClientMessage {
         Player player = gameHandler.lobbyPlayerToPlayer(lobby_player);
 
         // Invalid current assistant. Check whether the current assistant is present
-        Optional<Assistant> optional_assistant = player.getCurrentAssistant();
-        if(optional_assistant.isEmpty()){
+        Assistant assistant = player.getCurrentAssistant();
+        if(assistant == null){
             network_manager.addErrorMessage(lobby_player, "The assistant has not been selected");
             return StatusCode.INVALID_ACTION;
         }
-        Assistant assistant = optional_assistant.get();
 
         // Invalid mother_nature_position value
         if(mother_nature_position < 0 || mother_nature_position >= game.getIslands().size()){

@@ -21,13 +21,11 @@ public class Server{
     private ServerSocket serverSocket;
     private Socket clientSocket;
 
-    private final MenuManager menuManager;
     private final ArrayList<NetworkManager> networkManagers;
     private final ArrayList<LobbyPlayer> player_list;
 
     private Server(){
         PORT = Consts.SERVER_PORT;
-        menuManager = MenuManager.getInstance();
         networkManagers = new ArrayList<>();
         player_list = new ArrayList<>();
 

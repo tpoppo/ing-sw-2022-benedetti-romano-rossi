@@ -10,7 +10,7 @@ public class StartGameMessage extends ClientMessage{
     private final boolean expert_mode;
     public StartGameMessage(boolean expert_mode) {
         this.expert_mode = expert_mode;
-        super.message_type = MessageType.MENU;
+        super.message_type = MessageType.GAME;
     }
 
     @Override

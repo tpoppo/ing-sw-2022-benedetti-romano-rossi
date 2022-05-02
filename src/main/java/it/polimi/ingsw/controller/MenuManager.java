@@ -1,12 +1,16 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.messages.StatusCode;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuManager {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static MenuManager instance;
     ConcurrentLinkedQueue<MessageEnvelope> message_queue;
     private final Set<ConnectionCEO> subscribers;
@@ -19,7 +23,10 @@ public class MenuManager {
             while (true) {
                 if (!message_queue.isEmpty()) {
                     MessageEnvelope envelope = message_queue.remove();
-                    envelope.message().handle(envelope.connectionCEO(), envelope.sender());
+                    StatusCode statusCode = envelope.message().handle(envelope.connectionCEO(), envelope.sender());
+                    if(statusCode == StatusCode.NOT_IMPLEMENTED){
+                        LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
+                    }
                 }
             }
         }).start();

@@ -35,6 +35,7 @@ public class Game implements Serializable{
         this.expert_mode = expert_mode;
         gameModifiers = new GameModifiers();
         characters = new ArrayList<>();
+        play_order = new LinkedList<>();
 
         // Adding all the players from the lobby to the game
         players = new ArrayList<>();
@@ -197,7 +198,7 @@ public class Game implements Serializable{
 
         // checks if exists a player who've already played the chosen assistant
         for(Player player : players){
-            if(player.getCurrentAssistant().isPresent() && player.getCurrentAssistant().get().equals(assistant))
+            if(player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant))
                 assistant_already_played = true;
         }
 
@@ -227,8 +228,8 @@ public class Game implements Serializable{
             // Not checking if the currentAssistant is set as it should've been chosen in the previous method
             // FIXME: do we want to do the check and eventually throw an exception?
             //  - (it shouldn't happen normally... could it be a problem if we contemplate disconnections?)
-            power1 = o1.getCurrentAssistant().get().getPower();
-            power2 = o2.getCurrentAssistant().get().getPower();
+            power1 = o1.getCurrentAssistant().getPower();
+            power2 = o2.getCurrentAssistant().getPower();
 
             // Comparing elements first by the power of their assistant
             int first_compare = Integer.compare(power1, power2);
@@ -363,7 +364,7 @@ public class Game implements Serializable{
 
             // Students influence
             for(Color professor_color : player.getProfessors()){
-                if(!gameModifiers.getInhibitColor().isPresent() || !gameModifiers.getInhibitColor().get().equals(professor_color))
+                if(gameModifiers.getInhibitColor() == null || !gameModifiers.getInhibitColor().equals(professor_color))
                     student_influence += island.getStudents().get(professor_color);
             }
 
