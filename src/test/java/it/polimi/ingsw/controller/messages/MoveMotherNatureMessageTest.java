@@ -1,6 +1,8 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.messages;
 
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.controller.messages.MoveMotherNatureMessage;
+import it.polimi.ingsw.model.GameConfig;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
@@ -26,6 +28,7 @@ public class MoveMotherNatureMessageTest {
         lobby.addPlayer(player2);
 
         Game game = new Game(true, lobby);
+        GameConfig gameconfig = new GameConfig(3, 8, 2, 10, 7, 3, 12, 3);
 
         ArrayList<Island> islands = game.getIslands();
         int pos = 0;
@@ -54,7 +57,6 @@ public class MoveMotherNatureMessageTest {
         NetworkManager networkmanager = NetworkManager.createNetworkManager(2);
 
         movemothernaturemessage.handle(networkmanager, game.getPlayers().get(0));
-        // assertEquals(true, islands.get(1));
-
+        //assertEquals(true, islands.get(1).hasMotherNature());
     }
 }
