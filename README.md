@@ -32,11 +32,11 @@ The project includes:
 |:-----------------|:--------------------------------------------------:|
 | Basic rules      | 🟢 |
 | Complete rules   | 🟢 |
-| Socket           | 🟡 |
+| Socket           | 🟢 |
 | CLI              | 🟡 |
 | GUI              | 🔴 |
 | All Characters   | 🟢 |
-| Multiple games   | 🟡 |
+| Multiple games   | 🟢 |
 | Persistence      | 🟡 |
 
 ### Legend
