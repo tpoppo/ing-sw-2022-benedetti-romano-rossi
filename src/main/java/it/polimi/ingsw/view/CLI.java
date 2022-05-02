@@ -1,11 +1,14 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.*;
-import it.polimi.ingsw.controller.messages.ChooseWizardMessage;
-import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
-import it.polimi.ingsw.controller.messages.JoinLobbyMessage;
-import it.polimi.ingsw.controller.messages.StartGameMessage;
+import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.network.messages.ChooseWizardMessage;
+import it.polimi.ingsw.network.messages.CreateLobbyMessage;
+import it.polimi.ingsw.network.messages.JoinLobbyMessage;
+import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.ReducedLobby;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.Server;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.CLI;
 
 /**

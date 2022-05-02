@@ -1,13 +1,12 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class ClientMessage implements Serializable {
     protected MessageType message_type;

@@ -1,7 +1,6 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;

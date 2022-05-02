@@ -1,9 +1,9 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
+import it.polimi.ingsw.model.GameConfig;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class CreateLobbyMessageTest {
+public class ActivateCharacterMessageTest {
 
     @Test
-    public void CreateLobbyMessage() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void ActivateCharacterMessage () throws FullLobbyException, EmptyMovableException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -26,10 +26,10 @@ public class CreateLobbyMessageTest {
         lobby.addPlayer(player2);
 
         Game game = new Game(true, lobby);
+        GameConfig gameconfig = new GameConfig(3, 8, 2, 10, 7, 3, 12, 3);
 
-        CreateLobbyMessage createlobbymessage = new CreateLobbyMessage(2);
-        //createlobbymessage.handle(player1);
-        //createlobbymessage.handle(player2);
+        //PlayerChoicesSerializable playerchoice =
+        //ActivateCharacterMessage activateCharacterMessage = new ActivateCharacterMessage();
 
     }
 }

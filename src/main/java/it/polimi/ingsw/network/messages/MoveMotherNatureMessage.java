@@ -1,10 +1,12 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.GameState;
+import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Assistant;
-
-import java.util.Optional;
 
 public class MoveMotherNatureMessage extends ClientMessage {
 

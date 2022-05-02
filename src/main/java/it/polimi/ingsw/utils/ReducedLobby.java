@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.NetworkManager;
+import it.polimi.ingsw.network.NetworkManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;

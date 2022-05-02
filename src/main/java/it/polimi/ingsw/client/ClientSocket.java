@@ -1,17 +1,13 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.controller.messages.ClientMessage;
+import it.polimi.ingsw.network.messages.ClientMessage;
 import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.view.ViewContent;
 
-import javax.swing.text.View;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

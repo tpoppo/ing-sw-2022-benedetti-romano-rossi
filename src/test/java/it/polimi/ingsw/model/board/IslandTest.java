@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 

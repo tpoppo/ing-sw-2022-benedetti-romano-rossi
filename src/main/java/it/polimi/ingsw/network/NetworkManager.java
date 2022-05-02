@@ -1,13 +1,16 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.controller.messages.StatusCode;
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.network.messages.MessageEnvelope;
+import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;

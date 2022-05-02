@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.LobbyHandler;

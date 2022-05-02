@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view;
-import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.ReducedLobby;
 
 import java.io.Serializable;

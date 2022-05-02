@@ -1,6 +1,7 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.controller.messages.StatusCode;
+import it.polimi.ingsw.network.messages.MessageEnvelope;
+import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.util.HashSet;

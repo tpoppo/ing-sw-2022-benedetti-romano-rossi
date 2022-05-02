@@ -1,6 +1,7 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.network.*;
 
 import java.util.Optional;
 

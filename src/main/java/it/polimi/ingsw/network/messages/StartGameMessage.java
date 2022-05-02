@@ -1,10 +1,8 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.NetworkManager;
-
-import java.util.Optional;
+import it.polimi.ingsw.network.NetworkManager;
 
 public class StartGameMessage extends ClientMessage{
     private final boolean expert_mode;

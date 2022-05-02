@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.board.SchoolBoard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class Player extends LobbyPlayer implements Serializable {
     private Assistant current_assistant;

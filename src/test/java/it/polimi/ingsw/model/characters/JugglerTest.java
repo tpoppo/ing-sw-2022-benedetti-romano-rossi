@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.characters;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.GameModifiers;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.board.Color;
@@ -11,7 +10,6 @@ import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Random;

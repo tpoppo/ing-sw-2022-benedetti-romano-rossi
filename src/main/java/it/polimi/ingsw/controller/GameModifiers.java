@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.board.Color;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 public class GameModifiers implements Serializable {
     private int buff_influence;

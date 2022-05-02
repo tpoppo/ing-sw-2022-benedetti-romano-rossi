@@ -1,5 +1,8 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.LobbyHandler;
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.utils.Consts;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 

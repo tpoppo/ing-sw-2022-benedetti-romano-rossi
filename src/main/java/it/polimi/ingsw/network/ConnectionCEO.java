@@ -1,6 +1,8 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.controller.messages.ClientMessage;
+import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.network.messages.ClientMessage;
+import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.io.*;

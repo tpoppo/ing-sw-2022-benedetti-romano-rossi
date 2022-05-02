@@ -1,18 +1,13 @@
-package it.polimi.ingsw.controller.messages;
+package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.controller.NetworkManager;
+import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Random;
