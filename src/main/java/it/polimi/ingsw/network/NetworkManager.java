@@ -6,6 +6,8 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.utils.Consts;
+import it.polimi.ingsw.view.GameContent;
+import it.polimi.ingsw.view.LobbyContent;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.io.FileOutputStream;
@@ -114,9 +116,13 @@ public class NetworkManager {
         for(ConnectionCEO subscriber : subscribers) {
             String errorMessage = errorMessages.get(subscriber.getPlayer());
 
-            ViewContent viewContent = new ViewContent(
-                    game_handler, lobby_handler, current_handler, errorMessage
-            );
+            ViewContent viewContent;
+            if(current_handler == HandlerType.GAME){
+                viewContent = new GameContent(game_handler, errorMessage);
+            } else{
+                viewContent = new LobbyContent(lobby_handler, errorMessage);
+            }
+
             subscriber.sendViewContent(viewContent);
         }
     }

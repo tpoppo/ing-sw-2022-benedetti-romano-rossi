@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
+import it.polimi.ingsw.view.MenuContent;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.util.HashSet;
@@ -43,10 +44,10 @@ public class MenuManager {
     private void sendViewContent(){
         new Thread(() -> {
             while(true){
-                ViewContent viewContent = new ViewContent();
+                MenuContent menuContent = new MenuContent();
 
                 for(ConnectionCEO subscriber : subscribers){
-                    subscriber.sendViewContent(viewContent);
+                    subscriber.sendViewContent(menuContent);
                 }
 
                 try {

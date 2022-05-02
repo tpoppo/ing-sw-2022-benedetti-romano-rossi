@@ -18,8 +18,10 @@
     <!-- (https://lucapirovano.dev/post/softeng-sonar-guide.html) Add here the directories that we must exclude from the code coverage -->
     <sonar.coverage.exclusions>
       **/client/**/*,
-      **/server/**/*,
-      **/App.java,
+      **/network/**/*,
+      **/view/**/*,
+      **/utils/**/*,
+      **/Eriantys.java,
     </sonar.coverage.exclusions>
   </properties>
 

@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class ClientmessageTest {
 
-    @RepeatedTest(100)
+    @RepeatedTest(5)
     public void RandomTest() throws FullLobbyException, EmptyMovableException, EmptyBagException, WizardNotAvailableException {
         NetworkManager networkmanager = NetworkManager.createNetworkManager(2);
         ArrayList<LobbyPlayer> players = new ArrayList<>();
@@ -29,8 +29,8 @@ public class ClientmessageTest {
         networkmanager.getLobbyHandler().chooseWizard(2, players.get(1));
 
 
-        //try 100 random messages
-        for(int i=0; i<10000; i++){
+        //try 100000 random messages
+        for(int i=0; i<100000; i++){
             int random_message = rng.nextInt(13);
             switch (random_message){
                 case 0:
