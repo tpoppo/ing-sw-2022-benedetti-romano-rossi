@@ -6,18 +6,19 @@ import it.polimi.ingsw.controller.messages.ChooseWizardMessage;
 import it.polimi.ingsw.controller.messages.CreateLobbyMessage;
 import it.polimi.ingsw.controller.messages.JoinLobbyMessage;
 import it.polimi.ingsw.controller.messages.StartGameMessage;
-import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
+import it.polimi.ingsw.utils.ReducedLobby;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CLI {
-
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
     final private ClientSocket client_socket;
     final private PrintStream print_stream;
     final private Scanner read_stream;
@@ -38,60 +39,83 @@ public class CLI {
         } while(!client_socket.login(username));
         print_stream.println("Logged in");
 
+        System.out.println("START RENDERING");
+        renderState();
+
         while(true){
-            renderState();
+            getInput();
         }
     }
 
-    private void renderState() {
-
-        // TODO: this solution is not great
-        // clear the console
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        print_stream.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        print_stream.flush();
-
-        ViewContent view = client_socket.getView();
-
-        System.err.println(view);
-
-        // missing view
-        if(view == null) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            return ;
-        }
-
-        // print server errors
-        if(view.getErrorMessage() != null) print_stream.println(view.getErrorMessage());
-
-        if(view.getLobbyHandler() == null){ // we are in the menu
-            printMenu();
-        } else{
-            switch(view.getCurrentHandler()) {
-                case LOBBY: // we are in the lobby
-                    printLobby();
-                    break;
-
-                case GAME: // we are in the game
-                    printGame();
-                    break;
-            }
-        }
+    private void getInput(){
         print_stream.print("> ");
+        String input = read_stream.nextLine();
+        String out = parseInput(input);
+        print_stream.println(out);
+    }
 
-        if(read_stream.hasNextLine()) {
-            String input = new String(read_stream.nextLine());
-            String out = parseInput(input);
-            print_stream.println(out);
-        }
+    private void clearScreen(){
+        // clear the console
+        // For further references visit: https://stackoverflow.com/questions/2979383/how-to-clear-the-console
+        print_stream.print("\033[H\033[2J");
+        print_stream.flush();
+    }
+
+    private void renderState(){
+        new Thread(() -> {
+            while(true){
+                clearScreen();
+
+                ViewContent view;
+                synchronized (client_socket.mutex){
+                    while(client_socket.getView() == null) {
+                        try {
+                            client_socket.mutex.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+
+                view = client_socket.getView();
+
+                LOGGER.log(Level.INFO, "Rendered view: {0}", view);
+
+                /*
+                // missing view
+                if(view == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return ;
+                }
+                */
+
+                // print server errors
+                if(view.getErrorMessage() != null) print_stream.println(view.getErrorMessage());
+
+                if(view.getLobbyHandler() == null){ // we are in the menu
+                    printMenu();
+                } else{
+                    switch(view.getCurrentHandler()) {
+                        case LOBBY: // we are in the lobby
+                            printLobby();
+                            break;
+
+                        case GAME: // we are in the game
+                            printGame();
+                            break;
+                    }
+                }
+                System.out.println("DONE RENDERING");
+                synchronized (client_socket.mutex){
+                    client_socket.setView(null);
+                    client_socket.mutex.notifyAll();
+                }
+            }
+        }).start();
     }
 
     private void printMenu() {

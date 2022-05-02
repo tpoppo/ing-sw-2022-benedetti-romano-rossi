@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server{
-    private final Logger LOGGER = Logger.getLogger(getClass().getName());
+    private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
     private static Server instance;
     final private int PORT;
     private ServerSocket serverSocket;
@@ -41,6 +41,8 @@ public class Server{
     public static Server getInstance(){
         if(instance == null) {
             instance = new Server();
+
+            LOGGER.log(Level.INFO, "Server has been created");
 
             try {
                 instance.startServer();

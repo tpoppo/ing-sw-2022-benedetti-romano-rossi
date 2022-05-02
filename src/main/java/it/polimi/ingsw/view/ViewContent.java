@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.utils.ReducedLobby;
 
 import java.io.Serializable;
 import java.util.ArrayList;

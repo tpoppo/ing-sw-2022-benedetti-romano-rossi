@@ -63,10 +63,10 @@ public class NetworkManager {
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){
                         LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
                     }
-                    refresh();
+                    notifySubscribers();
 
                     // saves the networkManager state for persistence
-                    saveState();
+                    if(current_handler.equals(HandlerType.GAME)) saveState();
                 }
             }
         }).start();
@@ -90,10 +90,6 @@ public class NetworkManager {
         errorMessages.put(player, message);
     }
 
-    public ViewContent createViewContent(LobbyPlayer lobbyPlayer){
-        return new ViewContent(game_handler, lobby_handler, current_handler, errorMessages.get(lobbyPlayer));
-    }
-
     public void saveState(){
         String path = Consts.PATH_SAVES;
         String fileName = path + "/SavedGame_" + ID + ".sav";
@@ -110,6 +106,28 @@ public class NetworkManager {
         }
     }
 
+    private void notifySubscribers(){
+        // sends view updated to subscribers
+        for(ConnectionCEO subscriber : subscribers) {
+            String errorMessage = errorMessages.get(subscriber.getPlayer());
+
+            ViewContent viewContent = new ViewContent(
+                    game_handler, lobby_handler, current_handler, errorMessage
+            );
+            subscriber.sendViewContent(viewContent);
+        }
+    }
+
+    public void subscribe(ConnectionCEO connectionCEO){
+        subscribers.add(connectionCEO);
+        notifySubscribers();
+    }
+
+    public void unsubscribe(ConnectionCEO connectionCEO){
+        subscribers.remove(connectionCEO);
+        notifySubscribers();
+    }
+
     public HandlerType getCurrentHandler() {
         return current_handler;
     }
@@ -124,27 +142,5 @@ public class NetworkManager {
 
     public ConcurrentLinkedQueue<MessageEnvelope> getMessageQueue() {
         return message_queue;
-    }
-
-    private void refresh(){
-        // sends view updated to subscribers
-        for(ConnectionCEO subscriber : subscribers) {
-            String errorMessage = errorMessages.get(subscriber.getPlayer());
-
-            ViewContent viewContent = new ViewContent(
-                    game_handler, lobby_handler, current_handler, errorMessage
-            );
-            subscriber.sendViewContent(viewContent);
-        }
-    }
-
-    public void subscribe(ConnectionCEO connectionCEO){
-        subscribers.add(connectionCEO);
-        refresh();
-    }
-
-    public void unsubscribe(ConnectionCEO connectionCEO){
-        subscribers.remove(connectionCEO);
-        refresh();
     }
 }

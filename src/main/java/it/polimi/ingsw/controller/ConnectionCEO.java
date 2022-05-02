@@ -67,7 +67,7 @@ public class ConnectionCEO extends Thread {
         return true;
     }
 
-    public void handleMessages(){
+    private void handleMessages(){
         try {
             MenuManager menuManager = MenuManager.getInstance();
 
@@ -77,13 +77,9 @@ public class ConnectionCEO extends Thread {
                 LOGGER.log(Level.INFO, message.toString());
                 MessageEnvelope envelope = new MessageEnvelope(player, message, this);
 
-                switch(message.getMessageType()){
-                    case MENU:
-                        menuManager.message_queue.add(envelope);
-                        break;
-                    case GAME:
-                        networkManager.getMessageQueue().add(envelope);
-                        break;
+                switch (message.getMessageType()) {
+                    case MENU -> menuManager.message_queue.add(envelope);
+                    case GAME -> networkManager.getMessageQueue().add(envelope);
                 }
             }
 
