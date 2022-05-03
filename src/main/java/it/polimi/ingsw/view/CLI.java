@@ -90,7 +90,7 @@ public class CLI {
                 // print server errors
                 if(view.getErrorMessage() != null) print_stream.println(view.getErrorMessage());
 
-                if(view.getLobbyHandler() == null){ // we are in the menu
+                if(view.getCurrentHandler() == null){ // we are in the menu
                     printMenu();
                 } else{
                     switch (view.getCurrentHandler()) {
