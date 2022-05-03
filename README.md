@@ -28,16 +28,16 @@ The project includes:
 
 ## Implemented functionalities
 
-| Functionality    |                       State                        |
-|:-----------------|:--------------------------------------------------:|
-| Basic rules      | 🟢 |
-| Complete rules   | 🟢 |
-| Socket           | 🟢 |
-| CLI              | 🟡 |
-| GUI              | 🔴 |
-| All Characters   | 🟢 |
-| Multiple games   | 🟢 |
-| Persistence      | 🟡 |
+| Functionality  | State |
+|:---------------|:-----:|
+| Basic rules    |  🟢   |
+| Complete rules |  🟢   |
+| Socket         |  🟢   |
+| CLI            |  🟡   |
+| GUI            |  🔴   |
+| All Characters |  🟢   |
+| Multiple games |  🟢   |
+| Persistence    |  🟡   |
 
 ### Legend
 🟢 Implemented<br>

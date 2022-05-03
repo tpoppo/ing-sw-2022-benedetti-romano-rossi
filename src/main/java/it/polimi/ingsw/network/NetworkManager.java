@@ -65,10 +65,13 @@ public class NetworkManager {
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
                     StatusCode statusCode = envelope.message().handle(this, envelope.sender());
+
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){
                         LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
                     }
-                    notifySubscribers();
+
+                    if(statusCode.equals(StatusCode.OK))
+                        notifySubscribers();
 
                     // saves the networkManager state for persistence
                     if(current_handler.equals(HandlerType.GAME)) saveState();

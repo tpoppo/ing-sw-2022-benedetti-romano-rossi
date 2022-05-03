@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -22,7 +21,6 @@ public class Server{
     private static Server instance;
     final private int PORT;
     private ServerSocket serverSocket;
-    private Socket clientSocket;
 
     private final ArrayList<NetworkManager> networkManagers;
     private final ArrayList<LobbyPlayer> player_list;
@@ -63,7 +61,6 @@ public class Server{
 
     private void closeConnection() throws IOException {
         serverSocket.close();
-        clientSocket.close();
     }
 
     private void retrieveSavedState(){

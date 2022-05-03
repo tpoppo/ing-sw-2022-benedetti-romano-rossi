@@ -26,13 +26,14 @@ public class ConnectionCEO extends Thread {
 
     @Override
     public void run() {
-        if(login()) {
-            LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
-
-            MenuManager.getInstance().subscribe(this);
-            handleMessages();
+        while(!login()) {
+            LOGGER.log(Level.INFO, "Connection failed");
         }
-        else LOGGER.log(Level.INFO, "Connection failed");
+
+        LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
+
+        MenuManager.getInstance().subscribe(this);
+        handleMessages();
     }
 
     private boolean login(){
@@ -49,9 +50,8 @@ public class ConnectionCEO extends Thread {
                 logged_in = true;
                 if(!server.checkUsername(username)) {
                     logged_in = false;
-                    LOGGER.log(Level.INFO, "{0} can logged in. Username already taken", username);
+                    LOGGER.log(Level.INFO, "{0} tried to connect. Username already taken", username);
                     outputStream.writeObject("ERROR: Username already taken");
-                    outputStream.close();
                 }
             }while(!logged_in);
 
@@ -102,7 +102,7 @@ public class ConnectionCEO extends Thread {
             outputStream.writeObject(viewContent);
             outputStream.flush();
 
-            LOGGER.log(Level.INFO, viewContent.toString());
+            LOGGER.log(Level.FINE, viewContent.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

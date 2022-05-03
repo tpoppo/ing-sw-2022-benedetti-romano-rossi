@@ -37,12 +37,15 @@ public class CLI {
 
     public void run(){
         String username;
-        do {
+
+        username = read_stream.nextLine();
+        while(!client_socket.login(username)) {
+            // TODO: better error handling
+            print_stream.println("Username already taken");
             username = read_stream.nextLine();
-        } while(!client_socket.login(username));
+        }
         print_stream.println("Logged in");
 
-        System.out.println("START RENDERING");
         renderState();
 
         while(true){
@@ -84,35 +87,20 @@ public class CLI {
 
                 LOGGER.log(Level.INFO, "Rendered view: {0}", view);
 
-                /*
-                // missing view
-                if(view == null) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return ;
-                }
-                */
-
                 // print server errors
                 if(view.getErrorMessage() != null) print_stream.println(view.getErrorMessage());
 
                 if(view.getLobbyHandler() == null){ // we are in the menu
                     printMenu();
                 } else{
-                    switch(view.getCurrentHandler()) {
-                        case LOBBY: // we are in the lobby
-                            printLobby();
-                            break;
-
-                        case GAME: // we are in the game
-                            printGame();
-                            break;
+                    switch (view.getCurrentHandler()) {
+                        case LOBBY -> // we are in the lobby
+                                printLobby();
+                        case GAME -> // we are in the game
+                                printGame();
                     }
                 }
-                System.out.println("DONE RENDERING");
+
                 synchronized (client_socket.mutex){
                     client_socket.setView(null);
                     client_socket.mutex.notifyAll();

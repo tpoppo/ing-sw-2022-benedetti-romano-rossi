@@ -6,8 +6,6 @@ import it.polimi.ingsw.utils.ReducedLobby;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class ViewContent implements Serializable{
     public GameHandler getGameHandler(){
@@ -30,4 +28,3 @@ public abstract class ViewContent implements Serializable{
         return new ArrayList<>();
     }
 }
-

@@ -13,9 +13,6 @@ import java.util.logging.Logger;
 
 public class ClientSocket {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
-    private final String SERVER_ADDR = Consts.SERVER_ADDR;
-    private final int SERVER_PORT = Consts.SERVER_PORT;
-
     private Socket clientSocket;
     private ObjectOutputStream output_stream;
     private ObjectInputStream input_stream;
@@ -33,7 +30,7 @@ public class ClientSocket {
     }
 
     private void setup() throws IOException {
-        clientSocket = new Socket(SERVER_ADDR, SERVER_PORT);
+        clientSocket = new Socket(Consts.SERVER_ADDR, Consts.SERVER_PORT);
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
     }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.view.MenuContent;
-import it.polimi.ingsw.view.ViewContent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,14 +25,15 @@ public class MenuManager {
                 if (!message_queue.isEmpty()) {
                     MessageEnvelope envelope = message_queue.remove();
                     StatusCode statusCode = envelope.message().handle(envelope.connectionCEO(), envelope.sender());
+
+                    if(statusCode.equals(StatusCode.OK))
+                        notifySubscribers();
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){
                         LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
                     }
                 }
             }
         }).start();
-
-        sendViewContent();
     }
 
     public static MenuManager getInstance(){
@@ -41,29 +41,21 @@ public class MenuManager {
         return instance;
     }
 
-    private void sendViewContent(){
-        new Thread(() -> {
-            while(true){
-                MenuContent menuContent = new MenuContent();
+    private void notifySubscribers(){
+        MenuContent menuContent = new MenuContent();
 
-                for(ConnectionCEO subscriber : subscribers){
-                    subscriber.sendViewContent(menuContent);
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
+        for(ConnectionCEO subscriber : subscribers){
+            subscriber.sendViewContent(menuContent);
+        }
     }
 
     public void subscribe(ConnectionCEO connectionCEO){
         subscribers.add(connectionCEO);
+        notifySubscribers();
     }
 
     public void unsubscribe(ConnectionCEO connectionCEO){
         subscribers.remove(connectionCEO);
+        notifySubscribers();
     }
 }
