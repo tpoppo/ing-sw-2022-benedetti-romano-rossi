@@ -24,6 +24,10 @@ public class Bard extends Character{
         Students entranceStudents = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
         Students diningStudents = game.getCurrentPlayer().getSchoolBoard().getDiningStudents();
 
+        if(swap_list.size() % 2 != 0 || swap_list.size() > 4) {
+            throw new BadPlayerChoiceException();
+        }
+
         // assuming that the students are alternated in the swap list (entrance - dining)
         for(int i=0; i<swap_list.size(); i+=2){
             try {
