@@ -45,6 +45,7 @@ public class ThiefTest {
         player2.getSchoolBoard().setDiningStudents(student2);
 
         Thief thief = new Thief();
+        thief.require();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice.setStudent(Color.GREEN);
         thief.onActivation(game, playerchoice);

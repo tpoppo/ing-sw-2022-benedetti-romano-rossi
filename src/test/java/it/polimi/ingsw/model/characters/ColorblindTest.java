@@ -34,6 +34,7 @@ public class ColorblindTest {
         Game game = new Game(true, lobby);
 
         Colorblind colorblind = new Colorblind();
+        colorblind.require();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice.setStudent(Color.RED);
 

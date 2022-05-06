@@ -34,6 +34,7 @@ public class ConquerorTest {
         Game game = new Game(true, lobby);
 
         Conqueror conqueror = new Conqueror();
+        conqueror.require();
         ArrayList<Island> islands = game.getIslands();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice.setIsland(islands.get(0));

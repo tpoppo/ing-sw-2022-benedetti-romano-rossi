@@ -33,6 +33,7 @@ public class NatureBlockerTest {
 
         NatureBlocker natureblocker = new NatureBlocker();
         PlayerChoices playerChoices = new PlayerChoices();
+        natureblocker.require();
 
         ArrayList<Island> islands = game.getIslands();
         Island island = islands.get(0);
@@ -42,6 +43,7 @@ public class NatureBlockerTest {
         natureblocker.onActivation(game, playerChoices);
 
         assertEquals(3, islands.get(0).getNoEntryTiles());
+        assertEquals(3, natureblocker.getNoEntryTiles());
 
         natureblocker.onDeactivation(game, playerChoices);
     }
