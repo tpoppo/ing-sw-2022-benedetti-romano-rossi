@@ -27,4 +27,12 @@ public class GameContent extends ViewContent{
     public HandlerType getCurrentHandler() {
         return HandlerType.GAME;
     }
+
+    @Override
+    public String toString() {
+        return "GameContent{" +
+                "gameHandler=" + gameHandler +
+                ", errorMessage='" + errorMessage + '\'' +
+                '}';
+    }
 }

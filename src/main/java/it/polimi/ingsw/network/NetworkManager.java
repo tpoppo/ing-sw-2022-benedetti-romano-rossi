@@ -65,6 +65,7 @@ public class NetworkManager {
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
                     StatusCode statusCode = envelope.message().handle(this, envelope.sender());
+                    System.out.println(envelope.message() + " => " + statusCode);
 
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){
                         LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
@@ -118,6 +119,7 @@ public class NetworkManager {
         // sends view updated to subscribers
         for(ConnectionCEO subscriber : subscribers) {
             String errorMessage = errorMessages.get(subscriber.getPlayer());
+            errorMessages.remove(subscriber.getPlayer());
 
             ViewContent viewContent;
             if(current_handler == HandlerType.GAME){

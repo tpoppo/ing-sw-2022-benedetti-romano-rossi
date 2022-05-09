@@ -13,7 +13,7 @@ public class NextStateMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.CHOOSE_CLOUD);
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, null, true);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();
@@ -28,8 +28,11 @@ public class NextStateMessage extends ClientMessage {
                 break;
 
             case PLAY_ASSISTANT:
-                if(game.getPlayers() == null){
+                game.nextTurn();
+
+                if(game.getCurrentPlayer() == null){ // end of the subphase
                     game.endPlanning();
+                    gameHandler.setStudentMoves(3);
                     gameHandler.setCurrentState(GameState.MOVE_STUDENT);
                 }
                 break;
@@ -38,7 +41,7 @@ public class NextStateMessage extends ClientMessage {
                 if(gameHandler.getStudentMoves() == 0){
                     game.nextTurn();
                     gameHandler.setStudentMoves(3);
-                    if(game.getPlayers() == null){
+                    if(game.getCurrentPlayer() == null){ // end of the subphase
                         gameHandler.setCurrentState(GameState.MOVE_MOTHER_NATURE);
                     }
                 }else{
@@ -47,13 +50,17 @@ public class NextStateMessage extends ClientMessage {
                 break;
 
             case MOVE_MOTHER_NATURE:
-                if(game.getPlayers() == null){
+                game.nextTurn();
+
+                if(game.getCurrentPlayer() == null){ // end of the subphase
                     gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
                 }
                 break;
 
             case CHOOSE_CLOUD:
-                if(game.getPlayers() == null){ // end of the turn
+                game.nextTurn();
+
+                if(game.getCurrentPlayer() == null){ // end of the turn
                     /* TODO:
                         if (game.checkEndGame()) ...
                      */
@@ -63,14 +70,19 @@ public class NextStateMessage extends ClientMessage {
                 }
                 break;
 
+            case FINISHED:
+                // TODO: not implemented yet
+                break;
         }
 
-        gameHandler.setActionCompleted(true);
+        gameHandler.setActionCompleted(false);
         return StatusCode.OK;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "NextStateMessage{" +
+                "message_type=" + message_type +
+                '}';
     }
 }

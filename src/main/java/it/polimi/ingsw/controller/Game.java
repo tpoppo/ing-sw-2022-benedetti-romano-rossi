@@ -546,4 +546,5 @@ public class Game implements Serializable{
     public Color drawStudentFromBag() throws EmptyBagException {
         return bag.drawStudent();
     }
+
 }

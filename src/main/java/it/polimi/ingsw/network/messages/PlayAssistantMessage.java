@@ -18,7 +18,7 @@ public class PlayAssistantMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.ACTIVATE_CHARACTER);
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.PLAY_ASSISTANT, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();
@@ -39,7 +39,6 @@ public class PlayAssistantMessage extends ClientMessage {
             return StatusCode.INVALID_ACTION;
         }
 
-        game.nextTurn();
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;
     }

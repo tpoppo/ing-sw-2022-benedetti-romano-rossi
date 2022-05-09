@@ -70,6 +70,11 @@ public class ClientSocket {
                 try {
                     view = (ViewContent) input_stream.readObject();
                 } catch (IOException | ClassNotFoundException e) {
+                    if(clientSocket.isClosed() || clientSocket.isOutputShutdown() || clientSocket.isInputShutdown()){
+                        System.out.println(clientSocket.isClosed() + " " + clientSocket.isOutputShutdown() + " " + clientSocket.isInputShutdown());
+                        LOGGER.log(Level.SEVERE, "The socket has been closed");
+                        System.exit(1); // TODO: this is probably not what we want to do
+                    }
                     throw new RuntimeException(e);
                 }
  //               LOGGER.log(Level.INFO, "Received view: {0}", view);

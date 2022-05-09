@@ -27,4 +27,5 @@ public abstract class ViewContent implements Serializable{
     public ArrayList<ReducedLobby> getLobbies(){
         return new ArrayList<>();
     }
+
 }

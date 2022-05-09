@@ -32,7 +32,7 @@ public abstract class ClientMessage implements Serializable {
      * @param required_state  state required to take the action
      * @return empty if it is valid otherwise WRONG_PLAYER|WRONG_STATE
      */
-    protected StatusCode preamble_game_check(NetworkManager network_manager, LobbyPlayer lobby_player, GameState required_state) {
+    protected StatusCode preamble_game_check(NetworkManager network_manager, LobbyPlayer lobby_player, GameState required_state, boolean action_completed) {
         GameHandler gameHandler = network_manager.getGameHandler();
 
         // You must be in game (check current_handler)
@@ -44,8 +44,8 @@ public abstract class ClientMessage implements Serializable {
         Game game = gameHandler.getModel();
 
         // Invalid state. It must be (current_state=required_state, action_completed=False)
-        if (gameHandler.getCurrentState() != required_state || gameHandler.isActionCompleted()) {
-            network_manager.addErrorMessage(lobby_player, "There's a time and place for everything but not now!");
+        if ((required_state != null && gameHandler.getCurrentState() != required_state) || gameHandler.isActionCompleted() != action_completed) {
+            network_manager.addErrorMessage(lobby_player, "There is a time and place for everything but not now!");
             return StatusCode.WRONG_STATE;
         }
 

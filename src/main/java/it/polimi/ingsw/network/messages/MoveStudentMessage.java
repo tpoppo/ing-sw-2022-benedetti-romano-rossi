@@ -23,7 +23,7 @@ public class MoveStudentMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_STUDENT);
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_STUDENT, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();
@@ -46,6 +46,9 @@ public class MoveStudentMessage extends ClientMessage {
             }
 
         }else{
+            if(color == null){
+                return StatusCode.INVALID_ACTION;
+            }
             try {
                 game.moveStudent(color);
             } catch (FullDiningRoomException e) {

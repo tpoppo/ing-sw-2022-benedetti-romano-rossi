@@ -25,7 +25,7 @@ public class MenuManager {
                 if (!message_queue.isEmpty()) {
                     MessageEnvelope envelope = message_queue.remove();
                     StatusCode statusCode = envelope.message().handle(envelope.connectionCEO(), envelope.sender());
-
+                    System.out.println(envelope.message() + " => " + statusCode);
                     if(statusCode.equals(StatusCode.OK))
                         notifySubscribers();
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){

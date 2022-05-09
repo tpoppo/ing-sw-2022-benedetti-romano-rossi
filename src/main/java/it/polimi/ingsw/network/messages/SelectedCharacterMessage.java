@@ -17,7 +17,7 @@ public class SelectedCharacterMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.CHOOSE_CLOUD);
+        StatusCode status_code = preamble_game_check(network_manager, lobby_player, null, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();

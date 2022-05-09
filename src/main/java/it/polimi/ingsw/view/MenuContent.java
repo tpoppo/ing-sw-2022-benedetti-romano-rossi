@@ -28,4 +28,11 @@ public class MenuContent extends ViewContent {
     public ArrayList<ReducedLobby> getLobbies() {
         return lobbies;
     }
+
+    @Override
+    public String toString() {
+        return "MenuContent{" +
+                "lobbies=" + lobbies +
+                '}';
+    }
 }

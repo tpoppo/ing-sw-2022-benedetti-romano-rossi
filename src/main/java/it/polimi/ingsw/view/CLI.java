@@ -5,10 +5,9 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.network.messages.ChooseWizardMessage;
-import it.polimi.ingsw.network.messages.CreateLobbyMessage;
-import it.polimi.ingsw.network.messages.JoinLobbyMessage;
-import it.polimi.ingsw.network.messages.StartGameMessage;
+import it.polimi.ingsw.model.board.Color;
+import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.ReducedLobby;
@@ -193,6 +192,7 @@ public class CLI {
         String[] command = s.split(" ");
         if(command.length == 0) return "No command found";
         switch (command[0]) {
+            // menu commands
             case "create" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new CreateLobbyMessage(Integer.parseInt(command[1])));
@@ -203,7 +203,10 @@ public class CLI {
                 client_socket.send(new JoinLobbyMessage(Integer.parseInt(command[1])));
                 return "";
             }
+
+            // lobby commands
             case "start" -> {
+
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new StartGameMessage(Boolean.parseBoolean(command[1])));
                 return "";
@@ -213,6 +216,68 @@ public class CLI {
                 client_socket.send(new ChooseWizardMessage(Integer.parseInt(command[1])));
                 return "";
             }
+
+            // game commands
+            case "ac" -> { // ActivateCharacterMessage
+                Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
+                PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
+
+                switch (selected_character.require()) {
+                    case ISLAND -> {
+                        if (command.length != 2) return "Invalid number of arguments";
+                        player_choices_serializable.setIsland(Integer.parseInt(command[1]));
+                    }
+                    case CARD_STUDENT, STUDENT_COLOR, SWAP_DINING_ENTRANCE, SWAP_CARD_ENTRANCE -> {
+                        if (command.length < 2) return "Invalid number of arguments";
+                        ArrayList<Color> colors = new ArrayList<>();
+                        for (int i = 1; i < command.length; i++) {
+                            colors.add(Color.parseColor(command[i]));
+                        }
+                        player_choices_serializable.setStudent(colors);
+                    }
+                }
+
+                client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
+                return "";
+            }
+
+            case "cc" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
+                return "";
+            }
+
+            case "mm" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                client_socket.send(new MoveMotherNatureMessage(Integer.parseInt(command[1])));
+                return "";
+            }
+
+            case "ms" -> {
+                Integer island_position = null;
+                if (command.length > 3 || command.length < 2) return "Invalid number of arguments";
+                if(command.length == 3) island_position = Integer.parseInt(command[2]);
+                client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
+            }
+
+            case "ns" -> {
+                if(command.length != 1) return "Invalid number of arguments";
+                client_socket.send(new NextStateMessage());
+                return "";
+            }
+
+            case "pa" -> {
+                if(command.length != 2) return "Invalid number of arguments";
+                client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
+                return "";
+            }
+
+            case "sc" -> {
+                if(command.length != 2) return "Invalid number of arguments";
+                client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
+                return "";
+            }
+
         }
 
         return "Invalid Command";

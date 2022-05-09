@@ -17,4 +17,15 @@ public enum Color implements Serializable {
     public static Color getRandomColor(){
         return values()[rng.nextInt(values().length)];
     }
+
+    public static Color parseColor(Object s) {
+        return switch (s.toString().toUpperCase()) {
+            case "RED" -> RED;
+            case "GREEN" -> GREEN;
+            case "BLUE" -> BLUE;
+            case "YELLOW" -> YELLOW;
+            case "PINK" -> PINK;
+            default -> null;
+        };
+    }
 }

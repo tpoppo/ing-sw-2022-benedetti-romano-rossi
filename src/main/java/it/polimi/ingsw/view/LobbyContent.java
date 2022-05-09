@@ -27,4 +27,12 @@ public class LobbyContent extends ViewContent {
     public HandlerType getCurrentHandler() {
         return HandlerType.LOBBY;
     }
+
+    @Override
+    public String toString() {
+        return "LobbyContent{" +
+                "errorMessage='" + errorMessage + '\'' +
+                ", lobbyHandler=" + lobbyHandler +
+                '}';
+    }
 }

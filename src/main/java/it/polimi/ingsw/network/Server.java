@@ -102,7 +102,10 @@ public class Server{
     }
 
     public Optional<NetworkManager> joinLobby(int lobbyID, LobbyPlayer player){
-        Optional<NetworkManager> networkManager = networkManagers.stream().filter(x -> x.ID == lobbyID).findFirst();
+        Optional<NetworkManager> networkManager = networkManagers.stream().filter(
+                x -> x.ID == lobbyID && x.getCurrentHandler() == HandlerType.LOBBY
+        ).findFirst();
+
         if(networkManager.isPresent()){
             LobbyHandler lobbyHandler = networkManager.get().getLobbyHandler();
             try {
