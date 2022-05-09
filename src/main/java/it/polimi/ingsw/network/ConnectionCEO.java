@@ -46,12 +46,11 @@ public class ConnectionCEO extends Thread {
 
             do{
                 username = (String) inputStream.readObject();
-                System.out.println(username);
                 logged_in = true;
                 if(!server.checkUsername(username)) {
                     logged_in = false;
                     LOGGER.log(Level.INFO, "{0} tried to connect. Username already taken", username);
-                    outputStream.writeObject("ERROR: Username already taken");
+                    outputStream.writeObject("KO");
                 }
             }while(!logged_in);
 

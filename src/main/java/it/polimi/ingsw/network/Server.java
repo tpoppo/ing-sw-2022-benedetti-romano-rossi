@@ -3,7 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.utils.Consts;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class Server{
     private final ArrayList<LobbyPlayer> player_list;
 
     private Server(){
-        PORT = Consts.SERVER_PORT;
+        PORT = Constants.SERVER_PORT;
         networkManagers = new ArrayList<>();
         player_list = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class Server{
             LOGGER.log(Level.INFO, "Server has been created");
 
             try {
-                instance.startServer();
+                instance.run();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -54,7 +54,7 @@ public class Server{
         return instance;
     }
 
-    private void startServer() throws IOException {
+    private void run() throws IOException {
         while(true)
             new ConnectionCEO(serverSocket.accept()).start();
     }
@@ -64,7 +64,7 @@ public class Server{
     }
 
     private void retrieveSavedState(){
-        String path = Consts.PATH_SAVES;
+        String path = Constants.PATH_SAVES;
 
         File directory = new File(path);
 

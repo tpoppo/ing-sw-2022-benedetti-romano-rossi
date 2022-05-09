@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
-import it.polimi.ingsw.utils.Consts;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.GameContent;
 import it.polimi.ingsw.view.LobbyContent;
 import it.polimi.ingsw.view.ViewContent;
@@ -99,7 +99,7 @@ public class NetworkManager {
     }
 
     public void saveState(){
-        String path = Consts.PATH_SAVES;
+        String path = Constants.PATH_SAVES;
         String fileName = path + "/SavedGame_" + ID + ".sav";
 
         try (FileOutputStream fos = new FileOutputStream(fileName);

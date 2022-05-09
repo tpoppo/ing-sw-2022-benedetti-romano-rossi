@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.network.messages.ClientMessage;
-import it.polimi.ingsw.utils.Consts;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.ViewContent;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ClientSocket {
     }
 
     private void setup() throws IOException {
-        clientSocket = new Socket(Consts.SERVER_ADDR, Consts.SERVER_PORT);
+        clientSocket = new Socket(Constants.SERVER_ADDR, Constants.SERVER_PORT);
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
     }
@@ -57,9 +57,9 @@ public class ClientSocket {
             output_stream.reset();
             output_stream.writeObject(username);
             output_stream.flush();
-            String s = (String) input_stream.readObject();
+            String response = (String) input_stream.readObject();
 
-            if(s.charAt(0) == 'E') return false;
+            if(response.equals("KO")) return false;
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -77,6 +77,7 @@ public class ClientSocket {
                     synchronized (mutex){
                         mutex.notifyAll();
 
+                        // FIXME:
                         try {
                             mutex.wait();
                         } catch (InterruptedException e) {
