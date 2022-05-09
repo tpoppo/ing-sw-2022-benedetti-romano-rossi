@@ -18,11 +18,14 @@ public class GameHandler implements Serializable {
     public GameHandler(boolean expert_mode, LobbyHandler lobby_handler) {
         try {
             model = new Game(expert_mode, lobby_handler);
+            model.fillClouds();
+            model.beginPlanning();
         } catch (EmptyBagException | EmptyMovableException e) {
             // can't create a game
             // this shouldn't happen
             e.printStackTrace();
         }
+
         current_state = GameState.PLAY_ASSISTANT;
         saved_state = null;
         student_moves = 0;
