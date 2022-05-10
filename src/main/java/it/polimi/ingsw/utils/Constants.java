@@ -31,6 +31,9 @@ public class Constants {
     public static final String ANSI_CYAN_BACKGROUND = "\033[46m";   // CYAN
     public static final String ANSI_WHITE_BACKGROUND = "\033[47m";  // WHITE
 
+    public static final String NEWLINE = String.format("%n");
+
+
     public static String ERIANTYS = """
 
             ███████╗██████╗ ██╗ █████╗ ███╗   ██╗████████╗██╗   ██╗███████╗
@@ -85,4 +88,5 @@ public class Constants {
 
     // Path for saves
     public static final String PATH_SAVES = "src/main/SavedGames";
+
 }

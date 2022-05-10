@@ -3,6 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.CLIArt;
 
 /**
  * Hello world!
@@ -20,6 +21,7 @@ public class Eriantys
         switch (args[0].toLowerCase()) {
             case "server" -> runServer(args); // app server
             case "cli" -> runCli(args); // app cli
+            case "cliart" -> runCLIArt(args);
         }
     }
 
@@ -32,4 +34,11 @@ public class Eriantys
         CLI cli = new CLI(client_socket);
         cli.run();
     }
+
+    static void runCLIArt(String[] args){
+        ClientSocket client_socket = new ClientSocket();
+        CLIArt cli = new CLIArt(client_socket);
+        cli.run();
+    }
+
 }

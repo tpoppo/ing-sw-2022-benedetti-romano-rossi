@@ -28,15 +28,15 @@ import java.util.logging.Logger;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class CLI {
-    private final Logger LOGGER = Logger.getLogger(getClass().getName());
-    final private ClientSocket client_socket;
-    final private PrintStream out;
-    final private Scanner read_stream;
+    final protected Logger LOGGER = Logger.getLogger(getClass().getName());
+    final protected ClientSocket client_socket;
+    final protected PrintStream out;
+    final protected Scanner read_stream;
 
-    private GameHandler gameHandler;
-    private Game model;
-    private String username;
-    private Player schoolBoardPlayer;
+    protected GameHandler gameHandler;
+    protected Game model;
+    protected String username;
+    protected Player schoolBoardPlayer;
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -84,9 +84,11 @@ public class CLI {
         this.out.println(out);
     }
 
-    private void clearScreen(){
+    /**
+     * Clears the screen.
+     */
+    protected void clearScreen(){
         // clear the console
-        // For further references visit: https://stackoverflow.com/questions/2979383/how-to-clear-the-console
         out.println(ansi().cursor(0, 0).eraseScreen());
         out.flush();
     }
@@ -139,7 +141,7 @@ public class CLI {
         }).start();
     }
 
-    private void printMenu() {
+    protected void printMenu() {
         out.println(Constants.MENU);
         ViewContent view = client_socket.getView();
         ArrayList<ReducedLobby> reduced_lobbies = view.getLobbies();
@@ -152,7 +154,7 @@ public class CLI {
         out.println("join <lobby id> - join the lobby with ID <lobby id>");
     }
 
-    private void printLobby(){
+    protected void printLobby(){
         out.println(Constants.LOBBY);
 
         ViewContent view = client_socket.getView();
@@ -174,7 +176,7 @@ public class CLI {
         out.println("wizard <id> - choose wizard");
     }
 
-    private void printGame(){
+    protected void printGame(){
         out.print(Constants.ERIANTYS);
         out.println();
         out.println();

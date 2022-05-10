@@ -85,7 +85,7 @@ public class GameTest {
     }
 
     @RepeatedTest(200)
-    public void simpleRun() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, FullDiningRoomException {
+    public void simpleRun2Player() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, FullDiningRoomException {
         LobbyHandler lobby = new LobbyHandler(2);
         LobbyPlayer player0 = new LobbyPlayer("Player 1");
         LobbyPlayer player1 = new LobbyPlayer("Player 2");
@@ -108,7 +108,7 @@ public class GameTest {
             game.beginPlanning();
             checkInvariant(game);
 
-            // player0
+            // player1
             game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
             checkInvariant(game);
 
@@ -116,8 +116,23 @@ public class GameTest {
             game.nextTurn();
             checkInvariant(game);
 
-            // player1
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            // player2
+            Assistant assistant = null;
+            boolean assistant_already_played;
+            int cnt = 0;
+            do{
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++; // it might fail even if it is correct
+            }while(assistant_already_played && cnt < 100000);
+
+            game.playAssistant(assistant);
             checkInvariant(game);
 
             assertNotEquals(game.getCurrentPlayer(), first_player);
@@ -219,8 +234,8 @@ public class GameTest {
         }
     }
     
-    @RepeatedTest(100)
-    public void simpleRun2() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
+    @RepeatedTest(200)
+    public void simpleRun3Player() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
         LobbyHandler lobby = new LobbyHandler(3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -249,12 +264,38 @@ public class GameTest {
             game.nextTurn();
 
             // player2
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Assistant assistant;
+            boolean assistant_already_played;
+            int cnt = 0;
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
             assertNotEquals(game.getCurrentPlayer(), first_player);
             game.nextTurn();
 
             // player3
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            cnt = 0;
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
             assertNotEquals(game.getCurrentPlayer(), first_player);
             game.nextTurn();
 
@@ -361,14 +402,47 @@ public class GameTest {
 
             // player1
             game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Player first_player = game.getCurrentPlayer();
             game.nextTurn();
 
             // player2
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Assistant assistant;
+            boolean assistant_already_played;
+            int cnt = 0;
+            /* Note: the cnt check might return a false positive
+               However, this happened with probability (2/3)^-100000, thus, it is impossible.
+               The worst case is with 3 players, 2 invalid cards in hand and 1 valid.
+             */
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
+            assertNotEquals(game.getCurrentPlayer(), first_player);
             game.nextTurn();
 
             // player3
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            cnt = 0;
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
             game.nextTurn();
 
             game.endPlanning();
@@ -406,14 +480,42 @@ public class GameTest {
 
             // player1
             game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Player first_player = game.getCurrentPlayer();
             game.nextTurn();
 
             // player2
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            Assistant assistant;
+            boolean assistant_already_played;
+            int cnt = 0;
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
+            assertNotEquals(game.getCurrentPlayer(), first_player);
             game.nextTurn();
 
             // player3
-            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            cnt = 0;
+            do {
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++;
+            }while(assistant_already_played && cnt < 100000);
+            game.playAssistant(assistant);
             game.nextTurn();
 
             game.endPlanning();
