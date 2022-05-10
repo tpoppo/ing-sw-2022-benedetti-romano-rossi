@@ -80,7 +80,10 @@ public class ConnectionCEO extends Thread {
 
                 switch (message.getMessageType()) {
                     case MENU -> menuManager.message_queue.add(envelope);
-                    case GAME -> networkManager.getMessageQueue().add(envelope);
+                    case GAME -> {
+                        if(networkManager != null)
+                            networkManager.getMessageQueue().add(envelope);
+                    }
                 }
             }
 

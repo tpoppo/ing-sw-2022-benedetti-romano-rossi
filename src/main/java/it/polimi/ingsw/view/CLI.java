@@ -6,12 +6,9 @@ import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.model.board.Professors;
-import it.polimi.ingsw.model.board.Students;
+import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.ReducedLobby;
 import org.fusesource.jansi.Ansi;
@@ -118,20 +115,21 @@ public class CLI {
 
                 if(view.getCurrentHandler() == null){ // we are in the menu
                     printMenu();
+                    out.print("\n> ");
                 } else{
                     switch (view.getCurrentHandler()) {
-                        case LOBBY -> // we are in the lobby
-                                printLobby();
-                        case GAME -> {
+                        case LOBBY -> { // we are in the lobby
+                            printLobby();
+                            out.print("\n> ");
+                        }
+                        case GAME -> { // we are in the game
                             this.gameHandler = client_socket.getView().getGameHandler();
                             this.model = gameHandler.getModel();
                             printGame();
-                        }// we are in the game
-
+                            print(ansi().a("> ").reset(), 48, 1);
+                        }
                     }
                 }
-                out.println();
-                out.print("> ");
 
                 synchronized (client_socket.mutex){
                     client_socket.setView(null);
@@ -146,10 +144,14 @@ public class CLI {
         ViewContent view = client_socket.getView();
         ArrayList<ReducedLobby> reduced_lobbies = view.getLobbies();
 
-        out.println("Available lobbies:");
+        if(!reduced_lobbies.isEmpty())
+            out.println(ansi().bold().a("Available lobbies:").reset());
+        else out.println(ansi().fgRed().a("No lobbies available!").reset());
+
         for(ReducedLobby reduced_lobby : reduced_lobbies){
             out.printf("Lobby %d: Slots: %d/%d\n", reduced_lobby.getID(), reduced_lobby.getNumPlayer(), reduced_lobby.getMaxPlayers());
         }
+        out.println();
         out.println("create <max players> - create a new lobby");
         out.println("join <lobby id> - join the lobby with ID <lobby id>");
     }
@@ -172,148 +174,212 @@ public class CLI {
                     wizard
             );
         }
+        out.println();
         out.println("start <expert mode> - start the game");
         out.println("wizard <id> - choose wizard");
     }
 
     protected void printGame(){
-        out.print(Constants.ERIANTYS);
-        out.println();
-        out.println();
+        print(ansi().a(Constants.ERIANTYS), 1, 1);
 
-        out.println(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset());
-        out.println();
+        // Banner length is 63
+        print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), 2, 80);
 
         printCurrentPlayer();
         printState();
-        out.println();
-
-        printClouds();
-        out.println();
-        out.println();
-
         printIslands();
-        out.println();
-        out.println();
+        printClouds();
+        printAssistants();
 
         // print board
         if(schoolBoardPlayer == null)
             schoolBoardPlayer = model.getCurrentPlayer();
 
         printBoard(schoolBoardPlayer);
-        out.println();
+
+        if(model.getExpertMode()) {
+            printCoins();
+            printCharacters();
+        }
     }
 
     private void printCurrentPlayer(){
+        StringBuilder text = new StringBuilder();
+
         if(model.getCurrentPlayer().getUsername().equals(username))
-            out.println(ansi().bold().fg(Ansi.Color.GREEN).a("IT'S YOUR TURN!").reset());
+            text.append(ansi().bold().fg(Ansi.Color.GREEN).a("IT'S YOUR TURN!").reset());
         else
-            out.println(ansi()
+            text.append(ansi()
                         .bold()
                         .a("TURN: ")
                         .reset()
                         .a(model.getCurrentPlayer().getUsername())
             );
+
+        print(ansi().a(text.toString()).reset(), 10, 1);
     }
 
     private void printState(){
-        out.printf("Current state: %s-%s-%s-%d\n",
+        // TODO:
+        StringBuilder stateText = new StringBuilder();
+
+        stateText.append(String.format("Current state: %s-%s-%s-%d",
                 gameHandler.getCurrentState(),
                 gameHandler.isActionCompleted(),
                 gameHandler.getSavedState(),
-                gameHandler.getStudentMoves());
+                gameHandler.getStudentMoves())).append(Constants.NEWLINE);
+
+        print(ansi().a(stateText.toString()).reset(), 11, 1);
     }
 
     private void printClouds(){
-        out.println(ansi().bold().a("CLOUDS").reset());
+        StringBuilder cloudsText = new StringBuilder();
+
+        cloudsText.append(ansi().bold().a("CLOUDS").reset()).append(Constants.NEWLINE);
 
         int count = 0;
         for(Students cloud : model.getClouds()){
-            out.print("Cloud " + count + ": ");
+            cloudsText.append("Cloud ").append(count).append(": ");
 
             for(Color key : cloud.keySet()){
                 if(cloud.get(key) > 0)
-                    out.print(ansi().fg(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
+                    cloudsText.append(ansi().fg(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
             }
 
-            out.println();
+            cloudsText.append(Constants.NEWLINE);
             count++;
         }
+
+        print(ansi().a(cloudsText.toString()).reset(), 14, 50);
     }
 
     private void printIslands(){
-        out.println(ansi().bold().a("ISLANDS").reset());
+        StringBuilder islandStr = new StringBuilder();
+
+        islandStr.append(ansi().bold().a("ISLANDS").reset()).append(Constants.NEWLINE);
 
         for(int i=0; i<model.getIslands().size(); i++){
             Island island = model.getIslands().get(i);
             Students islandStudents = island.getStudents();
 
-            out.print(i + " (" + island.getNumIslands() + "): ");
+            islandStr.append(i).append(" (").append(island.getNumIslands()).append("): ");
             if(island.hasMotherNature())
-                out.print(ansi().bg(Ansi.Color.YELLOW).fg(Ansi.Color.BLACK).a("M").reset().a(" "));
+                islandStr.append(ansi().bg(Ansi.Color.YELLOW).fg(Ansi.Color.BLACK).a("M").reset().a(" "));
             if(island.getNoEntryTiles() > 0)
-                out.print(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(island.getNoEntryTiles()).reset());
-            out.print("\t\t");
+                islandStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(island.getNoEntryTiles()).reset());
+            islandStr.append("  ");
 
             for(Color studentColor : island.getStudents().keySet()){
                 if(islandStudents.get(studentColor) > 0)
-                    out.print(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(islandStudents.get(studentColor) + " ").reset());
+                    islandStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(islandStudents.get(studentColor) + " ").reset());
             }
-            out.print("\t");
-            out.println(island.getOwner() == null ?
+            islandStr.append(" ");
+            islandStr.append(island.getOwner() == null ?
                     "" :
                     island.getOwner().getUsername() + " - Towers: " + island.getNumTowers()
             );
+            islandStr.append(Constants.NEWLINE);
         }
+
+        print(ansi().a(islandStr.toString()).reset(), 14, 1);
     }
 
     private void printBoard(Player player){
-        out.println(ansi().bold().a("SCHOOLBOARD").reset());
+        StringBuilder boardStr = new StringBuilder();
+
+        boardStr.append(ansi().bold().a("SCHOOLBOARD").reset()).append(Constants.NEWLINE);
 
         Students entranceStudents = player.getSchoolBoard().getEntranceStudents();
         Students diningStudents = player.getSchoolBoard().getDiningStudents();
         int numTowers = player.getSchoolBoard().getNumTowers();
         Professors professors = player.getProfessors();
 
-        out.println("Towers: " + numTowers);
-        out.print("Entrance: ");
+        boardStr.append("Towers: ").append(numTowers).append(Constants.NEWLINE);
+        boardStr.append("Entrance: ");
         for(Color studentColor : entranceStudents.keySet()){
             if(entranceStudents.get(studentColor) > 0)
-                out.print(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(entranceStudents.get(studentColor) + " ").reset());
+                boardStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(entranceStudents.get(studentColor) + " ").reset());
         }
-        out.println();
-        out.println();
+        boardStr.append(Constants.NEWLINE).append(Constants.NEWLINE);
 
-        out.println("Dining room:");
-        out.println();
+        boardStr.append("Dining room:").append(Constants.NEWLINE).append(Constants.NEWLINE);
         for(Color studentColor : diningStudents.keySet()){
-            out.print(ansi().bg(Ansi.Color.valueOf(studentColor.toString())).fg(Ansi.Color.BLACK));
+            boardStr.append(ansi().bg(Ansi.Color.valueOf(studentColor.toString())).fg(Ansi.Color.BLACK));
 
             int numOfStudents = diningStudents.get(studentColor);
 
             for(int i = 0; i< Game.MAX_DINING_STUDENTS; i++){
                 if(numOfStudents > 0)
-                    out.print("X");
+                    boardStr.append("X");
                 else if(i > 0 && (i - 2) % 3 == 0) {
-                    out.print("C");
-                }else out.print("_");
-                out.print("   ");
+                    boardStr.append("C");
+                }else boardStr.append("_");
+                boardStr.append("   ");
 
                 numOfStudents--;
             }
 
-            out.print("\n");
             if(professors.contains(studentColor))
-                out.print("P");
+                boardStr.append("P");
 
-            out.println(ansi().reset());
-            out.println();
+            boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
         }
-        out.println(ansi().reset());
+
+        print(ansi().a(boardStr.toString()).reset(), 29, 1);
     }
 
     private void printAssistants(){
+        StringBuilder assistantStr = new StringBuilder();
 
+        ArrayList<Assistant> assistants = model.usernameToPlayer(username).getPlayerHand();
+        Assistant currentAssistant = model.usernameToPlayer(username).getCurrentAssistant();
+
+        assistantStr.append(ansi().bold().a("ASSISTANTS").reset()).append(Constants.NEWLINE);
+        int count = 0;
+        // iterating on all assistants
+        for(Assistant assistant : Assistant.getAssistants(1)){
+            // current assistant is green
+            if(assistant.equals(currentAssistant))
+                assistantStr.append(ansi().bgBrightGreen().fgBrightDefault());
+
+            // already played assistants are red
+            if(!assistants.contains(assistant))
+                assistantStr.append(ansi().bgRed().fgBrightDefault());
+
+            assistantStr.append(count).append(": ");
+            assistantStr.append("P ").append(assistant.getPower()).append(" - ").append("M ").append(assistant.getSteps());
+            assistantStr.append(ansi().reset());
+            assistantStr.append(Constants.NEWLINE);
+
+            count++;
+        }
+
+        print(ansi().a(assistantStr.toString()).reset(), 29, 50);
+    }
+
+    private void printCoins(){
+        StringBuilder coinsStr = new StringBuilder();
+
+        int coins = model.getCurrentPlayer().getCoins();
+
+        coinsStr.append(ansi().bold().a("COINS: ").reset());
+        coinsStr.append(ansi().fgBrightYellow().a(coins));
+
+        print(ansi().a(coinsStr.toString()).reset(), 30, 33);
+    }
+
+    private void printCharacters(){
+        StringBuilder text = new StringBuilder();
+
+        ArrayList<Character> characters = model.getCharacters();
+        text.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
+        for(Character character : characters){
+            // TODO: print character's specific features (entry tiles, students, ...)
+            text.append(character.getClass().getName()).append(" - Cost: ").append(character.getCost());
+            text.append(Constants.NEWLINE);
+        }
+
+        print(ansi().a(text.toString()).reset(), 40, 19);
     }
 
     private String parseInput(String s){
@@ -408,5 +474,16 @@ public class CLI {
         }
 
         return "Invalid Command";
+    }
+
+    private void print(Ansi s, int row, int column) {
+        out.print(ansi().cursor(row, column).a(
+                        s.toString().replaceAll(
+                                Constants.NEWLINE,
+                                ansi().a(Constants.NEWLINE).cursorRight(column - 1).toString()
+                        )
+                )
+        );
+        out.flush();
     }
 }

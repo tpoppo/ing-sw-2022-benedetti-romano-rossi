@@ -69,7 +69,7 @@ public class Constants {
 
     public static final String AUTHORS =
             "\nby "
-                    + ANSI_CYAN
+                    + ANSI_PURPLE
                     + "Arturo Benedetti"
                     + ANSI_RESET
                     + ", "
@@ -88,5 +88,4 @@ public class Constants {
 
     // Path for saves
     public static final String PATH_SAVES = "src/main/SavedGames";
-
 }
