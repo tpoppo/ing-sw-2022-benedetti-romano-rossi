@@ -44,7 +44,7 @@ public class BardTest {
 
         PlayerChoices playerChoices = new PlayerChoices();
         ArrayList<Color> swap_list = new ArrayList<>();
-        swap_list.add(Color.PINK);
+        swap_list.add(Color.MAGENTA);
         swap_list.add(Color.GREEN);
         swap_list.add(Color.BLUE);
         swap_list.add(Color.RED);
@@ -87,7 +87,7 @@ public class BardTest {
 
         PlayerChoices playerChoices = new PlayerChoices();
         ArrayList<Color> swap_list = new ArrayList<>();
-        swap_list.add(Color.PINK);
+        swap_list.add(Color.MAGENTA);
         swap_list.add(Color.GREEN);
         swap_list.add(Color.GREEN);
         playerChoices.setStudent(swap_list);

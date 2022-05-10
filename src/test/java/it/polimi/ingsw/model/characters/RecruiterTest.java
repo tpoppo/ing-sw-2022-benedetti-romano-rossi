@@ -89,7 +89,7 @@ public class RecruiterTest {
 
         ArrayList<Color> students = new ArrayList<>();
         students.add(Color.GREEN);
-        students.add(Color.PINK);
+        students.add(Color.MAGENTA);
 
         playerchoice.setStudent(students);
         playerchoice.setIsland(island);

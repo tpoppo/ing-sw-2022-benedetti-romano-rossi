@@ -13,12 +13,12 @@ public class ProfessorsTest {
         professor1.add(Color.BLUE);
         professor1.add(Color.GREEN);
         professor1.add(Color.RED);
-        professor1.add(Color.PINK);
+        professor1.add(Color.MAGENTA);
 
         Professors professor2 = new Professors();
         professor2.add(Color.BLUE);
         professor2.add(Color.GREEN);
-        professor2.add(Color.PINK);
+        professor2.add(Color.MAGENTA);
         professor2.add(Color.YELLOW);
 
         assertEquals(true, professor1.contains(Color.RED));
@@ -33,7 +33,7 @@ public class ProfessorsTest {
         Professors professor1 = new Professors();
         professor1.add(Color.BLUE);
         professor1.add(Color.GREEN);
-        professor1.add(Color.PINK);
+        professor1.add(Color.MAGENTA);
         professor1.add(Color.YELLOW);
 
         Professors professor2 = new Professors();
@@ -41,8 +41,8 @@ public class ProfessorsTest {
         professor2.add(Color.RED);
         professor2.add(Color.YELLOW);
 
-        professor1.moveTo(professor2, Color.PINK);
-        assertEquals(true, professor2.contains(Color.PINK));
+        professor1.moveTo(professor2, Color.MAGENTA);
+        assertEquals(true, professor2.contains(Color.MAGENTA));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ProfessorsTest {
         Professors professor1 = new Professors();
         professor1.add(Color.BLUE);
         professor1.add(Color.GREEN);
-        professor1.add(Color.PINK);
+        professor1.add(Color.MAGENTA);
         professor1.add(Color.YELLOW);
 
         Professors professor2 = new Professors();

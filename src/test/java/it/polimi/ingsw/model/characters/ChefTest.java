@@ -84,7 +84,7 @@ public class ChefTest {
         Chef chef = new Chef(game);
 
         ArrayList<Color> colors = new ArrayList<>();
-        colors.add(Color.PINK);
+        colors.add(Color.MAGENTA);
         colors.add(Color.GREEN);
 
         PlayerChoices playerChoices = new PlayerChoices();

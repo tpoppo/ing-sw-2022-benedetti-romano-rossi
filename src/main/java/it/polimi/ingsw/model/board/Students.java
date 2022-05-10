@@ -10,7 +10,7 @@ public class Students extends HashMap<Color, Integer> implements Serializable {
         this.put(Color.GREEN, greens);
         this.put(Color.BLUE, blues);
         this.put(Color.YELLOW, yellows);
-        this.put(Color.PINK, pinks);
+        this.put(Color.MAGENTA, pinks);
         this.put(Color.RED, reds);
     }
 
@@ -48,7 +48,7 @@ public class Students extends HashMap<Color, Integer> implements Serializable {
         put(Color.GREEN, 0);
         put(Color.BLUE, 0);
         put(Color.YELLOW, 0);
-        put(Color.PINK, 0);
+        put(Color.MAGENTA, 0);
         put(Color.RED, 0);
     }
 }

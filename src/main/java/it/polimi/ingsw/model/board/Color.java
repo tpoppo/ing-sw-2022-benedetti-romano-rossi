@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.board;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public enum Color implements Serializable {
@@ -10,7 +8,7 @@ public enum Color implements Serializable {
     GREEN,
     BLUE,
     YELLOW,
-    PINK;
+    MAGENTA;
 
     private static final Random rng = new Random();
 
@@ -24,7 +22,7 @@ public enum Color implements Serializable {
             case "GREEN" -> GREEN;
             case "BLUE" -> BLUE;
             case "YELLOW" -> YELLOW;
-            case "PINK" -> PINK;
+            case "MAGENTA" -> MAGENTA;
             default -> null;
         };
     }
