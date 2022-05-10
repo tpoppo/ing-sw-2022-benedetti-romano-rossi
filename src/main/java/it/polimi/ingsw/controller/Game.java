@@ -193,17 +193,20 @@ public class Game implements Serializable{
 
     public void playAssistant(Assistant assistant) throws AssistantAlreadyPlayedException {
         boolean assistant_already_played = false;
+        Set<Assistant> played_assistants = new HashSet<>();
         Player current_player = getCurrentPlayer();
         assert current_player != null;  // FIXME: do we like this?
 
         // checks if exists a player who've already played the chosen assistant
-        for(Player player : players){
-            if(player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant))
+        // the check is done on the players that have already played an assistant
+        for(Player player : players.stream().filter(x -> x.getCurrentAssistant() != null).toList()){
+            played_assistants.add(player.getCurrentAssistant());
+            if(player.getCurrentAssistant().equals(assistant))
                 assistant_already_played = true;
         }
 
         // if the assistant has already been played and the player has other assistant, the chosen assistant cannot be played
-        if(assistant_already_played && current_player.getPlayerHand().size() > 1)
+        if(assistant_already_played && !current_player.getPlayerHand().containsAll(played_assistants))
             throw new AssistantAlreadyPlayedException();
 
         current_player.setCurrentAssistant(assistant);
