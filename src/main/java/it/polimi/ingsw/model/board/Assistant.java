@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.board;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Assistant implements Serializable {
     final private int power;
@@ -46,4 +47,17 @@ public class Assistant implements Serializable {
     public int getSteps() { return steps; }
 
     public int getID() { return ID; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Assistant assistant = (Assistant) o;
+        return power == assistant.power && steps == assistant.steps;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(power, steps);
+    }
 }

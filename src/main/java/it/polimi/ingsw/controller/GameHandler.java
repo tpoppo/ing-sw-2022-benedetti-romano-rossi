@@ -20,7 +20,7 @@ public class GameHandler implements Serializable {
             model = new Game(expert_mode, lobby_handler);
             model.fillClouds();
             model.beginPlanning();
-        } catch (EmptyBagException | EmptyMovableException e) {
+        } catch (EmptyBagException e) {
             // can't create a game
             // this shouldn't happen
             e.printStackTrace();

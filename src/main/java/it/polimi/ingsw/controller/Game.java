@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Game implements Serializable{
     public static final int MAX_COINS = 20;
-    public static final int MAX_DINING_STUDENTS = 8;
+    public static final int MAX_DINING_STUDENTS = 10;
 
     private final boolean expert_mode;
     private Player first_player;
@@ -30,7 +30,7 @@ public class Game implements Serializable{
     private final GameModifiers gameModifiers;
 
     // FIXME: shouldn't we just give the list of LobbyPlayer (lobby.getPlayers()) instead of a LobbyHandler?
-    public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException, EmptyMovableException {
+    public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException {
         int num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
         gameModifiers = new GameModifiers();
@@ -547,4 +547,7 @@ public class Game implements Serializable{
         return bag.drawStudent();
     }
 
+    public Player usernameToPlayer(String username){
+        return getPlayers().stream().filter(player -> player.getUsername().equals(username)).toList().get(0);
+    }
 }
