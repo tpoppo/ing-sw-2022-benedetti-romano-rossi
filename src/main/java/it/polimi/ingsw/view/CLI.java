@@ -160,12 +160,15 @@ public class CLI {
         out.println(Constants.LOBBY);
 
         ViewContent view = client_socket.getView();
-
-        // print the list of the players in the lobby
         LobbyHandler lobby_handler = view.getLobbyHandler();
         ArrayList<LobbyPlayer> players = lobby_handler.getPlayers();
 
-        // TODO: add lobby id inside lobby
+        // prints the lobby id
+        out.println(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a("Lobby ID: " + lobby_handler.ID).reset());
+        out.println();
+        out.println();
+
+        // print the list of the players in the lobby
         out.printf("Players: %d/%d\n", players.size(), lobby_handler.getMaxPlayers());
         for(LobbyPlayer lobby_player : players){
             Integer wizard = lobby_player.getWizard();
@@ -375,7 +378,24 @@ public class CLI {
         text.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
         for(Character character : characters){
             // TODO: print character's specific features (entry tiles, students, ...)
+            //  decorators?
             text.append(character.getClass().getName()).append(" - Cost: ").append(character.getCost());
+
+            // print card's specific students
+            // FIXME: is null check useful?
+            if(character.getStudents() != null && character.getStudents().count() > 0){
+                for(Color studentColor : character.getStudents().keySet()) {
+                    int numOfStudents = character.getStudents().get(studentColor);
+
+                    if (numOfStudents > 0)
+                        text.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(numOfStudents).reset().a(" "));
+                }
+            }
+
+            // print card's specific noEntryTiles
+            if(character.getNoEntryTiles() > 0)
+                text.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(character.getNoEntryTiles()).reset());
+
             text.append(Constants.NEWLINE);
         }
 

@@ -77,7 +77,7 @@ public class Constants {
                     + "Lorenzo Rossi"
                     + ANSI_RESET
                     + ", "
-                    + ANSI_GREEN
+                    + ANSI_YELLOW
                     + "Luca Romanò"
                     + ANSI_RESET;
 

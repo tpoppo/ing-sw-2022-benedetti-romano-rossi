@@ -50,6 +50,7 @@ abstract public class Character implements Serializable {
     }
 
     // Tells which students are on top of the card
+    // FIXME: does this actually works?
     public Students getStudents(){
         return new Students();
     }
