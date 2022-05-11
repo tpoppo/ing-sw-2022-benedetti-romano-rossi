@@ -22,7 +22,7 @@ public class ChefTest {
 
     @Test
     public void Chef() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -65,7 +65,7 @@ public class ChefTest {
     //Test when there are more than one colors in playerchoice
     @Test
     public void BadPlayerChoiceException() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -96,7 +96,7 @@ public class ChefTest {
     //Test when there is not the choosen color in the dining room
     @Test
     public void BadPlayerChoiceException2() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -135,7 +135,7 @@ public class ChefTest {
     //Test when the bag is empty
     @Test
     public void BadPlayerChoiceException3() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);

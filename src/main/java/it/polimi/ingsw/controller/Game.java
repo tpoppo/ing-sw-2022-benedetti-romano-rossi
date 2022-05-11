@@ -229,8 +229,6 @@ public class Game implements Serializable{
             int power1, power2;
 
             // Not checking if the currentAssistant is set as it should've been chosen in the previous method
-            // FIXME: do we want to do the check and eventually throw an exception?
-            //  - (it shouldn't happen normally... could it be a problem if we contemplate disconnections?)
             power1 = o1.getCurrentAssistant().getPower();
             power2 = o2.getCurrentAssistant().getPower();
 

@@ -22,7 +22,7 @@ public class JugglerTest {
 
     @RepeatedTest(50)
     public void Juggler() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -69,7 +69,7 @@ public class JugglerTest {
     //Test when the number of students is odd
     @Test
     public void BadPlayerChoiceException() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -109,7 +109,7 @@ public class JugglerTest {
 
     @Test
     public void BadPlayerChoiceException2() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);

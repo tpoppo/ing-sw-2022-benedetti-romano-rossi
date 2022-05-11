@@ -20,7 +20,7 @@ public class ThiefTest {
 
     @Test
     public void Thief() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer lobby_player1 = new LobbyPlayer("Player 1");
         LobbyPlayer lobby_player2 = new LobbyPlayer("Player 2");
         lobby_player1.setWizard(1);

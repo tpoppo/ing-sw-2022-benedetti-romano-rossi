@@ -3,11 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 import java.io.Serializable;
 
 public class GameHandler implements Serializable {
+    public final int ID;
     private Game model;
     private GameState current_state;
     private GameState saved_state;
@@ -15,7 +15,9 @@ public class GameHandler implements Serializable {
     private Character selected_character;
     private boolean action_completed;
 
-    public GameHandler(boolean expert_mode, LobbyHandler lobby_handler) {
+    public GameHandler(int ID, boolean expert_mode, LobbyHandler lobby_handler) {
+        this.ID = ID;
+
         try {
             model = new Game(expert_mode, lobby_handler);
             model.fillClouds();

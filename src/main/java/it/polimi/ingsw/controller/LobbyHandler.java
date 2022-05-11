@@ -8,18 +8,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LobbyHandler implements Serializable {
-    private int max_players;
-    private ArrayList<LobbyPlayer> players;
-    private ArrayList<Integer> available_wizards;
+    public final int ID;
+    private final int max_players;
+    private final ArrayList<LobbyPlayer> players;
+    private final ArrayList<Integer> available_wizards;
 
-    public LobbyHandler(int max_players){
+    // FIXME: do we like this solution for the displaying of the lobby id in the view?
+    public LobbyHandler(int ID, int max_players){
+        this.ID = ID;
         this.max_players = max_players;
         players = new ArrayList<>();
         available_wizards = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
     }
 
-    public LobbyHandler(){
-        this(3);
+    public LobbyHandler(int ID){
+        this(ID, 3);
     }
 
     public void chooseWizard(int desired_wizard, LobbyPlayer player) throws WizardNotAvailableException {

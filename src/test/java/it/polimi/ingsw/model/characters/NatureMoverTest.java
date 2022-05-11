@@ -19,7 +19,7 @@ public class NatureMoverTest {
 
     @Test
     public void NatureMover() throws FullLobbyException, EmptyMovableException, EmptyBagException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);

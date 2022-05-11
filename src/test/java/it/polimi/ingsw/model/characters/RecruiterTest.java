@@ -22,7 +22,7 @@ public class RecruiterTest {
 
     @Test
     public void Recruiter() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -64,7 +64,7 @@ public class RecruiterTest {
 
     @Test
     public void BadPlayerChoiceException() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -99,7 +99,7 @@ public class RecruiterTest {
 
     @Test
     public void BadPlayerChoiceException2() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);

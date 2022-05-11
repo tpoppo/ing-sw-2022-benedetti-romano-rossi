@@ -41,7 +41,7 @@ public class Students extends HashMap<Color, Integer> implements Serializable {
     // Returns the number of students, no matter the color
     public int count(){
         return values().stream().reduce(0, Integer::sum);
-    } // FIXME: we don't like this name
+    }
 
     @Override
     public void clear() {

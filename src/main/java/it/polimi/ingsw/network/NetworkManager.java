@@ -41,7 +41,7 @@ public class NetworkManager {
         subscribers = new HashSet<>();
 
         current_handler = HandlerType.LOBBY;
-        lobby_handler = new LobbyHandler(max_players);
+        lobby_handler = new LobbyHandler(ID, max_players);
 
         handleMessages();
     }
@@ -75,7 +75,8 @@ public class NetworkManager {
                         notifySubscribers();
 
                     // saves the networkManager state for persistence
-                    if(current_handler.equals(HandlerType.GAME)) saveState();
+                    // FIXME: uncomment for persistence
+                    // if(current_handler.equals(HandlerType.GAME)) saveState();
                 }
             }
         }).start();
@@ -91,7 +92,7 @@ public class NetworkManager {
     }
 
     public void startGame(boolean expert_mode){
-        game_handler = new GameHandler(expert_mode, lobby_handler);
+        game_handler = new GameHandler(ID, expert_mode, lobby_handler);
         current_handler = HandlerType.GAME;
     }
 

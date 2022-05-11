@@ -21,7 +21,7 @@ public class BardTest {
 
     @Test
     public void Bard() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -64,7 +64,7 @@ public class BardTest {
     //try an Exception with an odd number of Students in input
     @Test
     public void BadPlayerChoiceException1() throws BadPlayerChoiceException, FullLobbyException, EmptyMovableException, EmptyBagException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -98,7 +98,7 @@ public class BardTest {
     //try an Exception when Students aren't in the dining room or entrance room
     @Test
     public void BadPlayerChoiceException2() throws BadPlayerChoiceException, FullLobbyException, EmptyMovableException, EmptyBagException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);

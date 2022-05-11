@@ -20,7 +20,7 @@ public class MoveMotherNatureMessageTest {
 
     @Test
     public void MoveMotherNatureMessage() throws FullLobbyException, EmptyMovableException, EmptyBagException {
-        LobbyHandler lobby = new LobbyHandler(2);
+        LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
@@ -45,7 +45,7 @@ public class MoveMotherNatureMessageTest {
             pos++;
         }
 
-        LobbyHandler lobbyhandler = new LobbyHandler(2);
+        LobbyHandler lobbyhandler = new LobbyHandler(1, 2);
         LobbyPlayer player3 = new LobbyPlayer("Player 1");
         LobbyPlayer player4 = new LobbyPlayer("Player 2");
         player3.setWizard(1);
@@ -54,7 +54,7 @@ public class MoveMotherNatureMessageTest {
         lobbyhandler.addPlayer(player3);
         lobbyhandler.addPlayer(player4);
 
-        GameHandler gamehandler = new GameHandler(true, lobbyhandler);
+        GameHandler gamehandler = new GameHandler(0, true, lobbyhandler);
         gamehandler.setModel(game);
         MoveMotherNatureMessage movemothernaturemessage = new MoveMotherNatureMessage(1);
         NetworkManager networkmanager = NetworkManager.createNetworkManager(2);
