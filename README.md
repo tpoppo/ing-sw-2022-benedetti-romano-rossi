@@ -19,7 +19,7 @@ The project includes:
 - Final UML diagram, generated from the code by automated tools
 - Working game implementation
 - Source code of the implementation
-- Source code of unity tests
+- Source code of unit tests
 
 ## Group members
 - [Arturo Benedetti](https://github.com/benedart) - 10747545<br>arturo.benedetti@mail.polimi.it
