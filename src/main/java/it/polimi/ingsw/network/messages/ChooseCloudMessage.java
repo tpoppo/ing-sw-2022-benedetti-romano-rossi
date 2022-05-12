@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
+import it.polimi.ingsw.utils.exceptions.EmptyCloudException;
 
 public class ChooseCloudMessage extends ClientMessage {
 
@@ -30,10 +31,15 @@ public class ChooseCloudMessage extends ClientMessage {
             return StatusCode.INVALID_ACTION;
         }
 
-        game.chooseCloud(game.getClouds().get(cloud_position));
+        try {
+            game.chooseCloud(game.getClouds().get(cloud_position));
+        } catch (EmptyCloudException e) {
+            network_manager.addErrorMessage(lobby_player, "The chosen cloud is empty");
+            return StatusCode.INVALID_ACTION;
+        }
 
         gameHandler.setActionCompleted(true);
-        return StatusCode.INVALID_ACTION;
+        return StatusCode.OK;
     }
 
     @Override

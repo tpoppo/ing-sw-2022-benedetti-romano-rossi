@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.Constants;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -17,9 +18,7 @@ import org.fusesource.jansi.AnsiConsole;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -35,9 +34,10 @@ public class CLI {
     protected GameHandler gameHandler;  // TODO: clean redundant attributes
     protected Game model;
     protected String username;
-    protected Player schoolBoardPlayer;
+    protected String schoolBoardPlayerUsername;
     private String errorMessage;
-    private final int STD_CURSOR_POSITION = 48;
+    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(48, 1);
+    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(29, 1);
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -70,6 +70,7 @@ public class CLI {
         out.println("Logged in");
 
         this.username = username;
+        this.schoolBoardPlayerUsername = username; // sets own username for later displaying of board
 
         startRendering();
 
@@ -200,19 +201,14 @@ public class CLI {
         printIslands();
         printClouds();
         printAssistants();
-
-        // print board
-        if(schoolBoardPlayer == null)
-            schoolBoardPlayer = model.getCurrentPlayer();
-
-        printBoard(schoolBoardPlayer);
+        printBoard(schoolBoardPlayerUsername);
 
         if(model.getExpertMode()) {
             printCoins();
             printCharacters();
         }
 
-        print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION, 1);
+        print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION.getX(), STD_CURSOR_POSITION.getY());
 
         // print server errors
         if(errorMessage != null) printErrorRelative();
@@ -266,11 +262,45 @@ public class CLI {
         // TODO:
         StringBuilder stateText = new StringBuilder();
 
-        stateText.append(String.format("Current state: %s-%s-%s-%d",
-                gameHandler.getCurrentState(),
-                gameHandler.isActionCompleted(),
-                gameHandler.getSavedState(),
-                gameHandler.getStudentMoves())).append(Constants.NEWLINE);
+        String instruction = "null";
+        String availableCommands = "no commands :(";
+
+        switch (gameHandler.getCurrentState()){
+            case PLAY_ASSISTANT -> {
+                instruction = "Play an assistant: ";
+                availableCommands = "assistant <number>";
+            }
+            case CHOOSE_CLOUD -> {
+                instruction = "Choose a cloud: ";
+                availableCommands = "cloud <number>";
+            }
+            case MOVE_MOTHER_NATURE -> {
+                instruction = "Move mother nature: ";
+                availableCommands = "mm <island>";
+            }
+            case MOVE_STUDENT -> {
+                instruction = "Move a student (" + gameHandler.getStudentMoves() + " left): ";
+                availableCommands = "ms <color>" +
+                                    Constants.NEWLINE +
+                                    "ms <color> <island>";
+            }
+            case ACTIVATE_CHARACTER -> {
+                instruction = "Activate a character: ";
+                availableCommands = ""; // TODO
+            }
+            case FINISHED -> {
+                instruction = "Finished :";
+            }
+        }
+
+        stateText.append(ansi().bold());
+        stateText.append(instruction).append(ansi().reset());
+        if(gameHandler.isActionCompleted())
+            stateText.append(ansi().fgBrightGreen().a("DONE!").reset());
+        else
+            stateText.append(ansi().fgBrightYellow().a("IN PROGRESS...").reset());
+        stateText.append(Constants.NEWLINE);
+        stateText.append(availableCommands);
 
         print(ansi().a(stateText.toString()).reset(), 11, 1);
     }
@@ -282,11 +312,15 @@ public class CLI {
 
         int count = 0;
         for(Students cloud : model.getClouds()){
-            cloudsText.append("Cloud ").append(count).append(": ");
+            if(cloud.count() == 0)
+                cloudsText.append(ansi().bgBrightRed().a("Cloud " + count + ": -").reset());
+            else {
+                cloudsText.append("Cloud ").append(count).append(": ");
 
-            for(Color key : cloud.keySet()){
-                if(cloud.get(key) > 0)
-                    cloudsText.append(ansi().fg(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
+                for(Color key : cloud.keySet()){
+                    if(cloud.get(key) > 0)
+                        cloudsText.append(ansi().fg(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
+                }
             }
 
             cloudsText.append(Constants.NEWLINE);
@@ -305,11 +339,13 @@ public class CLI {
             Island island = model.getIslands().get(i);
             Students islandStudents = island.getStudents();
 
-            islandStr.append(i).append(" (").append(island.getNumIslands()).append("): ");
+            islandStr.append(i).append(" (").append(island.getNumIslands()).append("):\t");
             if(island.hasMotherNature())
                 islandStr.append(ansi().bgBrightYellow().fg(Ansi.Color.BLACK).a("M").reset().a(" "));
+            else islandStr.append("  ");
             if(island.getNoEntryTiles() > 0)
                 islandStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(island.getNoEntryTiles()).reset());
+            else islandStr.append(" ");
             islandStr.append("  ");
 
             for(Color studentColor : island.getStudents().keySet()){
@@ -327,14 +363,16 @@ public class CLI {
         print(ansi().a(islandStr.toString()).reset(), 14, 1);
     }
 
-    private void printBoard(Player player){
+    private void printBoard(String username){
         StringBuilder boardStr = new StringBuilder();
+
+        Player player = model.usernameToPlayer(username);
 
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 
         // displays the username of the owner if it's not the user's
-        if(!schoolBoardPlayer.getUsername().equals(username))
-            boardStr.append(" (").append(schoolBoardPlayer.getUsername()).append(")");
+        if(!schoolBoardPlayerUsername.equals(username))
+            boardStr.append(" (").append(schoolBoardPlayerUsername).append(")");
 
         boardStr.append(Constants.NEWLINE);
 
@@ -359,7 +397,7 @@ public class CLI {
 
             for(int i = 0; i< Game.MAX_DINING_STUDENTS; i++){
                 if(numOfStudents > 0)
-                    boardStr.append("X");
+                    boardStr.append("S");
                 else if(i > 0 && (i - 2) % 3 == 0) {
                     boardStr.append("C");
                 }else boardStr.append("_");
@@ -369,12 +407,13 @@ public class CLI {
             }
 
             if(professors.contains(studentColor))
-                boardStr.append("P");
+                boardStr.append(" P");
+            else boardStr.append("  ");
 
             boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
         }
 
-        print(ansi().a(boardStr.toString()).reset(), 29, 1);
+        print(ansi().a(boardStr.toString()).reset(), STD_BOARD_POSITION.getX(), STD_BOARD_POSITION.getY());
     }
 
     private void printAssistants(){
@@ -382,9 +421,9 @@ public class CLI {
 
         ArrayList<Assistant> assistants = model.usernameToPlayer(username).getPlayerHand();
         Assistant currentAssistant = model.usernameToPlayer(username).getCurrentAssistant();
-        Map<Assistant, String> playedAssistants = model.getPlayers().stream()
+        Map<String, Assistant> playedAssistantsMap = model.getPlayers().stream()
                 .filter(player -> player.getCurrentAssistant() != null)
-                .collect(Collectors.toMap(Player::getCurrentAssistant, LobbyPlayer::getUsername));
+                .collect(Collectors.toMap(LobbyPlayer::getUsername, Player::getCurrentAssistant));
 
         assistantStr.append(ansi().bold().a("ASSISTANTS").reset()).append(Constants.NEWLINE);
         int count = 0;
@@ -393,20 +432,28 @@ public class CLI {
             // current assistant is green
             if(assistant.equals(currentAssistant))
                 assistantStr.append(ansi().bgBrightGreen().fgBrightDefault());
-            // already played assistants are red
+                // assistants played by other players are yellow
+            else if(playedAssistantsMap.containsValue(assistant))
+                assistantStr.append(ansi().bgYellow().fgBrightDefault());
+                // already played assistants are red
             else if(!assistants.contains(assistant) && !assistant.equals(currentAssistant))
                 assistantStr.append(ansi().bgRed().fgBrightDefault());
-            else if(playedAssistants.containsKey(assistant))
-                assistantStr.append(ansi().bgYellow().fgBrightDefault());
 
-            assistantStr.append(count).append(": ");
+            // if the player has this assistant, the index is displayed (otherwise -)
+            if(assistants.contains(assistant)) {
+                assistantStr.append(count).append(": ");
+                count++;
+            }else assistantStr.append("-: ");
+
             assistantStr.append("P ").append(assistant.getPower()).append(" - ").append("M ").append(assistant.getSteps());
             assistantStr.append(ansi().reset());
-            if(playedAssistants.containsKey(assistant))
-                assistantStr.append(" (").append(playedAssistants.get(assistant)).append(")");
+            if(playedAssistantsMap.containsValue(assistant)) {
+                List<String> usernames = playedAssistantsMap.keySet().stream()
+                        .filter(key -> playedAssistantsMap.get(key).equals(assistant))
+                        .toList();
+                assistantStr.append(" ").append(usernames);
+            }
             assistantStr.append(Constants.NEWLINE);
-
-            count++;
         }
 
         print(ansi().a(assistantStr.toString()).reset(), 29, 50);
@@ -470,13 +517,19 @@ public class CLI {
 
             case "board" -> {
                 if(command.length == 1) // own board
-                    schoolBoardPlayer = model.usernameToPlayer(username);
+                    schoolBoardPlayerUsername = username;
                 else if(command.length == 2) // requested board
-                    this.schoolBoardPlayer = gameHandler.getModel().getPlayers().get(Integer.parseInt(command[1]));
+                    this.schoolBoardPlayerUsername = gameHandler.getModel().getPlayers().get(Integer.parseInt(command[1])).getUsername();
                 else return "Invalid number of arguments";
 
-                printBoard(schoolBoardPlayer);
-                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION, 1);
+                int rowFrom = STD_BOARD_POSITION.getX();
+                int columnFrom = STD_BOARD_POSITION.getY();
+                int rowTo = rowFrom + 14;
+                int columnTo = columnFrom + 35;
+
+                eraseBox(rowFrom, columnFrom, rowTo, columnTo);
+                printBoard(schoolBoardPlayerUsername);
+                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION.getX(), STD_CURSOR_POSITION.getY());
 
                 return null;
             }
@@ -506,7 +559,7 @@ public class CLI {
             }
 
             // game commands
-            case "ac" -> { // ActivateCharacterMessage
+            case "activate" -> { // ActivateCharacterMessage
                 Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
                 PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
 
@@ -529,7 +582,7 @@ public class CLI {
                 return null;
             }
 
-            case "cc" -> {
+            case "cloud" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
                 return null;
@@ -549,19 +602,19 @@ public class CLI {
                 return null;
             }
 
-            case "ns" -> {
+            case "pass" -> {
                 if(command.length != 1) return "Invalid number of arguments";
                 client_socket.send(new NextStateMessage());
                 return null;
             }
 
-            case "pa" -> {
+            case "assistant" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
                 return null;
             }
 
-            case "sc" -> {
+            case "character" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
                 return null;
@@ -581,5 +634,13 @@ public class CLI {
                 )
         );
         out.flush();
+    }
+
+    private void eraseBox(int rowFrom, int columnFrom, int rowTo, int columnTo){
+        for(int i=rowFrom; i<rowTo; i++) {
+            out.print(ansi().cursor(i, columnFrom));
+            for (int k = columnFrom; k < columnTo; k++)
+                out.print(ansi().reset().a(" "));
+        }
     }
 }

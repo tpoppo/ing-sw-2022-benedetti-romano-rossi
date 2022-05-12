@@ -38,27 +38,20 @@ public class NextStateMessage extends ClientMessage {
                 break;
 
             case MOVE_STUDENT:
-                if(gameHandler.getStudentMoves() == 0){
-                    game.nextTurn();
-                    gameHandler.setStudentMoves(3);
-                    if(game.getCurrentPlayer() == null){ // end of the subphase
-                        gameHandler.setCurrentState(GameState.MOVE_MOTHER_NATURE);
-                    }
-                }else{
-                    gameHandler.setStudentMoves(gameHandler.getStudentMoves()-1);
-                }
+                gameHandler.setStudentMoves(gameHandler.getStudentMoves() - 1);
+
+                if(gameHandler.getStudentMoves() == 0)
+                    gameHandler.setCurrentState(GameState.MOVE_MOTHER_NATURE);
+
                 break;
 
             case MOVE_MOTHER_NATURE:
-                game.nextTurn();
-
-                if(game.getCurrentPlayer() == null){ // end of the subphase
-                    gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
-                }
+                gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
                 break;
 
             case CHOOSE_CLOUD:
                 game.nextTurn();
+                gameHandler.setStudentMoves(3);
 
                 if(game.getCurrentPlayer() == null){ // end of the turn
                     /* TODO:
@@ -67,7 +60,8 @@ public class NextStateMessage extends ClientMessage {
                     game.fillClouds();
                     game.beginPlanning();
                     gameHandler.setCurrentState(GameState.PLAY_ASSISTANT);
-                }
+                }else gameHandler.setCurrentState(GameState.MOVE_STUDENT);
+
                 break;
 
             case FINISHED:

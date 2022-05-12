@@ -21,6 +21,7 @@ public class MoveStudentMessage extends ClientMessage {
         super.message_type = MessageType.GAME;
     }
 
+    // FIXME: check color validity (and != null)
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
         StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_STUDENT, false);

@@ -214,7 +214,11 @@ public class GameTest {
                 do {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
-                game.chooseCloud(students);
+                try {
+                    game.chooseCloud(students);
+                } catch (EmptyCloudException e) {
+                    throw new RuntimeException(e);
+                }
                 checkInvariant(game);
 
                 assertEquals(0, students.count());
@@ -364,7 +368,11 @@ public class GameTest {
                 do {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
-                game.chooseCloud(students);
+                try {
+                    game.chooseCloud(students);
+                } catch (EmptyCloudException e) {
+                    throw new RuntimeException(e);
+                }
 
                 assertEquals(0, students.count());
 

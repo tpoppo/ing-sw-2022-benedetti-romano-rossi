@@ -205,8 +205,9 @@ public class Game implements Serializable{
                 assistant_already_played = true;
         }
 
-        // if the assistant has already been played and the player has other assistant, the chosen assistant cannot be played
-        if(assistant_already_played && !current_player.getPlayerHand().containsAll(played_assistants))
+        // if the assistant has already been played and the player has other assistants (not played by anyone),
+        // the chosen assistant cannot be played
+        if(assistant_already_played && !played_assistants.containsAll(current_player.getPlayerHand()))
             throw new AssistantAlreadyPlayedException();
 
         current_player.setCurrentAssistant(assistant);
@@ -435,7 +436,9 @@ public class Game implements Serializable{
      * It moves students from the selected cloud to the player's entrance
      * @param cloud
      */
-    public void chooseCloud(Students cloud) {
+    public void chooseCloud(Students cloud) throws EmptyCloudException {
+        if(cloud.count() == 0) throw new EmptyCloudException();
+
         Students entrance_students = getCurrentPlayer().getSchoolBoard().getEntranceStudents();
 
         for (Map.Entry<Color, Integer> entry : cloud.entrySet()) {
