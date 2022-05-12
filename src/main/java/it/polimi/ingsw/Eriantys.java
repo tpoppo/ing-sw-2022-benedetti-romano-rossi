@@ -14,14 +14,15 @@ public class Eriantys
     public static void main(String[] args ) {
 
         if(args.length == 0) {
-            System.out.println("Requires more parameters");
+            System.out.println("Missing argument (server - cli - cliart - gui)");
             return ;
         }
 
         switch (args[0].toLowerCase()) {
             case "server" -> runServer(args); // app server
             case "cli" -> runCli(args); // app cli
-            case "cliart" -> runCLIArt(args);
+            case "cliart" -> runCLIArt(args); // app cli, but fancy
+            case "gui" -> System.out.println("Not implemented yet"); // app gui
         }
     }
 

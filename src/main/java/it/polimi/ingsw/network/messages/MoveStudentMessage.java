@@ -41,7 +41,7 @@ public class MoveStudentMessage extends ClientMessage {
             try {
                 game.moveStudent(color, island);
             } catch (EmptyMovableException e) { // not enough student of color "color" at the entrance
-                network_manager.addErrorMessage(lobby_player, "not enough student of color \""+color+"\" at the entrance");
+                network_manager.addErrorMessage(lobby_player, "Not enough student of color \""+color+"\" at the entrance");
                 return StatusCode.INVALID_ACTION;
             }
 
@@ -55,7 +55,7 @@ public class MoveStudentMessage extends ClientMessage {
                 network_manager.addErrorMessage(lobby_player, "The dining room is full for the color "+color);
                 return StatusCode.INVALID_ACTION;
             } catch (EmptyMovableException e) { // not enough student of color "color" at the entrance
-                network_manager.addErrorMessage(lobby_player, "not enough student of color \""+color+"\" at the entrance");
+                network_manager.addErrorMessage(lobby_player, "Not enough student of color \""+color+"\" at the entrance");
                 return StatusCode.INVALID_ACTION;
 
             }

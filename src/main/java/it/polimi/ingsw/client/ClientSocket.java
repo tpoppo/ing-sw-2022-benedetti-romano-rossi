@@ -41,7 +41,7 @@ public class ClientSocket {
             output_stream.writeObject(message);
             output_stream.flush();
 
-            LOGGER.log(Level.INFO, "Message sent: {0}", message);
+            LOGGER.log(Level.FINE, "Message sent: {0}", message);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Couldn't send message: {0}", message);
             throw new RuntimeException(e);
@@ -71,7 +71,7 @@ public class ClientSocket {
                     view = (ViewContent) input_stream.readObject();
                 } catch (IOException | ClassNotFoundException e) {
                     if(clientSocket.isClosed() || clientSocket.isOutputShutdown() || clientSocket.isInputShutdown()){
-                        System.out.println(clientSocket.isClosed() + " " + clientSocket.isOutputShutdown() + " " + clientSocket.isInputShutdown());
+                        LOGGER.log(Level.SEVERE, clientSocket.isClosed() + " " + clientSocket.isOutputShutdown() + " " + clientSocket.isInputShutdown());
                         LOGGER.log(Level.SEVERE, "The socket has been closed");
                         System.exit(1); // TODO: this is probably not what we want to do
                     }

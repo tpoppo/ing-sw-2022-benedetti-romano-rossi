@@ -18,9 +18,11 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -29,11 +31,13 @@ public class CLI {
     final protected ClientSocket client_socket;
     final protected PrintStream out;
     final protected Scanner read_stream;
-
-    protected GameHandler gameHandler;
+    private ViewContent view;
+    protected GameHandler gameHandler;  // TODO: clean redundant attributes
     protected Game model;
     protected String username;
     protected Player schoolBoardPlayer;
+    private String errorMessage;
+    private final int STD_CURSOR_POSITION = 48;
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -67,7 +71,7 @@ public class CLI {
 
         this.username = username;
 
-        renderState();
+        startRendering();
 
         while(true){
             getInput();
@@ -77,8 +81,9 @@ public class CLI {
     private void getInput(){
         read_stream.reset();
         String input = read_stream.nextLine();
-        String out = parseInput(input);
-        this.out.println(out);
+        this.errorMessage = parseInput(input);
+
+        if(errorMessage != null) printClientError(); // for clientside errors
     }
 
     /**
@@ -90,10 +95,9 @@ public class CLI {
         out.flush();
     }
 
-    private void renderState(){
+    private void startRendering(){
         new Thread(() -> {
             while(true){
-                ViewContent view;
                 synchronized (client_socket.mutex){
                     while(client_socket.getView() == null) {
                         try {
@@ -104,29 +108,26 @@ public class CLI {
                     }
                 }
 
-                view = client_socket.getView();
+                this.view = client_socket.getView();
+                // FIXME: synchronized for view usage?
+                // if there's an error message, it overwrites the current one
+                if(view.getErrorMessage() != null)
+                    this.errorMessage = view.getErrorMessage();
 
-                LOGGER.log(Level.INFO, "Rendered view: {0}", view);
+                LOGGER.log(Level.FINE, "Rendered view: {0}", view);
 
                 clearScreen();
 
-                // print server errors
-                if(view.getErrorMessage() != null) out.println(view.getErrorMessage());
-
                 if(view.getCurrentHandler() == null){ // we are in the menu
                     printMenu();
-                    out.print("\n> ");
                 } else{
                     switch (view.getCurrentHandler()) {
-                        case LOBBY -> { // we are in the lobby
-                            printLobby();
-                            out.print("\n> ");
-                        }
+                        case LOBBY -> // we are in the lobby
+                                printLobby();
                         case GAME -> { // we are in the game
                             this.gameHandler = client_socket.getView().getGameHandler();
                             this.model = gameHandler.getModel();
                             printGame();
-                            print(ansi().a("> ").reset(), 48, 1);
                         }
                     }
                 }
@@ -141,7 +142,6 @@ public class CLI {
 
     protected void printMenu() {
         out.println(Constants.MENU);
-        ViewContent view = client_socket.getView();
         ArrayList<ReducedLobby> reduced_lobbies = view.getLobbies();
 
         if(!reduced_lobbies.isEmpty())
@@ -154,12 +154,15 @@ public class CLI {
         out.println();
         out.println("create <max players> - create a new lobby");
         out.println("join <lobby id> - join the lobby with ID <lobby id>");
+
+        out.print(ansi().cursorDown(2).a("> "));
+
+        if(errorMessage != null) printErrorRelative();
     }
 
     protected void printLobby(){
         out.println(Constants.LOBBY);
 
-        ViewContent view = client_socket.getView();
         LobbyHandler lobby_handler = view.getLobbyHandler();
         ArrayList<LobbyPlayer> players = lobby_handler.getPlayers();
 
@@ -180,6 +183,10 @@ public class CLI {
         out.println();
         out.println("start <expert mode> - start the game");
         out.println("wizard <id> - choose wizard");
+
+        out.print(ansi().cursorDownLine(2).a("> "));
+
+        if(errorMessage != null) printErrorRelative();
     }
 
     protected void printGame(){
@@ -187,7 +194,7 @@ public class CLI {
 
         // Banner length is 63
         print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), 2, 80);
-
+        printPlayers();
         printCurrentPlayer();
         printState();
         printIslands();
@@ -204,6 +211,11 @@ public class CLI {
             printCoins();
             printCharacters();
         }
+
+        print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION, 1);
+
+        // print server errors
+        if(errorMessage != null) printErrorRelative();
     }
 
     private void printCurrentPlayer(){
@@ -220,6 +232,34 @@ public class CLI {
             );
 
         print(ansi().a(text.toString()).reset(), 10, 1);
+    }
+
+    private void printErrorRelative(){
+        out.print(ansi().cursorDownLine(2).eraseLine());
+        out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
+        out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
+    }
+
+    private void printClientError(){
+        out.print(ansi().cursorDownLine(1).eraseLine());
+        out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
+        out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
+    }
+
+    private void printPlayers(){
+        StringBuilder playersStr = new StringBuilder();
+
+        playersStr.append(ansi().bold().a("PLAYERS").reset()).append(Constants.NEWLINE);
+
+        int count = 0;
+        ArrayList<Player> players = model.getPlayers();
+        for(Player player : players) {
+            playersStr.append(count).append(": ").append(player.getUsername()).append(Constants.NEWLINE);
+
+            count++;
+        }
+
+        print(ansi().a(playersStr.toString()).reset(), 4, 80);
     }
 
     private void printState(){
@@ -267,7 +307,7 @@ public class CLI {
 
             islandStr.append(i).append(" (").append(island.getNumIslands()).append("): ");
             if(island.hasMotherNature())
-                islandStr.append(ansi().bg(Ansi.Color.YELLOW).fg(Ansi.Color.BLACK).a("M").reset().a(" "));
+                islandStr.append(ansi().bgBrightYellow().fg(Ansi.Color.BLACK).a("M").reset().a(" "));
             if(island.getNoEntryTiles() > 0)
                 islandStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(island.getNoEntryTiles()).reset());
             islandStr.append("  ");
@@ -290,7 +330,13 @@ public class CLI {
     private void printBoard(Player player){
         StringBuilder boardStr = new StringBuilder();
 
-        boardStr.append(ansi().bold().a("SCHOOLBOARD").reset()).append(Constants.NEWLINE);
+        boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
+
+        // displays the username of the owner if it's not the user's
+        if(!schoolBoardPlayer.getUsername().equals(username))
+            boardStr.append(" (").append(schoolBoardPlayer.getUsername()).append(")");
+
+        boardStr.append(Constants.NEWLINE);
 
         Students entranceStudents = player.getSchoolBoard().getEntranceStudents();
         Students diningStudents = player.getSchoolBoard().getDiningStudents();
@@ -336,6 +382,9 @@ public class CLI {
 
         ArrayList<Assistant> assistants = model.usernameToPlayer(username).getPlayerHand();
         Assistant currentAssistant = model.usernameToPlayer(username).getCurrentAssistant();
+        Map<Assistant, String> playedAssistants = model.getPlayers().stream()
+                .filter(player -> player.getCurrentAssistant() != null)
+                .collect(Collectors.toMap(Player::getCurrentAssistant, LobbyPlayer::getUsername));
 
         assistantStr.append(ansi().bold().a("ASSISTANTS").reset()).append(Constants.NEWLINE);
         int count = 0;
@@ -344,14 +393,17 @@ public class CLI {
             // current assistant is green
             if(assistant.equals(currentAssistant))
                 assistantStr.append(ansi().bgBrightGreen().fgBrightDefault());
-
             // already played assistants are red
-            if(!assistants.contains(assistant))
+            else if(!assistants.contains(assistant) && !assistant.equals(currentAssistant))
                 assistantStr.append(ansi().bgRed().fgBrightDefault());
+            else if(playedAssistants.containsKey(assistant))
+                assistantStr.append(ansi().bgYellow().fgBrightDefault());
 
             assistantStr.append(count).append(": ");
             assistantStr.append("P ").append(assistant.getPower()).append(" - ").append("M ").append(assistant.getSteps());
             assistantStr.append(ansi().reset());
+            if(playedAssistants.containsKey(assistant))
+                assistantStr.append(" (").append(playedAssistants.get(assistant)).append(")");
             assistantStr.append(Constants.NEWLINE);
 
             count++;
@@ -404,30 +456,53 @@ public class CLI {
 
     private String parseInput(String s){
         String[] command = s.split(" ");
+
         if(command.length == 0) return "No command found";
         switch (command[0]) {
+            // clientside commands
+            case "clean" -> { // removes the error message (and cleans errors displayed with printErrorRelative)
+                this.errorMessage = null;
+                out.print(ansi().cursorDownLine(1).eraseLine());
+                out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
+
+                return null;
+            }
+
+            case "board" -> {
+                if(command.length == 1) // own board
+                    schoolBoardPlayer = model.usernameToPlayer(username);
+                else if(command.length == 2) // requested board
+                    this.schoolBoardPlayer = gameHandler.getModel().getPlayers().get(Integer.parseInt(command[1]));
+                else return "Invalid number of arguments";
+
+                printBoard(schoolBoardPlayer);
+                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION, 1);
+
+                return null;
+            }
+
             // menu commands
             case "create" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new CreateLobbyMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
             case "join" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new JoinLobbyMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
             // lobby commands
             case "start" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new StartGameMessage(Boolean.parseBoolean(command[1])));
-                return "";
+                return null;
             }
             case "wizard" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new ChooseWizardMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
             // game commands
@@ -451,19 +526,19 @@ public class CLI {
                 }
 
                 client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
-                return "";
+                return null;
             }
 
             case "cc" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
             case "mm" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new MoveMotherNatureMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
             case "ms" -> {
@@ -471,24 +546,25 @@ public class CLI {
                 if (command.length > 3 || command.length < 2) return "Invalid number of arguments";
                 if(command.length == 3) island_position = Integer.parseInt(command[2]);
                 client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
+                return null;
             }
 
             case "ns" -> {
                 if(command.length != 1) return "Invalid number of arguments";
                 client_socket.send(new NextStateMessage());
-                return "";
+                return null;
             }
 
             case "pa" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
             case "sc" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
-                return "";
+                return null;
             }
 
         }

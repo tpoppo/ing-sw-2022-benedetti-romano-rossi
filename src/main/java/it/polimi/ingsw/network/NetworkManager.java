@@ -65,7 +65,10 @@ public class NetworkManager {
                 if(!message_queue.isEmpty()){
                     MessageEnvelope envelope = message_queue.remove();
                     StatusCode statusCode = envelope.message().handle(this, envelope.sender());
-                    System.out.println(envelope.message() + " => " + statusCode);
+                    LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
+
+                    if(!errorMessages.isEmpty())
+                        LOGGER.log(Level.WARNING, errorMessages.toString());
 
                     if(statusCode == StatusCode.NOT_IMPLEMENTED){
                         LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
@@ -74,9 +77,19 @@ public class NetworkManager {
                     if(statusCode.equals(StatusCode.OK))
                         notifySubscribers();
 
-                    // saves the networkManager state for persistence
-                    // FIXME: uncomment for persistence
-                    // if(current_handler.equals(HandlerType.GAME)) saveState();
+                        // saves the networkManager state for persistence
+                        // FIXME: uncomment for persistence
+                        // if(current_handler.equals(HandlerType.GAME)) saveState();
+                    else {
+                        String subscriberUsername = envelope.sender().getUsername();
+                        ConnectionCEO subscriber = subscribers.stream()
+                                .filter(x -> x.getPlayer().getUsername().equals(subscriberUsername))
+                                .reduce((a, b) -> {
+                                    throw new IllegalStateException("Multiple elements: " + a + ", " + b);
+                                }).get(); // should always be != null
+
+                        notifyError(subscriber);
+                    }
                 }
             }
         }).start();
@@ -116,21 +129,34 @@ public class NetworkManager {
         }
     }
 
+    // sends an updated viewContent to all the subscribers
     private void notifySubscribers(){
         // sends view updated to subscribers
         for(ConnectionCEO subscriber : subscribers) {
-            String errorMessage = errorMessages.get(subscriber.getPlayer());
-            errorMessages.remove(subscriber.getPlayer());
+            ViewContent viewContent = null;
 
-            ViewContent viewContent;
-            if(current_handler == HandlerType.GAME){
-                viewContent = new GameContent(game_handler, errorMessage);
-            } else{
-                viewContent = new LobbyContent(lobby_handler, errorMessage);
+            switch (current_handler){
+                case GAME -> viewContent = new GameContent(game_handler, null);
+                case LOBBY -> viewContent = new LobbyContent(lobby_handler, null);
             }
 
             subscriber.sendViewContent(viewContent);
         }
+    }
+
+    // sends a viewContent containing an errorMessage to the given subscriber
+    private void notifyError(ConnectionCEO subscriber){
+        ViewContent viewContent = null;
+
+        String errorMessage = errorMessages.get(subscriber.getPlayer());
+        errorMessages.remove(subscriber.getPlayer());
+
+        switch (current_handler){
+            case GAME -> viewContent = new GameContent(game_handler, errorMessage);
+            case LOBBY -> viewContent = new LobbyContent(lobby_handler, errorMessage);
+        }
+
+        subscriber.sendViewContent(viewContent);
     }
 
     public void subscribe(ConnectionCEO connectionCEO){
