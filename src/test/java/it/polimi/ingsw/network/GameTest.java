@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.*;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -591,4 +592,56 @@ public class GameTest {
         assertEquals(player1, islands.get(0).getOwner());
         assertEquals(player2, islands.get(islands.size() - 1).getOwner());
     }*/
+
+    //Test when a player play the same assistant card of the previous player in the same turn
+    @Test
+    public void AssistantAlreadyPlayedExceptionTest1() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
+        LobbyHandler lobby = new LobbyHandler(0, 2);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        player1.setWizard(1);
+        player2.setWizard(2);
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+        game.beginPlanning();
+
+        ArrayList<Assistant> assistants_player1 = game.getPlayers().get(0).getPlayerHand();
+        ArrayList<Assistant> assistants_player2 = game.getPlayers().get(1).getPlayerHand();
+
+        game.playAssistant(assistants_player1.get(0));
+        game.nextTurn();
+        assertThrows(AssistantAlreadyPlayedException.class, () -> game.playAssistant(assistants_player2.get(0)));
+    }
+
+    //Test when a player must play the same assistant card of the previous player because it's the only assistant card that he has
+    @Test
+    public void AssistantAlreadyPlayedExceptionTest2() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
+        LobbyHandler lobby = new LobbyHandler(0, 2);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        player1.setWizard(1);
+        player2.setWizard(2);
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+
+        game.beginPlanning();
+        ArrayList<Assistant> assistants_player1 = game.getCurrentPlayer().getPlayerHand();
+        game.nextTurn();
+        ArrayList<Assistant> assistants_player2 = game.getCurrentPlayer().getPlayerHand();
+        while(assistants_player1.size() > 1){
+            assistants_player1.remove(assistants_player1.get(0));
+            assistants_player2.remove(assistants_player2.get(0));
+        }
+        game.beginPlanning();
+        game.playAssistant(assistants_player1.get(0));
+        game.nextTurn();
+        game.playAssistant(assistants_player2.get(0));
+        assertEquals(0, game.getCurrentPlayer().getPlayerHand().size());
+    }
 }
