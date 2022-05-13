@@ -22,6 +22,11 @@ public class ChooseWizardMessage extends ClientMessage{
             return StatusCode.INVALID_ACTION;
         }
 
+        if(wizard < 1 || wizard > 4){
+            network_manager.addErrorMessage(lobby_player, "The value must be between 1 and 4. Given: "+lobby_player.getWizard());
+            return StatusCode.INVALID_ACTION;
+        }
+
         try {
             network_manager.getLobbyHandler().chooseWizard(wizard, lobby_player);
         } catch (WizardNotAvailableException e) {

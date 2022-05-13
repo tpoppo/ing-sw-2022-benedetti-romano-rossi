@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.util.Set;
+
 public class Constants {
     // match constants
     public static final int MIN_PLAYERS = 2;
@@ -33,6 +35,8 @@ public class Constants {
 
     public static final String NEWLINE = String.format("%n");
 
+    public static final Set<String> TRUE_STRING = Set.of("yes", "true", "1");  // immutable set of true
+    public static final Set<String> FALSE_STRING = Set.of("no", "false", "0"); // immutable set of false
 
     public static String ERIANTYS = """
 
@@ -84,8 +88,9 @@ public class Constants {
     // Server info
     public static final String SERVER_ADDR = "127.0.0.1";
 
-    public static final int SERVER_PORT = 42069; // nice
+    public static final int SERVER_PORT = 52069; // nice
 
     // Path for saves
     public static final String PATH_SAVES = "src/main/SavedGames";
+
 }

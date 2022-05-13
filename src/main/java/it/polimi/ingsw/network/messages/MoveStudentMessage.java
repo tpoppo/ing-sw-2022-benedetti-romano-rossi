@@ -21,7 +21,6 @@ public class MoveStudentMessage extends ClientMessage {
         super.message_type = MessageType.GAME;
     }
 
-    // FIXME: check color validity (and != null)
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
         StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.MOVE_STUDENT, false);
@@ -29,6 +28,11 @@ public class MoveStudentMessage extends ClientMessage {
 
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
+
+        if(color == null){
+            network_manager.addErrorMessage(lobby_player, "Missing color");
+            return StatusCode.INVALID_ACTION;
+        }
 
         if(island_position != null) {
             // Invalid mother_nature_position value
@@ -47,9 +51,7 @@ public class MoveStudentMessage extends ClientMessage {
             }
 
         }else{
-            if(color == null){
-                return StatusCode.INVALID_ACTION;
-            }
+
             try {
                 game.moveStudent(color);
             } catch (FullDiningRoomException e) {

@@ -32,10 +32,11 @@ public class MenuManager {
 
                     LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
 
-                    if(statusCode.equals(StatusCode.OK))
+                    if(statusCode.equals(StatusCode.OK)){
                         notifySubscribers();
-                    else{
+                    } else{
                         String subscriberUsername = envelope.sender().getUsername();
+                        //FIXME: this can be null when JoinLobbyMessage is sent in the lobby
                         ConnectionCEO subscriber = subscribers.stream()
                                 .filter(x -> x.getPlayer().getUsername().equals(subscriberUsername))
                                 .reduce((a, b) -> {
