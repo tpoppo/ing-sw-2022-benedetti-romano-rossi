@@ -36,8 +36,17 @@ public class CLI {
     protected String username;
     protected String schoolBoardPlayerUsername;
     private String errorMessage;
+
     private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(48, 1);
-    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(29, 1);
+    private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
+    private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(4, 80);
+    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(30, 1);
+    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(22, 50);
+    private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(10, 1);
+    private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(15, 50);
+    private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(15, 1);
+    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
+    private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -194,40 +203,23 @@ public class CLI {
         print(ansi().a(Constants.ERIANTYS), 1, 1);
 
         // Banner length is 63
-        print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), 2, 80);
-        printPlayers();
-        printCurrentPlayer();
-        printState();
-        printIslands();
-        printClouds();
-        printAssistants();
-        printBoard(schoolBoardPlayerUsername);
+        print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), STD_USERNAME_POSITION);
+        print(drawPlayers(), STD_PLAYERS_POSITION);
+        print(drawState(), STD_STATUS_POSITION);
+        print(drawIslands(), STD_ISLANDS_POSITION);
+        print(drawClouds(), STD_CLOUDS_POSITION);
+        print(drawAssistants(), STD_ASSISTANTS_POSITION);
+        print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
 
         if(model.getExpertMode()) {
-            printCoins();
-            printCharacters();
+            print(drawCoins(), STD_COINS_POSITION);
+            print(drawCharacters(), STD_CHARACTER_POSITION);
         }
 
-        print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION.getX(), STD_CURSOR_POSITION.getY());
+        print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
 
         // print server errors
         if(errorMessage != null) printErrorRelative();
-    }
-
-    private void printCurrentPlayer(){
-        StringBuilder text = new StringBuilder();
-
-        if(model.getCurrentPlayer().getUsername().equals(username))
-            text.append(ansi().bold().fg(Ansi.Color.GREEN).a("IT'S YOUR TURN!").reset());
-        else
-            text.append(ansi()
-                        .bold()
-                        .a("TURN: ")
-                        .reset()
-                        .a(model.getCurrentPlayer().getUsername())
-            );
-
-        print(ansi().a(text.toString()).reset(), 10, 1);
     }
 
     private void printErrorRelative(){
@@ -242,7 +234,7 @@ public class CLI {
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
     }
 
-    private void printPlayers(){
+    private String drawPlayers(){
         StringBuilder playersStr = new StringBuilder();
 
         playersStr.append(ansi().bold().a("PLAYERS").reset()).append(Constants.NEWLINE);
@@ -255,12 +247,22 @@ public class CLI {
             count++;
         }
 
-        print(ansi().a(playersStr.toString()).reset(), 4, 80);
+        return playersStr.toString();
     }
 
-    private void printState(){
-        // TODO:
+    private String drawState(){
         StringBuilder stateText = new StringBuilder();
+
+        if(model.getCurrentPlayer().getUsername().equals(username))
+            stateText.append(ansi().bold().fg(Ansi.Color.GREEN).a("IT'S YOUR TURN!").reset());
+        else
+            stateText.append(ansi()
+                    .bold()
+                    .a("TURN: ")
+                    .reset()
+                    .a(model.getCurrentPlayer().getUsername())
+            );
+        stateText.append(Constants.NEWLINE);
 
         String instruction = "null";
         String availableCommands = "no commands :(";
@@ -302,10 +304,10 @@ public class CLI {
         stateText.append(Constants.NEWLINE);
         stateText.append(availableCommands);
 
-        print(ansi().a(stateText.toString()).reset(), 11, 1);
+        return stateText.toString();
     }
 
-    private void printClouds(){
+    private String drawClouds(){
         StringBuilder cloudsText = new StringBuilder();
 
         cloudsText.append(ansi().bold().a("CLOUDS").reset()).append(Constants.NEWLINE);
@@ -327,10 +329,10 @@ public class CLI {
             count++;
         }
 
-        print(ansi().a(cloudsText.toString()).reset(), 14, 50);
+        return cloudsText.toString();
     }
 
-    private void printIslands(){
+    private String drawIslands(){
         StringBuilder islandStr = new StringBuilder();
 
         islandStr.append(ansi().bold().a("ISLANDS").reset()).append(Constants.NEWLINE);
@@ -360,10 +362,10 @@ public class CLI {
             islandStr.append(Constants.NEWLINE);
         }
 
-        print(ansi().a(islandStr.toString()).reset(), 14, 1);
+        return islandStr.toString();
     }
 
-    private void printBoard(String username){
+    private String drawBoard(String username){
         StringBuilder boardStr = new StringBuilder();
 
         Player player = model.usernameToPlayer(username);
@@ -413,10 +415,10 @@ public class CLI {
             boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
         }
 
-        print(ansi().a(boardStr.toString()).reset(), STD_BOARD_POSITION.getX(), STD_BOARD_POSITION.getY());
+        return boardStr.toString();
     }
 
-    private void printAssistants(){
+    private String drawAssistants(){
         StringBuilder assistantStr = new StringBuilder();
 
         ArrayList<Assistant> assistants = model.usernameToPlayer(username).getPlayerHand();
@@ -456,10 +458,10 @@ public class CLI {
             assistantStr.append(Constants.NEWLINE);
         }
 
-        print(ansi().a(assistantStr.toString()).reset(), 29, 50);
+        return assistantStr.toString();
     }
 
-    private void printCoins(){
+    private String drawCoins(){
         StringBuilder coinsStr = new StringBuilder();
 
         int coins = model.getCurrentPlayer().getCoins();
@@ -467,18 +469,18 @@ public class CLI {
         coinsStr.append(ansi().bold().a("COINS: ").reset());
         coinsStr.append(ansi().fgBrightYellow().a(coins));
 
-        print(ansi().a(coinsStr.toString()).reset(), 30, 33);
+        return coinsStr.toString();
     }
 
-    private void printCharacters(){
-        StringBuilder text = new StringBuilder();
+    private String drawCharacters(){
+        StringBuilder charStr = new StringBuilder();
 
         ArrayList<Character> characters = model.getCharacters();
-        text.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
+        charStr.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
         for(Character character : characters){
             // TODO: print character's specific features (entry tiles, students, ...)
             //  decorators?
-            text.append(character.getClass().getName()).append(" - Cost: ").append(character.getCost());
+            charStr.append(character.getClass().getSimpleName()).append(" - Cost: ").append(character.getCost()).append(" ");
 
             // print card's specific students
             // FIXME: is null check useful?
@@ -487,18 +489,18 @@ public class CLI {
                     int numOfStudents = character.getStudents().get(studentColor);
 
                     if (numOfStudents > 0)
-                        text.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(numOfStudents).reset().a(" "));
+                        charStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(numOfStudents).reset().a(" "));
                 }
             }
 
             // print card's specific noEntryTiles
             if(character.getNoEntryTiles() > 0)
-                text.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(character.getNoEntryTiles()).reset());
+                charStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(character.getNoEntryTiles()).reset());
 
-            text.append(Constants.NEWLINE);
+            charStr.append(Constants.NEWLINE);
         }
 
-        print(ansi().a(text.toString()).reset(), 40, 19);
+        return charStr.toString();
     }
 
     private String parseInput(String s){
@@ -528,8 +530,8 @@ public class CLI {
                 int columnTo = columnFrom + 35;
 
                 eraseBox(rowFrom, columnFrom, rowTo, columnTo);
-                printBoard(schoolBoardPlayerUsername);
-                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION.getX(), STD_CURSOR_POSITION.getY());
+                print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
+                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
 
                 return null;
             }
@@ -549,6 +551,7 @@ public class CLI {
             // lobby commands
             case "start" -> {
                 if (command.length != 2) return "Invalid number of arguments";
+                // FIXME: parseBoolean is probably not user-friendly
                 client_socket.send(new StartGameMessage(Boolean.parseBoolean(command[1])));
                 return null;
             }
@@ -579,18 +582,22 @@ public class CLI {
                 }
 
                 client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
             case "cloud" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
+            // FIXME: maybe it's better to specify the number of steps (instead of the arrival island's id)
             case "mm" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new MoveMotherNatureMessage(Integer.parseInt(command[1])));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -599,6 +606,7 @@ public class CLI {
                 if (command.length > 3 || command.length < 2) return "Invalid number of arguments";
                 if(command.length == 3) island_position = Integer.parseInt(command[2]);
                 client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -611,12 +619,14 @@ public class CLI {
             case "assistant" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
             case "character" -> {
                 if(command.length != 2) return "Invalid number of arguments";
                 client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
+                if(!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -634,6 +644,25 @@ public class CLI {
                 )
         );
         out.flush();
+    }
+
+    private void print(Ansi s, Pair<Integer, Integer> coordinates){
+        print(s, coordinates.getX(), coordinates.getY());
+    }
+
+    private void print(String s, int row, int column) {
+        out.print(ansi().cursor(row, column).a(
+                        s.replaceAll(
+                                Constants.NEWLINE,
+                                ansi().a(Constants.NEWLINE).cursorRight(column - 1).toString()
+                        )
+                )
+        );
+        out.flush();
+    }
+
+    private void print(String s, Pair<Integer, Integer> coordinates){
+        print(s, coordinates.getX(), coordinates.getY());
     }
 
     private void eraseBox(int rowFrom, int columnFrom, int rowTo, int columnTo){
