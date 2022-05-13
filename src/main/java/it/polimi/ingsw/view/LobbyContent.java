@@ -5,8 +5,8 @@ import it.polimi.ingsw.network.HandlerType;
 import it.polimi.ingsw.controller.LobbyHandler;
 
 public class LobbyContent extends ViewContent {
-    private final String errorMessage;
     private final LobbyHandler lobbyHandler;
+    private final String errorMessage;
 
     public LobbyContent(LobbyHandler lobbyHandler, String errorMessage) {
         this.errorMessage = errorMessage;

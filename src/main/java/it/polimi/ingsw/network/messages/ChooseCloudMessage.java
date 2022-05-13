@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.exceptions.EmptyCloudException;
 
 public class ChooseCloudMessage extends ClientMessage {
-
     int cloud_position;
 
     public ChooseCloudMessage(int cloud_position) {

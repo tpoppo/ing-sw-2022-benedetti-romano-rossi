@@ -11,9 +11,16 @@ import java.util.stream.Collectors;
 
 public class MenuContent extends ViewContent {
     private final ArrayList<ReducedLobby> lobbies;
+    private final String errorMessage;
 
     public MenuContent(){
+        this(null);
+    }
+
+    public MenuContent(String errorMessage){
         this.lobbies = new ArrayList<>();
+
+        this.errorMessage = errorMessage;
 
         List<NetworkManager> lobbies = Server.getInstance().getLobbies();
         lobbies = lobbies.stream().filter(x -> x.getCurrentHandler().equals(HandlerType.LOBBY)).collect(Collectors.toList());
@@ -27,6 +34,11 @@ public class MenuContent extends ViewContent {
     @Override
     public ArrayList<ReducedLobby> getLobbies() {
         return lobbies;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     @Override

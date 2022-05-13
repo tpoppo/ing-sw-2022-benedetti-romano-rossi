@@ -12,9 +12,11 @@ public class JoinLobbyMessage extends ClientMessage {
         super.message_type = MessageType.MENU;
     }
 
-    public StatusCode handle(ConnectionCEO connectionCEO, LobbyPlayer player) {
+    @Override
+    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
         Server server = Server.getInstance();
         Optional<NetworkManager> network_manager = server.joinLobby(id, player);
+
         if(network_manager.isPresent()){
             connectionCEO.setNetworkManager(network_manager.get());
             MenuManager.getInstance().unsubscribe(connectionCEO);
@@ -23,6 +25,7 @@ public class JoinLobbyMessage extends ClientMessage {
             return StatusCode.OK;
         }
 
+        menuManager.addErrorMessage(player, "Please choose a valid lobby");
         return StatusCode.INVALID_ACTION;
     }
 

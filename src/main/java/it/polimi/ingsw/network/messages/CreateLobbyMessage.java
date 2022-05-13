@@ -20,9 +20,11 @@ public class CreateLobbyMessage extends ClientMessage {
      * @param player The caller (the current lobby player)
      * @return the status response.
      */
-    public StatusCode handle(ConnectionCEO connectionCEO, LobbyPlayer player) {
+    @Override
+    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
         // We check whether max_players is 2 or 3?
         if(max_players != 3 && max_players != 2) {
+            menuManager.addErrorMessage(player, "Lobby size can be only 2 or 3! Given : " + max_players);
             return StatusCode.INVALID_ACTION;
         }
 
@@ -32,6 +34,7 @@ public class CreateLobbyMessage extends ClientMessage {
         try {
             lobby_handler.addPlayer(player);
         } catch (FullLobbyException e) { // It means that the lobby is full. It should be impossible.
+            menuManager.addErrorMessage(player, "Lobby is full (this shouldn't have happened) :/");
             return StatusCode.INVALID_ACTION;
         }
         connectionCEO.setNetworkManager(network_manager);

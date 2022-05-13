@@ -9,8 +9,8 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class ActivateCharacterMessage extends ClientMessage {
-
     PlayerChoicesSerializable player_choices;
+
     public ActivateCharacterMessage(PlayerChoicesSerializable player_choices) {
         this.player_choices = player_choices;
         super.message_type = MessageType.GAME;
@@ -29,6 +29,7 @@ public class ActivateCharacterMessage extends ClientMessage {
         try {
             game.activateCharacter(character, player_choices.toPlayerChoices(game));
         } catch (BadPlayerChoiceException e) {
+            // TODO: add error message for client
             return StatusCode.INVALID_ACTION;
         }
 

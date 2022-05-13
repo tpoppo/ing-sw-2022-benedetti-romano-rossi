@@ -46,6 +46,7 @@ public class NextStateMessage extends ClientMessage {
                 break;
 
             case MOVE_MOTHER_NATURE:
+                // TODO: if(game.checkVictory()) ...
                 gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
                 break;
 

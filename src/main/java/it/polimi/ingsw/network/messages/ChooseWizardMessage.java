@@ -16,6 +16,7 @@ public class ChooseWizardMessage extends ClientMessage{
         StatusCode status_code = preamble_lobby_check(network_manager, lobby_player);
         if(status_code != StatusCode.EMPTY) return status_code;
 
+        // TODO: better error handling
         if(lobby_player.getWizard() != null) {
             network_manager.addErrorMessage(lobby_player, "You have already chosen a wizard");
             return StatusCode.INVALID_ACTION;
