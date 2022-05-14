@@ -690,4 +690,36 @@ public class GameTest {
             assertEquals(second_player, game.getCurrentPlayer());
         }
     }
+
+    @RepeatedTest(100)
+    public void moveMotherNatureTest() throws FullLobbyException, EmptyBagException {
+        LobbyHandler lobby = new LobbyHandler(0, 2);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        player1.setWizard(1);
+        player2.setWizard(2);
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+        Random rng = new Random();
+
+        ArrayList<Island> islands = game.getIslands();
+
+        for(int i=0; i<5; i++){
+            int random = rng.nextInt(2);
+            if(random == 0){
+                game.moveMotherNature(islands.get(rng.nextInt(islands.size())));
+            }else{
+                game.conquerIsland();
+            }
+            int count_mother_nature = 0;
+            for(Island island : islands){
+                if(island.hasMotherNature()) count_mother_nature++;
+            }
+            //Check that mothernature is only in one island
+            assertEquals(1, count_mother_nature);
+        }
+    }
 }
