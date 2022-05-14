@@ -43,6 +43,9 @@ public abstract class ClientMessage implements Serializable {
 
         Game game = gameHandler.getModel();
 
+        // FIXME: this error gets displayed when trying to move a student not possessed to the dining room
+        //  after a server crash
+        //  UPDATE: it happens even if the server hasn't crashed, it seems like it overrides other errors
         // Invalid state. It must be (current_state=required_state, action_completed=False)
         if ((required_state != null && gameHandler.getCurrentState() != required_state) || gameHandler.isActionCompleted() != action_completed) {
             network_manager.addErrorMessage(lobby_player, "There is a time and place for everything but not now!");

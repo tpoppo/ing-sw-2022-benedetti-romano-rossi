@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,7 @@ public class NetworkManager {
     private static int count = 0;
     public final int ID;
     private HandlerType current_handler;
-    private final ConcurrentLinkedQueue<MessageEnvelope> message_queue;
+    private final LinkedBlockingQueue<MessageEnvelope> message_queue;
     private final HashMap<LobbyPlayer, String> errorMessages;
     private LobbyHandler lobby_handler;
     private GameHandler game_handler;
@@ -36,7 +38,7 @@ public class NetworkManager {
     private NetworkManager(int max_players){
         ID = count;
         count++;
-        message_queue = new ConcurrentLinkedQueue<>();
+        message_queue = new LinkedBlockingQueue<>();
         errorMessages = new HashMap<>();
         subscribers = new HashSet<>();
 
@@ -50,8 +52,9 @@ public class NetworkManager {
     private NetworkManager(GameHandler gameHandler){
         ID = count;
         count++;
-        message_queue = new ConcurrentLinkedQueue<>();
+        message_queue = new LinkedBlockingQueue<>();
         errorMessages = new HashMap<>();
+        subscribers = new HashSet<>();
 
         current_handler = HandlerType.GAME;
         this.game_handler = gameHandler;
@@ -62,34 +65,53 @@ public class NetworkManager {
     private void handleMessages(){
         new Thread(() -> {
             while(true){
-                if(!message_queue.isEmpty()){
-                    MessageEnvelope envelope = message_queue.remove();
-                    StatusCode statusCode = envelope.message().handle(this, envelope.sender());
-                    LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
+                LOGGER.log(Level.FINE, "Handling message");
 
-                    if(!errorMessages.isEmpty())
-                        LOGGER.log(Level.WARNING, errorMessages.toString());
+                MessageEnvelope envelope = null;
+                try {
+                    envelope = message_queue.take(); // blocking (LinkedBlockingQueue)
+                } catch (InterruptedException e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                    throw new RuntimeException(e);
+                }
 
-                    if(statusCode == StatusCode.NOT_IMPLEMENTED){
-                        LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
-                    }
+                LOGGER.log(Level.FINE, "Message found: {}", envelope);
+                StatusCode statusCode = envelope.message().handle(this, envelope.sender());
+                LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
 
-                    if(statusCode.equals(StatusCode.OK))
-                        notifySubscribers();
+                if(!errorMessages.isEmpty())
+                    LOGGER.log(Level.WARNING, errorMessages.toString());
 
-                        // saves the networkManager state for persistence
-                        // FIXME: uncomment for persistence
-                        // if(current_handler.equals(HandlerType.GAME)) saveState();
-                    else {
-                        String subscriberUsername = envelope.sender().getUsername();
-                        ConnectionCEO subscriber = subscribers.stream()
-                                .filter(x -> x.getPlayer().getUsername().equals(subscriberUsername))
-                                .reduce((a, b) -> {
-                                    throw new IllegalStateException("Multiple elements: " + a + ", " + b);
-                                }).get(); // should always be != null
+                if(statusCode == StatusCode.NOT_IMPLEMENTED){
+                    LOGGER.log(Level.SEVERE, "This message has not been implemented correctly: {0}");
+                }
 
-                        notifyError(subscriber);
-                    }
+                if(statusCode.equals(StatusCode.OK)) {
+                    notifySubscribers();
+                    LOGGER.log(Level.INFO, "Subscribers notified");
+
+                    // saves the networkManager state for persistence
+                    // FIXME: uncomment for persistence
+
+                     if(current_handler.equals(HandlerType.GAME)) {
+                          saveState();
+                          LOGGER.log(Level.INFO, "Game saved");
+                     }
+
+                }else {
+                    String subscriberUsername = envelope.sender().getUsername();
+                    subscribers.stream()
+                            .filter(x -> x.getPlayer().getUsername().equals(subscriberUsername))
+                            .reduce((a, b) -> {
+                                throw new IllegalStateException("Multiple elements: " + a + ", " + b);
+                            }).ifPresent(subscriber -> {
+                                notifyError(subscriber);
+                                LOGGER.log(Level.INFO, "Subscriber found and notified");
+                            });
+
+                    // this should only happen if someone is sending an invalid message
+                    // while not being in a lobby or game
+                    LOGGER.log(Level.INFO, "Not notified (subscriber not found)");
                 }
             }
         }).start();
@@ -107,6 +129,10 @@ public class NetworkManager {
     public void startGame(boolean expert_mode){
         game_handler = new GameHandler(ID, expert_mode, lobby_handler);
         current_handler = HandlerType.GAME;
+    }
+
+    public void addMessage(MessageEnvelope envelope){
+        message_queue.add(envelope);
     }
 
     public void addErrorMessage(LobbyPlayer player, String message){
@@ -179,9 +205,5 @@ public class NetworkManager {
 
     public GameHandler getGameHandler() {
         return game_handler;
-    }
-
-    public ConcurrentLinkedQueue<MessageEnvelope> getMessageQueue() {
-        return message_queue;
     }
 }

@@ -32,7 +32,22 @@ public class ConnectionCEO extends Thread {
 
         LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
 
-        MenuManager.getInstance().subscribe(this);
+        if((networkManager = server.findPlayerLocation(player)) != null) {
+            networkManager.getGameHandler().getModel().getPlayers().stream()
+                            .filter(player -> player.getUsername().equals(this.player.getUsername()))
+                            .findFirst()
+                            .ifPresent(player -> {
+                                this.player = player; // FIXME: is this ok?
+
+                                networkManager.subscribe(this);
+                                LOGGER.log(Level.INFO, "Player found and subscribed to networkManager {}", networkManager);
+                            });
+            LOGGER.log(Level.SEVERE, "PLAYER NOT FOUND!");
+        }else {
+            MenuManager.getInstance().subscribe(this);
+            LOGGER.log(Level.INFO, "New player");
+        }
+
         handleMessages();
     }
 
@@ -79,10 +94,10 @@ public class ConnectionCEO extends Thread {
                 MessageEnvelope envelope = new MessageEnvelope(player, message, this);
 
                 switch (message.getMessageType()) {
-                    case MENU -> menuManager.message_queue.add(envelope);
+                    case MENU -> menuManager.addMessage(envelope);
                     case GAME -> {
                         if(networkManager != null)
-                            networkManager.getMessageQueue().add(envelope);
+                            networkManager.addMessage(envelope);
                     }
                 }
             }

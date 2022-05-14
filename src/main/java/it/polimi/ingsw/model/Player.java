@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.board.SchoolBoard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player extends LobbyPlayer implements Serializable {
     private Assistant current_assistant;
@@ -74,6 +75,20 @@ public class Player extends LobbyPlayer implements Serializable {
 
     public void setCoins(int coins){
         this.coins = coins;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Player player = (Player) o;
+        return username.equals(player.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), username);
     }
 
     @Override

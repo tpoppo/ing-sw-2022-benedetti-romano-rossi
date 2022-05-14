@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
@@ -130,22 +131,23 @@ public class Server{
     }
 
     // Returns the networkManager containing the lobbyPlayer given
-    public NetworkManager findPlayerLocation(LobbyPlayer player){
+    public NetworkManager findPlayerLocation(LobbyPlayer lobbyPlayer){
         for(NetworkManager networkManager : networkManagers){
-            // Searches the player inside the currentHandler
+            // Searches the lobbyPlayer inside the currentHandler
             switch (networkManager.getCurrentHandler()){
                 case LOBBY:
-                    if(networkManager.getLobbyHandler().getPlayers().contains(player))
+                    if(networkManager.getLobbyHandler().getPlayers().contains(lobbyPlayer))
                         return networkManager;
                     break;
                 case GAME:
+                    Player player = networkManager.getGameHandler().lobbyPlayerToPlayer(lobbyPlayer);
+
                     if(networkManager.getGameHandler().getModel().getPlayers().contains(player)) // this should work, right?
                         return networkManager;
                     break;
             }
         }
 
-        // This line should never be reached
         return null;
     }
 

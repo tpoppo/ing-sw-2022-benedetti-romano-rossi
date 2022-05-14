@@ -24,16 +24,18 @@ public class LobbyPlayer implements Serializable {
     public String getUsername() {
         return username;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LobbyPlayer that = (LobbyPlayer) o;
-        return Objects.equals(username, that.username) && Objects.equals(wizard, that.wizard);
+        return username.equals(that.username);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(username, wizard);
+        return Objects.hash(username);
     }
 
     @Override

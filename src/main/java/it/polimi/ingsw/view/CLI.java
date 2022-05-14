@@ -73,7 +73,8 @@ public class CLI {
         username = read_stream.nextLine();
         while(!client_socket.login(username)) {
             // TODO: better error handling
-            out.println(ansi().fg(Ansi.Color.RED).a("Username already taken").reset());
+            out.print(ansi().fgBrightRed().a("Username already taken").reset());
+            out.print(ansi().cursorUpLine().eraseLine().a("Username: "));
             username = read_stream.nextLine();
         }
         out.println("Logged in");
@@ -212,7 +213,6 @@ public class CLI {
         print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
 
         if(model.getExpertMode()) {
-            print(drawCoins(), STD_COINS_POSITION);
             print(drawCharacters(), STD_CHARACTER_POSITION);
         }
 
@@ -415,6 +415,9 @@ public class CLI {
             boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
         }
 
+        if(model.getExpertMode())
+            boardStr.append(ansi().cursor(STD_COINS_POSITION.getX(), STD_COINS_POSITION.getY()).a(drawCoins()));
+
         return boardStr.toString();
     }
 
@@ -461,7 +464,7 @@ public class CLI {
         return assistantStr.toString();
     }
 
-    private String drawCoins(){ //TODO: schoolboard
+    private String drawCoins(){
         StringBuilder coinsStr = new StringBuilder();
 
         int coins = model.getCurrentPlayer().getCoins();
@@ -478,8 +481,6 @@ public class CLI {
         ArrayList<Character> characters = model.getCharacters();
         charStr.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
         for(Character character : characters){
-            // TODO: print character's specific features (entry tiles, students, ...)
-            //  decorators?
             charStr.append(character.getClass().getSimpleName()).append(" - Cost: ").append(character.getCost()).append(" ");
 
             // print card's specific students
@@ -550,6 +551,7 @@ public class CLI {
                 }
                 return null;
             }
+
             case "join" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 try{
@@ -569,6 +571,7 @@ public class CLI {
                 client_socket.send(new StartGameMessage(boolean_command));
                 return null;
             }
+
             case "wizard" -> {
                 if (command.length != 2) return "Invalid number of arguments";
                 try{
@@ -606,7 +609,7 @@ public class CLI {
                 }
 
                 client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
-                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                if (model != null && !model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -617,7 +620,7 @@ public class CLI {
                 } catch(NumberFormatException e){
                     return "Invalid input";
                 }
-                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                if (model != null &&!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -629,7 +632,7 @@ public class CLI {
                 } catch(NumberFormatException e){
                     return "Invalid input";
                 }
-                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                if (model != null &&!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -649,7 +652,7 @@ public class CLI {
                     return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
 
                 client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
-                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                if (model != null && !model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -666,7 +669,7 @@ public class CLI {
                 } catch(NumberFormatException e){
                     return "Invalid input";
                 }
-                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                if (model != null &&!model.getExpertMode()) client_socket.send(new NextStateMessage());
                 return null;
             }
 
@@ -681,11 +684,10 @@ public class CLI {
             }
         }
 
-
         return "Invalid command";
     }
 
-    // ------------------------------------------------------------------------ PRINTING HELPER ------------------------------------------------------------------------
+    // ---------------------------- PRINTING HELPER ---------------------------- //
 
     protected void print(Ansi s, int row, int column) {
         print(s.toString(), row, column);
