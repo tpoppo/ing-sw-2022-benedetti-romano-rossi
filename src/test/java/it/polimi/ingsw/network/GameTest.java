@@ -644,4 +644,50 @@ public class GameTest {
         game.playAssistant(assistants_player2.get(0));
         assertEquals(0, game.getCurrentPlayer().getPlayerHand().size());
     }
+
+    //Check that the starting player of the current round is the player that played the assistant with
+    //the lower power in the previous round
+    @RepeatedTest(100)
+    public void EndRoundTest() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
+        LobbyHandler lobby = new LobbyHandler(0, 2);
+        LobbyPlayer player1 = new LobbyPlayer("Player 1");
+        LobbyPlayer player2 = new LobbyPlayer("Player 2");
+        player1.setWizard(1);
+        player2.setWizard(2);
+
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+
+        Game game = new Game(true, lobby);
+        Random rng = new Random();
+
+        game.beginPlanning();
+        ArrayList<Assistant> assistants_player1 = game.getCurrentPlayer().getPlayerHand();
+        //choose a random assistant
+        int assistant_position1 = rng.nextInt(assistants_player1.size());
+        int assistant_power_player1 = assistants_player1.get(assistant_position1).getPower();
+        game.playAssistant(assistants_player1.get(assistant_position1));
+        Player first_player = game.getCurrentPlayer();
+        game.nextTurn();
+        ArrayList<Assistant> assistants_player2 = game.getCurrentPlayer().getPlayerHand();
+        //choose a random assistant different from the previous one
+        int assistant_position2 = rng.nextInt(assistants_player2.size());
+        int assistant_power_player2 = assistants_player2.get(assistant_position2).getPower();
+        while(assistant_position2 == assistant_position1){
+            assistant_position2 = rng.nextInt(assistants_player2.size());
+            assistant_power_player2 = assistants_player2.get(assistant_position2).getPower();
+        }
+        game.playAssistant(assistants_player2.get(assistant_position2));
+        Player second_player = game.getCurrentPlayer();
+        game.endPlanning();
+
+        //Check that in the next turn the first player is the player that in teh previous round played the assistant
+        //whit the lower power
+        game.beginPlanning();
+        if(assistant_power_player1 < assistant_power_player2){
+            assertEquals(first_player, game.getCurrentPlayer());
+        }else{
+            assertEquals(second_player, game.getCurrentPlayer());
+        }
+    }
 }
