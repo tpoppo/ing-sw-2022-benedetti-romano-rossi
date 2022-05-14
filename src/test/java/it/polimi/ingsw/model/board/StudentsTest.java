@@ -22,7 +22,7 @@ public class StudentsTest {
     public void moveTo() throws EmptyMovableException {
         Students student1 = new Students(1, 2, 1, 3, 2);
         Students student2 = new Students(0, 3, 1, 3, 3);
-        Color color = Color.BLUE;
+        Color color = Color.CYAN;
         student1.moveTo(student2, color);
         assertEquals(1, student1.get(color));
         assertEquals(4, student2.get(color));

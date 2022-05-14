@@ -6,7 +6,7 @@ import java.util.Random;
 public enum Color implements Serializable {
     RED,
     GREEN,
-    BLUE,
+    CYAN,
     YELLOW,
     MAGENTA;
 
@@ -20,7 +20,7 @@ public enum Color implements Serializable {
         return switch (s.toString().toUpperCase()) {
             case "RED" -> RED;
             case "GREEN" -> GREEN;
-            case "BLUE" -> BLUE;
+            case "BLUE" -> CYAN;
             case "YELLOW" -> YELLOW;
             case "MAGENTA" -> MAGENTA;
             default -> null;

@@ -10,13 +10,13 @@ public class ProfessorsTest {
     @Test
     public void GetterSetter(){
         Professors professor1 = new Professors();
-        professor1.add(Color.BLUE);
+        professor1.add(Color.CYAN);
         professor1.add(Color.GREEN);
         professor1.add(Color.RED);
         professor1.add(Color.MAGENTA);
 
         Professors professor2 = new Professors();
-        professor2.add(Color.BLUE);
+        professor2.add(Color.CYAN);
         professor2.add(Color.GREEN);
         professor2.add(Color.MAGENTA);
         professor2.add(Color.YELLOW);
@@ -31,7 +31,7 @@ public class ProfessorsTest {
     @Test
     public void moveTo() throws EmptyMovableException {
         Professors professor1 = new Professors();
-        professor1.add(Color.BLUE);
+        professor1.add(Color.CYAN);
         professor1.add(Color.GREEN);
         professor1.add(Color.MAGENTA);
         professor1.add(Color.YELLOW);
@@ -48,7 +48,7 @@ public class ProfessorsTest {
     @Test
     public void moveToException(){
         Professors professor1 = new Professors();
-        professor1.add(Color.BLUE);
+        professor1.add(Color.CYAN);
         professor1.add(Color.GREEN);
         professor1.add(Color.MAGENTA);
         professor1.add(Color.YELLOW);

@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Students extends HashMap<Color, Integer> implements Serializable {
     public Students(int greens, int blues, int yellows, int pinks, int reds){
         this.put(Color.GREEN, greens);
-        this.put(Color.BLUE, blues);
+        this.put(Color.CYAN, blues);
         this.put(Color.YELLOW, yellows);
         this.put(Color.MAGENTA, pinks);
         this.put(Color.RED, reds);
@@ -46,7 +46,7 @@ public class Students extends HashMap<Color, Integer> implements Serializable {
     @Override
     public void clear() {
         put(Color.GREEN, 0);
-        put(Color.BLUE, 0);
+        put(Color.CYAN, 0);
         put(Color.YELLOW, 0);
         put(Color.MAGENTA, 0);
         put(Color.RED, 0);

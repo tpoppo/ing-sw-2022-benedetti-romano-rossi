@@ -46,7 +46,7 @@ public class BardTest {
         ArrayList<Color> swap_list = new ArrayList<>();
         swap_list.add(Color.MAGENTA);
         swap_list.add(Color.GREEN);
-        swap_list.add(Color.BLUE);
+        swap_list.add(Color.CYAN);
         swap_list.add(Color.RED);
         playerChoices.setStudent(swap_list);
         bard.activate(game, playerChoices);

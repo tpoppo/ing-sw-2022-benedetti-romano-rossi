@@ -4,10 +4,7 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.client.Command;
 import it.polimi.ingsw.client.CommandHandler;
 import it.polimi.ingsw.client.CommandType;
-import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.GameHandler;
-import it.polimi.ingsw.controller.LobbyHandler;
-import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
@@ -15,6 +12,7 @@ import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
 import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiColors;
 import org.fusesource.jansi.AnsiConsole;
 
 import java.io.BufferedInputStream;
@@ -47,6 +45,13 @@ public class CLI {
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(15, 1);
     private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
+
+    private final Map<GameState, List<Command>> COMMAND_MAP = Map.of(
+            GameState.PLAY_ASSISTANT, List.of(CommandHandler.get("assistant"), CommandHandler.get("pass")),
+            GameState.CHOOSE_CLOUD, List.of(CommandHandler.get("cloud"), CommandHandler.get("pass")),
+            GameState.MOVE_MOTHER_NATURE, List.of(CommandHandler.get("mm"), CommandHandler.get("pass"))
+            // TODO: finish
+    );
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -273,6 +278,7 @@ public class CLI {
         String availableCommands = "no commands :(";
 
         switch (gameHandler.getCurrentState()){
+            // TODO:
             case PLAY_ASSISTANT -> {
                 instruction = "Play an assistant: ";
                 availableCommands = "assistant <number>";
@@ -328,7 +334,7 @@ public class CLI {
 
                 for(Color key : cloud.keySet()){
                     if(cloud.get(key) > 0)
-                        cloudsText.append(ansi().fg(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
+                        cloudsText.append(ansi().fgBright(Ansi.Color.valueOf(key.toString())).a(cloud.get(key) + " ").reset());
                 }
             }
 
@@ -361,7 +367,7 @@ public class CLI {
 
             for(Color studentColor : island.getStudents().keySet()){
                 if(islandStudents.get(studentColor) > 0)
-                    islandStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(islandStudents.get(studentColor) + " ").reset());
+                    islandStr.append(ansi().fgBright(Ansi.Color.valueOf(studentColor.toString())).a(islandStudents.get(studentColor) + " ").reset());
             }
             islandStr.append(" ");
             islandStr.append(island.getOwner() == null ?
@@ -398,7 +404,7 @@ public class CLI {
         boardStr.append("Entrance: ");
         for(Color studentColor : entranceStudents.keySet()){
             if(entranceStudents.get(studentColor) > 0)
-                boardStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(entranceStudents.get(studentColor) + " ").reset());
+                boardStr.append(ansi().fgBright(Ansi.Color.valueOf(studentColor.toString())).a(entranceStudents.get(studentColor) + " ").reset());
         }
         boardStr.append(Constants.NEWLINE).append(Constants.NEWLINE);
 
@@ -449,10 +455,10 @@ public class CLI {
         for(Assistant assistant : Assistant.getAssistants(1)){
             // current assistant is green
             if(assistant.equals(currentAssistant))
-                assistantStr.append(ansi().bgBrightGreen().fgBrightDefault());
+                assistantStr.append(ansi().bgBrightGreen().fgBlack());
                 // assistants played by other players are yellow
             else if(playedAssistantsMap.containsValue(assistant))
-                assistantStr.append(ansi().bgYellow().fgBrightDefault());
+                assistantStr.append(ansi().bgBrightYellow().fgBlack());
                 // already played assistants are red
             else if(!assistants.contains(assistant) && !assistant.equals(currentAssistant))
                 assistantStr.append(ansi().bgRed().fgBrightDefault());
@@ -495,8 +501,13 @@ public class CLI {
 
         ArrayList<Character> characters = model.getCharacters();
         charStr.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
+
+        int count = 0;
         for(Character character : characters){
-            charStr.append(character.getClass().getSimpleName()).append(" - Cost: ").append(character.getCost()).append(" ");
+            if(character.equals(view.getGameHandler().getSelectedCharacter()))
+                charStr.append(ansi().bgBrightGreen().fgBlack());
+            charStr.append(count).append(" - ").append(character.getClass().getSimpleName()).append(" - Cost: ").append(character.getCost()).append(" ");
+            charStr.append(ansi().reset());
 
             // print card's specific students
             // FIXME: is null check useful?
@@ -514,6 +525,7 @@ public class CLI {
                 charStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(character.getNoEntryTiles()).reset());
 
             charStr.append(Constants.NEWLINE);
+            count++;
         }
 
         return charStr.toString();
@@ -604,6 +616,18 @@ public class CLI {
 
     protected void print(String s, Pair<Integer, Integer> coordinates){
         print(s, coordinates.getX(), coordinates.getY());
+    }
+
+    protected void drawBox(Ansi.Color color, int rowFrom, int columnFrom, int rowTo, int columnTo){
+        out.print(ansi().bg(color));
+
+        for(int i=rowFrom; i<rowTo; i++) {
+            out.print(ansi().cursor(i, columnFrom));
+            for (int k = columnFrom; k < columnTo; k++)
+                out.print(ansi().a(" "));
+        }
+
+        out.print(ansi().reset());
     }
 
     protected void eraseBox(int rowFrom, int columnFrom, int rowTo, int columnTo){

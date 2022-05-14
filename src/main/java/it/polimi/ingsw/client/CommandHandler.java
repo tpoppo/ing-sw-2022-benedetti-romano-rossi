@@ -131,6 +131,10 @@ public class CommandHandler {
         return commands;
     }
 
+    public static Command get(String name){
+        return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
+    }
+
     public static String sendInput(String inputCommand, ClientSocket client_socket, CLI cli){
         String[] command = inputCommand.split(" ");
 
