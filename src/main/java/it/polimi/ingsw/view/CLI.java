@@ -35,7 +35,7 @@ public class CLI {
     protected Game model;
     protected String username;
     protected String schoolBoardPlayerUsername;
-    private String errorMessage;
+    protected String errorMessage;
 
     private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(48, 1);
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
@@ -234,7 +234,7 @@ public class CLI {
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
     }
 
-    private String drawPlayers(){
+    protected String drawPlayers(){
         StringBuilder playersStr = new StringBuilder();
 
         playersStr.append(ansi().bold().a("PLAYERS").reset()).append(Constants.NEWLINE);
@@ -250,7 +250,7 @@ public class CLI {
         return playersStr.toString();
     }
 
-    private String drawState(){
+    protected String drawState(){
         StringBuilder stateText = new StringBuilder();
 
         if(model.getCurrentPlayer().getUsername().equals(username))
@@ -461,7 +461,7 @@ public class CLI {
         return assistantStr.toString();
     }
 
-    private String drawCoins(){
+    private String drawCoins(){ //TODO: schoolboard
         StringBuilder coinsStr = new StringBuilder();
 
         int coins = model.getCurrentPlayer().getCoins();
@@ -507,140 +507,180 @@ public class CLI {
         String[] command = s.split(" ");
 
         if(command.length == 0) return "No command found";
-        try {
-            switch (command[0]) {
-                // clientside commands
-                case "clean" -> { // removes the error message (and cleans errors displayed with printErrorRelative)
-                    this.errorMessage = null;
-                    out.print(ansi().cursorDownLine(1).eraseLine());
-                    out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
+        switch (command[0]) {
+            // clientside commands
+            case "clean" -> { // removes the error message (and cleans errors displayed with printErrorRelative)
+                this.errorMessage = null;
+                out.print(ansi().cursorDownLine(1).eraseLine());
+                out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
 
-                    return null;
-                }
+                return null;
+            }
 
-                case "board" -> {
-                    if (command.length == 1) // own board
-                        schoolBoardPlayerUsername = username;
-                    else if (command.length == 2) // requested board
+            case "board" -> {
+                if (command.length == 1) // own board
+                    schoolBoardPlayerUsername = username;
+                else if (command.length == 2) // requested board
+                    try {
                         this.schoolBoardPlayerUsername = gameHandler.getModel().getPlayers().get(Integer.parseInt(command[1])).getUsername();
-                    else return "Invalid number of arguments";
+                    } catch(NumberFormatException e){
+                        return "Invalid input";
+                    }
+                else return "Invalid number of arguments";
 
-                    int rowFrom = STD_BOARD_POSITION.getX();
-                    int columnFrom = STD_BOARD_POSITION.getY();
-                    int rowTo = rowFrom + 14;
-                    int columnTo = columnFrom + 35;
+                int rowFrom = STD_BOARD_POSITION.getX();
+                int columnFrom = STD_BOARD_POSITION.getY();
+                int rowTo = rowFrom + 14;
+                int columnTo = columnFrom + 35;
 
-                    eraseBox(rowFrom, columnFrom, rowTo, columnTo);
-                    print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
-                    print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
+                eraseBox(rowFrom, columnFrom, rowTo, columnTo);
+                print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
+                print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
 
-                    return null;
-                }
+                return null;
+            }
 
-                // menu commands
-                case "create" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
+            // menu commands
+            case "create" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try {
                     client_socket.send(new CreateLobbyMessage(Integer.parseInt(command[1])));
-                    return null;
+                } catch(NumberFormatException e){
+                    return "Invalid input";
                 }
-                case "join" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
+                return null;
+            }
+            case "join" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try{
                     client_socket.send(new JoinLobbyMessage(Integer.parseInt(command[1])));
-                    return null;
+                } catch(NumberFormatException e){
+                    return "Invalid input";
                 }
+                return null;
+            }
 
-                // lobby commands
-                case "start" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
-                    boolean boolean_command = false;
-                    if(Constants.TRUE_STRING.contains(command[1].toLowerCase())) boolean_command = true;
-                    else if(!Constants.FALSE_STRING.contains(command[1].toLowerCase())) return "Invalid input.";
-                    client_socket.send(new StartGameMessage(boolean_command));
-                    return null;
-                }
-                case "wizard" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
+            // lobby commands
+            case "start" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                boolean boolean_command = false;
+                if(Constants.TRUE_STRING.contains(command[1].toLowerCase())) boolean_command = true;
+                else if(!Constants.FALSE_STRING.contains(command[1].toLowerCase())) return "Invalid input.";
+                client_socket.send(new StartGameMessage(boolean_command));
+                return null;
+            }
+            case "wizard" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try{
                     client_socket.send(new ChooseWizardMessage(Integer.parseInt(command[1])));
-                    return null;
+                } catch(NumberFormatException e){
+                    return "Invalid input";
                 }
+                return null;
+            }
 
-                // game commands
-                case "activate" -> { // ActivateCharacterMessage
-                    Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
-                    PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
+            // game commands
+            case "activate" -> { // ActivateCharacterMessage
+                Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
+                PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
 
-                    switch (selected_character.require()) {
-                        case ISLAND -> {
-                            if (command.length != 2) return "Invalid number of arguments";
+                switch (selected_character.require()) {
+                    case ISLAND -> {
+                        if (command.length != 2) return "Invalid number of arguments";
+                        try{
                             player_choices_serializable.setIsland(Integer.parseInt(command[1]));
-                        }
-                        case CARD_STUDENT, STUDENT_COLOR, SWAP_DINING_ENTRANCE, SWAP_CARD_ENTRANCE -> {
-                            if (command.length < 2) return "Invalid number of arguments";
-                            ArrayList<Color> colors = new ArrayList<>();
-                            for (int i = 1; i < command.length; i++) {
-                                colors.add(Color.parseColor(command[i]));
-                            }
-                            if (colors.contains(null))
-                                return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
-                            player_choices_serializable.setStudent(colors);
+                        } catch(NumberFormatException e){
+                            return "Invalid input";
                         }
                     }
-
-                    client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
-                    if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
-                    return null;
+                    case CARD_STUDENT, STUDENT_COLOR, SWAP_DINING_ENTRANCE, SWAP_CARD_ENTRANCE -> {
+                        if (command.length < 2) return "Invalid number of arguments";
+                        ArrayList<Color> colors = new ArrayList<>();
+                        for (int i = 1; i < command.length; i++) {
+                            colors.add(Color.parseColor(command[i]));
+                        }
+                        if (colors.contains(null))
+                            return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
+                        player_choices_serializable.setStudent(colors);
+                    }
                 }
 
-                case "cloud" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
-                    client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
-                    if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
-                    return null;
-                }
-
-                // FIXME: maybe it's better to specify the number of steps (instead of the arrival island's id)
-                case "mm" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
-                    client_socket.send(new MoveMotherNatureMessage(Integer.parseInt(command[1])));
-                    if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
-                    return null;
-                }
-
-                case "ms" -> {
-                    Integer island_position = null;
-                    if (command.length > 3 || command.length < 2) return "Invalid number of arguments";
-                    if (command.length == 3) island_position = Integer.parseInt(command[2]);
-                    Color color = Color.parseColor(command[1]);
-                    if (color == null)
-                        return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
-
-                    client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
-                    if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
-                    return null;
-                }
-
-                case "pass" -> {
-                    if (command.length != 1) return "Invalid number of arguments";
-                    client_socket.send(new NextStateMessage());
-                    return null;
-                }
-
-                case "assistant" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
-                    client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
-                    if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
-                    return null;
-                }
-
-                case "character" -> {
-                    if (command.length != 2) return "Invalid number of arguments";
-                    client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
-                    return null;
-                }
+                client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
+                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                return null;
             }
-        } catch(NumberFormatException e){
-            return "Invalid input";
+
+            case "cloud" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try {
+                    client_socket.send(new ChooseCloudMessage(Integer.parseInt(command[1])));
+                } catch(NumberFormatException e){
+                    return "Invalid input";
+                }
+                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                return null;
+            }
+
+            // FIXME: maybe it's better to specify the number of steps (instead of the arrival island's id)
+            case "mm" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try {
+                    client_socket.send(new MoveMotherNatureMessage(Integer.parseInt(command[1])));
+                } catch(NumberFormatException e){
+                    return "Invalid input";
+                }
+                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                return null;
+            }
+
+            case "ms" -> {
+                Integer island_position = null;
+                if (command.length > 3 || command.length < 2) return "Invalid number of arguments";
+                if (command.length == 3) {
+                    try {
+                        island_position = Integer.parseInt(command[2]);
+                    } catch(NumberFormatException e){
+                        return "Invalid input";
+                    }
+                }
+
+                Color color = Color.parseColor(command[1]);
+                if (color == null)
+                    return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
+
+                client_socket.send(new MoveStudentMessage(Color.parseColor(command[1]), island_position));
+                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                return null;
+            }
+
+            case "pass" -> {
+                if (command.length != 1) return "Invalid number of arguments";
+                client_socket.send(new NextStateMessage());
+                return null;
+            }
+
+            case "assistant" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try {
+                    client_socket.send(new PlayAssistantMessage(Integer.parseInt(command[1])));
+                } catch(NumberFormatException e){
+                    return "Invalid input";
+                }
+                if (!model.getExpertMode()) client_socket.send(new NextStateMessage());
+                return null;
+            }
+
+            case "character" -> {
+                if (command.length != 2) return "Invalid number of arguments";
+                try{
+                    client_socket.send(new SelectedCharacterMessage(Integer.parseInt(command[1])));
+                } catch(NumberFormatException e){
+                    return "Invalid input";
+                }
+                return null;
+            }
         }
+
 
         return "Invalid command";
     }

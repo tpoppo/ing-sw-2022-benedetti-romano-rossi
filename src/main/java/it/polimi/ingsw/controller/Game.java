@@ -356,6 +356,12 @@ public class Game implements Serializable{
     }
 
     public void conquerIsland(Island island){
+        // if there are NoEntryTiles skip conquerIsland
+        if(island.getNoEntryTiles() > 0){
+            island.setNoEntryTiles(island.getNoEntryTiles()-1);
+            return ;
+        }
+
         HashMap<Player, Integer> influence = new HashMap<>();
         int towers_on_island = island.getNumTowers();
 
