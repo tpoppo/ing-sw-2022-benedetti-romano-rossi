@@ -71,6 +71,17 @@ public class Constants {
                                                      \s
             """;
 
+    public static String HELP = """
+
+            ██╗  ██╗███████╗██╗     ██████╗\s
+            ██║  ██║██╔════╝██║     ██╔══██╗
+            ███████║█████╗  ██║     ██████╔╝
+            ██╔══██║██╔══╝  ██║     ██╔═══╝\s
+            ██║  ██║███████╗███████╗██║    \s
+            ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝    \s
+                                           \s
+            """;
+
     public static final String AUTHORS =
             "\nby "
                     + ANSI_PURPLE

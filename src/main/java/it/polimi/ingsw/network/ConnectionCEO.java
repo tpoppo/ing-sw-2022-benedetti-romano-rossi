@@ -42,7 +42,6 @@ public class ConnectionCEO extends Thread {
                                 networkManager.subscribe(this);
                                 LOGGER.log(Level.INFO, "Player found and subscribed to networkManager {}", networkManager);
                             });
-            LOGGER.log(Level.SEVERE, "PLAYER NOT FOUND!");
         }else {
             MenuManager.getInstance().subscribe(this);
             LOGGER.log(Level.INFO, "New player");

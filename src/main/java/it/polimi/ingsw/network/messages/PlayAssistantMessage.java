@@ -25,7 +25,6 @@ public class PlayAssistantMessage extends ClientMessage {
         Game game = gameHandler.getModel();
         Player player = gameHandler.lobbyPlayerToPlayer(lobby_player);
 
-
         // Invalid card_position value
         if(card_position < 0 || card_position >= player.getPlayerHand().size()){
             network_manager.addErrorMessage(lobby_player, "Invalid card position. It must be in range [0, "+ player.getPlayerHand().size()+"). Given: "+ card_position);
@@ -40,6 +39,10 @@ public class PlayAssistantMessage extends ClientMessage {
         }
 
         gameHandler.setActionCompleted(true);
+
+        if(!game.getExpertMode())
+            return new NextStateMessage().handle(network_manager, lobby_player);
+
         return StatusCode.OK;
     }
 

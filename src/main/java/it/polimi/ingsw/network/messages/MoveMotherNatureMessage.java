@@ -61,8 +61,11 @@ public class MoveMotherNatureMessage extends ClientMessage {
           if (game.checkVictory()) {...}
          */
 
-
         gameHandler.setActionCompleted(true);
+
+        if(!game.getExpertMode())
+            return new NextStateMessage().handle(network_manager, lobby_player);
+
         return StatusCode.OK;
     }
 

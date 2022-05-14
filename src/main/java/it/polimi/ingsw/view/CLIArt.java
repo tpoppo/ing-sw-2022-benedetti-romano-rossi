@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.GameState;
-import it.polimi.ingsw.controller.LobbyHandler;
-import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
@@ -50,6 +48,8 @@ public class CLIArt extends CLI {
     protected void printGame(){
         print(ansi().a(Constants.ERIANTYS), 1, 1);
 
+        Game model = view.getGameHandler().getModel();
+
         // Banner length is 63
         print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), STD_USERNAME_POSITION);
         print(drawPlayers(), STD_PLAYERS_POSITION);
@@ -74,6 +74,8 @@ public class CLIArt extends CLI {
     private void printState(){
         final int row_position = STD_STATUS_POSITION.getY() + 1;
         final int columns_position = STD_STATUS_POSITION.getX();
+        GameHandler gameHandler = view.getGameHandler();
+        Game model = gameHandler.getModel();
 
         Player current_player = model.getCurrentPlayer();
         print(ansi().bg(Ansi.Color.DEFAULT).a("Turn: ").reset(), STD_STATUS_POSITION.getY() , STD_STATUS_POSITION.getX());
@@ -96,6 +98,8 @@ public class CLIArt extends CLI {
     }
 
     private void printClouds(){
+        Game model = view.getGameHandler().getModel();
+
         int cnt = 0;
         for(Students students : model.getClouds()){
             String cloudString = drawCloud(students, cnt);
@@ -106,6 +110,8 @@ public class CLIArt extends CLI {
     }
 
     private void printIslands(){
+        Game model = view.getGameHandler().getModel();
+
         int divisor = model.getIslands().size();
         for(int i=2; i<=model.getIslands().size(); i++) {
             if(model.getIslands().size()%i == 0){
