@@ -1,8 +1,11 @@
 package it.polimi.ingsw.model.board;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class SchoolBoard implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8344161602434039242L;
     private int num_towers;
     private Professors professors;
     private Students dining_students;

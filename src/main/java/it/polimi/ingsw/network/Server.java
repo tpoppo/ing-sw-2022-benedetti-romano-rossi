@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,13 +25,13 @@ public class Server{
     final private int PORT;
     private ServerSocket serverSocket;
 
-    private final ArrayList<NetworkManager> networkManagers;
-    private final ArrayList<LobbyPlayer> player_list;
+    private final List<NetworkManager> networkManagers;
+    private final List<String> player_list;
 
     private Server(){
         PORT = Constants.SERVER_PORT;
-        networkManagers = new ArrayList<>();
-        player_list = new ArrayList<>();
+        networkManagers = Collections.synchronizedList(new ArrayList<>());
+        player_list = Collections.synchronizedList(new ArrayList<>());
 
         retrieveSavedState();
 
@@ -118,14 +120,15 @@ public class Server{
         return networkManager;
     }
 
-    public ArrayList<LobbyPlayer> getPlayerList() {
+    public List<String> getPlayerList() {
         return player_list;
     }
 
+
     // Checks the uniqueness of the username
     public boolean checkUsername(String username){
-        for(LobbyPlayer player : player_list)
-            if(player.getUsername().equals(username))
+        for(String user : player_list)
+            if(user.equals(username))
                 return false;
         return true;
     }

@@ -2,9 +2,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.board.Color;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class GameModifiers implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 7267446910559981331L;
     private int buff_influence;
     private Color inhibit_color;
     private boolean inhibit_towers;

@@ -28,7 +28,7 @@ public class CLIArt extends CLI {
     private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(2, 110);
     private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(10, 1);
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(19, 1);
-    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
+    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(7, 145);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
 
     private final Pair<Integer, Integer> ISLAND_SHAPE = new Pair<>(8, 25);
@@ -59,7 +59,7 @@ public class CLIArt extends CLI {
         printClouds();
         print(drawBoard(), STD_BOARD_POSITION);
 
-        // print(drawAssistants(), STD_ASSISTANTS_POSITION);
+        print(drawAssistants(), STD_ASSISTANTS_POSITION);
 
         if(model.getExpertMode()) {
             // print(drawCoins(), STD_COINS_POSITION);
@@ -69,7 +69,7 @@ public class CLIArt extends CLI {
         print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
 
         // print server errors
-        // if(errorMessage != null) printErrorRelative();
+        if(errorMessage != null) printErrorRelative();
     }
 
     // NOT USED
@@ -149,6 +149,8 @@ public class CLIArt extends CLI {
         Students diningStudents = player.getSchoolBoard().getDiningStudents();
         StringBuilder boardStr = new StringBuilder();
 
+        boardStr.append(ansi().cursorRight(3));
+
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 
         // displays the username of the owner if it's not the user's
@@ -169,16 +171,16 @@ public class CLIArt extends CLI {
             for(int i=0; i<entranceStudents.get(studentColor); i++){
                 position++;
                 if(position % 2 == 0){
-                    boardStr.append(ansi().cursorMove(+1, +1).bg(Ansi.Color.valueOf(studentColor.toString())).a(" ").reset());
+                    boardStr.append(ansi().cursorMove(+1, +1).bg(Ansi.Color.valueOf(studentColor.toString())).a("  ").reset());
                 }else{
-                    boardStr.append(ansi().cursorMove(+1, -1).bg(Ansi.Color.valueOf(studentColor.toString())).a(" ").reset());
+                    boardStr.append(ansi().cursorMove(+1, -1).bg(Ansi.Color.valueOf(studentColor.toString())).a("  ").reset());
                 }
             }
         }
         boardStr.append(Constants.NEWLINE).append(Constants.NEWLINE).append(Constants.NEWLINE);
 
         // draw the dining room
-        boardStr.append("Dining room:").append(Constants.NEWLINE).append(Constants.NEWLINE);
+        boardStr.append("Dining room:").append(Constants.NEWLINE).append(Constants.NEWLINE).append(ansi().cursorRight(-3));
 
         for(int i=0; i<Game.MAX_DINING_STUDENTS; i++) {
             for(int r=0; r<3; r++){
@@ -191,7 +193,7 @@ public class CLIArt extends CLI {
                     String value;
                     if(r == 0) {
                         if (diningStudents.get(color) > i)
-                            value = " S ";
+                            value = "  S  ";
                         else if (i > 0 && (i - 2) % 3 == 0) {
                             value = "  C  ";
                         } else {
@@ -202,7 +204,7 @@ public class CLIArt extends CLI {
                     }
                     boardStr.append(ansi().fg(Ansi.Color.BLACK).bg(Ansi.Color.valueOf(color.toString())).a(value).reset());
                 }
-                boardStr.append(Constants.NEWLINE);
+                boardStr.append(Constants.NEWLINE).append(ansi().cursorRight(-3));
             }
         }
 
@@ -214,6 +216,7 @@ public class CLIArt extends CLI {
         boolean[][] mat = new boolean[row][column];
         ArrayList<Pair<Integer, Integer>> coast = new ArrayList<Pair<Integer, Integer>>();
 
+        /*
         dim = Math.min(row*column, dim);
         for(int i=-1; i<1; i++){
             for(int j=-5; j<5; j++){
@@ -222,7 +225,7 @@ public class CLIArt extends CLI {
         }
 
         while(dim > 0 && !coast.isEmpty()){
-            Pair<Integer, Integer> current = coast.get(rng.nextInt(Math.min(coast.size(), 5)));
+            Pair<Integer, Integer> current = coast.get(rng.nextInt(Math.min(coast.size(), 1)));
             coast.remove(current);
             if(current.getFirst() >= 0 && current.getFirst() < row && current.getSecond() >= 0 && current.getSecond() < column && !mat[current.getFirst()][current.getSecond()]){
                 mat[current.getFirst()][current.getSecond()] = true;
@@ -233,18 +236,25 @@ public class CLIArt extends CLI {
                 dim--;
             }
         }
+         */
+
+        for(int i=-row/2; i<(1+row)/2; i++){
+            for(int j=-column/2; j<(1+column)/2; j++){
+                mat[row/2+i][column/2+j] = 2*i*i+j*j/2 <= dim;
+            }
+        }
         return mat;
     }
 
     private String drawCloud(Students cloud, int seed){
-        return drawTile(cloud, 0,0,  false, 40,
+        return drawTile(cloud, 0,0,  false, 20,
                         seed, Ansi.Color.WHITE, CLOUD_SHAPE.getFirst(), CLOUD_SHAPE.getSecond());
     }
 
     private String drawIsland(Island island, int seed){
         // dim must be >= 36 (in the worst case)
         return drawTile(island.getStudents(), island.getNumTowers(), island.getNoEntryTiles(),
-                        island.hasMotherNature(), 30 + 20*island.getNumIslands(), seed,
+                        island.hasMotherNature(), 12 + 5*island.getNumIslands(), seed,
                         Ansi.Color.GREEN, ISLAND_SHAPE.getFirst(), ISLAND_SHAPE.getSecond());
     }
 

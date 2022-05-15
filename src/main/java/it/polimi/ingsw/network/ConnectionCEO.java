@@ -26,9 +26,21 @@ public class ConnectionCEO extends Thread {
 
     @Override
     public void run() {
-        while(!login()) {
-            LOGGER.log(Level.INFO, "Connection failed");
+        try{
+            while(!login()) {
+                LOGGER.log(Level.INFO, "Connection failed");
+            }
+        }catch (IOException e){
+
+            try {
+                clientSocket.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            LOGGER.log(Level.INFO, "User disconnected during login");
+            return;
         }
+
 
         LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
 
@@ -50,7 +62,7 @@ public class ConnectionCEO extends Thread {
         handleMessages();
     }
 
-    private boolean login(){
+    private boolean login() throws IOException {
         // The first message must contain the username chosen by the client
         boolean logged_in;
         String username;
@@ -70,14 +82,14 @@ public class ConnectionCEO extends Thread {
 
             outputStream.writeObject("OK");
             outputStream.flush();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             LOGGER.log(Level.WARNING, "Exception while logging in: {0}", e.toString());
             return false;
         }
 
         // Creates a new lobbyPlayer and adds it to the global player list of the server
         player = new LobbyPlayer(username);
-        server.getPlayerList().add(player);
+        server.getPlayerList().add(player.getUsername());
 
         return true;
     }
@@ -108,7 +120,9 @@ public class ConnectionCEO extends Thread {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         } finally {
             // Removes the player from the global player list of the server
-            server.getPlayerList().remove(player);
+            boolean res = server.getPlayerList().remove(player.getUsername());
+            LOGGER.log(Level.SEVERE, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
+
         }
     }
 
@@ -120,7 +134,8 @@ public class ConnectionCEO extends Thread {
 
             LOGGER.log(Level.FINE, viewContent.toString());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE, "Cannot send: {0}. {1}", new Object[]{viewContent, e});
+            // throw new RuntimeException(e);
         }
     }
 

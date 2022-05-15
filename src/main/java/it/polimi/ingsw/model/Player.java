@@ -5,11 +5,14 @@ import it.polimi.ingsw.model.board.Assistant;
 import it.polimi.ingsw.model.board.Professors;
 import it.polimi.ingsw.model.board.SchoolBoard;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player extends LobbyPlayer implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2605603161368085648L;
     private Assistant current_assistant;
     private final String username;
     private int coins;
@@ -84,6 +87,11 @@ public class Player extends LobbyPlayer implements Serializable {
         if (!super.equals(o)) return false;
         Player player = (Player) o;
         return username.equals(player.username);
+    }
+
+    public boolean equals(LobbyPlayer o){
+        if(o == null) return false;
+        return username.equals(o.getUsername());
     }
 
     @Override

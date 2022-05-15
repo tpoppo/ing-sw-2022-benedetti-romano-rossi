@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.board;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Assistant implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5617454978786526667L;
     final private int power;
     final private int steps;
     final private int ID;

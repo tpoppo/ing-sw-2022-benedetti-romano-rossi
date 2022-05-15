@@ -3,11 +3,14 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LobbyHandler implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3855855398364694695L;
     public final int ID;
     private final int max_players;
     private final ArrayList<LobbyPlayer> players;

@@ -3,11 +3,14 @@ package it.polimi.ingsw.utils;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.NetworkManager;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ReducedLobby implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 5047237163325726667L;
     private final int ID;
     private final int numPlayer;
     private final int maxPlayers;

@@ -2,10 +2,14 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 
 public class Students extends HashMap<Color, Integer> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6465882703969744942L;
+
     public Students(int greens, int blues, int yellows, int pinks, int reds){
         this.put(Color.GREEN, greens);
         this.put(Color.CYAN, blues);

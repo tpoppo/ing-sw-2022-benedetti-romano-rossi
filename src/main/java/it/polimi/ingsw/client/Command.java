@@ -96,4 +96,16 @@ public class Command {
     public List<GameState> getAdmittedStates() {
         return admittedStates;
     }
+
+    public List<String> getAliases(){
+        return new ArrayList<>(aliases);
+    }
+
+    public boolean checkName(String command){
+        if(name.equalsIgnoreCase(command)) return true;
+        for(String alias : aliases){
+            if(alias.equalsIgnoreCase(command)) return true;
+        }
+        return false;
+    }
 }

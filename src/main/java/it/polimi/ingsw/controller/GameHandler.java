@@ -4,9 +4,12 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class GameHandler implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -1563449150961541286L;
     public final int ID;
     private Game model;
     private GameState current_state;

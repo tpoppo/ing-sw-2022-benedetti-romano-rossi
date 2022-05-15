@@ -2,11 +2,14 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.Player;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 public class Island implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -3072123057338700620L;
     private int num_towers;
     private Player owner;
     private boolean mother_nature;

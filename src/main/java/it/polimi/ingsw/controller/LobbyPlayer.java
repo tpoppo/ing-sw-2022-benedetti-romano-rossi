@@ -1,10 +1,15 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Player;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class LobbyPlayer implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -8126205440396712999L;
     private final String username;
     private Integer wizard;
 
@@ -31,6 +36,11 @@ public class LobbyPlayer implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         LobbyPlayer that = (LobbyPlayer) o;
         return username.equals(that.username);
+    }
+
+    public boolean equals(Player o){
+        if(o == null) return false;
+        return username.equals(o.getUsername());
     }
 
     @Override

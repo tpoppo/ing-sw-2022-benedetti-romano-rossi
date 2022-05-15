@@ -5,10 +5,13 @@ import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PlayerChoicesSerializable implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -1509324086180147284L;
     private Integer island;
     private ArrayList<Color> student;
 

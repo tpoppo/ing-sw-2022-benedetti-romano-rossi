@@ -4,9 +4,12 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 abstract public class Character implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6948735520110438443L;
     private int cost;
     private boolean activated;
 

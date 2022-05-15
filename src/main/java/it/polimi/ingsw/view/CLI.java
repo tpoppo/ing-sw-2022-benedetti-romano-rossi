@@ -222,7 +222,7 @@ public class CLI {
         if(errorMessage != null) printErrorRelative();
     }
 
-    private void printErrorRelative(){
+    protected void printErrorRelative(){
         out.print(ansi().cursorDownLine(2).eraseLine());
         out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
@@ -451,7 +451,7 @@ public class CLI {
         return boardStr.toString();
     }
 
-    private String drawAssistants(){
+    protected String drawAssistants(){
         StringBuilder assistantStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();
@@ -482,7 +482,7 @@ public class CLI {
                 count++;
             }else assistantStr.append("-: ");
 
-            assistantStr.append("P ").append(assistant.getPower()).append(" - ").append("M ").append(assistant.getSteps());
+            assistantStr.append("P ").append("%2d".formatted(assistant.getPower())).append(" - ").append("M ").append(assistant.getSteps());
             assistantStr.append(ansi().reset());
             if(playedAssistantsMap.containsValue(assistant)) {
                 List<String> usernames = playedAssistantsMap.keySet().stream()

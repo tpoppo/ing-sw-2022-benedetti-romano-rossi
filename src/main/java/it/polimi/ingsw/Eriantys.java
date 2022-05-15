@@ -9,8 +9,7 @@ import it.polimi.ingsw.view.CLIArt;
  * Hello world!
  *
  */
-public class Eriantys
-{
+public class Eriantys {
     public static void main(String[] args ) {
 
         if(args.length == 0) {

@@ -97,7 +97,7 @@ public class Constants {
                     + ANSI_RESET;
 
     // Server info
-    public static final String SERVER_ADDR = "127.0.0.1";
+    public static final String SERVER_ADDR = "127.0.0.1"; // "192.168.100.24";
 
     public static final int SERVER_PORT = 42069; // nice
 
