@@ -5,6 +5,8 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -14,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test for simple App.
  */
 public class AppTest {
-    /*
+
     @Test
     void RunServer() throws InterruptedException {
         runThread(() -> {
@@ -23,6 +25,7 @@ public class AppTest {
 }
 
     @Test
+    @EnabledOnOs(OS.LINUX)
     void RunCli() throws InterruptedException {
         runThread(() -> {Server server = Server.getInstance();});
         runThread(() -> {
@@ -33,6 +36,7 @@ public class AppTest {
     }
 
     @Test
+    @EnabledOnOs(OS.LINUX)
     void RunCliArt() throws InterruptedException {
         runThread(() -> {Server server = Server.getInstance();});
         runThread(() -> {
@@ -43,17 +47,20 @@ public class AppTest {
     }
 
     void runThread(Runnable runnable) throws InterruptedException {
-        // this method is required as an exception in the
+        // this method is required as an exception might not stop the run
         AtomicReference<Exception> exc = new AtomicReference<>();
-        new Thread(() -> {
+
+        Thread t = new Thread(() -> {
             try{
                 runnable.run();
             } catch (Exception e){
                 exc.set(e);
             }
-        }).start();
+        });
+        t.start();
         Thread.sleep(300);
+        t.interrupt();
         assertNull(exc.get());
+
     }
-    */
 }
