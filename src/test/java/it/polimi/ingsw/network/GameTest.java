@@ -20,6 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
+    void checkStudent(Students students){
+        for(Color color : students.keySet()){
+            assertTrue(students.get(color) >= 0);
+        }
+    }
+
     /**
      * Check whether the invariants of the game are respected
      * @param game the current game to check
@@ -83,6 +89,40 @@ public class GameTest {
             assertTrue(player.getCoins() >= 0);
         }
         assertTrue(total_coins <= Game.MAX_COINS);
+
+        // check that getNumIslands() == getNumTowers()
+        for(Island island : game.getIslands()){
+            if(island.getOwner() == null) assertEquals(0, island.getNumTowers());
+            else assertEquals(island.getNumIslands(), island.getNumTowers());
+        }
+
+        // if not owner must be alone
+        for(Island island : game.getIslands()){
+            if(island.getOwner() == null) assertEquals(1, island.getNumIslands());
+        }
+
+        // check that there are 8 towers for each player in game
+        for(Player player : game.getPlayers()){
+            int towers = player.getSchoolBoard().getNumTowers();
+            for(Island island : game.getIslands()){
+                if(player.equals(island.getOwner()))towers += island.getNumIslands();
+            }
+            assertEquals(towers, 8);
+        }
+
+        // player's stuffs >= 0
+        for(Player player : game.getPlayers()){
+            checkStudent(player.getSchoolBoard().getDiningStudents());
+            checkStudent(player.getSchoolBoard().getEntranceStudents());
+
+            assertTrue(player.getSchoolBoard().getNumTowers() >= 0);
+        }
+
+        // island's stuffs >= 0
+        for(Island island : game.getIslands()){
+            assertTrue(island.getNumIslands() >= 0);
+            checkStudent(island.getStudents());
+        }
     }
 
     @RepeatedTest(200)
