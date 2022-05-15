@@ -6,6 +6,8 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.NatureBlocker;
+import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.*;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -761,5 +763,174 @@ public class GameTest {
             //Check that mothernature is only in one island
             assertEquals(1, count_mother_nature);
         }
+    }
+
+    //Check that the character NatureBlocker works in a game simulation
+    @RepeatedTest(100)
+    public void conquerIslandTest() throws FullLobbyException, EmptyBagException, EmptyMovableException, FullDiningRoomException, AssistantAlreadyPlayedException, BadPlayerChoiceException {
+        LobbyHandler lobby = new LobbyHandler(0, 2);
+        LobbyPlayer player0 = new LobbyPlayer("Player 1");
+        LobbyPlayer player1 = new LobbyPlayer("Player 2");
+        player0.setWizard(1);
+        player1.setWizard(2);
+        Random rng = new Random();
+
+        lobby.addPlayer(player0);
+        lobby.addPlayer(player1);
+
+        Game game = new Game(true, lobby);
+
+        //simulate five turn
+        int turn = 0;
+        while(turn == 5){
+            turn++;
+            // planning phase
+            game.fillClouds();
+            game.getClouds().forEach((x) -> assertEquals(3, x.count()));
+            checkInvariant(game);
+
+            game.beginPlanning();
+            checkInvariant(game);
+
+            // player1
+            game.playAssistant(game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size())));
+            checkInvariant(game);
+
+            Player first_player = game.getCurrentPlayer();
+            game.nextTurn();
+            checkInvariant(game);
+
+            // player2
+            Assistant assistant = null;
+            boolean assistant_already_played;
+            int cnt = 0;
+            do{
+                assistant = game.getCurrentPlayer().getPlayerHand().get(rng.nextInt(game.getCurrentPlayer().getPlayerHand().size()));
+                assistant_already_played = false;
+                for(Player player : game.getPlayers()){
+                    if (player.getCurrentAssistant() != null && player.getCurrentAssistant().equals(assistant)) {
+                        assistant_already_played = true;
+                        break;
+                    }
+                }
+                cnt++; // it might fail even if it is correct
+            }while(assistant_already_played && cnt < 100000);
+
+            game.playAssistant(assistant);
+            checkInvariant(game);
+
+            assertNotEquals(game.getCurrentPlayer(), first_player);
+
+            game.nextTurn();
+            checkInvariant(game);
+
+            game.endPlanning();
+            checkInvariant(game);
+            assertNotNull(game.getCurrentPlayer());
+
+            ArrayList<Island> islands = game.getIslands();
+
+            // action phase
+            for (int player_id = 0; player_id < 2; player_id++) {
+                assertEquals(7, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
+                // step 1
+                for (int i = 0; i < 3; i++) {
+                    // move a random student from the player's entrance to a random island
+                    Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
+                    Optional<Color> color = students.entrySet().stream().filter(
+                            (key_value) -> {
+                                return key_value.getKey() != null // is a valid color
+                                        && key_value.getValue() > 0 // is present (at least one element)
+                                        && game.getCurrentPlayer().getSchoolBoard().getDiningStudents().get(key_value.getKey()) < Game.MAX_DINING_STUDENTS; // there is enough space in the dining room for that color
+                            }).map(Map.Entry::getKey).findFirst();
+
+                    if(color.isPresent()){
+                        if(rng.nextBoolean()){
+                            game.moveStudent(color.get(), islands.get(rng.nextInt(islands.size())));
+                        }else{
+                            game.moveStudent(color.get());
+                        }
+                    }else{
+                        /* Very Special Case (and very unlikely)
+                           Example:
+                            getEntranceStudents: {PINK=0, GREEN=0, RED=5, BLUE=0, YELLOW=0}
+                            getDiningStudents: {PINK=0, GREEN=1, RED=8, BLUE=1, YELLOW=1}
+                           Only one color in the entrance room and that color is full in the dining room.
+                         */
+                        // same as before, but without the dining room condition.
+                        Optional<Color> color_island = students.entrySet().stream().filter(
+                                (key_value) -> {
+                                    return key_value.getKey() != null // is a valid color
+                                            && key_value.getValue() > 0; // is present (at least one element)
+                                }).map(Map.Entry::getKey).findFirst();
+                        assertTrue(color_island.isPresent());
+                        game.moveStudent(color_island.get(), islands.get(rng.nextInt(islands.size())));
+                    }
+
+                }
+                assertEquals(4, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
+                checkInvariant(game);
+
+                // step 2 - move mother nature
+                Island mother_nature_island = islands.stream().filter(Island::hasMotherNature).findFirst().get();
+                int curr_mother_nature_position = islands.indexOf(mother_nature_island);
+                int next_mother_nature_position = (curr_mother_nature_position + rng.nextInt(game.getCurrentPlayer().getCurrentAssistant().getSteps()) + 1) % islands.size();
+
+                game.moveMotherNature(islands.get(next_mother_nature_position));
+                checkInvariant(game);
+
+                // conquering an island
+                game.conquerIsland();
+                checkInvariant(game);
+
+                // check victory immediately
+                if (game.checkVictory()) {
+                    assertNotNull(game.winner());
+                    return;
+                }
+
+                // step 3 - choose cloud tiles
+                ArrayList<Students> clouds = game.getClouds();
+
+                clouds.forEach((x) -> assertTrue(x.count() == 3 || x.count() == 0));
+
+                Students students = null;
+                do {
+                    students = clouds.get(rng.nextInt(clouds.size()));
+                } while (students.count() <= 0);
+                try {
+                    game.chooseCloud(students);
+                } catch (EmptyCloudException e) {
+                    throw new RuntimeException(e);
+                }
+                checkInvariant(game);
+
+                assertEquals(0, students.count());
+                assertEquals(7, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents().count());
+
+                // end phase
+                game.nextTurn();
+            }
+
+            // check victory end game
+            if (game.checkEndGame()) {
+                assertNotNull(game.winner());
+                return ;
+            }
+        }
+
+        ArrayList<Island> islands = game.getIslands();
+        ArrayList<Island> islands_copy = new ArrayList<>();
+        for(Island island : islands){
+            islands_copy.add(island);
+        }
+        NatureBlocker natureBlocker = new NatureBlocker();
+        PlayerChoices playerChoices = new PlayerChoices();
+        playerChoices.setIsland(islands.get(game.findMotherNaturePosition()));
+        natureBlocker.activate(game, playerChoices);
+        game.conquerIsland();
+
+        //Check that island don't change after activate that character
+        assertEquals(islands_copy, islands);
     }
 }
