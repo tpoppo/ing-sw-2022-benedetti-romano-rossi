@@ -403,21 +403,18 @@ public class Game implements Serializable{
                 island.setOwner(new_owner);
                 island.setNumTowers(1);
                 new_owner.getSchoolBoard().addTowers(-1);
-            }else if(new_owner.equals(island.getOwner())){
-                island.setNumTowers(towers_on_island + 1);
-                new_owner.getSchoolBoard().addTowers(-1);
-            }else{
+            }else if(island.getOwner() != getCurrentPlayer()){
                 Player old_owner = island.getOwner();
+                int towersToMove = Math.min(new_owner.getSchoolBoard().getNumTowers(), towers_on_island);
 
                 island.setOwner(new_owner);
-                new_owner.getSchoolBoard().addTowers(-towers_on_island);
-                old_owner.getSchoolBoard().addTowers(towers_on_island);
+                new_owner.getSchoolBoard().addTowers(-towersToMove);
+                old_owner.getSchoolBoard().addTowers(towersToMove);
             }
 
             mergeIslands();
 
         }
-
     }
 
     /**
@@ -426,7 +423,7 @@ public class Game implements Serializable{
     private void mergeIslands(){
         int current_position = 0;
 
-        while(current_position < islands.size() && islands.size() >= 2){
+        while(current_position < islands.size() && islands.size() > 2){
             int next_position = (current_position + 1) % islands.size();
             Island current_island = islands.get(current_position);
             Island next_island = islands.get(next_position);
@@ -565,5 +562,21 @@ public class Game implements Serializable{
 
     public Player usernameToPlayer(String username){
         return getPlayers().stream().filter(player -> player.getUsername().equals(username)).toList().get(0);
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "expert_mode=" + expert_mode +
+                ", first_player=" + first_player +
+                ", play_order=" + play_order +
+                ", islands=" + islands +
+                ", bag=" + bag +
+                ", clouds=" + clouds +
+                ", players=" + players +
+                ", characters=" + characters +
+                ", gameConfig=" + gameConfig +
+                ", gameModifiers=" + gameModifiers +
+                '}';
     }
 }

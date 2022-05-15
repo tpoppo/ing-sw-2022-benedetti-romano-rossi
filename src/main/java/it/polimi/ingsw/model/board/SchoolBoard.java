@@ -57,4 +57,14 @@ public class SchoolBoard implements Serializable {
     public void setEntranceStudents(Students entrance_students) {
         this.entrance_students = entrance_students;
     }
+
+    @Override
+    public String toString() {
+        return "SchoolBoard{" +
+                "num_towers=" + num_towers +
+                ", professors=" + professors +
+                ", dining_students=" + dining_students +
+                ", entrance_students=" + entrance_students +
+                '}';
+    }
 }

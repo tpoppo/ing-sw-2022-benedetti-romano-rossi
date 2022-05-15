@@ -3,6 +3,14 @@ package it.polimi.ingsw.utils;
 import java.util.Set;
 
 public class Constants {
+    // Server info
+    public static final String SERVER_ADDR = "127.0.0.1"; // "192.168.100.24";
+
+    public static final int SERVER_PORT = 42069; // nice
+
+    // Path for saves
+    public static final String PATH_SAVES = "src/main/SavedGames";
+
     // match constants
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 3;
@@ -82,6 +90,33 @@ public class Constants {
                                            \s
             """;
 
+    public static String VICTORY = "" + NEWLINE +
+            "                                                                                                                " + NEWLINE +
+            "`8.`888b           ,8'  8 8888     ,o888888o.8888888 8888888888 ,o888888o.     8 888888888o. `8.`8888.      ,8' " + NEWLINE +
+            " `8.`888b         ,8'   8 8888    8888     `88.    8 8888    . 8888     `88.   8 8888    `88. `8.`8888.    ,8'  " + NEWLINE +
+            "  `8.`888b       ,8'    8 8888 ,8 8888       `8.   8 8888   ,8 8888       `8b  8 8888     `88  `8.`8888.  ,8'   " + NEWLINE +
+            "   `8.`888b     ,8'     8 8888 88 8888             8 8888   88 8888        `8b 8 8888     ,88   `8.`8888.,8'    " + NEWLINE +
+            "    `8.`888b   ,8'      8 8888 88 8888             8 8888   88 8888         88 8 8888.   ,88'    `8.`88888'     " + NEWLINE +
+            "     `8.`888b ,8'       8 8888 88 8888             8 8888   88 8888         88 8 888888888P'      `8. 8888      " + NEWLINE +
+            "      `8.`888b8'        8 8888 88 8888             8 8888   88 8888        ,8P 8 8888`8b           `8 8888      " + NEWLINE +
+            "       `8.`888'         8 8888 `8 8888       .8'   8 8888   `8 8888       ,8P  8 8888 `8b.          8 8888      " + NEWLINE +
+            "        `8.`8'          8 8888    8888     ,88'    8 8888    ` 8888     ,88'   8 8888   `8b.        8 8888      " + NEWLINE +
+            "         `8.`           8 8888     `8888888P'      8 8888       `8888888P'     8 8888     `88.      8 8888      " + NEWLINE;
+
+    public static String DEFEAT = "" + NEWLINE +
+            "                                                                                                   " + NEWLINE +
+            "8 888888888o.      8 8888888888   8 8888888888   8 8888888888            .8.    8888888 8888888888 " + NEWLINE +
+            "8 8888    `^888.   8 8888         8 8888         8 8888                 .888.         8 8888       " + NEWLINE +
+            "8 8888        `88. 8 8888         8 8888         8 8888                :88888.        8 8888       " + NEWLINE +
+            "8 8888         `88 8 8888         8 8888         8 8888               . `88888.       8 8888       " + NEWLINE +
+            "8 8888          88 8 888888888888 8 888888888888 8 888888888888      .8. `88888.      8 8888       " + NEWLINE +
+            "8 8888          88 8 8888         8 8888         8 8888             .8`8. `88888.     8 8888       " + NEWLINE +
+            "8 8888         ,88 8 8888         8 8888         8 8888            .8' `8. `88888.    8 8888       " + NEWLINE +
+            "8 8888        ,88' 8 8888         8 8888         8 8888           .8'   `8. `88888.   8 8888       " + NEWLINE +
+            "8 8888    ,o88P'   8 8888         8 8888         8 8888          .888888888. `88888.  8 8888       " + NEWLINE +
+            "8 8888    ,o88P'   8 8888         8 8888         8 8888          .888888888. `88888.  8 8888       " + NEWLINE +
+            "8 888888888P'      8 888888888888 8 8888         8 888888888888 .8'       `8. `88888. 8 8888       " + NEWLINE;
+
     public static final String AUTHORS =
             "\nby "
                     + ANSI_PURPLE
@@ -95,13 +130,4 @@ public class Constants {
                     + ANSI_YELLOW
                     + "Luca Romanò"
                     + ANSI_RESET;
-
-    // Server info
-    public static final String SERVER_ADDR = "127.0.0.1"; // "192.168.100.24";
-
-    public static final int SERVER_PORT = 42069; // nice
-
-    // Path for saves
-    public static final String PATH_SAVES = "src/main/SavedGames";
-
 }

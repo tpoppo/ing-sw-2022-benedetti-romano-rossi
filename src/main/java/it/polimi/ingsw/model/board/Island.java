@@ -93,4 +93,15 @@ public class Island implements Serializable {
 
     public void setNumIslands(int num_islands) {this.num_islands = num_islands;}
 
+    @Override
+    public String toString() {
+        return "Island{" +
+                "num_towers=" + num_towers +
+                ", owner=" + owner +
+                ", mother_nature=" + mother_nature +
+                ", students=" + students +
+                ", no_entry_tiles=" + no_entry_tiles +
+                ", num_islands=" + num_islands +
+                '}';
+    }
 }

@@ -8,6 +8,8 @@ import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.network.ConnectionCEO;
+import it.polimi.ingsw.network.messages.NextStateMessage;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
+// FIXME: tower check if conquering an island with more towers than you currently have
+
 public class CLI {
     final protected Logger LOGGER = Logger.getLogger(getClass().getName());
     final protected ClientSocket client_socket;
@@ -33,6 +37,7 @@ public class CLI {
     protected String username;
     protected String schoolBoardPlayerUsername;
     protected String errorMessage;
+    private boolean playing;
 
     private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(48, 1);
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
@@ -44,12 +49,14 @@ public class CLI {
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(15, 1);
     private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
+    private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(20, 15);
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
         this.out = out;
         this.read_stream = new Scanner(new BufferedInputStream(read_stream));
         CommandHandler.createCommands();
+        playing = true;
     }
     public CLI(ClientSocket client_socket) {
         this(client_socket, System.out, System.in);
@@ -78,12 +85,19 @@ public class CLI {
         out.println("Logged in");
 
         this.username = username;
-        this.schoolBoardPlayerUsername = username; // sets own username for later displaying of board
 
         startRendering();
 
         while(true){
-            getInput();
+            playing = true;
+            this.schoolBoardPlayerUsername = username; // sets own username for later displaying of board
+
+            while(playing){
+                getInput();
+            }
+
+            // last input
+            client_socket.send(new NextStateMessage());
         }
     }
 
@@ -134,7 +148,11 @@ public class CLI {
                         case LOBBY -> // we are in the lobby
                                 printLobby();
                         case GAME -> { // we are in the game
-                            printGame();
+                            if(view.getGameHandler().getCurrentState().equals(GameState.ENDING)){
+                                playing = false;
+                                print(drawEndingScreen(), STD_ENDING_POSITION);
+                            }
+                            else printGame();
                         }
                     }
                 }
@@ -210,7 +228,7 @@ public class CLI {
         print(drawIslands(), STD_ISLANDS_POSITION);
         print(drawClouds(), STD_CLOUDS_POSITION);
         print(drawAssistants(), STD_ASSISTANTS_POSITION);
-        print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
+        print(drawBoard(), STD_BOARD_POSITION);
 
         if(model.getExpertMode()) {
             print(drawCharacters(), STD_CHARACTER_POSITION);
@@ -310,10 +328,10 @@ public class CLI {
                         .map(command -> command.getSimpleInfo() + "\n")
                         .forEach(availableCommands::append);
             }
-            case FINISHED -> {
-                instruction = "Finished :";
+            case ENDING -> {
+                instruction = "The end: ";
                 gameCommands.stream()
-                        .filter(command -> command.getAdmittedStates().contains(GameState.FINISHED))
+                        .filter(command -> command.getAdmittedStates().contains(GameState.ENDING))
                         .map(command -> command.getSimpleInfo() + "\n")
                         .forEach(availableCommands::append);
             }
@@ -393,15 +411,16 @@ public class CLI {
         return islandStr.toString();
     }
 
-    private String drawBoard(String username){
+    private String drawBoard(){
         StringBuilder boardStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();
 
-        Player player = model.usernameToPlayer(username);
+        Player player = model.usernameToPlayer(schoolBoardPlayerUsername);
 
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 
+        // TODO: this doesnt works
         // displays the username of the owner if it's not the user's
         if(!schoolBoardPlayerUsername.equals(username))
             boardStr.append(" (").append(schoolBoardPlayerUsername).append(")");
@@ -544,6 +563,26 @@ public class CLI {
         return charStr.toString();
     }
 
+    private String drawEndingScreen(){
+        StringBuilder endString = new StringBuilder();
+
+        Game model = view.getGameHandler().getModel();
+
+        // if this player is the winner
+        if(model.winner().getUsername().equals(username)) {
+            endString.append(ansi().fgGreen().a(Constants.VICTORY).reset());
+        }else {
+            endString.append(ansi().fgRed().a(Constants.DEFEAT).reset());
+            endString.append(Constants.NEWLINE).append(Constants.NEWLINE);
+            endString.append("\t\t\t\t\t\tWinner: ").append(model.winner().getUsername());
+        }
+
+        endString.append(Constants.NEWLINE).append(Constants.NEWLINE).append(Constants.NEWLINE);
+        endString.append("\t\t\t\t\tPress Enter to continue......");
+
+        return endString.toString();
+    }
+
     public void printHelpScreen(){
         clearScreen();
 
@@ -583,7 +622,7 @@ public class CLI {
         int columnTo = columnFrom + 35;
 
         eraseBox(rowFrom, columnFrom, rowTo, columnTo);
-        print(drawBoard(schoolBoardPlayerUsername), STD_BOARD_POSITION);
+        print(drawBoard(), STD_BOARD_POSITION);
         print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
     }
 

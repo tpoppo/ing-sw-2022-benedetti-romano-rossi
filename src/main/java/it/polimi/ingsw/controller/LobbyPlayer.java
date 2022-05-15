@@ -18,7 +18,7 @@ public class LobbyPlayer implements Serializable {
         wizard = null;
     }
 
-    public void setWizard(int wizard) {
+    public void setWizard(Integer wizard) {
         this.wizard = wizard;
     }
 
@@ -36,11 +36,6 @@ public class LobbyPlayer implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         LobbyPlayer that = (LobbyPlayer) o;
         return username.equals(that.username);
-    }
-
-    public boolean equals(Player o){
-        if(o == null) return false;
-        return username.equals(o.getUsername());
     }
 
     @Override

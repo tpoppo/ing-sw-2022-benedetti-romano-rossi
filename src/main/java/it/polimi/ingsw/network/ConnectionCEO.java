@@ -113,12 +113,16 @@ public class ConnectionCEO extends Thread {
                 }
             }
 
+            menuManager.unsubscribe(this);
+            networkManager.unsubscribe(this);
+
             outputStream.close();
             inputStream.close();
             clientSocket.close();
         } catch (IOException | ClassNotFoundException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         } finally {
+
             // Removes the player from the global player list of the server
             boolean res = server.getPlayerList().remove(player.getUsername());
             LOGGER.log(Level.SEVERE, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
@@ -137,6 +141,11 @@ public class ConnectionCEO extends Thread {
             LOGGER.log(Level.SEVERE, "Cannot send: {0}. {1}", new Object[]{viewContent, e});
             // throw new RuntimeException(e);
         }
+    }
+
+    public void clean(){
+        this.networkManager = null;
+        player.setWizard(null);
     }
 
     public LobbyPlayer getPlayer() {

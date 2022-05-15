@@ -8,36 +8,31 @@ import it.polimi.ingsw.model.board.SchoolBoard;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Player extends LobbyPlayer implements Serializable {
     @Serial
     private static final long serialVersionUID = -2605603161368085648L;
     private Assistant current_assistant;
-    private final String username;
     private int coins;
     final private SchoolBoard schoolBoard;
     private ArrayList<Assistant> playerHand;
-    private final int wizard;
 
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
         super(username);
-        this.username = username;
+        setWizard(wizard);
         this.current_assistant = current_assistant;
         this.coins = coins;
         this.schoolBoard = schoolBoard;
         this.playerHand = playerHand;
-        this.wizard = wizard;
     }
 
     public Player(String username, int wizard){
         super(username);
-        this.username = username;
+        setWizard(wizard);
         current_assistant = null;
         coins = 0;
         schoolBoard = new SchoolBoard(0);
-        this.wizard = wizard;
-        playerHand = Assistant.getAssistants(this.wizard);
+        playerHand = Assistant.getAssistants(wizard);
     }
 
     public Player(LobbyPlayer player){
@@ -50,10 +45,6 @@ public class Player extends LobbyPlayer implements Serializable {
 
     public ArrayList<Assistant> getPlayerHand() {
         return playerHand;
-    }
-
-    public Integer getWizard() {
-        return wizard;
     }
 
     public Professors getProfessors(){
@@ -81,33 +72,12 @@ public class Player extends LobbyPlayer implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Player player = (Player) o;
-        return username.equals(player.username);
-    }
-
-    public boolean equals(LobbyPlayer o){
-        if(o == null) return false;
-        return username.equals(o.getUsername());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), username);
-    }
-
-    @Override
     public String toString() {
         return "Player{" +
                 "current_assistant=" + current_assistant +
-                ", username='" + username + '\'' +
                 ", coins=" + coins +
                 ", schoolBoard=" + schoolBoard +
                 ", playerHand=" + playerHand +
-                ", wizard=" + wizard +
                 '}';
     }
 }

@@ -133,6 +133,10 @@ public class Server{
         return true;
     }
 
+    public void deleteNetworkManager(NetworkManager networkManager){
+        networkManagers.remove(networkManager);
+    }
+
     // Returns the networkManager containing the lobbyPlayer given
     public NetworkManager findPlayerLocation(LobbyPlayer lobbyPlayer){
         for(NetworkManager networkManager : networkManagers){

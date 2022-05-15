@@ -21,56 +21,60 @@ public class NextStateMessage extends ClientMessage {
 
         gameHandler.setActionCompleted(false);
 
-        switch(gameHandler.getCurrentState()){
-            case ACTIVATE_CHARACTER:
+        switch (gameHandler.getCurrentState()) {
+            case ACTIVATE_CHARACTER -> {
                 gameHandler.setCurrentState(gameHandler.getSavedState());
                 gameHandler.setSavedState(null);
-                break;
-
-            case PLAY_ASSISTANT:
+            }
+            case PLAY_ASSISTANT -> {
                 game.nextTurn();
-
-                if(game.getCurrentPlayer() == null){ // end of the subphase
+                if (game.getCurrentPlayer() == null) { // end of the subphase
                     game.endPlanning();
                     gameHandler.setStudentMoves(3);
                     gameHandler.setCurrentState(GameState.MOVE_STUDENT);
                 }
-                break;
-
-            case MOVE_STUDENT:
+            }
+            case MOVE_STUDENT -> {
                 gameHandler.setStudentMoves(gameHandler.getStudentMoves() - 1);
-
-                if(gameHandler.getStudentMoves() == 0)
+                if (gameHandler.getStudentMoves() == 0)
                     gameHandler.setCurrentState(GameState.MOVE_MOTHER_NATURE);
-
-                break;
-
-            case MOVE_MOTHER_NATURE:
-                // TODO: if(game.checkVictory()) ...
-                gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
-                break;
-
-            case CHOOSE_CLOUD:
+            }
+            case MOVE_MOTHER_NATURE -> {
+                if (game.checkVictory()) {
+                    gameHandler.setCurrentState(GameState.ENDING);
+                    gameHandler.setActionCompleted(true);
+                }else {
+                    gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
+                }
+            }
+            case CHOOSE_CLOUD -> {
                 game.nextTurn();
                 gameHandler.setStudentMoves(3);
+                if (game.getCurrentPlayer() == null) { // end of the round
+                    if (game.checkEndGame()) {
+                        gameHandler.setCurrentState(GameState.ENDING);
+                        gameHandler.setActionCompleted(true);
+                    }else {
+                        game.fillClouds();
+                        game.beginPlanning();
+                        gameHandler.setCurrentState(GameState.PLAY_ASSISTANT);
+                    }
+                } else gameHandler.setCurrentState(GameState.MOVE_STUDENT);
+            }
+            case ENDING -> {
+                MenuManager menuManager = MenuManager.getInstance();
 
-                if(game.getCurrentPlayer() == null){ // end of the turn
-                    /* TODO:
-                        if (game.checkEndGame()) ...
-                     */
-                    game.fillClouds();
-                    game.beginPlanning();
-                    gameHandler.setCurrentState(GameState.PLAY_ASSISTANT);
-                }else gameHandler.setCurrentState(GameState.MOVE_STUDENT);
+                for (ConnectionCEO subscriber : network_manager.getSubscribers()) {
+                    menuManager.subscribe(subscriber);
+                    subscriber.clean();
+                }
+                network_manager.getSubscribers().clear();
 
-                break;
-
-            case FINISHED:
-                // TODO: not implemented yet
-                break;
+                network_manager.destroy();
+                Server.getInstance().deleteNetworkManager(network_manager);
+            }
         }
 
-        gameHandler.setActionCompleted(false);
         return StatusCode.OK;
     }
 

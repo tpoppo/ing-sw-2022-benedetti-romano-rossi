@@ -104,12 +104,17 @@ public class GameTest {
         }
 
         // check that there are 8 towers for each player in game
-        for(Player player : game.getPlayers()){
-            int towers = player.getSchoolBoard().getNumTowers();
-            for(Island island : game.getIslands()){
-                if(player.equals(island.getOwner()))towers += island.getNumIslands();
+        if(!game.checkEndGame() && !game.checkVictory()) {
+            for (Player player : game.getPlayers()) {
+                int towers = player.getSchoolBoard().getNumTowers();
+                for (Island island : game.getIslands()) {
+                    if (player.equals(island.getOwner())) towers += island.getNumTowers();
+                }
+                if (towers != 8)
+                    System.out.println(game);
+
+                assertEquals(8, towers);
             }
-            assertEquals(towers, 8);
         }
 
         // player's stuffs >= 0
@@ -127,7 +132,7 @@ public class GameTest {
         }
     }
 
-    @RepeatedTest(200)
+    @RepeatedTest(1000)
     public void simpleRun2Player() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, FullDiningRoomException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player0 = new LobbyPlayer("Player 1");

@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test for simple App.
  */
 public class AppTest {
+    /*
     @Test
     void RunServer() throws InterruptedException {
         runThread(() -> {
@@ -54,5 +55,5 @@ public class AppTest {
         Thread.sleep(300);
         assertNull(exc.get());
     }
-
+    */
 }

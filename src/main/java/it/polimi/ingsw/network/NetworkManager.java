@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +29,8 @@ public class NetworkManager {
     private final HashMap<LobbyPlayer, String> errorMessages;
     private LobbyHandler lobby_handler;
     private GameHandler game_handler;
-    private Set<ConnectionCEO> subscribers;
+    private final Set<ConnectionCEO> subscribers;
+    private boolean alive;
 
     // not thread safe
     // default constructor for the NetworkManager, starts in the lobby state
@@ -64,7 +63,9 @@ public class NetworkManager {
 
     private void handleMessages(){
         new Thread(() -> {
-            while(true){
+            alive = true;
+
+            while(alive){
                 LOGGER.log(Level.FINE, "Handling message");
 
                 MessageEnvelope envelope = null;
@@ -91,13 +92,10 @@ public class NetworkManager {
                     LOGGER.log(Level.INFO, "Subscribers notified");
 
                     // saves the networkManager state for persistence
-                    // FIXME: uncomment for persistence
-
                      if(current_handler.equals(HandlerType.GAME)) {
                           saveState();
                           LOGGER.log(Level.INFO, "Game saved");
                      }
-
                 }else {
                     String subscriberUsername = envelope.sender().getUsername();
                     subscribers.stream()
@@ -114,6 +112,8 @@ public class NetworkManager {
                     LOGGER.log(Level.INFO, "Not notified (subscriber not found)");
                 }
             }
+
+            LOGGER.log(Level.INFO, "Goodbye.");
         }).start();
     }
 
@@ -155,6 +155,11 @@ public class NetworkManager {
         }
     }
 
+    public void destroy(){
+        alive = false;
+        message_queue.clear();
+    }
+
     // sends an updated viewContent to all the subscribers
     private void notifySubscribers(){
         // sends view updated to subscribers
@@ -168,6 +173,10 @@ public class NetworkManager {
 
             subscriber.sendViewContent(viewContent);
         }
+    }
+
+    public Set<ConnectionCEO> getSubscribers() {
+        return subscribers;
     }
 
     // sends a viewContent containing an errorMessage to the given subscriber

@@ -91,7 +91,7 @@ public class CLIArt extends CLI {
                 case MOVE_MOTHER_NATURE -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, move mother nature...").reset(), row_position, columns_position);
                 case MOVE_STUDENT -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, move a student...").reset(), row_position, columns_position);
                 case ACTIVATE_CHARACTER -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, activate a character...").reset(), row_position, columns_position);
-                case FINISHED -> print(ansi().bg(Ansi.Color.DEFAULT).a("Finished").reset(), row_position, columns_position);
+                case ENDING -> print(ansi().bg(Ansi.Color.DEFAULT).a("Finished").reset(), row_position, columns_position);
             }
         }else{
             print(ansi().bg(Ansi.Color.DEFAULT).a("It's " + current_player.getUsername() + " turn, wait...").reset(), row_position, columns_position);

@@ -26,8 +26,8 @@ public class CommandHandler {
         commands.add(clean);
 
         Command board = new Command("board", CommandType.GENERAL);
-        board.addArgument("number");
-        board.setDescription("Displays the [" + board.getArguments().get(0) + "] board");
+        board.addArgument("username");
+        board.setDescription("Displays [" + board.getArguments().get(0) + "]'s board");
         commands.add(board);
 
         Command help = new Command("help", CommandType.GENERAL);
@@ -41,7 +41,7 @@ public class CommandHandler {
         // Menu commands
         Command create = new Command("create", CommandType.MENU);
         create.addArgument("lobby size");
-        create.setDescription("Creates a lobby of the given size.");
+        create.setDescription("Creates a lobby of the given size (2 - 3).");
         commands.add(create);
 
         Command join = new Command("join", CommandType.MENU);
