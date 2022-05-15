@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client;
 
 
+import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.characters.Character;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class CommandHandler {
-    private static List<Command> commands = null;
-    private static final String NEWLINE = "<--NEWLINE-->";
+    private static final List<Command> commands = new ArrayList<>();
+    protected static final String NEWLINE = "<--NEWLINE-->";
 
-    private static void createCommands(){
+    public static void createCommands(){
+        // General clientside commands
         Command clean = new Command("clean", CommandType.GENERAL);
         clean.setDescription("Cleans errors from the screen");
         commands.add(clean);
@@ -35,6 +37,7 @@ public class CommandHandler {
         exit.setDescription("Exit from the help screen.");
         commands.add(exit);
 
+        // Menu commands
         Command create = new Command("create", CommandType.MENU);
         create.addArgument("lobby size");
         create.setDescription("Creates a lobby of the given size.");
@@ -58,12 +61,14 @@ public class CommandHandler {
         Command cloud = new Command("cloud", CommandType.GAME);
         cloud.addArgument("number");
         cloud.setDescription("Selects the [" + cloud.getArguments().get(0) + "] cloud.");
+        cloud.addState(GameState.CHOOSE_CLOUD);
         commands.add(cloud);
 
         Command mm = new Command("mothernature", CommandType.GAME);
         mm.addArgument("island number");
         mm.setDescription("Moves mother nature to the given [" + mm.getArguments().get(0) + "] island.");
         mm.addAlias("mm");
+        mm.addState(GameState.MOVE_MOTHER_NATURE);
         commands.add(mm);
 
         Command ms = new Command("student", CommandType.GAME);
@@ -71,32 +76,37 @@ public class CommandHandler {
         ms.addArgument("island number");
         ms.setDescription("Moves a student of the color [" + ms.getArguments().get(0) + "] " +
                 "from the entrance to the dining room." + NEWLINE +
-                "If [" + ms.getArguments().get(1) + "] is specified, it instead moves the student to the selected island.");
+                "If [" + ms.getArguments().get(1) + "] is specified, it moves the student to the selected island instead.");
         ms.addAlias("ms");
+        ms.addState(GameState.MOVE_STUDENT);
         commands.add(ms);
 
         Command pass = new Command("pass", CommandType.GAME);
         pass.setDescription("Passes the turn.");
+        pass.addStates(List.of(GameState.MOVE_MOTHER_NATURE, GameState.CHOOSE_CLOUD, GameState.ACTIVATE_CHARACTER, GameState.MOVE_STUDENT, GameState.PLAY_ASSISTANT));
         commands.add(pass);
 
         Command assistant = new Command("assistant", CommandType.GAME);
         assistant.addArgument("number");
         assistant.setDescription("Selects the [" + assistant.getArguments().get(0) + "] assistant from the list.");
+        assistant.addState(GameState.PLAY_ASSISTANT);
         commands.add(assistant);
 
         Command character = new Command("character", CommandType.GAME);
         character.addArgument("number");
         character.setDescription("Selects the character that you want to be played");
+        pass.addStates(List.of(GameState.MOVE_MOTHER_NATURE, GameState.CHOOSE_CLOUD, GameState.MOVE_STUDENT, GameState.PLAY_ASSISTANT));
         commands.add(character);
 
         Command activate = new Command("activate", CommandType.GAME);
         activate.addArgument("requirements");
         activate.setDescription("Activates the selected character." + NEWLINE +
                 "The [" + activate.getArguments().get(0)+ "] vary character to character.");
+        activate.addState(GameState.ACTIVATE_CHARACTER);
         commands.add(activate);
     }
 
-    private static void normalizeDescriptions(){
+    public static String normalizeDescription(Command command){
         /*
         Optional<Integer> maxLen;
 
@@ -105,29 +115,39 @@ public class CommandHandler {
                 .sum())
                 .reduce((a, b) -> a > b ? a : b);
 
-        maxLen.ifPresent(len -> {
+        if(maxLen.isPresent()){
+            String replacement = "\n";
 
-        });
+            for(int i=0; i<maxLen.get(); i++)
+                replacement = replacement.concat(" ");
+
+            String newlineReplacement = replacement;
+
+            commands.forEach(command -> {
+                StringBuilder firstSpaces = new StringBuilder();
+
+                int spacesToAdd = maxLen.get() - command.getCommandInfo().indexOf("-");
+
+                firstSpaces.append(" ".repeat(Math.max(0, spacesToAdd)));
+
+                formattedCommands.append(
+                        command.getCommandInfo()
+                                .replace("-", firstSpaces.toString())
+                                .replaceAll(NEWLINE, newlineReplacement)
+                );
+            });
+        }
         */
 
         String replacement = "\n";
         for(int i=0; i<41; i++)
             replacement = replacement.concat(" ");
-
         String finalReplacement = replacement;
-        commands.forEach(command -> {
-            String normalizedDescription = command.getDescription().replaceAll(NEWLINE, finalReplacement);
-            command.setDescription(normalizedDescription);
-        });
+
+        return command.getDescription().replaceAll(NEWLINE, finalReplacement);
     }
 
     public static List<Command> getCommands() {
-        if(commands == null){
-            commands = new ArrayList<>();
-            createCommands();
-            normalizeDescriptions();
-        }
-
         return commands;
     }
 
@@ -224,7 +244,7 @@ public class CommandHandler {
             // game commands
             case "activate" -> { // ActivateCharacterMessage
 
-                Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
+                Character selected_character = cli.getView().getGameHandler().getSelectedCharacter();
                 PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
                 if(selected_character == null) return "You need to select a character first.";
 

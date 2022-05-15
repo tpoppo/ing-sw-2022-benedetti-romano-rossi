@@ -12,7 +12,6 @@ import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiColors;
 import org.fusesource.jansi.AnsiConsole;
 
 import java.io.BufferedInputStream;
@@ -46,17 +45,11 @@ public class CLI {
     private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
 
-    private final Map<GameState, List<Command>> COMMAND_MAP = Map.of(
-            GameState.PLAY_ASSISTANT, List.of(CommandHandler.get("assistant"), CommandHandler.get("pass")),
-            GameState.CHOOSE_CLOUD, List.of(CommandHandler.get("cloud"), CommandHandler.get("pass")),
-            GameState.MOVE_MOTHER_NATURE, List.of(CommandHandler.get("mm"), CommandHandler.get("pass"))
-            // TODO: finish
-    );
-
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
         this.out = out;
         this.read_stream = new Scanner(new BufferedInputStream(read_stream));
+        CommandHandler.createCommands();
     }
     public CLI(ClientSocket client_socket) {
         this(client_socket, System.out, System.in);
@@ -166,8 +159,9 @@ public class CLI {
             out.printf("Lobby %d: Slots: %d/%d\n", reduced_lobby.getID(), reduced_lobby.getNumPlayer(), reduced_lobby.getMaxPlayers());
         }
         out.println();
-        out.println("create <max players> - create a new lobby");
-        out.println("join <lobby id> - join the lobby with ID <lobby id>");
+
+        List<Command> menuCommands = CommandHandler.getCommands().stream().filter(command -> command.getCommandType().equals(CommandType.MENU)).toList();
+        menuCommands.forEach(command -> out.print(command.getCommandInfo() + "\n"));
 
         out.print(ansi().cursorDown(2).a("> "));
 
@@ -195,8 +189,9 @@ public class CLI {
             );
         }
         out.println();
-        out.println("start <expert mode> - start the game");
-        out.println("wizard <id> - choose wizard");
+
+        List<Command> lobbyCommands = CommandHandler.getCommands().stream().filter(command -> command.getCommandType().equals(CommandType.LOBBY)).toList();
+        lobbyCommands.forEach(command -> out.print(command.getCommandInfo() + "\n"));
 
         out.print(ansi().cursorDownLine(2).a("> "));
 
@@ -275,34 +270,52 @@ public class CLI {
         stateText.append(Constants.NEWLINE);
 
         String instruction = "null";
-        String availableCommands = "no commands :(";
+        StringBuilder availableCommands = new StringBuilder();
+
+        List<Command> gameCommands = CommandHandler.getCommands().stream().filter(command -> command.getCommandType().equals(CommandType.GAME)).toList();
 
         switch (gameHandler.getCurrentState()){
-            // TODO:
             case PLAY_ASSISTANT -> {
                 instruction = "Play an assistant: ";
-                availableCommands = "assistant <number>";
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.PLAY_ASSISTANT))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
             case CHOOSE_CLOUD -> {
                 instruction = "Choose a cloud: ";
-                availableCommands = "cloud <number>";
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.CHOOSE_CLOUD))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
             case MOVE_MOTHER_NATURE -> {
                 instruction = "Move mother nature: ";
-                availableCommands = "mm <island>";
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_MOTHER_NATURE))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
             case MOVE_STUDENT -> {
                 instruction = "Move a student (" + gameHandler.getStudentMoves() + " left): ";
-                availableCommands = "ms <color>" +
-                                    Constants.NEWLINE +
-                                    "ms <color> <island>";
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_STUDENT))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
             case ACTIVATE_CHARACTER -> {
                 instruction = "Activate a character: ";
-                availableCommands = ""; // TODO
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.ACTIVATE_CHARACTER))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
             case FINISHED -> {
                 instruction = "Finished :";
+                gameCommands.stream()
+                        .filter(command -> command.getAdmittedStates().contains(GameState.FINISHED))
+                        .map(command -> command.getSimpleInfo() + "\n")
+                        .forEach(availableCommands::append);
             }
         }
 
@@ -313,7 +326,7 @@ public class CLI {
         else
             stateText.append(ansi().fgBrightYellow().a("IN PROGRESS...").reset());
         stateText.append(Constants.NEWLINE);
-        stateText.append(availableCommands);
+        stateText.append(availableCommands.toString());
 
         return stateText.toString();
     }
@@ -547,7 +560,7 @@ public class CLI {
                     .forEach(command -> {
                         helpText.append(command.getName()).append(" ");
                         command.getArguments().forEach(argument -> helpText.append("[" + argument + "] "));
-                        helpText.append(ansi().cursorToColumn(42).a(command.getDescription()));
+                        helpText.append(ansi().cursorToColumn(42).a(CommandHandler.normalizeDescription(command)));
                         helpText.append(Constants.NEWLINE);
                     });
             helpText.append(Constants.NEWLINE);

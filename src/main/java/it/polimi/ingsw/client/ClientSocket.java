@@ -22,7 +22,6 @@ public class ClientSocket {
     public final Object mutex = new Object();
 
     public ClientSocket(){
-
         try {
             setup();
         } catch (IOException e) {
