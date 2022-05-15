@@ -39,7 +39,7 @@ public class HeadmasterTest {
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(1, gameModifiers.getProfessorModifier());
 
-        Headmaster.onDeactivation(game, playerchoice);
+        Headmaster.onDeactivation(game);
         assertEquals(0, gameModifiers.getProfessorModifier());
     }
 }

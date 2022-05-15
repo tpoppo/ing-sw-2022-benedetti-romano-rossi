@@ -439,7 +439,7 @@ public class Game implements Serializable{
     }
 
     /**
-     * It moves students from the selected cloud to the player's entrance
+     * It moves students from the selected cloud to the player's entrance. Additionally, it deactivates the characters
      * @param cloud
      */
     public void chooseCloud(Students cloud) throws EmptyCloudException {
@@ -455,6 +455,12 @@ public class Game implements Serializable{
         }
         getCurrentPlayer().getSchoolBoard().setEntranceStudents(entrance_students);
         cloud.clear();
+
+        if(expert_mode){
+            for(Character character : characters){
+                character.deactivate(this);
+            }
+        }
     }
 
 

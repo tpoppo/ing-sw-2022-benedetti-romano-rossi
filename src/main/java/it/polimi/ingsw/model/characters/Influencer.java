@@ -13,7 +13,7 @@ public class Influencer extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices) {
+    void onDeactivation(Game game) {
         game.getGameModifiers().setBuffInfluence(0);
     }
 }

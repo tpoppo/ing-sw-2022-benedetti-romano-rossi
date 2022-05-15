@@ -18,7 +18,7 @@ public class ChooseCloudMessage extends ClientMessage {
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
 
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.CHOOSE_CLOUD, false);
+        StatusCode status_code = preambleGameCheck(network_manager, lobby_player, GameState.CHOOSE_CLOUD, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();

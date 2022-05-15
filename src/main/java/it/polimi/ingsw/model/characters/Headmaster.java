@@ -14,7 +14,7 @@ public class Headmaster extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices) {
+    void onDeactivation(Game game) {
         game.getGameModifiers().setProfessorModifier(0);
     }
 }

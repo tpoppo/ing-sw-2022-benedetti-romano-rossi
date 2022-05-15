@@ -23,7 +23,7 @@ public class Conqueror extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices){
+    void onDeactivation(Game game){
         boolean overlying_mother_nature = true;
 
         for(Island island : game.getIslands()) {

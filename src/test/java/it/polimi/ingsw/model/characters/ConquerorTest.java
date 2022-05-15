@@ -42,6 +42,6 @@ public class ConquerorTest {
         conqueror.onActivation(game, playerchoice);
         assertEquals(true, islands.get(0).hasMotherNature());
 
-        conqueror.onDeactivation(game, playerchoice);
+        conqueror.onDeactivation(game);
     }
 }

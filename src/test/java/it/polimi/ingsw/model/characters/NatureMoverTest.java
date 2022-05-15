@@ -39,7 +39,7 @@ public class NatureMoverTest {
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getExtraSteps());
 
-        NatureMover.onDeactivation(game, playerchoice);
+        NatureMover.onDeactivation(game);
         assertEquals(0, gameModifiers.getExtraSteps());
     }
 }

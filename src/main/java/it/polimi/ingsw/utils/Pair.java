@@ -3,28 +3,28 @@ package it.polimi.ingsw.utils;
 import java.util.Objects;
 
 public class Pair <T, K>{
-    private T x;
-    private K y;
+    private T first;
+    private K second;
 
-    public Pair(T x, K y) {
-        this.x = x;
-        this.y = y;
+    public Pair(T first, K second) {
+        this.first = first;
+        this.second = second;
     }
 
-    public T getX() {
-        return x;
+    public T getFirst() {
+        return first;
     }
 
-    public void setX(T x) {
-        this.x = x;
+    public void setFirst(T first) {
+        this.first = first;
     }
 
-    public K getY() {
-        return y;
+    public K getSecond() {
+        return second;
     }
 
-    public void setY(K y) {
-        this.y = y;
+    public void setSecond(K second) {
+        this.second = second;
     }
 
     @Override
@@ -32,11 +32,11 @@ public class Pair <T, K>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pair<?, ?> pair = (Pair<?, ?>) o;
-        return Objects.equals(x, pair.x) && Objects.equals(y, pair.y);
+        return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(first, second);
     }
 }

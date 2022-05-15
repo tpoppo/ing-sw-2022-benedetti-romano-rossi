@@ -18,7 +18,7 @@ public class PlayAssistantMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, GameState.PLAY_ASSISTANT, false);
+        StatusCode status_code = preambleGameCheck(network_manager, lobby_player, GameState.PLAY_ASSISTANT, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();

@@ -13,7 +13,7 @@ public class NextStateMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, null, true);
+        StatusCode status_code = preambleGameCheck(network_manager, lobby_player, null, true);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();

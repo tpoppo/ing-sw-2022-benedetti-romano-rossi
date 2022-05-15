@@ -58,7 +58,7 @@ public class BardTest {
         assertEquals(expected_diningstudents, game.getCurrentPlayer().getSchoolBoard().getDiningStudents());
         assertEquals(expected_entrancestudents, game.getCurrentPlayer().getSchoolBoard().getEntranceStudents());
 
-        bard.deactivate(game, playerChoices);
+        bard.deactivate(game);
     }
 
     //try an Exception with an odd number of Students in input
@@ -92,7 +92,7 @@ public class BardTest {
         swap_list.add(Color.GREEN);
         playerChoices.setStudent(swap_list);
         assertThrows(BadPlayerChoiceException.class, () -> bard.activate(game, playerChoices));
-        bard.deactivate(game, playerChoices);
+        bard.deactivate(game);
     }
 
     //try an Exception when Students aren't in the dining room or entrance room
@@ -127,6 +127,6 @@ public class BardTest {
         swap_list.add(Color.GREEN);
         playerChoices.setStudent(swap_list);
         assertThrows(BadPlayerChoiceException.class, () -> bard.activate(game, playerChoices));
-        bard.deactivate(game, playerChoices);
+        bard.deactivate(game);
     }
 }

@@ -14,6 +14,10 @@ public class JoinLobbyMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
+        if(!menuManager.isSubscribed(connectionCEO)){
+            menuManager.addErrorMessage(player, "You must be in the Menu");
+            return StatusCode.WRONG_STATE;
+        }
         Server server = Server.getInstance();
         Optional<NetworkManager> network_manager = server.joinLobby(id, player);
 

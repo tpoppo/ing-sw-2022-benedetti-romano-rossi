@@ -37,7 +37,7 @@ public class InfluencerTest {
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getBuffInfluence());
 
-        influencer.onDeactivation(game, playerchoice);
+        influencer.onDeactivation(game);
         assertEquals(0, gameModifiers.getBuffInfluence());
     }
 }

@@ -16,7 +16,7 @@ public class NatureMover extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices) {
+    void onDeactivation(Game game) {
         GameModifiers gameModifiers = game.getGameModifiers();
         gameModifiers.setExtraSteps(0);
     }

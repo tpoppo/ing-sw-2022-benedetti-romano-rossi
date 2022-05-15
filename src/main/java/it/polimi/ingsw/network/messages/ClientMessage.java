@@ -32,7 +32,7 @@ public abstract class ClientMessage implements Serializable {
      * @param required_state  state required to take the action
      * @return empty if it is valid otherwise WRONG_PLAYER|WRONG_STATE
      */
-    protected StatusCode preamble_game_check(NetworkManager network_manager, LobbyPlayer lobby_player, GameState required_state, boolean action_completed) {
+    protected StatusCode preambleGameCheck(NetworkManager network_manager, LobbyPlayer lobby_player, GameState required_state, boolean action_completed) {
         GameHandler gameHandler = network_manager.getGameHandler();
 
         // You must be in game (check current_handler)
@@ -43,15 +43,6 @@ public abstract class ClientMessage implements Serializable {
 
         Game game = gameHandler.getModel();
 
-        // FIXME: this error gets displayed when trying to move a student not possessed to the dining room
-        //  after a server crash
-        //  UPDATE: it happens even if the server hasn't crashed, it seems like it overrides other errors
-        // Invalid state. It must be (current_state=required_state, action_completed=False)
-        if ((required_state != null && gameHandler.getCurrentState() != required_state) || gameHandler.isActionCompleted() != action_completed) {
-            network_manager.addErrorMessage(lobby_player, "There is a time and place for everything but not now!");
-            return StatusCode.WRONG_STATE;
-        }
-
         // Invalid player. Different players (from model and from socket)
         Player current_player = game.getCurrentPlayer();
         Player player = network_manager.getGameHandler().lobbyPlayerToPlayer(lobby_player);
@@ -60,10 +51,19 @@ public abstract class ClientMessage implements Serializable {
             return StatusCode.WRONG_PLAYER;
         }
 
+        // Invalid state. It must be (current_state=required_state, action_completed=False)
+        if ((required_state != null && gameHandler.getCurrentState() != required_state) || gameHandler.isActionCompleted() != action_completed) {
+            System.err.println(required_state);
+
+            String err = "Required: %s %s. Given: %s %s.".formatted(gameHandler.getCurrentState(), gameHandler.isActionCompleted(), required_state, action_completed);
+            network_manager.addErrorMessage(lobby_player, "Wrong state." + err);
+            return StatusCode.WRONG_STATE;
+        }
+
         return StatusCode.EMPTY;
     }
 
-    protected StatusCode preamble_lobby_check(NetworkManager network_manager, LobbyPlayer lobby_player) {
+    protected StatusCode preambleLobbyCheck(NetworkManager network_manager, LobbyPlayer lobby_player) {
         LobbyHandler lobby_handler = network_manager.getLobbyHandler();
 
         // You must be in game (check current_handler)

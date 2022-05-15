@@ -45,6 +45,6 @@ public class NatureBlockerTest {
         assertEquals(3, islands.get(0).getNoEntryTiles());
         assertEquals(3, natureblocker.getNoEntryTiles());
 
-        natureblocker.onDeactivation(game, playerChoices);
+        natureblocker.onDeactivation(game);
     }
 }

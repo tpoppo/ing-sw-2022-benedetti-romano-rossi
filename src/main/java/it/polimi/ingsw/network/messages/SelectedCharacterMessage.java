@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameHandler;
-import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
@@ -17,7 +16,7 @@ public class SelectedCharacterMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_game_check(network_manager, lobby_player, null, false);
+        StatusCode status_code = preambleGameCheck(network_manager, lobby_player, null, false);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         GameHandler gameHandler = network_manager.getGameHandler();

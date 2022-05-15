@@ -22,11 +22,17 @@ public class CreateLobbyMessage extends ClientMessage {
      */
     @Override
     public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
+        if(!menuManager.isSubscribed(connectionCEO)){
+            menuManager.addErrorMessage(player, "You must be in the Menu");
+            return StatusCode.WRONG_STATE;
+        }
+
         // We check whether max_players is 2 or 3?
         if(max_players != 3 && max_players != 2) {
             menuManager.addErrorMessage(player, "Lobby size can be only 2 or 3! Given : " + max_players);
             return StatusCode.INVALID_ACTION;
         }
+
 
         Server server = Server.getInstance();
         NetworkManager network_manager = server.createLobby(max_players);

@@ -109,4 +109,8 @@ public class MenuManager {
         subscribers.remove(connectionCEO);
         notifySubscribers();
     }
+
+    public boolean isSubscribed(ConnectionCEO connectionCEO){
+        return subscribers.contains(connectionCEO);
+    }
 }

@@ -433,7 +433,7 @@ public class CLI {
         }
 
         if(model.getExpertMode())
-            boardStr.append(ansi().cursor(STD_COINS_POSITION.getX(), STD_COINS_POSITION.getY()).a(drawCoins(player)));
+            boardStr.append(ansi().cursor(STD_COINS_POSITION.getFirst(), STD_COINS_POSITION.getSecond()).a(drawCoins(player)));
 
         return boardStr.toString();
     }
@@ -564,8 +564,8 @@ public class CLI {
     }
 
     public void printRequestedBoard(){
-        int rowFrom = STD_BOARD_POSITION.getX();
-        int columnFrom = STD_BOARD_POSITION.getY();
+        int rowFrom = STD_BOARD_POSITION.getFirst();
+        int columnFrom = STD_BOARD_POSITION.getSecond();
         int rowTo = rowFrom + 14;
         int columnTo = columnFrom + 35;
 
@@ -600,7 +600,7 @@ public class CLI {
     }
 
     protected void print(Ansi s, Pair<Integer, Integer> coordinates){
-        print(s, coordinates.getX(), coordinates.getY());
+        print(s, coordinates.getFirst(), coordinates.getSecond());
     }
 
     protected void print(String s, int row, int column) {
@@ -615,7 +615,7 @@ public class CLI {
     }
 
     protected void print(String s, Pair<Integer, Integer> coordinates){
-        print(s, coordinates.getX(), coordinates.getY());
+        print(s, coordinates.getFirst(), coordinates.getSecond());
     }
 
     protected void drawBox(Ansi.Color color, int rowFrom, int columnFrom, int rowTo, int columnTo){

@@ -44,9 +44,11 @@ abstract public class Character implements Serializable {
         cost++;
     }
 
-    public void deactivate(Game game, PlayerChoices playerChoices){
+    public void deactivate(Game game){
+        if(!activated) return;
+
         activated = false;
-        onDeactivation(game, playerChoices);
+        onDeactivation(game);
     }
 
     // Tells which students are on top of the card
@@ -73,7 +75,7 @@ abstract public class Character implements Serializable {
 
     abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
 
-    abstract void onDeactivation(Game game, PlayerChoices playerChoices);
+    abstract void onDeactivation(Game game);
 
 
 }

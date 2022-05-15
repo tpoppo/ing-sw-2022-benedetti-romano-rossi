@@ -39,7 +39,7 @@ public class DemolisherTest {
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(true, gameModifiers.isInhibitTowers());
 
-        demolisher.onDeactivation(game, playerchoice);
+        demolisher.onDeactivation(game);
         assertEquals(false, gameModifiers.isInhibitTowers());
     }
 }

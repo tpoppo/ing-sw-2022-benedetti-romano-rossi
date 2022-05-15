@@ -13,7 +13,7 @@ public class ChooseWizardMessage extends ClientMessage{
     }
 
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
-        StatusCode status_code = preamble_lobby_check(network_manager, lobby_player);
+        StatusCode status_code = preambleLobbyCheck(network_manager, lobby_player);
         if(status_code != StatusCode.EMPTY) return status_code;
 
         // TODO: better error handling

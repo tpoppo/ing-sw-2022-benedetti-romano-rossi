@@ -51,7 +51,7 @@ public class Chef extends Character{
     }
 
     @Override
-    void onDeactivation(Game game, PlayerChoices playerChoices) {
+    void onDeactivation(Game game) {
 
     }
 

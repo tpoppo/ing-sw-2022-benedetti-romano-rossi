@@ -223,8 +223,10 @@ public class CommandHandler {
 
             // game commands
             case "activate" -> { // ActivateCharacterMessage
+
                 Character selected_character = client_socket.getView().getGameHandler().getSelectedCharacter();
                 PlayerChoicesSerializable player_choices_serializable = new PlayerChoicesSerializable();
+                if(selected_character == null) return "You need to select a character first.";
 
                 switch (selected_character.require()) {
                     case ISLAND -> {
