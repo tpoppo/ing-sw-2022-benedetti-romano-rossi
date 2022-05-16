@@ -8,7 +8,6 @@ import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
-import it.polimi.ingsw.network.ConnectionCEO;
 import it.polimi.ingsw.network.messages.NextStateMessage;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
@@ -19,14 +18,15 @@ import org.fusesource.jansi.AnsiConsole;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.fusesource.jansi.Ansi.ansi;
-
-// FIXME: tower check if conquering an island with more towers than you currently have
 
 public class CLI {
     final protected Logger LOGGER = Logger.getLogger(getClass().getName());
@@ -50,6 +50,8 @@ public class CLI {
     private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
     private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(20, 15);
+
+    // TODO: display bag current size
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -344,7 +346,7 @@ public class CLI {
         else
             stateText.append(ansi().fgBrightYellow().a("IN PROGRESS...").reset());
         stateText.append(Constants.NEWLINE);
-        stateText.append(availableCommands.toString());
+        stateText.append(availableCommands);
 
         return stateText.toString();
     }
@@ -377,6 +379,7 @@ public class CLI {
     }
 
     private String drawIslands(){
+        // TODO: add influence on island
         StringBuilder islandStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();
@@ -420,7 +423,6 @@ public class CLI {
 
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 
-        // TODO: this doesnt works
         // displays the username of the owner if it's not the user's
         if(!schoolBoardPlayerUsername.equals(username))
             boardStr.append(" (").append(schoolBoardPlayerUsername).append(")");

@@ -38,7 +38,7 @@ public class MenuManager {
                     throw new RuntimeException(e);
                 }
 
-                LOGGER.log(Level.FINE, "Message found: {}", envelope);
+                LOGGER.log(Level.FINE, "Message found: {0}", envelope);
                 StatusCode statusCode = envelope.message().handle(envelope.connectionCEO(), this, envelope.sender());
                 LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
 

@@ -52,7 +52,7 @@ public class ConnectionCEO extends Thread {
                                 this.player = player; // FIXME: is this ok?
 
                                 networkManager.subscribe(this);
-                                LOGGER.log(Level.INFO, "Player found and subscribed to networkManager {}", networkManager);
+                                LOGGER.log(Level.INFO, "Player found and subscribed to networkManager {0}", networkManager);
                             });
         }else {
             MenuManager.getInstance().subscribe(this);

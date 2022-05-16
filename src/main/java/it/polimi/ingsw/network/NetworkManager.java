@@ -10,6 +10,7 @@ import it.polimi.ingsw.view.GameContent;
 import it.polimi.ingsw.view.LobbyContent;
 import it.polimi.ingsw.view.ViewContent;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -68,7 +69,7 @@ public class NetworkManager {
             while(alive){
                 LOGGER.log(Level.FINE, "Handling message");
 
-                MessageEnvelope envelope = null;
+                MessageEnvelope envelope;
                 try {
                     envelope = message_queue.take(); // blocking (LinkedBlockingQueue)
                 } catch (InterruptedException e) {
@@ -76,7 +77,7 @@ public class NetworkManager {
                     throw new RuntimeException(e);
                 }
 
-                LOGGER.log(Level.FINE, "Message found: {}", envelope);
+                LOGGER.log(Level.FINE, "Message found: {0}", envelope);
                 StatusCode statusCode = envelope.message().handle(this, envelope.sender());
                 LOGGER.log(Level.INFO, envelope.message() + " => " + statusCode);
 
@@ -92,7 +93,7 @@ public class NetworkManager {
                     LOGGER.log(Level.INFO, "Subscribers notified");
 
                     // saves the networkManager state for persistence
-                     if(current_handler.equals(HandlerType.GAME)) {
+                     if(current_handler != null && current_handler.equals(HandlerType.GAME)) {
                           saveState();
                           LOGGER.log(Level.INFO, "Game saved");
                      }
@@ -155,9 +156,22 @@ public class NetworkManager {
         }
     }
 
+    private void deleteSaveFile(){
+        String path = Constants.PATH_SAVES;
+        String fileName = path + "/SavedGame_" + ID + ".sav";
+
+        File saveFile = new File(fileName);
+
+        if(saveFile.delete()){
+            LOGGER.log(Level.INFO, "{0} deleted successfully!", saveFile);
+        }else LOGGER.log(Level.INFO, "Failed to delete {0}", saveFile);
+    }
+
     public void destroy(){
         alive = false;
         message_queue.clear();
+        current_handler = null;
+        deleteSaveFile();
     }
 
     // sends an updated viewContent to all the subscribers
