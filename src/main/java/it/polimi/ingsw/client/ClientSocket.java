@@ -43,13 +43,16 @@ public class ClientSocket {
 
             LOGGER.log(Level.FINE, "Message sent: {0}", message);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Couldn't send message: {0}", message);
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE, "Could not send message: {0}. Exception: {1}", new Object[]{message, e});
         }
     }
 
     public void closeConnection() throws IOException {
         clientSocket.close();
+    }
+
+    public boolean isOpened() {
+        return !clientSocket.isClosed();
     }
 
     public boolean login(String username) {
@@ -66,18 +69,21 @@ public class ClientSocket {
         this.username = username;
 
         new Thread(() -> {
-            while(true) {
+            while(isOpened()) {
                 try {
                     view = (ViewContent) input_stream.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    if(clientSocket.isClosed() || clientSocket.isOutputShutdown() || clientSocket.isInputShutdown()){
-                        LOGGER.log(Level.SEVERE, clientSocket.isClosed() + " " + clientSocket.isOutputShutdown() + " " + clientSocket.isInputShutdown());
-                        LOGGER.log(Level.SEVERE, "The socket has been closed");
-                        System.exit(1); // TODO: this is probably not what we want to do
+                } catch (IOException e) {
+                    try {
+                        closeConnection();
+                    } catch (IOException ex) {
+                        LOGGER.log(Level.SEVERE, "Cannot closed: {0}", ex);
                     }
-                    throw new RuntimeException(e);
+
+                    LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", e);
+                } catch (ClassNotFoundException e){
+                    LOGGER.log(Level.INFO, "Invalid message: {0}", e);
                 }
- //               LOGGER.log(Level.INFO, "Received view: {0}", view);
+
                 if(view != null) {
                     synchronized (mutex){
                         mutex.notifyAll();

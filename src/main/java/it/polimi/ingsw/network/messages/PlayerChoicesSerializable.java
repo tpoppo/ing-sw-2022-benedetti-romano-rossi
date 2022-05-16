@@ -40,7 +40,7 @@ public class PlayerChoicesSerializable implements Serializable {
 
     PlayerChoices toPlayerChoices(Game game){
         PlayerChoices p = new PlayerChoices();
-        p.setStudent(new ArrayList<>(student));
+        p.setStudent(student == null ? new ArrayList<>() : new ArrayList<>(student));
         p.setIsland(island == null ? null : game.getIslands().get(island));
         return p;
     }

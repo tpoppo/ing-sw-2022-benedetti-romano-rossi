@@ -8,6 +8,7 @@ import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.network.messages.EndingMessage;
 import it.polimi.ingsw.network.messages.NextStateMessage;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
@@ -90,17 +91,22 @@ public class CLI {
 
         startRendering();
 
-        while(true){
+        while(client_socket.isOpened()){
             playing = true;
             this.schoolBoardPlayerUsername = username; // sets own username for later displaying of board
 
-            while(playing){
+            while(playing && client_socket.isOpened()){
                 getInput();
             }
+            this.errorMessage = null;
 
             // last input
-            client_socket.send(new NextStateMessage());
+            client_socket.send(new EndingMessage());
+
+            LOGGER.log(Level.INFO, "isOpened: {0}", new Object[]{client_socket.isOpened()});
         }
+        // FIXME: this is the end.
+        System.exit(0);
     }
 
     private void getInput(){
@@ -528,7 +534,7 @@ public class CLI {
         return coinsStr.toString();
     }
 
-    private String drawCharacters(){
+    protected String drawCharacters(){
         StringBuilder charStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();

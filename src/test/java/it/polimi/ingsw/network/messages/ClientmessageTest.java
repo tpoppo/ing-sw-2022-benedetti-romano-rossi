@@ -31,7 +31,7 @@ public class ClientmessageTest {
 
         //try 100000 random messages
         for(int i=0; i<100000; i++){
-            int random_message = rng.nextInt(13);
+            int random_message = rng.nextInt(11);
             switch (random_message){
                 case 0:
                     //ActivateCharacterMessage
@@ -90,6 +90,11 @@ public class ClientmessageTest {
                 case 8:
                     StartGameMessage startgamemessage = new StartGameMessage(rng.nextBoolean());
                     startgamemessage.handle(networkmanager, players.get(rng.nextInt(players.size())));
+                    startgamemessage.toString();
+                case 9:
+                    EndingMessage endingMessage = new EndingMessage();
+                    endingMessage.handle(networkmanager, players.get(rng.nextInt(players.size())));
+                    endingMessage.toString();
             }
         }
         /*StartGameMessage startgamemesage = new StartGameMessage(true);

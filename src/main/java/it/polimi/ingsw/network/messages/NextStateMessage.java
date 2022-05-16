@@ -19,7 +19,6 @@ public class NextStateMessage extends ClientMessage {
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
 
-        gameHandler.setActionCompleted(false);
 
         switch (gameHandler.getCurrentState()) {
             case ACTIVATE_CHARACTER -> {
@@ -42,7 +41,6 @@ public class NextStateMessage extends ClientMessage {
             case MOVE_MOTHER_NATURE -> {
                 if (game.checkVictory()) {
                     gameHandler.setCurrentState(GameState.ENDING);
-                    gameHandler.setActionCompleted(true);
                 }else {
                     gameHandler.setCurrentState(GameState.CHOOSE_CLOUD);
                 }
@@ -53,7 +51,6 @@ public class NextStateMessage extends ClientMessage {
                 if (game.getCurrentPlayer() == null) { // end of the round
                     if (game.checkEndGame()) {
                         gameHandler.setCurrentState(GameState.ENDING);
-                        gameHandler.setActionCompleted(true);
                     }else {
                         game.fillClouds();
                         game.beginPlanning();
@@ -61,20 +58,13 @@ public class NextStateMessage extends ClientMessage {
                     }
                 } else gameHandler.setCurrentState(GameState.MOVE_STUDENT);
             }
-            case ENDING -> {
-                MenuManager menuManager = MenuManager.getInstance();
-
-                for (ConnectionCEO subscriber : network_manager.getSubscribers()) {
-                    menuManager.subscribe(subscriber);
-                    subscriber.clean();
-                }
-                network_manager.getSubscribers().clear();
-
-                network_manager.destroy();
-                Server.getInstance().deleteNetworkManager(network_manager);
+            default -> {
+                network_manager.addErrorMessage(lobby_player, "You cannot pass in this situation.");
+                return StatusCode.INVALID_ACTION;
             }
         }
 
+        gameHandler.setActionCompleted(false);
         return StatusCode.OK;
     }
 

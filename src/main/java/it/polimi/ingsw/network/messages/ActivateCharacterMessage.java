@@ -25,13 +25,15 @@ public class ActivateCharacterMessage extends ClientMessage {
         Game game = gameHandler.getModel();
 
         Character character = gameHandler.getSelectedCharacter();
-
+        int cost = character.getCost();
         try {
             game.activateCharacter(character, player_choices.toPlayerChoices(game));
         } catch (BadPlayerChoiceException e) {
-            // TODO: add error message for client
+            network_manager.addErrorMessage(lobby_player, "Wrong parameters");
             return StatusCode.INVALID_ACTION;
         }
+
+        game.getCurrentPlayer().setCoins(game.getCurrentPlayer().getCoins()-cost);
 
         gameHandler.setActionCompleted(true);
         return StatusCode.OK;

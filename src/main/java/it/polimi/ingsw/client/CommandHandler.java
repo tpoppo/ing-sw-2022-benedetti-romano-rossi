@@ -282,6 +282,17 @@ public class CommandHandler {
                                 return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
                             player_choices_serializable.setStudent(colors);
                         }
+                        case MOVE_CARD_ISLAND -> {
+                            if (command.length != 3) return "Invalid number of arguments";
+                            int island_pos = Integer.parseInt(command[1]);
+                            player_choices_serializable.setIsland(island_pos);
+                            Color color = Color.parseColor(command[2]);
+                            if(color == null) return "Invalid input. Must be RED, GREEN, BLUE, YELLOW or MAGENTA (case insensitive).";
+                            player_choices_serializable.setStudent(color);
+                        }
+                        case NOTHING -> {
+                            if (command.length != 3) return "Invalid number of arguments";
+                        }
                     }
 
                     client_socket.send(new ActivateCharacterMessage(player_choices_serializable));

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.*;
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
@@ -23,13 +23,12 @@ public class CLIArt extends CLI {
     private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(55, 1);
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
     private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(4, 80);
-    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(2, 180);
-    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(22, 50);
+    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(2, 177);
+    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(43, 177);
     private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(2, 110);
     private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(10, 1);
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(19, 1);
-    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(7, 145);
-    private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
+    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(7, 131);
 
     private final Pair<Integer, Integer> ISLAND_SHAPE = new Pair<>(8, 25);
     private final Pair<Integer, Integer> CLOUD_SHAPE = new Pair<>(8, 25);
@@ -62,8 +61,7 @@ public class CLIArt extends CLI {
         print(drawAssistants(), STD_ASSISTANTS_POSITION);
 
         if(model.getExpertMode()) {
-            // print(drawCoins(), STD_COINS_POSITION);
-            // print(drawCharacters(), STD_CHARACTER_POSITION);
+            print(drawCharacters(), STD_CHARACTER_POSITION);
         }
 
         print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
@@ -149,7 +147,6 @@ public class CLIArt extends CLI {
         Students diningStudents = player.getSchoolBoard().getDiningStudents();
         StringBuilder boardStr = new StringBuilder();
 
-        boardStr.append(ansi().cursorRight(3));
 
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 

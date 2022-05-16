@@ -17,6 +17,7 @@ public class GameHandler implements Serializable {
     private int student_moves;
     private Character selected_character;
     private boolean action_completed;
+    private boolean saved_action_completed;
 
     public GameHandler(int ID, boolean expert_mode, LobbyHandler lobby_handler) {
         this.ID = ID;
@@ -94,5 +95,13 @@ public class GameHandler implements Serializable {
 
     public void setActionCompleted(boolean action_completed) {
         this.action_completed = action_completed;
+    }
+
+    public void setSavedActionCompleted(boolean saved_action_completed) {
+        this.saved_action_completed = saved_action_completed;
+    }
+
+    public boolean isSavedActionCompleted() {
+        return saved_action_completed;
     }
 }
