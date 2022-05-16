@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 public class Headmaster extends Character{
     public Headmaster() {
         super(2);
+        setDescription("During this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them.");
     }
 
     @Override

@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 public class Colorblind extends Character{
     public Colorblind() {
         super(3);
+        setDescription("Choose a color of Student: during the influence calculation this turn, that color adds no influence.");
     }
 
     @Override

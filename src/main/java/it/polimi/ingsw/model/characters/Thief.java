@@ -12,6 +12,7 @@ public class Thief extends Character{
 
     public Thief() {
         super(3);
+        setDescription("Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room to the bag. If any player has fewer than 3 Students of that type, return as many Students as they have. ");
     }
 
     @Override

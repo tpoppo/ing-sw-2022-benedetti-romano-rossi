@@ -44,13 +44,14 @@ public class CLI {
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
     private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(4, 80);
     private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(30, 1);
-    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(22, 50);
+    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(23, 50);
     private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(10, 1);
-    private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(15, 50);
+    private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(17, 50);
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(15, 1);
     private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
     private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
     private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(20, 15);
+    private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(15, 50);
 
     // TODO: display bag current size
 
@@ -229,8 +230,8 @@ public class CLI {
 
         Game model = view.getGameHandler().getModel();
 
-        // Banner length is 63
         print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), STD_USERNAME_POSITION);
+        print(drawBag(), STD_BAG_POSITION);
         print(drawPlayers(), STD_PLAYERS_POSITION);
         print(drawState(), STD_STATUS_POSITION);
         print(drawIslands(), STD_ISLANDS_POSITION);
@@ -258,6 +259,17 @@ public class CLI {
         out.print(ansi().cursorDownLine(1).eraseLine());
         out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
+    }
+
+    protected String drawBag(){
+        StringBuilder bagStr = new StringBuilder();
+
+        Game model = view.getGameHandler().getModel();
+
+        bagStr.append(ansi().bold().a("BAG: ").reset());
+        bagStr.append(model.getBag().capacity());
+
+        return bagStr.toString();
     }
 
     protected String drawPlayers(){
@@ -552,12 +564,14 @@ public class CLI {
             // print card's specific students
             // FIXME: is null check useful?
             if(character.getStudents() != null && character.getStudents().count() > 0){
+                charStr.append("[ ");
                 for(Color studentColor : character.getStudents().keySet()) {
                     int numOfStudents = character.getStudents().get(studentColor);
 
                     if (numOfStudents > 0)
                         charStr.append(ansi().fg(Ansi.Color.valueOf(studentColor.toString())).a(numOfStudents).reset().a(" "));
                 }
+                charStr.append("]");
             }
 
             // print card's specific noEntryTiles
@@ -571,6 +585,32 @@ public class CLI {
         return charStr.toString();
     }
 
+    public void printCharacterInfo(){
+        clearScreen();
+
+        Game model = view.getGameHandler().getModel();
+
+        int position = 10;
+        print(Constants.CHARACTERS.replaceAll("\n", Constants. NEWLINE), 8, 40);
+        for(Character character : model.getCharacters()){
+            StringBuilder characterCard = new StringBuilder();
+
+            characterCard.append(ansi().bold().a("CHARACTER: ").reset());
+            characterCard.append(character.getClass().getSimpleName()).append("\n\n");
+
+            characterCard.append(ansi().fgYellow().a("COST: ").reset().a(character.getCost()));
+            characterCard.append("\n\n");
+
+            characterCard.append("EFFECT: ").append(character.getDescription());
+            characterCard.append("\n\n");
+
+            print(addRectangle(characterCard).replaceAll("\n", Constants.NEWLINE), 20, position);
+            position += 50;
+        }
+
+        out.print(ansi().cursor(40, 1));
+    }
+
     private String drawEndingScreen(){
         StringBuilder endString = new StringBuilder();
 
@@ -580,7 +620,7 @@ public class CLI {
         if(model.winner().getUsername().equals(username)) {
             endString.append(ansi().fgGreen().a(Constants.VICTORY).reset());
         }else {
-            endString.append(ansi().fgRed().a(Constants.DEFEAT).reset());
+            endString.append(ansi().fgBrightRed().a(Constants.DEFEAT).reset());
             endString.append(Constants.NEWLINE).append(Constants.NEWLINE);
             endString.append("\t\t\t\t\t\tWinner: ").append(model.winner().getUsername());
         }
@@ -696,5 +736,31 @@ public class CLI {
             for (int k = columnFrom; k < columnTo; k++)
                 out.print(ansi().reset().a(" "));
         }
+    }
+
+    private String addRectangle(StringBuilder text){
+        int MAXLEN = 36;
+
+        StringBuilder horizontalLine = new StringBuilder();
+        horizontalLine.append("_".repeat(MAXLEN+4));
+
+        StringBuilder replacement = new StringBuilder(text.substring(text.indexOf("EFFECT:")));
+
+        for(int i=0; i<replacement.length(); i+=MAXLEN)
+            replacement.insert(i, "\n");
+
+        text.delete(text.indexOf("EFFECT:"), text.length()).append(replacement);
+        text.insert(0, "   " + horizontalLine + "\n\n\n");
+        text.insert(text.length(), "\n\n" + horizontalLine + "|");
+
+        String result = text.toString().replaceAll("\n", "  |\n|  ");
+        StringBuilder final_result = new StringBuilder();
+        for(String line : result.split("\n")){
+            int spaces = MAXLEN + 10 - line.replaceAll("\\e\\[[\\d;]*[^\\d;]","").length();
+            String newline = line.substring(0, line.length()-1) + " ".repeat(spaces) + "|\n";
+            final_result.append(newline);
+        }
+
+        return final_result.toString().replaceFirst("\\|", "");
     }
 }

@@ -13,6 +13,7 @@ public class Juggler extends Character{
 
     public Juggler(Game game){
         super(1);
+        setDescription("You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance. ");
         students = new Students();
 
         for(int i=0; i<6; i++){

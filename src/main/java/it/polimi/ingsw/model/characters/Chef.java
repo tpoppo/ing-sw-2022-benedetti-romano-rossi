@@ -12,15 +12,16 @@ import java.util.ArrayList;
 public class Chef extends Character{
     Students students;
 
-    Chef(Game game){
+    public Chef(Game game){
         super(2);
+        setDescription(" Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card. ");
         students = new Students();
 
         for(int i=0; i<4; i++){
             try {
                 Color color = game.drawStudentFromBag();
                 students.put(color, students.get(color) + 1);
-            } catch (EmptyBagException e) {}
+            } catch (EmptyBagException ignored) {}
         }
     }
 

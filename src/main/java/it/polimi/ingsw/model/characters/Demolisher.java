@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.Game;
 public class Demolisher extends Character{
     public Demolisher() {
         super(3);
+        setDescription("When resolving a Conquering on an Island, Towers do not count towards influence.");
     }
 
     @Override

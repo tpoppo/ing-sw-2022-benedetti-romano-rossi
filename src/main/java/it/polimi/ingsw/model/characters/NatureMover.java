@@ -7,6 +7,7 @@ public class NatureMover extends Character{
 
     public NatureMover() {
         super(1);
+        setDescription("You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played. ");
     }
 
     @Override

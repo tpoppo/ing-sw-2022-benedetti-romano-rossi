@@ -38,6 +38,12 @@ public class CommandHandler {
         exit.setDescription("Exit from the help screen.");
         commands.add(exit);
 
+        Command characterInfo = new Command("characterinfo", CommandType.GENERAL);
+        characterInfo.setDescription("Displays detailed info about the characters.");
+        characterInfo.addAlias("cinfo");
+        commands.add(characterInfo);
+
+
         // Menu commands
         Command create = new Command("create", CommandType.MENU);
         create.addArgument("lobby size");
@@ -49,6 +55,8 @@ public class CommandHandler {
         join.setDescription("Joins the specified lobby.");
         commands.add(join);
 
+
+        // Lobby commands
         Command start = new Command("start", CommandType.LOBBY);
         start.addArgument("expert mode");
         start.setDescription("Starts the game. Expert mode can be either 0 or 1.");
@@ -59,6 +67,8 @@ public class CommandHandler {
         wizard.setDescription("Selects the wizard (1 - 4).");
         commands.add(wizard);
 
+
+        // Game commands
         Command cloud = new Command("cloud", CommandType.GAME);
         cloud.addArgument("number");
         cloud.setDescription("Selects the [" + cloud.getArguments().get(0) + "] cloud.");
@@ -201,6 +211,12 @@ public class CommandHandler {
 
                 case "exit" -> {
                     cli.refresh();
+
+                    return null;
+                }
+
+                case "characterinfo" -> {
+                    cli.printCharacterInfo();
 
                     return null;
                 }

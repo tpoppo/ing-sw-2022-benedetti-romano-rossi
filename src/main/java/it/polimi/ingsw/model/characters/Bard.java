@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Bard extends Character{
     public Bard() {
         super(1);
+        setDescription("You may exchange up to 2 Students between your Entrance and your Dining Room.");
     }
 
     @Override
