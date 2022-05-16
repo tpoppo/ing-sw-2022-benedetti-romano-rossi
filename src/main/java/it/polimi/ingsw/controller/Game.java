@@ -46,7 +46,7 @@ public class Game implements Serializable{
         }
 
         // Importing game config from file (the file is chosen based on the # of players playing)
-        String file_path = "src/main/resources/" + num_players + "PlayersGame.json";
+        String file_path = "src/main/resources/Config_Files/" + num_players + "PlayersGame.json";
         Gson gson = new Gson();
         Random rng = new Random();
 
