@@ -33,11 +33,11 @@ The project includes:
 | Basic rules    |  🟢   |
 | Complete rules |  🟢   |
 | Socket         |  🟢   |
-| CLI            |  🟡   |
+| CLI            |  🟢   |
 | GUI            |  🔴   |
 | All Characters |  🟢   |
 | Multiple games |  🟢   |
-| Persistence    |  🟡   |
+| Persistence    |  🟢   |
 
 ### Legend
 🟢 Implemented<br>
