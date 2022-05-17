@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
+import it.polimi.ingsw.view.GUI;
 
 /**
  * Hello world!
@@ -21,7 +22,7 @@ public class Eriantys {
             case "server" -> runServer(args); // app server
             case "cli" -> runCli(args); // app cli
             case "cliart" -> runCLIArt(args); // app cli, but fancy
-            case "gui" -> System.out.println("Not implemented yet"); // app gui
+            case "gui" -> runGUI(args); // app gui
         }
     }
 
@@ -41,4 +42,8 @@ public class Eriantys {
         cli.run();
     }
 
+    static void runGUI(String[] args){
+        System.out.println("Starting the GUI...\n");
+        GUI.main(args);
+    }
 }

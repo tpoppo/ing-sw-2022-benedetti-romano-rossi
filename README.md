@@ -34,7 +34,7 @@ The project includes:
 | Complete rules |  🟢   |
 | Socket         |  🟢   |
 | CLI            |  🟢   |
-| GUI            |  🔴   |
+| GUI            |  🟡   |
 | All Characters |  🟢   |
 | Multiple games |  🟢   |
 | Persistence    |  🟢   |

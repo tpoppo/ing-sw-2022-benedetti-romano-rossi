@@ -44,6 +44,11 @@
       <artifactId>jansi</artifactId>
       <version>2.4.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>18.0.1</version>
+    </dependency>
   </dependencies>
 
 
@@ -132,6 +137,15 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>HelloFX</mainClass>
+        </configuration>
       </plugin>
 
       <plugin>
