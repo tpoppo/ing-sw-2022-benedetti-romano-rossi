@@ -9,7 +9,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.messages.EndingMessage;
-import it.polimi.ingsw.network.messages.NextStateMessage;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
@@ -40,18 +39,18 @@ public class CLI {
     protected String errorMessage;
     private boolean playing;
 
-    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(48, 1);
-    private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
-    private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(4, 80);
-    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(30, 1);
-    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(23, 50);
-    private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(10, 1);
-    private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(17, 50);
-    private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(15, 1);
-    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(30, 50);
-    private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(31, 33);
-    private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(20, 15);
-    private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(15, 50);
+    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(53, 11);
+    private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(7, 90);
+    private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(9, 90);
+    private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(35, 11);
+    private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(28, 60);
+    private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(15, 11);
+    private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(22, 60);
+    private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(20, 11);
+    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(20, 95);
+    private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(36, 43);
+    private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(25, 25);
+    private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(20, 60);
 
     // TODO: display bag current size
 
@@ -226,7 +225,7 @@ public class CLI {
     }
 
     protected void printGame(){
-        print(ansi().a(Constants.ERIANTYS), 1, 1);
+        print(ansi().a(Constants.ERIANTYS.replaceAll("\n", Constants.NEWLINE)), 5, 10);
 
         Game model = view.getGameHandler().getModel();
 
@@ -237,7 +236,7 @@ public class CLI {
         print(drawIslands(), STD_ISLANDS_POSITION);
         print(drawClouds(), STD_CLOUDS_POSITION);
         print(drawAssistants(), STD_ASSISTANTS_POSITION);
-        print(drawBoard(), STD_BOARD_POSITION);
+        printBoards();
 
         if(model.getExpertMode()) {
             print(drawCharacters(), STD_CHARACTER_POSITION);
@@ -317,42 +316,42 @@ public class CLI {
                 instruction = "Play an assistant: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.PLAY_ASSISTANT))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
             case CHOOSE_CLOUD -> {
                 instruction = "Choose a cloud: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.CHOOSE_CLOUD))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
             case MOVE_MOTHER_NATURE -> {
                 instruction = "Move mother nature: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_MOTHER_NATURE))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
             case MOVE_STUDENT -> {
                 instruction = "Move a student (" + gameHandler.getStudentMoves() + " left): ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_STUDENT))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
             case ACTIVATE_CHARACTER -> {
                 instruction = "Activate a character: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.ACTIVATE_CHARACTER))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
             case ENDING -> {
                 instruction = "The end: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.ENDING))
-                        .map(command -> command.getSimpleInfo() + "\n")
+                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
                         .forEach(availableCommands::append);
             }
         }
@@ -452,7 +451,12 @@ public class CLI {
         int numTowers = player.getSchoolBoard().getNumTowers();
         Professors professors = player.getProfessors();
 
-        boardStr.append("Towers: ").append(numTowers).append(Constants.NEWLINE);
+        boardStr.append("Towers: ").append(numTowers);
+
+        if(model.getExpertMode())
+            boardStr.append("\t\t\t").append(drawCoins(player));
+        boardStr.append(Constants.NEWLINE);
+
         boardStr.append("Entrance: ");
         for(Color studentColor : entranceStudents.keySet()){
             if(entranceStudents.get(studentColor) > 0)
@@ -484,10 +488,21 @@ public class CLI {
             boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
         }
 
-        if(model.getExpertMode())
-            boardStr.append(ansi().cursor(STD_COINS_POSITION.getFirst(), STD_COINS_POSITION.getSecond()).a(drawCoins(player)));
-
         return boardStr.toString();
+    }
+
+    private void printBoards(){
+        final int DISTANCE = 49;
+        List<String> usernames = view.getGameHandler().getModel().getPlayers().stream()
+                .map(LobbyPlayer::getUsername).toList();
+
+        int count = 0;
+        for(String username : usernames){
+            this.schoolBoardPlayerUsername = username;
+
+            print(drawBoard(), STD_BOARD_POSITION.getFirst(), STD_BOARD_POSITION.getSecond() + (count * DISTANCE));
+            count++;
+        }
     }
 
     protected String drawAssistants(){
@@ -541,7 +556,7 @@ public class CLI {
         int coins = player.getCoins();
 
         coinsStr.append(ansi().bold().a("COINS: ").reset());
-        coinsStr.append(ansi().fgBrightYellow().a(coins));
+        coinsStr.append(ansi().fgBrightYellow().a(coins).reset());
 
         return coinsStr.toString();
     }
@@ -637,7 +652,7 @@ public class CLI {
         StringBuilder helpText = new StringBuilder();
         List<Command> commands = CommandHandler.getCommands();
 
-        helpText.append(ansi().bold().a(Constants.HELP).reset());
+        helpText.append(ansi().bold().a(Constants.HELP.replaceAll("\n", Constants.NEWLINE)).reset());
         helpText.append(Constants.NEWLINE).append(Constants.NEWLINE);
 
         for(CommandType commandType : CommandType.values()){
@@ -647,14 +662,14 @@ public class CLI {
                     .forEach(command -> {
                         helpText.append(command.getName()).append(" ");
                         command.getArguments().forEach(argument -> helpText.append("[" + argument + "] "));
-                        helpText.append(ansi().cursorToColumn(42).a(CommandHandler.normalizeDescription(command)));
+                        helpText.append(ansi().cursorToColumn(52).a(CommandHandler.normalizeDescription(command)));
                         helpText.append(Constants.NEWLINE);
                     });
             helpText.append(Constants.NEWLINE);
             helpText.append(Constants.NEWLINE);
         }
 
-        print(helpText.toString(), 1, 1);
+        print(helpText.toString(), 5, 11);
     }
 
     public void cleanErrorMessage(){

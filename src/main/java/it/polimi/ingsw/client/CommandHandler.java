@@ -151,7 +151,7 @@ public class CommandHandler {
         */
 
         String replacement = "\n";
-        for(int i=0; i<41; i++)
+        for(int i=0; i<51; i++)
             replacement = replacement.concat(" ");
         String finalReplacement = replacement;
 
@@ -216,7 +216,11 @@ public class CommandHandler {
                 }
 
                 case "characterinfo" -> {
-                    cli.printCharacterInfo();
+                    if(cli.getView().getCurrentHandler() == HandlerType.GAME) {
+                        if (cli.getView().getGameHandler().getModel().getExpertMode())
+                            cli.printCharacterInfo();
+                        else return "This command is only available in expert mode!";
+                    }else return "This command is only available in game!";
 
                     return null;
                 }
