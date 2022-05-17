@@ -787,7 +787,7 @@ public class GameTest {
 
         //simulate five turn
         int turn = 0;
-        while(turn == 5){
+        while(turn != 5){
             turn++;
             // planning phase
             game.fillClouds();
@@ -925,6 +925,8 @@ public class GameTest {
         }
 
         ArrayList<Island> islands = game.getIslands();
+        islands.get(game.findMotherNaturePosition()).setMotherNature(false);
+        islands.get(rng.nextInt(islands.size())).setMotherNature(true);
         ArrayList<Island> islands_copy = new ArrayList<>();
         for(Island island : islands){
             islands_copy.add(island);
@@ -936,6 +938,13 @@ public class GameTest {
         game.conquerIsland();
 
         //Check that island don't change after activate that character
-        assertEquals(islands_copy, islands);
+        for(int i=0; i<islands.size(); i++){
+            assertEquals(islands_copy.get(i).getOwner(), islands.get(i).getOwner());
+            assertEquals(islands_copy.get(i).getNumIslands(), islands.get(i).getNumIslands());
+            assertEquals(islands_copy.get(i).getStudents(), islands.get(i).getStudents());
+            assertEquals(islands_copy.get(i).getNumTowers(), islands.get(i).getNumTowers());
+            assertEquals(islands_copy.get(i).getNoEntryTiles(), islands.get(i).getNoEntryTiles());
+            assertEquals(islands_copy.get(i).hasMotherNature(), islands.get(i).hasMotherNature());
+        }
     }
 }
