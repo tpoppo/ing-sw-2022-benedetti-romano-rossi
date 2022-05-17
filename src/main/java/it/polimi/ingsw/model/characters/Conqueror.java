@@ -8,7 +8,7 @@ public class Conqueror extends Character{
     private Island chosen_island;
 
     public Conqueror() {
-        super(2);
+        super(3);
         setDescription("Choose an Island and resolve the Island as if Mother Nature had ended her movement there. Mother Nature will still move and the Island where she ends her movement will also be resolved.");
     }
 
