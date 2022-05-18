@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.CLIArt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +186,9 @@ public class CommandHandler {
                 case "board" -> {
                     if (cli.getView().getCurrentHandler() != HandlerType.GAME)
                         return "You don't have a board... yet";
+
+                    if(!(cli instanceof CLIArt))
+                        return "Error: this command is only available in CLIArt";
 
                     if (command.length == 1) {// own board
                         cli.setSchoolboardPlayerUsername(client_socket.getUsername());

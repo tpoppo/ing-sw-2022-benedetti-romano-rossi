@@ -39,20 +39,17 @@ public class CLI {
     protected String errorMessage;
     private boolean playing;
 
-    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(53, 11);
-    private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(7, 90);
-    private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(9, 90);
+    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(53, 1);
+    private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(6, 109);
+    private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(8, 109);
     private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(35, 11);
     private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(28, 60);
     private final Pair<Integer, Integer> STD_STATUS_POSITION = new Pair<>(15, 11);
     private final Pair<Integer, Integer> STD_CLOUDS_POSITION = new Pair<>(22, 60);
     private final Pair<Integer, Integer> STD_ISLANDS_POSITION = new Pair<>(20, 11);
-    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(20, 95);
-    private final Pair<Integer, Integer> STD_COINS_POSITION = new Pair<>(36, 43);
+    private final Pair<Integer, Integer> STD_ASSISTANTS_POSITION = new Pair<>(20, 109);
     private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(25, 25);
     private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(20, 60);
-
-    // TODO: display bag current size
 
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
@@ -453,6 +450,7 @@ public class CLI {
 
         boardStr.append("Towers: ").append(numTowers);
 
+        // [Expert mode] Coins
         if(model.getExpertMode())
             boardStr.append("\t\t\t").append(drawCoins(player));
         boardStr.append(Constants.NEWLINE);
