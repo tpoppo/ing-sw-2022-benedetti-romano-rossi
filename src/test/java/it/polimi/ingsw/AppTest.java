@@ -1,9 +1,11 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.client.ClientConfig;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
+import it.polimi.ingsw.view.GUI;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -17,9 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class AppTest {
 
+    final int TESTING_PORT = 0xcafe;
+
     @Test
     void RunServer() throws InterruptedException {
         runThread(() -> {
+            Server.setPort(TESTING_PORT);
             Server server = Server.getInstance();
         });
 }
@@ -27,9 +32,14 @@ public class AppTest {
     @Test
     @EnabledOnOs(OS.LINUX)
     void RunCli() throws InterruptedException {
-        runThread(() -> {Server server = Server.getInstance();});
         runThread(() -> {
-            ClientSocket client_socket = new ClientSocket();
+            Server.setPort(TESTING_PORT);
+            Server server = Server.getInstance();
+        });
+        runThread(() -> {
+            ClientConfig clientConfig = new ClientConfig();
+            clientConfig.setPort(TESTING_PORT);
+            ClientSocket client_socket = new ClientSocket(clientConfig);
             CLI cli = new CLI(client_socket);
             cli.run();
         });
@@ -38,12 +48,35 @@ public class AppTest {
     @Test
     @EnabledOnOs(OS.LINUX)
     void RunCliArt() throws InterruptedException {
-        runThread(() -> {Server server = Server.getInstance();});
         runThread(() -> {
-            ClientSocket client_socket = new ClientSocket();
-            CLIArt cli = new CLIArt(client_socket);
-            cli.run();
+            Server.setPort(TESTING_PORT);
+            Server server = Server.getInstance();
         });
+        runThread(() -> {
+            ClientConfig clientConfig = new ClientConfig();
+            clientConfig.setPort(TESTING_PORT);
+            ClientSocket client_socket = new ClientSocket(clientConfig);
+            CLIArt cliArt = new CLIArt(client_socket);
+            cliArt.run();
+        });
+    }
+
+    @Test
+    @EnabledOnOs(OS.LINUX)
+    void ClientSocket() throws InterruptedException {
+        runThread(() -> {
+            Server.setPort(TESTING_PORT);
+            Server server = Server.getInstance();
+        });
+        for(int i=0; i<10; i++) {
+            int tmp_i = i;
+            runThread(() -> {
+                ClientConfig clientConfig = new ClientConfig();
+                clientConfig.setPort(TESTING_PORT);
+                ClientSocket clientSocket = new ClientSocket(clientConfig);
+                clientSocket.login("username_"+tmp_i);
+            });
+        }
     }
 
     void runThread(Runnable runnable) throws InterruptedException {
@@ -58,9 +91,8 @@ public class AppTest {
             }
         });
         t.start();
-        Thread.sleep(300);
+        Thread.sleep(100);
         t.interrupt();
         assertNull(exc.get());
-
     }
 }

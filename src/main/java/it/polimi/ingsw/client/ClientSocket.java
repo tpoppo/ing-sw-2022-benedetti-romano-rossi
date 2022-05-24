@@ -18,10 +18,14 @@ public class ClientSocket {
     private ObjectInputStream input_stream;
     private String username;
     private ViewContent view;
+    final private ClientConfig client_config;
 
     public final Object mutex = new Object();
 
-    public ClientSocket(){
+
+
+    public ClientSocket(ClientConfig client_config){
+        this.client_config = client_config;
         try {
             setup();
         } catch (IOException e) {
@@ -30,7 +34,7 @@ public class ClientSocket {
     }
 
     private void setup() throws IOException {
-        clientSocket = new Socket(Constants.SERVER_ADDR, Constants.SERVER_PORT);
+        clientSocket = new Socket(client_config.getAddress(), client_config.getPort());
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
     }

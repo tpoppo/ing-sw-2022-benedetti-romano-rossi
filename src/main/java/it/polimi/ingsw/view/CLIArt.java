@@ -213,28 +213,6 @@ public class CLIArt extends CLI {
         boolean[][] mat = new boolean[row][column];
         ArrayList<Pair<Integer, Integer>> coast = new ArrayList<Pair<Integer, Integer>>();
 
-        /*
-        dim = Math.min(row*column, dim);
-        for(int i=-1; i<1; i++){
-            for(int j=-5; j<5; j++){
-                coast.add(new Pair<>(row/2+i, column/2+j));
-            }
-        }
-
-        while(dim > 0 && !coast.isEmpty()){
-            Pair<Integer, Integer> current = coast.get(rng.nextInt(Math.min(coast.size(), 1)));
-            coast.remove(current);
-            if(current.getFirst() >= 0 && current.getFirst() < row && current.getSecond() >= 0 && current.getSecond() < column && !mat[current.getFirst()][current.getSecond()]){
-                mat[current.getFirst()][current.getSecond()] = true;
-                coast.add(new Pair<>(current.getFirst()+1, current.getSecond()));
-                coast.add(new Pair<>(current.getFirst()-1, current.getSecond()));
-                coast.add(new Pair<>(current.getFirst(), current.getSecond()+1));
-                coast.add(new Pair<>(current.getFirst(), current.getSecond()-1));
-                dim--;
-            }
-        }
-         */
-
         for(int i=-row/2; i<(1+row)/2; i++){
             for(int j=-column/2; j<(1+column)/2; j++){
                 mat[row/2+i][column/2+j] = 2*i*i+j*j/2 <= dim;

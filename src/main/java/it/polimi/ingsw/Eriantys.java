@@ -1,10 +1,17 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.client.ClientConfig;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import it.polimi.ingsw.view.GUI;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Hello world!
@@ -24,26 +31,65 @@ public class Eriantys {
             case "cliart" -> runCLIArt(args); // app cli, but fancy
             case "gui" -> runGUI(args); // app gui
         }
+        System.out.println("Invalid argument given: "+args[0]);
     }
 
-    static void runServer(String[] args){
+    private static void runServer(String[] args){
+        ClientConfig clientConfig = parseInput(args, true);
+        Server.setPort(clientConfig.getPort());
         Server server = Server.getInstance();
     }
 
-    static void runCli(String[] args){
-        ClientSocket client_socket = new ClientSocket();
+    private static void runCli(String[] args){
+        ClientConfig clientConfig = parseInput(args, false);
+        ClientSocket client_socket = new ClientSocket(clientConfig);
         CLI cli = new CLI(client_socket);
         cli.run();
     }
 
-    static void runCLIArt(String[] args){
-        ClientSocket client_socket = new ClientSocket();
+    private static void runCLIArt(String[] args){
+        ClientConfig clientConfig = parseInput(args, false);
+        ClientSocket client_socket = new ClientSocket(clientConfig);
         CLIArt cli = new CLIArt(client_socket);
         cli.run();
     }
 
-    static void runGUI(String[] args){
+    private static void runGUI(String[] args){
         System.out.println("Starting the GUI...\n");
         GUI.main(args);
+    }
+
+    static ClientConfig parseInput(String[] args, boolean is_server){
+        ClientConfig client_config = new ClientConfig();
+        ArrayList<String> largs = new ArrayList<>(Arrays.asList(args));
+
+        // set the port <port> argument
+        int port = largs.indexOf("port");
+        if(port != -1){
+            if(port+1<largs.size()){
+                try{
+                    client_config.setPort(Integer.parseInt(largs.get(port+1)));
+                } catch (NumberFormatException e) {
+                    System.out.println("the ip parameters must be an integer given: "+largs.get(port+1));
+                }
+            } else {
+                System.out.println("The ip value is missing");
+            }
+        }
+
+        // set the ip <ip> argument
+        int ip = largs.indexOf("ip");
+        if(ip != -1) {
+            if(is_server){
+                System.out.println("It is running in server mode: the ip argument has been ignored");
+            } else {
+                if (ip + 1 < largs.size()) {
+                    client_config.setAddress(largs.get(ip + 1));
+                } else {
+                    System.out.println("The ip value is missing");
+                }
+            }
+        }
+        return client_config;
     }
 }

@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 public class Server{
     private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
+    static private int PORT_INIT;
     private static Server instance;
     final private int PORT;
     private ServerSocket serverSocket;
@@ -29,7 +30,7 @@ public class Server{
     private final List<String> player_list;
 
     private Server(){
-        PORT = Constants.SERVER_PORT;
+        PORT = PORT_INIT;
         networkManagers = Collections.synchronizedList(new ArrayList<>());
         player_list = Collections.synchronizedList(new ArrayList<>());
 
@@ -38,8 +39,13 @@ public class Server{
         try {
             serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Port already in use");
+            System.exit(0);
         }
+    }
+
+    public static void setPort(int port){
+        PORT_INIT = port;
     }
 
     public static Server getInstance(){
@@ -84,7 +90,7 @@ public class Server{
                         networkManager = NetworkManager.createNetworkManager(gameHandler);
                         networkManagers.add(networkManager);
                     } catch (ClassNotFoundException e) {
-                        LOGGER.log(Level.SEVERE, "Invalid file format: {0}", e);
+                        LOGGER.log(Level.SEVERE, "Invalid file format: {0}", new Object[]{e});
                         throw new RuntimeException(e);
                     }
                 } catch (IOException e) {
@@ -93,7 +99,7 @@ public class Server{
             }
         }else {
             if(!directory.mkdir())
-                LOGGER.log(Level.SEVERE, "Couldn't create directory in path {0}", directory.getAbsolutePath());
+                LOGGER.log(Level.SEVERE, "Could not create directory in path {0}", new Object[]{directory.getAbsolutePath()});
         }
     }
 
