@@ -149,7 +149,6 @@ public class NetworkManager {
             outputStream.reset();
             outputStream.writeObject(game_handler);
             outputStream.flush();
-            // FIXME: do we also need to save the message_queue?
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

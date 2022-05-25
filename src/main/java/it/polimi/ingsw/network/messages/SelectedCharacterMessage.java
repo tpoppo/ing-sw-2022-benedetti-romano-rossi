@@ -20,23 +20,13 @@ public class SelectedCharacterMessage extends ClientMessage {
 
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
+        StatusCode status_code = preambleGameCheck(network_manager, lobby_player, GameState.CHOOSE_CLOUD, false);
+        if(status_code != StatusCode.EMPTY) return status_code;
+
         GameHandler gameHandler = network_manager.getGameHandler();
-
-        // You must be in game (check current_handler)
-        if (gameHandler == null || network_manager.getCurrentHandler() != HandlerType.GAME) {
-            network_manager.addErrorMessage(lobby_player, "You are in the lobby, not in the game");
-            return StatusCode.WRONG_HANDLER;
-        }
-
         Game game = gameHandler.getModel();
 
-        // Invalid player. Different players (from model and from socket)
-        Player current_player = game.getCurrentPlayer();
         Player player = network_manager.getGameHandler().lobbyPlayerToPlayer(lobby_player);
-        if (current_player == null || !current_player.equals(player)) {
-            network_manager.addErrorMessage(lobby_player, "It is not your turn");
-            return StatusCode.WRONG_PLAYER;
-        }
 
         // The game must be in expert mode
         if(!game.getExpertMode()){
