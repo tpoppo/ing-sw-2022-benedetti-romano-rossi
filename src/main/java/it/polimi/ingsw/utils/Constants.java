@@ -9,7 +9,7 @@ public class Constants {
     public static final int SERVER_PORT = 42069; // nice
 
     // Path for saves
-    public static final String PATH_SAVES = "src/main/SavedGames";
+    public static final String PATH_SAVES = "SavedGames";
 
     // match constants
     public static final int MIN_PLAYERS = 2;

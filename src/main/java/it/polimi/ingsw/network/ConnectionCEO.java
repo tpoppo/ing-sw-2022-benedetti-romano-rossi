@@ -125,7 +125,7 @@ public class ConnectionCEO extends Thread {
 
             // Removes the player from the global player list of the server
             boolean res = server.getPlayerList().remove(player.getUsername());
-            LOGGER.log(Level.SEVERE, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
+            LOGGER.log(Level.INFO, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
 
         }
     }

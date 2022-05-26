@@ -52,6 +52,8 @@ public class Eriantys {
 
     private static void runGUI(String[] args){
         System.out.println("Starting the GUI...\n");
+        ClientConfig clientConfig = parseInput(args, false);
+        GUI.setClientSocket(new ClientSocket(clientConfig));
         GUI.main(args);
     }
 
@@ -69,7 +71,7 @@ public class Eriantys {
                     System.out.println("the ip parameters must be an integer given: "+largs.get(port+1));
                 }
             } else {
-                System.out.println("The ip value is missing");
+                System.out.println("The port value is missing");
             }
         }
 

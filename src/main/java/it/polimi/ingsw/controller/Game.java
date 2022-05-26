@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.*;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -46,16 +47,14 @@ public class Game implements Serializable{
         }
 
         // Importing game config from file (the file is chosen based on the # of players playing)
-        String file_path = "src/main/resources/Config_Files/" + num_players + "PlayersGame.json";
+        InputStream file_path = getClass().getResourceAsStream("/Config_Files/" + num_players + "PlayersGame.json");
+
         Gson gson = new Gson();
         Random rng = new Random();
 
         // Parsing the json
-        try {
-            gameConfig = gson.fromJson(Files.newBufferedReader(Paths.get(file_path)), GameConfig.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(file_path);
+        gameConfig = gson.fromJson(new BufferedReader(new InputStreamReader(file_path)), GameConfig.class);
 
         // 1: Placing the # of islands on the table
         islands = new ArrayList<>();
