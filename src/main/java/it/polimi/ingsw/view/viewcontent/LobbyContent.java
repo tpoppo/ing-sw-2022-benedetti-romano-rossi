@@ -1,6 +1,5 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.viewcontent;
 
-import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.network.HandlerType;
 import it.polimi.ingsw.controller.LobbyHandler;
 

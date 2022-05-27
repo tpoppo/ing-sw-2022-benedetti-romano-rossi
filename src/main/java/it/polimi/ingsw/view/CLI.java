@@ -12,6 +12,7 @@ import it.polimi.ingsw.network.messages.EndingMessage;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.ReducedLobby;
+import it.polimi.ingsw.view.viewcontent.ViewContent;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 

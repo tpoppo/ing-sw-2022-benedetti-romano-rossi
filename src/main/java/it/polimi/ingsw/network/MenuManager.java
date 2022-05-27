@@ -3,13 +3,11 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
-import it.polimi.ingsw.view.MenuContent;
+import it.polimi.ingsw.view.viewcontent.MenuContent;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;

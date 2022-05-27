@@ -3,7 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.ClientMessage;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
-import it.polimi.ingsw.view.ViewContent;
+import it.polimi.ingsw.view.viewcontent.ViewContent;
 
 import java.io.*;
 import java.net.Socket;

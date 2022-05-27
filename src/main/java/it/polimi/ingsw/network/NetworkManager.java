@@ -6,9 +6,9 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.utils.Constants;
-import it.polimi.ingsw.view.GameContent;
-import it.polimi.ingsw.view.LobbyContent;
-import it.polimi.ingsw.view.ViewContent;
+import it.polimi.ingsw.view.viewcontent.GameContent;
+import it.polimi.ingsw.view.viewcontent.LobbyContent;
+import it.polimi.ingsw.view.viewcontent.ViewContent;
 
 import java.io.File;
 import java.io.FileOutputStream;
