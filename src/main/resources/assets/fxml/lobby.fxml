@@ -9,9 +9,9 @@
       <ImageView fx:id="chosen_wizard0" fitHeight="150.0" fitWidth="200.0" layoutX="8.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="chosen_wizard1" fitHeight="150.0" fitWidth="200.0" layoutX="208.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="chosen_wizard2" fitHeight="150.0" fitWidth="200.0" layoutX="394.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="player2" layoutX="86.0" layoutY="66.0" prefHeight="25.0" prefWidth="45.0" text="Label" />
-      <Label fx:id="player0" layoutX="271.0" layoutY="66.0" prefHeight="25.0" prefWidth="74.0" text="Label" textAlignment="CENTER" />
-      <Label fx:id="player1" layoutX="472.0" layoutY="66.0" prefHeight="25.0" prefWidth="45.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="player0" layoutX="86.0" layoutY="66.0" prefHeight="25.0" prefWidth="45.0" text="Label" />
+      <Label fx:id="player1" layoutX="271.0" layoutY="66.0" prefHeight="25.0" prefWidth="74.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="player2" layoutX="472.0" layoutY="66.0" prefHeight="25.0" prefWidth="45.0" text="Label" textAlignment="CENTER" />
       <Button fx:id="start_game" layoutX="487.0" layoutY="328.0" mnemonicParsing="false" onAction="#startGame" text="Start Game" />
       <CheckBox fx:id="expert_mode" layoutX="488.0" layoutY="301.0" mnemonicParsing="false" text="Expert Mode" />
       <GridPane alignment="CENTER" layoutY="188.0" prefHeight="213.0" prefWidth="259.0">

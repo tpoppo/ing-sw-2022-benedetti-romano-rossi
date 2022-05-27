@@ -50,4 +50,7 @@ public class LobbyHandler implements Serializable {
         return max_players;
     }
 
+    public ArrayList<Integer> getAvailableWizards() {
+        return new ArrayList<>(available_wizards);
+    }
 }

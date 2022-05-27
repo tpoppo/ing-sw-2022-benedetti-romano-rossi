@@ -5,6 +5,7 @@ import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -20,7 +21,9 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Group root = FXMLLoader.load(getClass().getResource("/assets/fxml/login.fxml"));
+        // Group root = FXMLLoader.load(getClass().getResource("/assets/fxml/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/assets/fxml/lobby.fxml"));
+
         Scene scene = new Scene(root);
 
         stage.setFullScreen(true);
@@ -42,8 +45,6 @@ public class GUI extends Application {
                     }
                 }
                 view = client_socket.getView();
-
-
 
                 switch(view.getCurrentHandler()){
                     case GAME -> {
