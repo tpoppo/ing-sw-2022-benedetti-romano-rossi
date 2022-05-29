@@ -36,6 +36,9 @@ public class AppTest {
             Server.setPort(TESTING_PORT);
             Server server = Server.getInstance();
         });
+
+        Thread.sleep(10);
+
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
@@ -52,6 +55,9 @@ public class AppTest {
             Server.setPort(TESTING_PORT);
             Server server = Server.getInstance();
         });
+
+        Thread.sleep(10);
+
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
@@ -68,6 +74,9 @@ public class AppTest {
             Server.setPort(TESTING_PORT);
             Server server = Server.getInstance();
         });
+
+        Thread.sleep(10);
+
         for(int i=0; i<10; i++) {
             int tmp_i = i;
             runThread(() -> {
