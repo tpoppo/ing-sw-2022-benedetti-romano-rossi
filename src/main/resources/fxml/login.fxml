@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LoginController">
+   <children>
+      <ImageView fitHeight="750.0" fitWidth="750.0">
+         <image>
+            <Image url="@../graphics/Eriantys.jpg" />
+         </image>
+      </ImageView>
+      <Pane layoutX="231.0" layoutY="288.0" prefHeight="301.0" prefWidth="287.0" style="-fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;">
+         <children>
+            <Button layoutX="95.0" layoutY="185.0" mnemonicParsing="false" onAction="#login" prefHeight="43.0" prefWidth="98.0" style="-fx-background-color: aad9e0;" text="Login">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <TextField fx:id="usernameField" layoutX="37.0" layoutY="121.0" prefHeight="43.0" prefWidth="212.0" promptText="Username">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Text fill="#14436f" layoutX="49.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!">
+               <font>
+                  <Font name="System Bold" size="40.0" />
+               </font>
+            </Text>
+            <Label fx:id="errorLabel" layoutX="49.0" layoutY="249.0" prefHeight="25.0" prefWidth="188.0" style="-fx-background-color: ea99a2; -fx-background-radius: 4; -fx-alignment: center;" text="Username already taken!" textFill="#bc1616" visible="false" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

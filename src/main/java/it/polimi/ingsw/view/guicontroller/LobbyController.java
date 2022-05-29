@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.guicontroller;
 
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.ChooseWizardMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
@@ -19,7 +18,6 @@ import javafx.scene.image.ImageView;
 
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -96,7 +94,7 @@ public class LobbyController implements Initializable {
                 LobbyPlayer lobbyPlayer = lobbyHandler.getPlayers().get(i);
                 player_labels.get(i).setText(lobbyPlayer.getUsername());
                 if(lobbyPlayer.getWizard() != null){
-                    chosen_wizard0.setImage(new Image("/assets/assistants/back/back_"+lobbyPlayer.getWizard()+".png"));
+                    chosen_wizard0.setImage(new Image("/graphics/assistants/back/back_" +lobbyPlayer.getWizard()+".png"));
                 }
             } else{
                 player_labels.get(i).setText("");

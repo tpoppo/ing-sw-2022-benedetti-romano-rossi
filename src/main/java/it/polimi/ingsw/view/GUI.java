@@ -14,6 +14,8 @@ import java.io.IOException;
 public class GUI extends Application {
     private static ViewContent view;
     private static ClientSocket client_socket;
+    private static String username;
+    private static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -21,12 +23,12 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Group root = FXMLLoader.load(getClass().getResource("/assets/fxml/login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/assets/fxml/lobby.fxml"));
+        GUI.stage = stage;
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
 
         Scene scene = new Scene(root);
 
-        stage.setFullScreen(true);
+        stage.setTitle("Eriantys");
         stage.setScene(scene);
         stage.show();
         startViewContentUpdates(stage);
@@ -54,7 +56,7 @@ public class GUI extends Application {
                     case LOBBY -> {
                         Group root = null;
                         try {
-                            root = FXMLLoader.load(getClass().getResource("/assets/fxml/lobby.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("/fxml/lobby.fxml"));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -64,6 +66,21 @@ public class GUI extends Application {
                 }
             }
         });
+    }
+
+    public static void switchScene(String scenePath) throws IOException {
+        Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        GUI.username = username;
     }
 
     public static ClientSocket getClientSocket() {

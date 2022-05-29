@@ -41,7 +41,6 @@ public class ConnectionCEO extends Thread {
             return;
         }
 
-
         LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
 
         if((networkManager = server.findPlayerLocation(player)) != null) {

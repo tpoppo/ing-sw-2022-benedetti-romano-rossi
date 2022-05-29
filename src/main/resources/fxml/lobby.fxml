@@ -26,22 +26,22 @@
          <children>
             <ImageView fx:id="wizard1" fitHeight="76.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assistants/back/back_1.png" />
+                  <Image url="@../graphics/assistants/back/back_1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="wizard2" fitHeight="76.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <image>
-                  <Image url="@../assistants/back/back_2.png" />
+                  <Image url="@../graphics/assistants/back/back_2.png" />
                </image>
             </ImageView>
             <ImageView fx:id="wizard3" fitHeight="76.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../assistants/back/back_3.png" />
+                  <Image url="@../graphics/assistants/back/back_3.png" />
                </image>
             </ImageView>
             <ImageView fx:id="wizard4" fitHeight="76.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <image>
-                  <Image url="@../assistants/back/back_4.png" />
+                  <Image url="@../graphics/assistants/back/back_4.png" />
                </image>
             </ImageView>
          </children>

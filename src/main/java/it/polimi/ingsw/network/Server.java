@@ -131,8 +131,10 @@ public class Server{
     }
 
 
-    // Checks the uniqueness of the username
+    // Checks the uniqueness of the username, and that it's not blank
     public boolean checkUsername(String username){
+        if(username.isBlank()) return false;
+
         for(String user : player_list)
             if(user.equals(username))
                 return false;
