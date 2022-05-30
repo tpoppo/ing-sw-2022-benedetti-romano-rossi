@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
@@ -12,8 +14,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class GUI extends Application {
@@ -23,6 +28,7 @@ public class GUI extends Application {
     private static Stage stage;
 
     public static void main(String[] args) {
+   //     System.setProperty("prism.allowhidpi", "false"); // FIXME: does this works for all OS?
         launch(args);
     }
 
@@ -30,6 +36,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws IOException {
         GUI.stage = stage;
         stage.setTitle("Eriantys");
+        stage.setFullScreenExitHint("");
 
         switchScene("/fxml/login.fxml");
 
@@ -69,7 +76,8 @@ public class GUI extends Application {
                         case GAME -> { // show the game
                             Platform.runLater(() -> {
                                 try {
-                                    switchScene("/fxml/game.fxml");
+                                    switchSceneResize("/fxml/game.fxml", 1920, 1080);
+                                    stage.setFullScreen(true);
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -116,9 +124,27 @@ public class GUI extends Application {
         }
     }
 
-    public static void switchScene(String scenePath) throws IOException {
+    public static void switchScene(String scenePath) throws IOException{
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
+
+        scene.getRoot().setCache(true);
+        scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void switchSceneResize(String scenePath, int width, int heigth) throws IOException {
+        Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
+        Scene scene = new Scene(root);
+
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+        double currentWidth = resolution.getWidth();
+        double currentHeight = resolution.getHeight();
+        double w = currentWidth/width;
+        double h = currentHeight/heigth;
+        Scale scale = new Scale(w, h, 0, 0);
+        root.getTransforms().add(scale);
 
         scene.getRoot().setCache(true);
         scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
