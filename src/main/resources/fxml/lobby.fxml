@@ -36,22 +36,22 @@
          <font>
             <Font size="15.0" />
          </font></CheckBox>
-      <ImageView fx:id="wizard1" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard1" onMouseClicked="#selectWizard1" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard2" fitHeight="228.0" fitWidth="255.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard2" onMouseClicked="#selectWizard2" fitHeight="228.0" fitWidth="255.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_2.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard3" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard3" onMouseClicked="#selectWizard3" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_3.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard4" fitHeight="228.0" fitWidth="255.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard4" onMouseClicked="#selectWizard4" fitHeight="228.0" fitWidth="255.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_4.png" />
          </image>

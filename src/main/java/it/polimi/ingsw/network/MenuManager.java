@@ -111,4 +111,6 @@ public class MenuManager {
     public boolean isSubscribed(ConnectionCEO connectionCEO){
         return subscribers.contains(connectionCEO);
     }
+
+    public int countSubscriber() {return subscribers.size();}
 }

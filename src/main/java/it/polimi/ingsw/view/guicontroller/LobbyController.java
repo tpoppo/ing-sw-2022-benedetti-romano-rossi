@@ -4,17 +4,17 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.messages.ChooseWizardMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
-import it.polimi.ingsw.utils.exceptions.FullLobbyException;
-import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 import it.polimi.ingsw.view.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 
 import java.net.URL;
@@ -45,6 +45,8 @@ public class LobbyController implements Initializable {
     private ImageView wizard3;
     @FXML
     private ImageView wizard4;
+    @FXML
+    private Button start_game;
 
     private List<Label> player_labels;
     private List<ImageView> wizards_selections;
@@ -61,50 +63,62 @@ public class LobbyController implements Initializable {
         GUI.getClientSocket().send(new StartGameMessage(expert_mode.isSelected()));
     }
 
-    private void selectWizard(ActionEvent actionEvent, int value){
+    private void selectWizard(MouseEvent mouseEvent, int value){
         GUI.getClientSocket().send(new ChooseWizardMessage(value));
     }
-    public void selectWizard1(ActionEvent actionEvent){
-        selectWizard(actionEvent, 1);
+    public void selectWizard1(MouseEvent mouseEvent){
+        selectWizard(mouseEvent, 1);
     }
-    public void selectWizard2(ActionEvent actionEvent){
-        selectWizard(actionEvent, 2);
+    public void selectWizard2(MouseEvent mouseEvent){
+        selectWizard(mouseEvent, 2);
     }
-    public void selectWizard3(ActionEvent actionEvent){
-        selectWizard(actionEvent, 3);
+    public void selectWizard3(MouseEvent mouseEvent){
+        selectWizard(mouseEvent, 3);
     }
-    public void selectWizard4(ActionEvent actionEvent){
-        selectWizard(actionEvent, 4);
+    public void selectWizard4(MouseEvent mouseEvent){
+        selectWizard(mouseEvent, 4);
     }
-
 
     public void updateLobby() {
         LobbyHandler lobbyHandler = GUI.getView().getLobbyHandler();
 
         // set username and chosen wizard icon
+        boolean all_has_chosen = true;
         for(int i=0; i<3; i++){
             if(i < lobbyHandler.getPlayers().size()){
                 LobbyPlayer lobbyPlayer = lobbyHandler.getPlayers().get(i);
                 player_labels.get(i).setText(lobbyPlayer.getUsername());
                 if(lobbyPlayer.getWizard() != null){
                     chosen_wizard0.setImage(new Image("/graphics/assistants/back/back_" +lobbyPlayer.getWizard()+".png"));
+                } else {
+                    all_has_chosen = false;
                 }
             } else{
                 player_labels.get(i).setText("");
             }
         }
 
+        boolean has_chosen_wizard = lobbyHandler.getPlayers()
+                .stream()
+                .filter(player -> player.getWizard() != null)
+                .filter(player -> player.getUsername().equals(GUI.getUsername()))
+                .count() == 1;
+
         // show available wizards
         // disable all
-        for(ImageView imageView : wizards_selections){
-            imageView.setOnMouseClicked(mouseEvent -> {});
-            imageView.setEffect(new BoxBlur());
+        for(int wizard=1; wizard<=4; wizard++){
+            ImageView imageView = wizards_selections.get(wizard-1);
+            if(!has_chosen_wizard && lobbyHandler.getAvailableWizards().contains(wizard)){
+                imageView.setEffect(null);
+            } else {
+                imageView.setOnMouseClicked(mouseEvent -> {});
+                imageView.setEffect(new BoxBlur());
+            }
         }
 
-        for(Integer wizard : lobbyHandler.getAvailableWizards()){
-            ImageView imageView = wizards_selections.get(wizard-1);
-            imageView.setOnMouseClicked(mouseEvent -> {});
-            imageView.setEffect(null);
+        if(!all_has_chosen || lobbyHandler.getPlayers().size() == 1) {
+            start_game.setDisable(true);
+            start_game.setOnAction(event -> {});
         }
     }
 }
