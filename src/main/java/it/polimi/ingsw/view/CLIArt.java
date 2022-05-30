@@ -56,6 +56,7 @@ public class CLIArt extends CLI {
         print(drawState(), STD_STATUS_POSITION);
         printIslands();
         printClouds();
+
         print(drawBoard(), STD_BOARD_POSITION);
 
         print(drawAssistants(), STD_ASSISTANTS_POSITION);
@@ -119,6 +120,7 @@ public class CLIArt extends CLI {
                 break;
             }
         }
+        divisor = Math.min(divisor, 7);
 
         int cnt = 0;
         for(Island island : model.getIslands()){

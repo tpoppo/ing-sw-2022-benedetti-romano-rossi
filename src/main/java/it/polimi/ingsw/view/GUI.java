@@ -3,10 +3,13 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,14 +27,15 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         GUI.stage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-
-        Scene scene = new Scene(root);
-
         stage.setTitle("Eriantys");
-        stage.setScene(scene);
-        stage.show();
+
+        switchScene("/fxml/login.fxml");
+
         startViewContentUpdates(stage);
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            logout();
+        });
     }
 
     private void startViewContentUpdates(Stage stage){
@@ -50,22 +54,43 @@ public class GUI extends Application {
 
                 switch(view.getCurrentHandler()){
                     case GAME -> {
-
-                    }
-
-                    case LOBBY -> {
-                        Group root = null;
                         try {
-                            root = FXMLLoader.load(getClass().getResource("/fxml/lobby.fxml"));
+                            switchScene("/fxml/game.fxml");
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
                     }
+
+                    case LOBBY -> {
+                        try {
+                            switchScene("/fxml/lobby.fxml");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                 }
             }
         });
+    }
+
+    private static void logout(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("You are about to exit the game");
+        alert.setContentText("Are you sure you want to exit?");
+
+        if(alert.showAndWait().get() == ButtonType.OK){
+
+            System.out.println("You are about to logout");
+            stage.close();
+            try {
+                getClientSocket().closeConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.exit(0);
+        }
     }
 
     public static void switchScene(String scenePath) throws IOException {

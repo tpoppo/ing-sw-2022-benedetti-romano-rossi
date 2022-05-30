@@ -8,10 +8,7 @@ import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import it.polimi.ingsw.view.GUI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Eriantys {
     public static void main(String[] args ) {
@@ -21,13 +18,16 @@ public class Eriantys {
             return ;
         }
 
-        switch (args[0].toLowerCase()) {
-            case "server" -> runServer(args); // app server
-            case "cli" -> runCli(args); // app cli
-            case "cliart" -> runCLIArt(args); // app cli, but fancy
-            case "gui" -> runGUI(args); // app gui
+        if(!List.of("server", "cli", "cliart", "gui").contains(args[0].toLowerCase())){
+            System.out.println("Invalid argument given: "+args[0]);
+        } else {
+            switch (args[0].toLowerCase()) {
+                case "server" -> runServer(args); // app server
+                case "cli" -> runCli(args); // app cli
+                case "cliart" -> runCLIArt(args); // app cli, but fancy
+                case "gui" -> runGUI(args); // app gui
+            }
         }
-        System.out.println("Invalid argument given: "+args[0]);
     }
 
     private static void runServer(String[] args){
