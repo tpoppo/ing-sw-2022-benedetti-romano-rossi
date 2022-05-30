@@ -22,10 +22,6 @@
          </font>
       </Button>
       <SplitMenuButton fx:id="choose_lobby" layoutX="184.0" layoutY="286.0" mnemonicParsing="false" onAction="#Choose_Lobby" text="Choose Lobby">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
          <font>
             <Font size="24.0" />
          </font>

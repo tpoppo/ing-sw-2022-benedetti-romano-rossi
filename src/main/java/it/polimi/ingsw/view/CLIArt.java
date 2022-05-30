@@ -67,7 +67,6 @@ public class CLIArt extends CLI {
         if(model.getExpertMode()) {
             print(drawCharacters(), STD_CHARACTER_POSITION);
         }
-
         print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
 
         // print server errors

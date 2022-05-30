@@ -79,14 +79,7 @@ public class LobbyController implements Initializable {
 
 
     public void updateLobby() {
-        // LobbyHandler lobbyHandler = GUI.getView().getLobbyHandler();
-        LobbyHandler lobbyHandler = new LobbyHandler(10);
-        try {
-            lobbyHandler.addPlayer(new LobbyPlayer("tpoppo"));
-            lobbyHandler.chooseWizard(1, lobbyHandler.getPlayers().get(0));
-        } catch (FullLobbyException | WizardNotAvailableException e) {
-            throw new RuntimeException(e);
-        }
+        LobbyHandler lobbyHandler = GUI.getView().getLobbyHandler();
 
         // set username and chosen wizard icon
         for(int i=0; i<3; i++){

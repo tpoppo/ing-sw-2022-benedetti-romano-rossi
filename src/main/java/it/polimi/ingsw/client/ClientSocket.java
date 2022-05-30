@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,16 +76,17 @@ public class ClientSocket {
             while(isOpened()) {
                 try {
                     view = (ViewContent) input_stream.readObject();
+                    System.out.println("view:"+view);
                 } catch (IOException e) {
                     try {
                         closeConnection();
                     } catch (IOException ex) {
-                        LOGGER.log(Level.SEVERE, "Cannot closed: {0}", ex);
+                        LOGGER.log(Level.SEVERE, "Cannot closed: {0}", new Object[]{ex});
                     }
 
-                    LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", e);
+                    LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", new Object[]{e});
                 } catch (ClassNotFoundException e){
-                    LOGGER.log(Level.INFO, "Invalid message: {0}", e);
+                    LOGGER.log(Level.INFO, "Invalid message: {0}", new Object[]{e});
                 }
 
                 if(view != null) {

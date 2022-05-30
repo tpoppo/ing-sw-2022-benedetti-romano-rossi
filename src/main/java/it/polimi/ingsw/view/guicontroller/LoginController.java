@@ -37,11 +37,5 @@ public class LoginController {
         }
 
         GUI.setUsername(username);
-
-        try {
-            switchScene("/fxml/lobby.fxml");
-        } catch (IOException e) {
-            throw new RuntimeException(e); // TODO
-        }
     }
 }

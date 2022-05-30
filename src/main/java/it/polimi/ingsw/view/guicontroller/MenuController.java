@@ -33,12 +33,15 @@ public class MenuController {
         ArrayList<MenuItem> menuitem = new ArrayList<>();
         ViewContent view = GUI.getView();
         ArrayList<ReducedLobby> lobbies = view.getLobbies();
+
         for(int i=0; i<lobbies.size(); i++){
-            menuitem.add(new MenuItem("Lobby " + String.valueOf(lobbies.get(i).getID())));
+            menuitem.add(new MenuItem("Lobby " + lobbies.get(i).getID()));
         }
         choose_lobby.getItems().addAll(menuitem);
+
         for(int i=0; i< menuitem.size(); i++){
             final int pos = i;
+            menuitem.get(i).setText("Lobby " + lobbies.get(i).getID());
             menuitem.get(i).setOnAction((e)-> {
                 JoinLobbyMessage joinlobbymessage = new JoinLobbyMessage(lobbies.get(pos).getID());
                 GUI.getClientSocket().send(joinlobbymessage);

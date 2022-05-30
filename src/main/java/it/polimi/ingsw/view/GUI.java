@@ -3,8 +3,10 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,28 +52,49 @@ public class GUI extends Application {
                         }
                     }
                 }
-                view = client_socket.getView();
 
-                switch(view.getCurrentHandler()){
-                    case GAME -> {
+                GUI.view = client_socket.getView();
+
+
+                if (view.getCurrentHandler() == null) { // show the menu
+                    Platform.runLater(() -> {
                         try {
-                            switchScene("/fxml/game.fxml");
+                            switchScene("/fxml/menu.fxml");
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                    }
-
-                    case LOBBY -> {
-                        try {
-                            switchScene("/fxml/lobby.fxml");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                    });
+                } else {
+                    switch (view.getCurrentHandler()) {
+                        case GAME -> { // show the game
+                            Platform.runLater(() -> {
+                                try {
+                                    switchScene("/fxml/game.fxml");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
                         }
-                    }
 
+                        case LOBBY -> { // show the lobby
+                            Platform.runLater(() -> {
+                                try {
+                                    switchScene("/fxml/lobby.fxml");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+                        }
+
+                    }
+                }
+
+                synchronized (client_socket.mutex){
+                    client_socket.setView(null);
+                    client_socket.mutex.notifyAll();
                 }
             }
-        });
+        }).start();
     }
 
     private static void logout(){
@@ -96,6 +119,9 @@ public class GUI extends Application {
     public static void switchScene(String scenePath) throws IOException {
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
+
+        scene.getRoot().setCache(true);
+        scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
         stage.setScene(scene);
         stage.show();
     }
