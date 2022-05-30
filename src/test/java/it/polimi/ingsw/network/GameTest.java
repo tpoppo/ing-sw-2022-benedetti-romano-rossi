@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
-import it.polimi.ingsw.model.characters.NatureBlocker;
+import it.polimi.ingsw.model.characters.Witch;
 import it.polimi.ingsw.model.characters.PlayerChoices;
 import it.polimi.ingsw.utils.exceptions.*;
 import org.junit.jupiter.api.RepeatedTest;
@@ -770,7 +770,7 @@ public class GameTest {
         }
     }
 
-    //Check that the character NatureBlocker works in a game simulation
+    //Check that the character Witch works in a game simulation
     @RepeatedTest(100)
     public void conquerIslandTest() throws FullLobbyException, EmptyBagException, EmptyMovableException, FullDiningRoomException, AssistantAlreadyPlayedException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -931,10 +931,10 @@ public class GameTest {
         for(Island island : islands){
             islands_copy.add(island);
         }
-        NatureBlocker natureBlocker = new NatureBlocker();
+        Witch witch = new Witch();
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setIsland(islands.get(game.findMotherNaturePosition()));
-        natureBlocker.activate(game, playerChoices);
+        witch.activate(game, playerChoices);
         game.conquerIsland();
 
         //Check that island don't change after activate that character

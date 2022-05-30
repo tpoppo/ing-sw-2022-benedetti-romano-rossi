@@ -21,17 +21,17 @@ abstract public class Character implements Serializable {
 
     public static Character createCharacter(Characters character_to_create, Game game){
         return switch (character_to_create) {
-            case CHEF -> new Chef(game);
+            case PRINCESS -> new Princess(game);
             case BARD -> new Bard();
             case COLORBLIND -> new Colorblind();
-            case CONQUEROR -> new Conqueror();
+            case HERALD -> new Herald();
             case DEMOLISHER -> new Demolisher();
             case HEADMASTER -> new Headmaster();
-            case INFLUENCER -> new Influencer();
+            case KNIGHT -> new Knight();
             case JUGGLER -> new Juggler(game);
-            case NATUREBLOCKER -> new NatureBlocker();
-            case NATUREMOVER -> new NatureMover();
-            case RECRUITER -> new Recruiter(game);
+            case WITCH -> new Witch();
+            case POSTMAN -> new Postman();
+            case MONK -> new Monk(game);
             case THIEF -> new Thief();
         };
         // This line should never be reached

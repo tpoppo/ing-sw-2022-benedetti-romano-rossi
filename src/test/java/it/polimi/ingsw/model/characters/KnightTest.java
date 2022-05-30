@@ -13,7 +13,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InfluencerTest {
+public class KnightTest {
 
     @Test
     public void Influencer() throws FullLobbyException, EmptyMovableException, EmptyBagException {
@@ -29,15 +29,15 @@ public class InfluencerTest {
 
         Game game = new Game(true, lobby);
 
-        Influencer influencer = new Influencer();
+        Knight knight = new Knight();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        influencer.onActivation(game, playerchoice);
+        knight.onActivation(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getBuffInfluence());
 
-        influencer.onDeactivation(game);
+        knight.onDeactivation(game);
         assertEquals(0, gameModifiers.getBuffInfluence());
     }
 }

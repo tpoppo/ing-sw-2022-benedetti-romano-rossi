@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.characters;
 
+
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
@@ -14,11 +15,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NatureBlockerTest {
+public class HeraldTest {
 
     @Test
-    public void NatureBlocker() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
+    public void Conqueror() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -31,20 +33,15 @@ public class NatureBlockerTest {
 
         Game game = new Game(true, lobby);
 
-        NatureBlocker natureblocker = new NatureBlocker();
-        PlayerChoices playerChoices = new PlayerChoices();
-        natureblocker.require();
-
+        Herald herald = new Herald();
+        herald.require();
         ArrayList<Island> islands = game.getIslands();
-        Island island = islands.get(0);
-        island.setNoEntryTiles(2);
-        playerChoices.setIsland(island);
+        PlayerChoices playerchoice = new PlayerChoices();
+        playerchoice.setIsland(islands.get(0));
 
-        natureblocker.onActivation(game, playerChoices);
+        herald.onActivation(game, playerchoice);
+        assertEquals(true, islands.get(0).hasMotherNature());
 
-        assertEquals(3, islands.get(0).getNoEntryTiles());
-        assertEquals(3, natureblocker.getNoEntryTiles());
-
-        natureblocker.onDeactivation(game);
+        herald.onDeactivation(game);
     }
 }

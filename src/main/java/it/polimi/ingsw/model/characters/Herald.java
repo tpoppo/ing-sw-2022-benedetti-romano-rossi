@@ -4,10 +4,10 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
-public class Conqueror extends Character{
+public class Herald extends Character{
     private Island chosen_island;
 
-    public Conqueror() {
+    public Herald() {
         super(3);
         setDescription("""
                 Choose an Island and resolve the Island as if Mother Nature had ended her movement there. Mother Nature will still move and the Island where she ends her movement will also be resolved.\n\nRequirements: <island position>""");

@@ -18,7 +18,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ChefTest {
+public class PrincessTest {
 
     @Test
     public void Chef() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
@@ -38,10 +38,10 @@ public class ChefTest {
         Students students = new Students(2, 1, 0, 3, 0);
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(students);
 
-        Chef chef = new Chef(game);
-        chef.require();
+        Princess princess = new Princess(game);
+        princess.require();
 
-        Students Chef_students = chef.getStudents();
+        Students Chef_students = princess.getStudents();
 
         Color Chefcolor = null;
         Boolean choosen = false;
@@ -54,7 +54,7 @@ public class ChefTest {
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setStudent(Chefcolor);
 
-        chef.onActivation(game, playerChoices);
+        princess.onActivation(game, playerChoices);
 
         Students expected_students = new Students(2, 1, 0, 3, 0);
         expected_students.add(Chefcolor);
@@ -81,7 +81,7 @@ public class ChefTest {
         Students students = new Students(2, 3, 2, 0, 1);
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(students);
 
-        Chef chef = new Chef(game);
+        Princess princess = new Princess(game);
 
         ArrayList<Color> colors = new ArrayList<>();
         colors.add(Color.MAGENTA);
@@ -90,7 +90,7 @@ public class ChefTest {
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setStudent(colors);
 
-        assertThrows(BadPlayerChoiceException.class, () -> chef.activate(game, playerChoices));
+        assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
     }
 
     //Test when there is not the choosen color in the dining room
@@ -112,13 +112,13 @@ public class ChefTest {
         Students students = new Students(0, 1, 2, 2, 1);
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(students);
 
-        Chef chef = new Chef(game);
+        Princess princess = new Princess(game);
 
-        Students Chef_students = chef.getStudents();
+        Students Chef_students = princess.getStudents();
         Color Chefcolor = null;
         Boolean choosen = false;
 
-        //choose a color that is not in the chef student's
+        //choose a color that is not in the princess student's
         for (Color color : Chef_students.keySet()) {
             if(Chef_students.get(color) == 0 && choosen == false){
                 Chefcolor = color;
@@ -129,7 +129,7 @@ public class ChefTest {
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setStudent(Chefcolor);
 
-        assertThrows(BadPlayerChoiceException.class, () -> chef.activate(game, playerChoices));
+        assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
     }
 
     //Test when the bag is empty
@@ -151,9 +151,9 @@ public class ChefTest {
         Students students = new Students(2, 2, 2, 2, 1);
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(students);
 
-        Chef chef = new Chef(game);
+        Princess princess = new Princess(game);
 
-        Students Chef_students = chef.getStudents();
+        Students Chef_students = princess.getStudents();
 
         Color Chefcolor = null;
         Boolean choosen = false;
@@ -174,6 +174,6 @@ public class ChefTest {
             game.drawStudentFromBag();
         }
 
-        assertThrows(BadPlayerChoiceException.class, () -> chef.activate(game, playerChoices));
+        assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
     }
 }

@@ -4,16 +4,16 @@ import java.util.Random;
 
 public enum Characters {
     BARD,
-    CHEF,
+    PRINCESS,
     COLORBLIND,
-    CONQUEROR,
+    HERALD,
     DEMOLISHER,
     HEADMASTER,
-    INFLUENCER,
+    KNIGHT,
     JUGGLER,
-    NATUREBLOCKER,
-    NATUREMOVER,
-    RECRUITER,
+    WITCH,
+    POSTMAN,
+    MONK,
     THIEF;
 
     static Random rng = new Random();

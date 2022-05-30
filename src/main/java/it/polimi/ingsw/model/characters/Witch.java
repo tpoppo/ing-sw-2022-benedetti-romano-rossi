@@ -4,10 +4,10 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
-public class NatureBlocker extends  Character{
+public class Witch extends  Character{
     int tiles;
 
-    public NatureBlocker(){
+    public Witch(){
         super(2);
         setDescription("""
                 Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.

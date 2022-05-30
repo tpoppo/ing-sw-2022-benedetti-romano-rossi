@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RecruiterTest {
+public class MonkTest {
 
     @Test
     public void Recruiter() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
@@ -35,8 +35,8 @@ public class RecruiterTest {
         Game game = new Game(true, lobby);
 
         ArrayList<Island> islands = game.getIslands();
-        Recruiter recruiter = (Recruiter) Character.createCharacter(Characters.RECRUITER, game);
-        recruiter.require();
+        Monk monk = (Monk) Character.createCharacter(Characters.MONK, game);
+        monk.require();
 
         PlayerChoices playerchoice = new PlayerChoices();
 
@@ -48,14 +48,14 @@ public class RecruiterTest {
         Color color = null;
         do{
             color = Color.getRandomColor();
-            if(recruiter.getStudents().getOrDefault(color, 0) == 0) color = null;
+            if(monk.getStudents().getOrDefault(color, 0) == 0) color = null;
         }while(color == null);
 
         playerchoice.setStudent(color);
         playerchoice.setIsland(island);
         assertEquals(1, playerchoice.getStudent().size());
 
-        recruiter.onActivation(game, playerchoice);
+        monk.onActivation(game, playerchoice);
 
         Students expected_student = new Students();
         expected_student.add(color);
@@ -77,8 +77,8 @@ public class RecruiterTest {
         Game game = new Game(true, lobby);
 
         ArrayList<Island> islands = game.getIslands();
-        Recruiter recruiter = (Recruiter) Character.createCharacter(Characters.RECRUITER, game);
-        recruiter.require();
+        Monk monk = (Monk) Character.createCharacter(Characters.MONK, game);
+        monk.require();
 
         PlayerChoices playerchoice = new PlayerChoices();
 
@@ -94,7 +94,7 @@ public class RecruiterTest {
         playerchoice.setStudent(students);
         playerchoice.setIsland(island);
 
-        assertThrows(BadPlayerChoiceException.class, () -> recruiter.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> monk.onActivation(game, playerchoice));
     }
 
     @Test
@@ -112,8 +112,8 @@ public class RecruiterTest {
         Game game = new Game(true, lobby);
 
         ArrayList<Island> islands = game.getIslands();
-        Recruiter recruiter = (Recruiter) Character.createCharacter(Characters.RECRUITER, game);
-        recruiter.require();
+        Monk monk = (Monk) Character.createCharacter(Characters.MONK, game);
+        monk.require();
 
         PlayerChoices playerchoice = new PlayerChoices();
 
@@ -125,13 +125,13 @@ public class RecruiterTest {
         Color color = null;
         do{
             color = Color.getRandomColor();
-            if(recruiter.getStudents().getOrDefault(color, 0) != 0) color = null;
+            if(monk.getStudents().getOrDefault(color, 0) != 0) color = null;
         }while(color == null);
 
         playerchoice.setStudent(color);
         playerchoice.setIsland(island);
 
-        assertThrows(BadPlayerChoiceException.class, () -> recruiter.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> monk.onActivation(game, playerchoice));
     }
 
 }

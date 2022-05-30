@@ -10,10 +10,10 @@ import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
-public class Recruiter extends Character{
+public class Monk extends Character{
     Students students;
 
-    Recruiter(Game game){
+    Monk(Game game){
         super(1);
         setDescription("""
                 Take 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.

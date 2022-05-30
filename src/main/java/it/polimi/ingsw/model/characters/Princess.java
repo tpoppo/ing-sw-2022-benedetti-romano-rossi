@@ -9,10 +9,10 @@ import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 import java.util.ArrayList;
 
-public class Chef extends Character{
+public class Princess extends Character{
     Students students;
 
-    public Chef(Game game){
+    public Princess(Game game){
         super(2);
         setDescription("""
                  Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.

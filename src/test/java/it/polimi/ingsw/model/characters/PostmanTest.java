@@ -15,7 +15,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NatureMoverTest {
+public class PostmanTest {
 
     @Test
     public void NatureMover() throws FullLobbyException, EmptyMovableException, EmptyBagException {
@@ -31,15 +31,15 @@ public class NatureMoverTest {
 
         Game game = new Game(true, lobby);
 
-        NatureMover NatureMover = new NatureMover();
+        Postman Postman = new Postman();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        NatureMover.onActivation(game, playerchoice);
+        Postman.onActivation(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getExtraSteps());
 
-        NatureMover.onDeactivation(game);
+        Postman.onDeactivation(game);
         assertEquals(0, gameModifiers.getExtraSteps());
     }
 }
