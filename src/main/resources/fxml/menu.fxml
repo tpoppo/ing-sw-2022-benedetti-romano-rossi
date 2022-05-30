@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.MenuController">
+   <children>
+      <Label layoutX="226.0" layoutY="40.0" text="MENU'" textAlignment="CENTER">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Button layoutX="168.0" layoutY="121.0" mnemonicParsing="false" onAction="#Create_Lobby_2_Players" text="Create Lobby 2 Player" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="168.0" layoutY="206.0" mnemonicParsing="false" onAction="#Create_Lobby_3_Players" text="Create Lobby 3 Player">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <SplitMenuButton fx:id="choose_lobby" layoutX="184.0" layoutY="286.0" mnemonicParsing="false" onAction="#Choose_Lobby" text="Choose Lobby">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+         <font>
+            <Font size="24.0" />
+         </font>
+      </SplitMenuButton>
+   </children>
+</AnchorPane>
