@@ -7,26 +7,22 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LobbyController">
    <children>
-      <ImageView fitHeight="750.0" fitWidth="750.0">
-         <image>
-            <Image url="@../graphics/Eriantys.jpg" />
-         </image>
-      </ImageView>
+      <ImageView fitHeight="750.0" fitWidth="750.0" style="-fx-background-color: GREEN;" />
 
       <ImageView fx:id="chosen_wizard0" fitHeight="150.0" fitWidth="200.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;" />
       <ImageView fx:id="chosen_wizard1" fitHeight="150.0" fitWidth="200.0" layoutX="275.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="chosen_wizard2" fitHeight="150.0" fitWidth="200.0" layoutX="544.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="player0" layoutX="6.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" textFill="WHITE">
+      <Label fx:id="player0" layoutX="6.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold" size="20.0" />
          </font></Label>
-      <Label fx:id="player1" layoutX="275.0" layoutY="154.0" prefHeight="25.0" prefWidth="74.0" text="Label" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="player1" layoutX="275.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold" size="20.0" />
          </font></Label>
-      <Label fx:id="player2" layoutX="544.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="player2" layoutX="544.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold" size="20.0" />
          </font></Label>
       <Button fx:id="start_game" layoutX="522.0" layoutY="648.0" mnemonicParsing="false" onAction="#startGame" prefHeight="52.0" prefWidth="189.0" text="Start Game">
          <font>
@@ -36,29 +32,29 @@
          <font>
             <Font size="15.0" />
          </font></CheckBox>
-      <ImageView fx:id="wizard1" onMouseClicked="#selectWizard1" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard1" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="479.0" onMouseClicked="#selectWizard1" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard2" onMouseClicked="#selectWizard2" fitHeight="228.0" fitWidth="255.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard2" fitHeight="228.0" fitWidth="255.0" layoutY="479.0" onMouseClicked="#selectWizard2" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_2.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard3" onMouseClicked="#selectWizard3" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard3" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="251.0" onMouseClicked="#selectWizard3" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_3.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="wizard4" onMouseClicked="#selectWizard4" fitHeight="228.0" fitWidth="255.0" layoutY="251.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="wizard4" fitHeight="228.0" fitWidth="255.0" layoutY="251.0" onMouseClicked="#selectWizard4" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../graphics/assistants/back/back_4.png" />
          </image>
       </ImageView>
-      <Label layoutX="90.0" layoutY="233.0" text="Available Wizards" textFill="WHITE">
+      <Label layoutX="65.0" layoutY="217.0" text="Available Wizards">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
    </children>

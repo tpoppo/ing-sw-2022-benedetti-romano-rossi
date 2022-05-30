@@ -50,10 +50,13 @@ public class LobbyController implements Initializable {
 
     private List<Label> player_labels;
     private List<ImageView> wizards_selections;
+    private List<ImageView> chosen_wizards;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         player_labels = List.of(player0, player1, player2);
+        chosen_wizards = List.of(chosen_wizard0, chosen_wizard1, chosen_wizard2);
+
         wizards_selections = List.of(wizard1, wizard2, wizard3, wizard4);
 
         updateLobby();
@@ -89,7 +92,7 @@ public class LobbyController implements Initializable {
                 LobbyPlayer lobbyPlayer = lobbyHandler.getPlayers().get(i);
                 player_labels.get(i).setText(lobbyPlayer.getUsername());
                 if(lobbyPlayer.getWizard() != null){
-                    chosen_wizard0.setImage(new Image("/graphics/assistants/back/back_" +lobbyPlayer.getWizard()+".png"));
+                    chosen_wizards.get(i).setImage(new Image("/graphics/assistants/back/back_" +lobbyPlayer.getWizard()+".png"));
                 } else {
                     all_has_chosen = false;
                 }
