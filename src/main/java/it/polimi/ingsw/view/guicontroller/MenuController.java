@@ -36,12 +36,15 @@ public class MenuController {
 
         for(int i=0; i<lobbies.size(); i++){
             menuitem.add(new MenuItem("Lobby " + lobbies.get(i).getID()));
-        }
-        choose_lobby.getItems().addAll(menuitem);
-
-        for(int i=0; i< menuitem.size(); i++){
-            final int pos = i;
             menuitem.get(i).setText("Lobby " + lobbies.get(i).getID());
+        }
+
+        for(int i=0; i<menuitem.size(); i++){
+            choose_lobby.getItems().add(menuitem.get(i));
+        }
+
+        for(int i=0; i<menuitem.size(); i++){
+            final int pos = i;
             menuitem.get(i).setOnAction((e)-> {
                 JoinLobbyMessage joinlobbymessage = new JoinLobbyMessage(lobbies.get(pos).getID());
                 GUI.getClientSocket().send(joinlobbymessage);
