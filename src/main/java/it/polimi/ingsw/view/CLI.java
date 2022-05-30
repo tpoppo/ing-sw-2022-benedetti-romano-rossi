@@ -429,6 +429,7 @@ public class CLI {
         return islandStr.toString();
     }
 
+
     private String drawBoard(){
         StringBuilder boardStr = new StringBuilder();
 
@@ -758,10 +759,20 @@ public class CLI {
         StringBuilder horizontalLine = new StringBuilder();
         horizontalLine.append("_".repeat(MAXLEN+4));
 
-        StringBuilder replacement = new StringBuilder(text.substring(text.indexOf("EFFECT:")));
+        String tmp_replacement = text.substring(text.indexOf("EFFECT:"));
 
-        for(int i=0; i<replacement.length(); i+=MAXLEN)
-            replacement.insert(i, "\n");
+        StringBuilder replacement = new StringBuilder();
+
+        int current_len = 0;
+        for(int i=0; i<tmp_replacement.length(); i++){
+            replacement.append(tmp_replacement.charAt(i));
+            if(tmp_replacement.charAt(i) == '\n'){
+                current_len = 0;
+            } else {
+                current_len = (current_len + 1) % MAXLEN;
+                if(current_len == 0) replacement.append('\n');
+            }
+        }
 
         text.delete(text.indexOf("EFFECT:"), text.length()).append(replacement);
         text.insert(0, "   " + horizontalLine + "\n\n\n");
@@ -770,7 +781,7 @@ public class CLI {
         String result = text.toString().replaceAll("\n", "  |\n|  ");
         StringBuilder final_result = new StringBuilder();
         for(String line : result.split("\n")){
-            int spaces = MAXLEN + 10 - line.replaceAll("\\e\\[[\\d;]*[^\\d;]","").length();
+            int spaces = MAXLEN + 10 - line.replaceAll("(\\e\\[[\\d;]*[^\\d;])","").length();
             String newline = line.substring(0, line.length()-1) + " ".repeat(spaces) + "|\n";
             final_result.append(newline);
         }

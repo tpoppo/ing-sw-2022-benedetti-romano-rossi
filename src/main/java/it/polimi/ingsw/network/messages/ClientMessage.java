@@ -55,7 +55,8 @@ public abstract class ClientMessage implements Serializable {
         if ((required_state != null && gameHandler.getCurrentState() != required_state) || gameHandler.isActionCompleted() != action_completed) {
             System.err.println(required_state);
 
-            String err = "Required: %s %s. Given: %s %s.".formatted(required_state, action_completed, gameHandler.getCurrentState(), gameHandler.isActionCompleted());
+            // String err = "Required: %s %s. Given: %s %s.".formatted(required_state, action_completed, gameHandler.getCurrentState(), gameHandler.isActionCompleted());
+            String err = "You cannot do this action at the moment";
             network_manager.addErrorMessage(lobby_player, "Wrong state." + err);
             return StatusCode.WRONG_STATE;
         }

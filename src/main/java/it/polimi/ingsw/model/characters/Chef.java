@@ -14,7 +14,10 @@ public class Chef extends Character{
 
     public Chef(Game game){
         super(2);
-        setDescription(" Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card. ");
+        setDescription("""
+                 Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.
+
+                Requirements:  <color of the student>""");
         students = new Students();
 
         for(int i=0; i<4; i++){

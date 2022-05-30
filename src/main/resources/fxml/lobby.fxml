@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LobbyController">
+<AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LobbyController">
    <children>
       <ImageView fitHeight="750.0" fitWidth="750.0">
          <image>
@@ -17,9 +16,18 @@
       <ImageView fx:id="chosen_wizard0" fitHeight="150.0" fitWidth="200.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;" />
       <ImageView fx:id="chosen_wizard1" fitHeight="150.0" fitWidth="200.0" layoutX="275.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="chosen_wizard2" fitHeight="150.0" fitWidth="200.0" layoutX="544.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="player0" layoutX="6.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" />
-      <Label fx:id="player1" layoutX="275.0" layoutY="154.0" prefHeight="25.0" prefWidth="74.0" text="Label" textAlignment="CENTER" />
-      <Label fx:id="player2" layoutX="544.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="player0" layoutX="6.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Label>
+      <Label fx:id="player1" layoutX="275.0" layoutY="154.0" prefHeight="25.0" prefWidth="74.0" text="Label" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Label>
+      <Label fx:id="player2" layoutX="544.0" layoutY="154.0" prefHeight="25.0" prefWidth="45.0" text="Label" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Label>
       <Button fx:id="start_game" layoutX="522.0" layoutY="648.0" mnemonicParsing="false" onAction="#startGame" prefHeight="52.0" prefWidth="189.0" text="Start Game">
          <font>
             <Font size="18.0" />
@@ -48,9 +56,9 @@
             <Image url="@../graphics/assistants/back/back_4.png" />
          </image>
       </ImageView>
-      <Label layoutX="90.0" layoutY="233.0" text="Available Wizards">
+      <Label layoutX="90.0" layoutY="233.0" text="Available Wizards" textFill="WHITE">
          <font>
-            <Font size="15.0" />
+            <Font name="System Bold" size="15.0" />
          </font>
       </Label>
    </children>

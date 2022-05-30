@@ -9,7 +9,10 @@ public class NatureBlocker extends  Character{
 
     public NatureBlocker(){
         super(2);
-        setDescription("Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.");
+        setDescription("""
+                Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.
+                
+                Requirements: <island position>""");
         tiles = 4;
     }
 

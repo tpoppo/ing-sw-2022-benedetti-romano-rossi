@@ -13,7 +13,10 @@ public class Juggler extends Character{
 
     public Juggler(Game game){
         super(1);
-        setDescription("You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance. ");
+        setDescription("""
+                You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance.
+
+                Requirements: <color of a student in the entrance> <color of a student in this card>\s""");
         students = new Students();
 
         for(int i=0; i<6; i++){
@@ -26,7 +29,7 @@ public class Juggler extends Character{
 
     /**
      *
-     * @param game
+     * @param game is current game
      * @param playerChoices contains a list of color with even size. (2*i, 2*i+1) values are pairs of color that must be swapped
      * @throws BadPlayerChoiceException
      */

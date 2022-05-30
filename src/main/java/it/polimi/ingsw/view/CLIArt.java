@@ -20,8 +20,9 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class CLIArt extends CLI {
-    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(55, 1);
+    private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(53, 1);
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
+    private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(3, 80);
     private final Pair<Integer, Integer> STD_PLAYERS_POSITION = new Pair<>(4, 80);
     private final Pair<Integer, Integer> STD_BOARD_POSITION = new Pair<>(2, 177);
     private final Pair<Integer, Integer> STD_CHARACTER_POSITION = new Pair<>(43, 177);
@@ -54,6 +55,8 @@ public class CLIArt extends CLI {
         print(ansi().bg(Ansi.Color.WHITE).fg(Ansi.Color.BLACK).a(username).reset(), STD_USERNAME_POSITION);
         print(drawPlayers(), STD_PLAYERS_POSITION);
         print(drawState(), STD_STATUS_POSITION);
+        print(drawBag(), STD_BAG_POSITION);
+
         printIslands();
         printClouds();
 

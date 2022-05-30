@@ -15,7 +15,10 @@ public class Recruiter extends Character{
 
     Recruiter(Game game){
         super(1);
-        setDescription("Take 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card. ");
+        setDescription("""
+                Take 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card.
+
+                Requirements: <island position> <color of the student>""");
         students = new Students();
 
         for(int i=0; i<4; i++){

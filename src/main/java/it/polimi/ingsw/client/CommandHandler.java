@@ -95,6 +95,7 @@ public class CommandHandler {
 
         Command pass = new Command("pass", CommandType.GAME);
         pass.setDescription("Passes the turn.");
+        pass.addAlias("p");
         pass.addStates(List.of(GameState.MOVE_MOTHER_NATURE, GameState.CHOOSE_CLOUD, GameState.ACTIVATE_CHARACTER, GameState.MOVE_STUDENT, GameState.PLAY_ASSISTANT));
         commands.add(pass);
 

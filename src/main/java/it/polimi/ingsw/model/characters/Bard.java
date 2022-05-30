@@ -11,7 +11,11 @@ import java.util.ArrayList;
 public class Bard extends Character{
     public Bard() {
         super(1);
-        setDescription("You may exchange up to 2 Students between your Entrance and your Dining Room.");
+        setDescription("""
+                You may exchange up to 2 Students between your Entrance and your Dining Room.
+
+                Requirements: <color of the student in the entrance> <color of the student in the entrance> <color of the student in the entrance>.
+                You can also use only the first 2 arguments""");
     }
 
     @Override
