@@ -23,6 +23,8 @@ public class GUI extends Application {
     private static String username;
     private static Stage stage;
 
+
+
     public static void main(String[] args) {
    //     System.setProperty("prism.allowhidpi", "false"); // FIXME: does this works for all OS?
         launch(args);
@@ -166,4 +168,6 @@ public class GUI extends Application {
     public static ViewContent getView() {
         return view;
     }
+
+    public static Stage getStage() {return stage;}
 }
