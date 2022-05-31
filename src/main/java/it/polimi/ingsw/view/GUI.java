@@ -4,17 +4,13 @@ import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
@@ -36,6 +32,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws IOException {
         GUI.stage = stage;
         stage.setTitle("Eriantys");
+        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/icon.png")));
         stage.setFullScreenExitHint("");
 
         switchScene("/fxml/login.fxml");
@@ -73,26 +70,24 @@ public class GUI extends Application {
                     });
                 } else {
                     switch (view.getCurrentHandler()) {
-                        case GAME -> { // show the game
-                            Platform.runLater(() -> {
-                                try {
-                                    switchSceneResize("/fxml/game.fxml", 1920, 1080);
-                                    stage.setFullScreen(true);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                        }
+                        case GAME -> // show the game
+                                Platform.runLater(() -> {
+                                    try {
+                                        switchSceneResize("/fxml/gameV2.fxml", 1920, 1080);
+                                        stage.setFullScreen(true);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
 
-                        case LOBBY -> { // show the lobby
-                            Platform.runLater(() -> {
-                                try {
-                                    switchScene("/fxml/lobby.fxml");
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                        }
+                        case LOBBY -> // show the lobby
+                                Platform.runLater(() -> {
+                                    try {
+                                        switchScene("/fxml/lobby.fxml");
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
 
                     }
                 }

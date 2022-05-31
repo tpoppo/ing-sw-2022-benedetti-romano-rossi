@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+   <children>
+      <ImageView fitHeight="1080.0" fitWidth="1920.0" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../graphics/backgrounds/sky.jpg" />
+         </image>
+      </ImageView>
+      <Pane fx:id="statusPane" layoutX="31.0" layoutY="30.0" prefHeight="137.0" prefWidth="850.0">
+         <children>
+            <Label fx:id="turnLabel" layoutX="14.0" layoutY="18.0" prefHeight="62.0" prefWidth="809.0" text="Turn: player.username" textFill="WHITE">
+               <font>
+                  <Font size="42.0" />
+               </font>
+            </Label>
+            <Label fx:id="actionLabel" layoutX="14.0" layoutY="80.0" prefHeight="43.0" prefWidth="801.0" text="Action: Move student" textFill="WHITE">
+               <font>
+                  <Font size="29.0" />
+               </font>
+            </Label>
+            <ProgressBar layoutX="623.0" layoutY="49.0" prefWidth="200.0" progress="0.3" />
+         </children>
+      </Pane>
+      <Pane fx:id="turnOrderLabel" layoutX="1631.0" layoutY="222.0" prefHeight="150.0" prefWidth="268.0" style="-fx-background-color: #2196f3; -fx-background-radius: 30;">
+         <children>
+            <Label fx:id="firstPlayerLabel" layoutX="-8.0" layoutY="46.0" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="firstPlayer" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="secondPlayerLabel" layoutX="-7.0" layoutY="76.0" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="secondPlayer" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="thirdPlayerLabel" layoutX="-8.0" layoutY="106.0" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="thirdPlayer" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="78.0" layoutY="14.0" text="Turn order" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font></Label>
+         </children></Pane>
+      <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/waterr.gif');">
+         <children>
+            <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="56.0" layoutY="63.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/arrow_white.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="725.0" layoutY="734.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/bag.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/0.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="643.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/2.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="63.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/1.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="662.0" layoutY="541.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/0.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="650.0" layoutY="244.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/2.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="71.0" layoutY="541.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="711.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/0.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="208.0" layoutY="658.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/2.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="79.0" layoutY="244.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="26.0" layoutY="395.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/0.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="127.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/2.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="689.0" layoutY="389.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/islands/1.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="283.0" layoutY="365.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="432.0" layoutY="470.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/cloud.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="usernameLabel" layoutX="650.0" layoutY="49.0" text="USERNAME" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
+         <children>
+            <ImageView fx:id="schoolBoardImage" fitHeight="411.0" fitWidth="940.0" layoutX="16.0" layoutY="90.0">
+               <image>
+                  <Image url="@../graphics/schoolboard.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <Button layoutX="176.0" layoutY="28.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-background-radius: 12; -fx-border-width: 2; -fx-border-color: #8c7b75; -fx-border-radius: 10;" text="Username2" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button layoutX="304.0" layoutY="28.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-background-radius: 12; -fx-border-width: 2; -fx-border-color: #8c7b75; -fx-border-radius: 10;" text="Username3" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button layoutX="48.0" layoutY="27.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-background-radius: 12; -fx-border-width: 2; -fx-border-color: #8c7b75; -fx-border-radius: 10;" text="Username1" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="coinImage" fitHeight="62.0" fitWidth="65.0" layoutX="854.0" layoutY="16.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="854.0" layoutY="292.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="792.0" layoutY="347.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="792.0" layoutY="292.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="854.0" layoutY="236.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="792.0" layoutY="236.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="854.0" layoutY="181.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="792.0" layoutY="181.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="48.0" layoutX="854.0" layoutY="347.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/pieces/towers/towerWhite.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="greenProfessorImage" fitHeight="62.0" fitWidth="56.0" layoutX="673.0" layoutY="135.0" preserveRatio="true" rotate="90.0">
+               <image>
+                  <Image url="@../graphics/pieces/green_professor.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="redProfessorImage" fitHeight="185.0" fitWidth="60.0" layoutX="671.0" layoutY="202.0" preserveRatio="true" rotate="90.0">
+               <image>
+                  <Image url="@../graphics/pieces/red_professor.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane fx:id="assistantsPane" layoutX="907.0" layoutY="912.0" prefHeight="167.0" prefWidth="1013.0">
+         <children>
+            <ImageView fx:id="assistant5" fitHeight="200.0" fitWidth="90.0" layoutX="412.0" layoutY="86.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/5.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant4" fitHeight="200.0" fitWidth="90.0" layoutX="313.0" layoutY="86.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/4.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant3" fitHeight="200.0" fitWidth="90.0" layoutX="215.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/3.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant2" fitHeight="200.0" fitWidth="90.0" layoutX="118.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant1" fitHeight="200.0" fitWidth="90.0" layoutX="19.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant9" fitHeight="200.0" fitWidth="90.0" layoutX="805.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/9.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant8" fitHeight="200.0" fitWidth="90.0" layoutX="705.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/8.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant7" fitHeight="200.0" fitWidth="90.0" layoutX="609.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/7.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant6" fitHeight="200.0" fitWidth="90.0" layoutX="511.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/6.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="assistant10" fitHeight="200.0" fitWidth="90.0" layoutX="905.0" layoutY="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/assistants/front/10.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane fx:id="charactersPane" layoutX="960.0" layoutY="205.0" prefHeight="167.0" prefWidth="471.0">
+         <children>
+            <ImageView fx:id="characterInfoButton" fitHeight="62.0" fitWidth="65.0" layoutX="381.0" layoutY="53.0">
+               <image>
+                  <Image url="@../graphics/info.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="chracterImage0" fitHeight="200.0" fitWidth="100.0" layoutX="24.0" layoutY="9.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/characters/CarteTOT_front.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="characterImage1" fitHeight="200.0" fitWidth="100.0" layoutX="138.0" layoutY="9.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/characters/CarteTOT_front7.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="characterImage2" fitHeight="200.0" fitWidth="100.0" layoutX="249.0" layoutY="9.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/characters/CarteTOT_front10.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0">
+         <image>
+            <Image url="@../graphics/next.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
