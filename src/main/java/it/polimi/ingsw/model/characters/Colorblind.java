@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class Colorblind extends Character{
+    private static final long serialVersionUID = -3440315359225311324L;
+
     public Colorblind() {
         super(3);
         setDescription("""

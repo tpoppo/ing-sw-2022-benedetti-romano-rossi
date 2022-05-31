@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class Witch extends  Character{
+    private static final long serialVersionUID = -1314321620815889368L;
     int tiles;
 
     public Witch(){

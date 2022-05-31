@@ -5,6 +5,8 @@ import it.polimi.ingsw.controller.GameModifiers;
 
 public class Postman extends Character{
 
+    private static final long serialVersionUID = -4653799686486683334L;
+
     public Postman() {
         super(1);
         setDescription("You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played. ");

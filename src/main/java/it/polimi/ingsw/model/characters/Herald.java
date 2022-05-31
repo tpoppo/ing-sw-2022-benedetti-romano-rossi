@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 public class Herald extends Character{
+    private static final long serialVersionUID = -3708599904449301484L;
     private Island chosen_island;
 
     public Herald() {

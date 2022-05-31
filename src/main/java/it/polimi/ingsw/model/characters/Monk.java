@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import java.util.ArrayList;
 
 public class Monk extends Character{
+    private static final long serialVersionUID = -6153301158581915577L;
     Students students;
 
     Monk(Game game){

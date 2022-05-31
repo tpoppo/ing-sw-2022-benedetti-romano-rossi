@@ -9,6 +9,8 @@ import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import java.util.ArrayList;
 
 public class Bard extends Character{
+    private static final long serialVersionUID = -4064825437837380668L;
+
     public Bard() {
         super(1);
         setDescription("""

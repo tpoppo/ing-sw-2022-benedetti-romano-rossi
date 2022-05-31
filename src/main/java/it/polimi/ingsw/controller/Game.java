@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.characters.Characters;
 import it.polimi.ingsw.model.characters.PlayerChoices;
+import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.utils.exceptions.*;
 
 import java.io.*;
@@ -15,6 +16,7 @@ import java.util.*;
 public class Game implements Serializable{
     public static final int MAX_COINS = 20;
     public static final int MAX_DINING_STUDENTS = 10;
+    private static final long serialVersionUID = -8385917117979059599L;
 
     private final boolean expert_mode;
     private Player first_player;
@@ -543,7 +545,7 @@ public class Game implements Serializable{
     public ArrayList<Character> getCharacters() {
         return new ArrayList<>(characters);
     }
-
+    
     public boolean getExpertMode() {
         return expert_mode;
     }

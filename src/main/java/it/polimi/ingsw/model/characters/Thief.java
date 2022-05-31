@@ -8,6 +8,7 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 public class Thief extends Character{
+    private static final long serialVersionUID = 2326534445678915384L;
     final private int THEFT_COUNT = 3;
 
     public Thief() {

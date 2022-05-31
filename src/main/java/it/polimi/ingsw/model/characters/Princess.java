@@ -10,6 +10,7 @@ import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import java.util.ArrayList;
 
 public class Princess extends Character{
+    private static final long serialVersionUID = -8501442375720696617L;
     Students students;
 
     public Princess(Game game){

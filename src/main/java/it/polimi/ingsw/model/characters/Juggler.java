@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
 public class Juggler extends Character{
+    private static final long serialVersionUID = -7901721705819512488L;
     Students students;
 
     public Juggler(Game game){
