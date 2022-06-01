@@ -132,27 +132,27 @@
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="128.0" layoutX="443.0" layoutY="308.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="128.0" layoutX="276.0" layoutY="349.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="128.0" layoutX="425.0" layoutY="454.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="718.0" layoutY="718.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/bag.png" />
+                  <Image url="@../graphics/other/bag.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="49.0" layoutY="47.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/arrow_white.png" />
+                  <Image url="@../graphics/other/arrow_white.png" />
                </image>
             </ImageView>
             <Label fx:id="usernameLabel" layoutX="643.0" layoutY="33.0" text="USERNAME" textFill="WHITE">
@@ -247,7 +247,7 @@
          <children>
             <ImageView fx:id="characterInfoButton" fitHeight="62.0" fitWidth="65.0" layoutX="51.0" layoutY="7.0">
                <image>
-                  <Image url="@../graphics/info.png" />
+                  <Image url="@../graphics/other/info.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="131.0" layoutX="18.0" layoutY="75.0">
@@ -269,12 +269,12 @@
       </Pane>
       <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1708.0" layoutY="899.0">
          <image>
-            <Image url="@../graphics/next.png" />
+            <Image url="@../graphics/other/next.png" />
          </image>
       </ImageView>
       <ImageView fx:id="coins" fitHeight="90.0" fitWidth="90.0" layoutX="1524.0" layoutY="929.0">
          <image>
-            <Image url="@../graphics/coin.png" />
+            <Image url="@../graphics/other/coin.png" />
          </image>
       </ImageView>
    </children>

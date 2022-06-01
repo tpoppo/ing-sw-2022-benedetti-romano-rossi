@@ -75,12 +75,12 @@
          <children>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
                <image>
-                  <Image url="@../graphics/arrow_white.png" />
+                  <Image url="@../graphics/other/arrow_white.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="725.0" layoutY="734.0" preserveRatio="true">
                <image>
-                  <Image url="@../graphics/bag.png" />
+                  <Image url="@../graphics/other/bag.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
@@ -154,17 +154,17 @@
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="283.0" layoutY="365.0" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="432.0" layoutY="470.0" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../graphics/cloud.png" />
+                  <Image url="@../graphics/islands/cloud.png" />
                </image>
             </ImageView>
             <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
@@ -391,7 +391,7 @@
                <children>
                   <ImageView fitHeight="62.0" fitWidth="65.0" preserveRatio="true">
                      <image>
-                        <Image url="@../graphics/coin.png" />
+                        <Image url="@../graphics/other/coin.png" />
                      </image>
                   </ImageView>
                </children>
@@ -456,7 +456,7 @@
          <children>
             <ImageView fx:id="characterInfoButton" fitHeight="62.0" fitWidth="65.0" layoutX="381.0" layoutY="53.0" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../graphics/info.png" />
+                  <Image url="@../graphics/other/info.png" />
                </image>
             </ImageView>
             <ImageView fx:id="characterImage0" fitHeight="200.0" fitWidth="100.0" layoutX="24.0" layoutY="9.0" preserveRatio="true" style="-fx-cursor: hand;">
@@ -478,7 +478,7 @@
       </Pane>
       <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0" style="-fx-cursor: hand;">
          <image>
-            <Image url="@../graphics/next.png" />
+            <Image url="@../graphics/other/next.png" />
          </image>
       </ImageView>
       <Label fx:id="errorMsg" layoutX="1048.0" layoutY="75.0" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">

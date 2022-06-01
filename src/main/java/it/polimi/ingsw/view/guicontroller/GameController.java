@@ -19,7 +19,6 @@ import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -309,7 +308,7 @@ public class GameController implements Initializable {
 
         // coins
         Text coinNumber = new Text(String.valueOf(coins));
-        ImageView coinsImage = new ImageView("graphics/coin.png");
+        ImageView coinsImage = new ImageView("graphics/other/coin.png");
         coinsImage = resizeImageView(coinsImage, 50, 50);
         coinsPane.getChildren().add(coinsImage);
         coinsPane.getChildren().add(coinNumber);

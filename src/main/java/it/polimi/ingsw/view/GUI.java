@@ -22,8 +22,7 @@ public class GUI extends Application {
     private static ClientSocket client_socket;
     private static String username;
     private static Stage stage;
-
-
+    private static boolean creatingLobby;
 
     public static void main(String[] args) {
    //     System.setProperty("prism.allowhidpi", "false"); // FIXME: does this works for all OS?
@@ -34,10 +33,11 @@ public class GUI extends Application {
     public void start(Stage stage) throws IOException {
         GUI.stage = stage;
         stage.setTitle("Eriantys");
-        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/icon.png")));
+        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/other/icon.png")));
         stage.setFullScreenExitHint("");
 
         switchScene("/fxml/login.fxml");
+        stage.getScene().getStylesheets().add("css/login.css");
 
         startViewContentUpdates(stage);
         stage.setOnCloseRequest(event -> {
@@ -66,6 +66,7 @@ public class GUI extends Application {
                     Platform.runLater(() -> {
                         try {
                             switchScene("/fxml/menu.fxml");
+                            stage.getScene().getStylesheets().add("css/menu.css");
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -76,6 +77,7 @@ public class GUI extends Application {
                                 Platform.runLater(() -> {
                                     try {
                                         switchSceneResize("/fxml/game.fxml", 1920, 1080);
+                                        stage.getScene().getStylesheets().add("css/game.css");
                                         stage.setFullScreen(true);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
@@ -125,8 +127,6 @@ public class GUI extends Application {
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
 
-        scene.getStylesheets().add("css/login.css");
-
         scene.getRoot().setCache(true);
         scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
         stage.setScene(scene);
@@ -136,8 +136,6 @@ public class GUI extends Application {
     public static void switchSceneResize(String scenePath, int width, int heigth) throws IOException {
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
-
-        scene.getStylesheets().add("css/game.css");
 
         Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
         double currentWidth = resolution.getWidth();
@@ -174,4 +172,12 @@ public class GUI extends Application {
     }
 
     public static Stage getStage() {return stage;}
+
+    public static boolean isCreatingLobby() {
+        return creatingLobby;
+    }
+
+    public static void setCreatingLobby(boolean creatingLobby) {
+        GUI.creatingLobby = creatingLobby;
+    }
 }

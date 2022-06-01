@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class AppTest {
 
-    final int TESTING_PORT = 0xcafe;
+    final int TESTING_PORT = 0xcafd;
 
     @Test
     void RunServer() throws InterruptedException {

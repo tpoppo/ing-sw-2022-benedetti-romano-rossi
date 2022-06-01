@@ -1,0 +1,15 @@
+.lobbyButton{
+    -fx-pref-width: 525;
+    -fx-pref-height: 60;
+    -fx-background-color: #aad9e0;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+}
+
+.lobbyButton:hover{
+    -fx-background-color: lightskyblue;
+}
+
+.rectangle:hover{
+    -fx-fill: #0074b759;
+}
