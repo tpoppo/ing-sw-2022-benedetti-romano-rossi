@@ -75,7 +75,7 @@ public class GUI extends Application {
                         case GAME -> // show the game
                                 Platform.runLater(() -> {
                                     try {
-                                        switchSceneResize("/fxml/gameV2.fxml", 1920, 1080);
+                                        switchSceneResize("/fxml/game.fxml", 1920, 1080);
                                         stage.setFullScreen(true);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
@@ -125,6 +125,8 @@ public class GUI extends Application {
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
 
+        scene.getStylesheets().add("css/login.css");
+
         scene.getRoot().setCache(true);
         scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
         stage.setScene(scene);
@@ -134,6 +136,8 @@ public class GUI extends Application {
     public static void switchSceneResize(String scenePath, int width, int heigth) throws IOException {
         Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
         Scene scene = new Scene(root);
+
+        scene.getStylesheets().add("css/game.css");
 
         Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
         double currentWidth = resolution.getWidth();

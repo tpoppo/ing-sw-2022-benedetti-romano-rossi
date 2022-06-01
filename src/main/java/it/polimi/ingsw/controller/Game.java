@@ -14,9 +14,10 @@ import java.io.*;
 import java.util.*;
 
 public class Game implements Serializable{
+    @Serial
+    private static final long serialVersionUID = -8385917117979059599L;
     public static final int MAX_COINS = 20;
     public static final int MAX_DINING_STUDENTS = 10;
-    private static final long serialVersionUID = -8385917117979059599L;
 
     private final boolean expert_mode;
     private Player first_player;
@@ -560,6 +561,10 @@ public class Game implements Serializable{
 
     public Player usernameToPlayer(String username){
         return getPlayers().stream().filter(player -> player.getUsername().equals(username)).toList().get(0);
+    }
+
+    public Queue<Player> getPlayOrder() {
+        return new LinkedList<>(play_order);
     }
 
     @Override

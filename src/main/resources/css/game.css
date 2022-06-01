@@ -1,0 +1,26 @@
+.schoolboardButton{
+	-fx-background-color: grey;
+	-fx-background-radius: 12;
+	-fx-border-width: 2;
+	-fx-border-radius: 10;
+	-fx-pref-width: 105;
+	-fx-pref-height: 36;
+	-fx-font-size: 16;
+	-fx-text-fill: white;
+	-fx-alignment: center;
+	-fx-cursor: hand;
+}
+
+.schoolboardButton:hover{
+	-fx-background-color: darkGrey;
+}
+
+.schoolboardButton:disabled{
+	-fx-background-color: black;
+}
+
+.username{
+	-fx-font-size: 16;
+	-fx-text-fill: white;
+	-fx-alignment: center;
+}

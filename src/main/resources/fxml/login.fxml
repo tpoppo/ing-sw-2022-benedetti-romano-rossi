@@ -19,11 +19,11 @@
       </ImageView>
       <Pane layoutX="231.0" layoutY="288.0" prefHeight="301.0" prefWidth="287.0" style="-fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;">
          <children>
-            <Button layoutX="95.0" layoutY="185.0" mnemonicParsing="false" onAction="#login" prefHeight="43.0" prefWidth="98.0" style="-fx-background-color: aad9e0;" text="Login">
+            <Button fx:id="loginButton" layoutX="95.0" layoutY="185.0" mnemonicParsing="false" onAction="#login" prefHeight="43.0" prefWidth="98.0" style="-fx-cursor: hand;" text="Login">
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <TextField fx:id="usernameField" layoutX="37.0" layoutY="121.0" prefHeight="43.0" prefWidth="212.0" promptText="Username">
+            <TextField fx:id="usernameField" layoutX="37.0" layoutY="121.0" onKeyPressed="#checkKeyPressed" prefHeight="43.0" prefWidth="212.0" promptText="Username">
                <font>
                   <Font size="15.0" />
                </font></TextField>

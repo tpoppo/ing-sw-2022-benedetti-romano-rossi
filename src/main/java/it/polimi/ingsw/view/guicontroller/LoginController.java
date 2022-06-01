@@ -2,15 +2,11 @@ package it.polimi.ingsw.view.guicontroller;
 
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.view.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-
-import java.io.IOException;
-
-import static it.polimi.ingsw.view.GUI.switchScene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class LoginController {
     @FXML
@@ -18,7 +14,7 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    public void login(ActionEvent event){
+    public void login(){
         String username = usernameField.getText();
 
         System.out.println("Username: " + username);
@@ -38,5 +34,10 @@ public class LoginController {
         }
 
         GUI.setUsername(username);
+    }
+
+    public void checkKeyPressed(KeyEvent keyEvent){
+        if(keyEvent.getCode().equals(KeyCode.ENTER))
+            login();
     }
 }
