@@ -1,61 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LobbyController">
+<AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.LobbyController">
    <children>
-      <ImageView fitHeight="750.0" fitWidth="750.0" style="-fx-background-color: GREEN;" />
-
-      <ImageView fx:id="chosen_wizard0" fitHeight="150.0" fitWidth="200.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;" />
-      <ImageView fx:id="chosen_wizard1" fitHeight="150.0" fitWidth="200.0" layoutX="275.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="chosen_wizard2" fitHeight="150.0" fitWidth="200.0" layoutX="544.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="player0" layoutX="6.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font></Label>
-      <Label fx:id="player1" layoutX="275.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font></Label>
-      <Label fx:id="player2" layoutX="544.0" layoutY="154.0" prefHeight="25.0" prefWidth="200.0" text="Label" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font></Label>
-      <Button fx:id="start_game" layoutX="522.0" layoutY="648.0" mnemonicParsing="false" onAction="#startGame" prefHeight="52.0" prefWidth="189.0" text="Start Game">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <CheckBox fx:id="expert_mode" layoutX="522.0" layoutY="613.0" mnemonicParsing="false" text="Expert Mode">
-         <font>
-            <Font size="15.0" />
-         </font></CheckBox>
-      <ImageView fx:id="wizard1" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="479.0" onMouseClicked="#selectWizard1" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="750.0" fitWidth="750.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../graphics/assistants/back/back_1.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="wizard2" fitHeight="228.0" fitWidth="255.0" layoutY="479.0" onMouseClicked="#selectWizard2" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphics/assistants/back/back_2.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="wizard3" fitHeight="228.0" fitWidth="255.0" layoutX="150.0" layoutY="251.0" onMouseClicked="#selectWizard3" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphics/assistants/back/back_3.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="wizard4" fitHeight="228.0" fitWidth="255.0" layoutY="251.0" onMouseClicked="#selectWizard4" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphics/assistants/back/back_4.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="65.0" layoutY="217.0" text="Available Wizards">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
+            <Image url="@../graphics/backgrounds/sky.jpg" />
+         </image></ImageView>
+      <Pane fx:id="select_wizard1" layoutX="7.0" layoutY="8.0" prefHeight="736.0" prefWidth="737.0" style="-fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;">
+         <children>
+            <CheckBox fx:id="expert_mode" layoutX="583.0" layoutY="677.0" mnemonicParsing="false" text="Expert Mode">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </CheckBox>
+            <Button fx:id="start_game" layoutX="184.0" layoutY="507.0" mnemonicParsing="false" onAction="#startGame" prefHeight="170.0" prefWidth="369.0" style="-fx-alignment: center; -fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;" text="Start Game">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <GridPane fx:id="players_grid" layoutX="15.0" layoutY="14.0" prefHeight="337.0" prefWidth="704.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Pane prefHeight="264.0" prefWidth="260.0" style="-fx-alignment: center; -fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;">
+                     <children>
+                        <ImageView fx:id="chosen_wizard0" fitHeight="315.0" fitWidth="208.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;" />
+                        <Label fx:id="player0" layoutX="14.0" layoutY="302.0" prefHeight="25.0" prefWidth="171.0" text="Label">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="337.0" prefWidth="211.0" style="-fx-alignment: center; -fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;" GridPane.columnIndex="1">
+                     <children>
+                        <ImageView fx:id="chosen_wizard1" fitHeight="315.0" fitWidth="208.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;">
+                           <image>
+                              <Image url="@../graphics/assistants/back/back_1.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="player1" layoutX="14.0" layoutY="298.0" prefHeight="25.0" prefWidth="171.0" text="Label">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-alignment: center; -fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;" GridPane.columnIndex="2">
+                     <children>
+                        <ImageView fx:id="chosen_wizard2" fitHeight="315.0" fitWidth="208.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" style="-fx-alignment: center;" />
+                        <Label fx:id="player2" layoutX="14.0" layoutY="298.0" prefHeight="25.0" prefWidth="171.0" text="Label">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+            <Label fx:id="lobby_id" alignment="CENTER" layoutX="262.0" layoutY="364.0" prefHeight="38.0" prefWidth="227.0" text="Lobby ID" textAlignment="CENTER">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="select_wizard" layoutX="25.0" layoutY="150.0" prefHeight="450.0" prefWidth="691.0" style="-fx-background-color: fef2db; -fx-border-color: aad9e0; -fx-border-width: 10; -fx-background-radius: 10; -fx-border-radius: 8;">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" layoutY="55.0" prefHeight="34.0" prefWidth="493.0" text="Choose your wizard">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <GridPane fx:id="wizard_grid" alignment="CENTER" layoutX="14.0" layoutY="111.0" prefHeight="275.0" prefWidth="661.0">
+              <columnConstraints>
+                 <ColumnConstraints />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="157.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
