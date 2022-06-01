@@ -301,7 +301,7 @@ public class GameController implements Initializable {
         for(int i=0; i<numTowers; i++){
             ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
             towerImage = resizeImageView(towerImage, 50, 50);
-            towersGrid.add(towerImage, count/2, count%2);
+            towersGrid.add(towerImage, count%2, count/2);
 
             count++;
         }
