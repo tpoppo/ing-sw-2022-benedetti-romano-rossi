@@ -8,43 +8,36 @@ import it.polimi.ingsw.view.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class LobbyController implements Initializable {
-
+    @FXML
+    private Pane mainPane;
+    @FXML
+    private ImageView background;
     @FXML
     private CheckBox expert_mode;
     @FXML
-    private Label player0;
+    private Label player0, player1, player2;
     @FXML
-    private Label player1;
-    @FXML
-    private Label player2;
-    @FXML
-    private ImageView chosen_wizard0;
-    @FXML
-    private ImageView chosen_wizard1;
-    @FXML
-    private ImageView chosen_wizard2;
+    private ImageView chosen_wizard0, chosen_wizard1, chosen_wizard2;
     @FXML
     private Pane select_wizard;
     @FXML
     private GridPane wizard_grid;
-    @FXML
-    private GridPane players_grid;
     @FXML
     private Button start_game;
 
@@ -102,26 +95,32 @@ public class LobbyController implements Initializable {
         // wizard selection pop-up
         // show available wizards
         if(!has_chosen_wizard){
+            mainPane.setDisable(true);
+            mainPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+            background.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+
             for(int wizard=1; wizard<=4; wizard++){
                 if(lobbyHandler.getAvailableWizards().contains(wizard)){
                     ImageView imageView = new ImageView();
                     imageView.setImage(new Image("/graphics/assistants/back/back_"+wizard+".png"));
                     imageView.setFitWidth(125);
                     imageView.setPreserveRatio(true);
+                    imageView.setCursor(Cursor.HAND);
 
                     int finalWizard = wizard;
-                    imageView.setOnMouseClicked(mouseEvent -> {
-                        selectWizard(mouseEvent, finalWizard);
-                    });
+                    imageView.setOnMouseClicked(mouseEvent -> selectWizard(mouseEvent, finalWizard));
 
+                    wizard_grid.setHgap(20);
                     wizard_grid.addRow(0, imageView);
                 }
             }
         } else {
+            mainPane.setDisable(false);
+            mainPane.setEffect(null);
+            background.setEffect(null);
             select_wizard.setVisible(false);
             select_wizard.setDisable(false);
         }
-
 
         if(!all_has_chosen || lobbyHandler.getPlayers().size() == 1) {
             start_game.setDisable(true);

@@ -88,6 +88,7 @@ public class GUI extends Application {
                                 Platform.runLater(() -> {
                                     try {
                                         switchScene("/fxml/lobby.fxml");
+                                        stage.getScene().getStylesheets().add("css/lobby.css");
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
