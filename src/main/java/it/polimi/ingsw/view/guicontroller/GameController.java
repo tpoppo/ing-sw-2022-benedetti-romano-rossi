@@ -4,35 +4,36 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.board.Assistant;
+import it.polimi.ingsw.model.board.*;
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.network.messages.ClientMessage;
 import it.polimi.ingsw.network.messages.NextStateMessage;
 import it.polimi.ingsw.network.messages.PlayAssistantMessage;
 import it.polimi.ingsw.network.messages.StatusCode;
 import it.polimi.ingsw.utils.DeepCopy;
-import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.model.board.Professors;
-import it.polimi.ingsw.model.board.SchoolBoard;
-import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.*;
 
 public class GameController implements Initializable {
+    @FXML
+    private Pane mainPane;
     @FXML
     private GridPane entranceGrid;
     @FXML
@@ -64,10 +65,23 @@ public class GameController implements Initializable {
     @FXML
     private StackPane coinsPane;
     @FXML
-    private ImageView characterImage0, characterImage1, characterImage2;
+    private GridPane charactersGrid;
+    @FXML
+    private Pane characterPane;
+    @FXML
+    private ImageView characterImage;
+    @FXML
+    private Label characterNameLabel;
+    @FXML
+    private Label characterDescriptionLabel;
+    @FXML
+    private Text characterCostText;
+    @FXML
+    private Button activateCharacterButton;
+    @FXML
+    private ImageView closeCharacterPaneButton;
 
     private ViewContent view;
-    private List<ImageView> characterImages;
     private List<ImageView> assistantCards;
     private Player thisPlayer;
     private Player schoolboardPlayer;
@@ -81,7 +95,6 @@ public class GameController implements Initializable {
         GameHandler gameHandler = view.getGameHandler();
         Game game = gameHandler.getModel();
         assistantCards = List.of(assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10);
-        characterImages = List.of(characterImage0, characterImage1, characterImage2);
         playerTowerColorMap = new HashMap<>();
         thisPlayer = game.usernameToPlayer(GUI.getUsername());
         schoolboardPlayer = thisPlayer;
@@ -100,26 +113,34 @@ public class GameController implements Initializable {
         // expert mode
         if(view.getGameHandler().getModel().getExpertMode()) {
             setupNextTurnButton();
+            setupCharacters();
         }else{
             hideExpertModeComponents();
         }
 
-        /*
-        // disable characters when not in expert mode
-        if(!game.getExpertMode()){
-            for(ImageView imageView : characterImages) {
-                imageView.setVisible(false);
-            }
-            characterInfoButton.setVisible(false);
-        } else {
+        if(GUI.getSelectingCharacter() != null)
+            showCharacterInfo(GUI.getSelectingCharacter());
+    }
 
-            for(int i=0; i<game.getCharacters().size(); i++){
-                characterImages.get(i).setImage(new Image("/graphics/characters/CarteTOT_front" +game.getCharacters().get(i).getClass().getName()+".png"));
-            }
+    private void setupCharacters(){
+        Game model = view.getGameHandler().getModel();
 
+        ArrayList<Character> characters = model.getCharacters();
+
+        int count = 0;
+        for(Character character : characters){
+            // setting the image
+            int id = count;
+            ImageView characterImage = (ImageView)((Pane)charactersGrid.getChildren().get(count)).getChildren().get(0);
+            characterImage.setImage(new Image("graphics/characters/"+character.getClass().getSimpleName()+".jpg"));
+            characterImage.setOnMouseClicked(mouseEvent -> showCharacterInfo(id));
+
+            // setting coin number
+            Text coinText = (Text)((StackPane)((Pane)charactersGrid.getChildren().get(count)).getChildren().get(1)).getChildren().get(1);
+            coinText.setText(String.valueOf(character.getCost()));
+
+            count++;
         }
-
-         */
     }
 
     private void setupPlayOrder(){
@@ -262,6 +283,7 @@ public class GameController implements Initializable {
             for(int i=0; i<entranceStudents.get(studentColor); i++){
                 ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                 studentImage = resizeImageView(studentImage, 50, 50);
+                studentImage.setCursor(Cursor.HAND);
                 entranceGrid.add(studentImage, 1 - count%2, 4 - count/2);
 
                 count++;
@@ -284,6 +306,7 @@ public class GameController implements Initializable {
         for(Color professorColor : professors){
             ImageView professorImage = new ImageView("graphics/pieces/" + professorColor.toString().toLowerCase() + "_professor.png");
             professorImage = resizeImageView(professorImage, 55, 55, 90);
+            professorImage.setCursor(Cursor.HAND);
 
             switch (professorColor){
                 case YELLOW -> professorsGrid.addRow(2, professorImage);
@@ -301,6 +324,7 @@ public class GameController implements Initializable {
         for(int i=0; i<numTowers; i++){
             ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
             towerImage = resizeImageView(towerImage, 50, 50);
+            towerImage.setCursor(Cursor.HAND);
             towersGrid.add(towerImage, count%2, count/2);
 
             count++;
@@ -308,6 +332,7 @@ public class GameController implements Initializable {
 
         // coins
         Text coinNumber = new Text(String.valueOf(coins));
+        coinNumber.getStyleClass().add("coinNumber");
         ImageView coinsImage = new ImageView("graphics/other/coin.png");
         coinsImage = resizeImageView(coinsImage, 50, 50);
         coinsPane.getChildren().add(coinsImage);
@@ -321,6 +346,7 @@ public class GameController implements Initializable {
         for(int i=0; i<diningStudents.get(studentColor); i++){
             ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
             studentImage = resizeImageView(studentImage, 45, 45);
+            studentImage.setCursor(Cursor.HAND);
 
             colorGrid.addColumn(i, studentImage);
         }
@@ -377,5 +403,32 @@ public class GameController implements Initializable {
         GameHandler gameHandler = (GameHandler) DeepCopy.copy(GUI.getView().getGameHandler());
         NetworkManager networkManager = NetworkManager.createNetworkManager(gameHandler);
         return clientMessage.handle(networkManager, player);
+    }
+
+    private void showCharacterInfo(int id){
+        Character character = view.getGameHandler().getModel().getCharacters().get(id);
+
+        characterPane.setVisible(true);
+        mainPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+
+        String characterName = character.getClass().getSimpleName();
+        String description = character.getDescription();
+
+        characterImage.setImage(new Image("graphics/characters/" + characterName + ".jpg"));
+        characterCostText.setText(String.valueOf(character.getCost()));
+
+        characterNameLabel.setText(characterName);
+        characterDescriptionLabel.setText(description);
+        activateCharacterButton.setOnMouseClicked(mouseEvent -> {
+            // TODO: checks & send message
+        });
+
+        closeCharacterPaneButton.setOnMouseClicked(mouseEvent -> closeCharacterInfo());
+    }
+
+    private void closeCharacterInfo(){
+        characterPane.setVisible(false);
+        mainPane.setEffect(null);
+        GUI.setSelectingCharacter(null);
     }
 }

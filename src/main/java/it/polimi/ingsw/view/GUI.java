@@ -23,6 +23,7 @@ public class GUI extends Application {
     private static String username;
     private static Stage stage;
     private static boolean creatingLobby;
+    private static Integer selectingCharacter;
 
     public static void main(String[] args) {
    //     System.setProperty("prism.allowhidpi", "false");
@@ -180,5 +181,13 @@ public class GUI extends Application {
 
     public static void setCreatingLobby(boolean creatingLobby) {
         GUI.creatingLobby = creatingLobby;
+    }
+
+    public static Integer getSelectingCharacter() {
+        return selectingCharacter;
+    }
+
+    public static void setSelectingCharacter(Integer selectingCharacter) {
+        GUI.selectingCharacter = selectingCharacter;
     }
 }

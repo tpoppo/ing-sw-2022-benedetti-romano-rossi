@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
@@ -13,477 +14,640 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
-      <ImageView fitHeight="1080.0" fitWidth="1920.0" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@../graphics/backgrounds/sky.jpg" />
-         </image>
-      </ImageView>
-      <Pane fx:id="statusPane" layoutX="31.0" layoutY="30.0" prefHeight="137.0" prefWidth="850.0">
+      <Pane fx:id="mainPane">
          <children>
-            <Label fx:id="turnLabel" layoutX="14.0" layoutY="18.0" prefHeight="62.0" prefWidth="809.0" text="Turn: player.username" textFill="WHITE">
+            <ImageView fitHeight="1080.0" fitWidth="1920.0">
+               <image>
+                  <Image url="@../graphics/backgrounds/sky.jpg" />
+               </image>
+            </ImageView>
+            <Pane fx:id="statusPane" layoutX="31.0" layoutY="30.0" prefHeight="137.0" prefWidth="850.0">
+               <children>
+                  <Label fx:id="turnLabel" layoutX="14.0" layoutY="18.0" prefHeight="62.0" prefWidth="809.0" text="Turn: player.username" textFill="WHITE">
+                     <font>
+                        <Font size="42.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="actionLabel" layoutX="14.0" layoutY="80.0" prefHeight="43.0" prefWidth="801.0" text="Action: Move student" textFill="WHITE">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                  </Label>
+                  <ProgressBar layoutX="623.0" layoutY="49.0" prefWidth="200.0" progress="0.3" />
+               </children>
+            </Pane>
+            <Pane fx:id="turnOrderLabel" layoutX="1631.0" layoutY="222.0" prefHeight="150.0" prefWidth="268.0" style="-fx-background-color: #2196f3; -fx-background-radius: 30;">
+               <children>
+                  <Label layoutX="78.0" layoutY="14.0" text="Turn order" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                  </Label>
+                  <GridPane fx:id="playOrderGrid" layoutX="27.0" layoutY="46.0" prefHeight="90.0" prefWidth="213.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="firstPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="firstPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="secondPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="secondPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="thirdPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="thirdPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
+               </children>
+            </Pane>
+            <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('../graphics/backgrounds/water.gif');">
+               <children>
+                  <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
+                     <image>
+                        <Image url="@../graphics/other/arrow_white.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="725.0" layoutY="734.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/other/bag.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="643.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="63.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/1.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="662.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="650.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/2.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="71.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/1.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="711.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="208.0" layoutY="658.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="79.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/1.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="26.0" layoutY="395.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/2.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="689.0" layoutY="389.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/1.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/cloud.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="283.0" layoutY="365.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/cloud.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="432.0" layoutY="470.0" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../graphics/islands/cloud.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="56.0" fitWidth="47.0" layoutX="423.0" layoutY="195.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/pieces/mothernature/plant.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
+               <children>
+                  <ImageView fx:id="schoolBoardImage" fitHeight="411.0" fitWidth="940.0" layoutX="16.0" layoutY="90.0">
+                     <image>
+                        <Image url="@../graphics/schoolboard.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <GridPane fx:id="professorsGrid" layoutX="672.0" layoutY="126.0" prefHeight="340.0" prefWidth="60.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.66650390625" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="118.66668701171875" minHeight="10.0" prefHeight="65.3333740234375" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="209.99993896484375" minHeight="10.0" prefHeight="67.66664632161456" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="69.66666666666669" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="67.66664632161456" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="67.66668701171875" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="redDining" layoutX="187.0" layoutY="208.0" prefHeight="43.0" prefWidth="450.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="greenDining" layoutX="187.0" layoutY="139.0" prefHeight="43.0" prefWidth="450.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <ImageView fitHeight="75.0" fitWidth="43.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/pieces/green_student.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="75.0" fitWidth="43.0" preserveRatio="true" GridPane.columnIndex="1">
+                           <image>
+                              <Image url="@../graphics/pieces/green_student.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+                  <GridPane fx:id="cyanDining" layoutX="187.0" layoutY="408.0" prefHeight="43.0" prefWidth="450.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="magentaDining" layoutX="187.0" layoutY="341.0" prefHeight="43.0" prefWidth="450.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="yellowDining" layoutX="187.0" layoutY="274.0" prefHeight="43.0" prefWidth="450.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="entranceGrid" layoutX="36.0" layoutY="126.0" prefHeight="335.0" prefWidth="117.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="64.33333333333334" minWidth="10.0" prefWidth="58.333333333333336" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="64.66668701171875" minWidth="10.0" prefWidth="59.00000000000001" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="towersGrid" layoutX="780.0" layoutY="171.0" prefHeight="233.0" prefWidth="126.0" style="-fx-alignment: center;">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../graphics/pieces/towers/tower_white.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+                  <GridPane fx:id="schoolboardButtonsGrid" layoutX="49.0" layoutY="24.0" prefHeight="47.0" prefWidth="450.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="181.666748046875" minWidth="10.0" prefWidth="150.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" style="-fx-background-color: grey; -fx-background-radius: 12; -fx-border-width: 2; -fx-border-radius: 10;" text="Username1" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="schoolboardButton" stylesheets="@../css/game.css" text="Username2" textFill="WHITE" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </GridPane>
+                  <StackPane fx:id="coinsPane" layoutX="845.0" layoutY="9.0" prefHeight="75.0" prefWidth="80.0">
+                     <children>
+                        <ImageView fitHeight="62.0" fitWidth="65.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/other/coin.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+               </children>
+            </Pane>
+            <Pane fx:id="assistantsPane" layoutX="907.0" layoutY="912.0" prefHeight="167.0" prefWidth="1013.0">
+               <children>
+                  <ImageView fx:id="assistant5" fitHeight="200.0" fitWidth="90.0" layoutX="412.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/5.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant4" fitHeight="200.0" fitWidth="90.0" layoutX="313.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/4.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant3" fitHeight="200.0" fitWidth="90.0" layoutX="215.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/3.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant2" fitHeight="200.0" fitWidth="90.0" layoutX="118.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/2.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant1" fitHeight="200.0" fitWidth="90.0" layoutX="19.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/1.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant9" fitHeight="200.0" fitWidth="90.0" layoutX="805.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/9.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant8" fitHeight="200.0" fitWidth="90.0" layoutX="705.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/8.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant7" fitHeight="200.0" fitWidth="90.0" layoutX="609.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/7.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant6" fitHeight="200.0" fitWidth="90.0" layoutX="511.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/6.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="assistant10" fitHeight="200.0" fitWidth="90.0" layoutX="905.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/assistants/front/10.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="charactersPane" layoutX="1082.0" layoutY="213.0" prefHeight="167.0" prefWidth="378.0">
+               <children>
+                  <GridPane fx:id="charactersGrid" layoutX="7.0" layoutY="9.0" prefHeight="152.0" prefWidth="357.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Pane>
+                           <children>
+                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../graphics/characters/Knight.jpg" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                              <StackPane fx:id="coinsPane1" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../graphics/other/coin.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </Pane>
+                        <Pane GridPane.columnIndex="1">
+                           <children>
+                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../graphics/characters/Knight.jpg" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                              <StackPane fx:id="coinsPane11" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../graphics/other/coin.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </Pane>
+                        <Pane GridPane.columnIndex="2">
+                           <children>
+                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../graphics/characters/Knight.jpg" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                              <StackPane fx:id="coinsPane12" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../graphics/other/coin.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </Pane>
+                     </children>
+                  </GridPane>
+               </children>
+            </Pane>
+            <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0">
+               <image>
+                  <Image url="@../graphics/other/next.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <Label fx:id="errorMsg" layoutX="1013.0" layoutY="75.0" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
                <font>
-                  <Font size="42.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="actionLabel" layoutX="14.0" layoutY="80.0" prefHeight="43.0" prefWidth="801.0" text="Action: Move student" textFill="WHITE">
-               <font>
-                  <Font size="29.0" />
-               </font>
-            </Label>
-            <ProgressBar layoutX="623.0" layoutY="49.0" prefWidth="200.0" progress="0.3" />
          </children>
       </Pane>
-      <Pane fx:id="turnOrderLabel" layoutX="1631.0" layoutY="222.0" prefHeight="150.0" prefWidth="268.0" style="-fx-background-color: #2196f3; -fx-background-radius: 30;">
+      <Pane fx:id="characterPane" layoutX="486.0" layoutY="253.0" prefHeight="574.0" prefWidth="947.0" stylesheets="@../css/game.css" visible="false">
          <children>
-            <Label layoutX="78.0" layoutY="14.0" text="Turn order" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font></Label>
-            <GridPane fx:id="playOrderGrid" layoutX="27.0" layoutY="46.0" prefHeight="90.0" prefWidth="213.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <ImageView fx:id="characterImage" fitHeight="471.0" fitWidth="332.0" layoutX="75.0" layoutY="52.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/characters/Knight.jpg" />
+               </image>
+            </ImageView>
+            <Pane fx:id="characterDescriptionPane" layoutX="445.0" layoutY="52.0" prefHeight="471.0" prefWidth="428.0">
                <children>
-                  <Label fx:id="firstPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="firstPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1">
+                  <Label fx:id="characterDescriptionLabel" alignment="TOP_LEFT" layoutX="49.0" layoutY="108.0" prefHeight="255.0" prefWidth="330.0" text="You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance. Requirements: &lt;color of a student in the entrance&gt; &lt;color of a student in this card&gt;" wrapText="true">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="secondPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="secondPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="2">
+                  <Button fx:id="activateCharacterButton" layoutX="139.0" layoutY="363.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="150.0" text="ACTIVATE">
                      <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="thirdPlayerLabel" prefHeight="30.0" prefWidth="283.0" style="-fx-alignment: center;" text="thirdPlayer" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-         </children></Pane>
-      <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('../graphics/backgrounds/water.gif');">
-         <children>
-            <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
-               <image>
-                  <Image url="@../graphics/other/arrow_white.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="725.0" layoutY="734.0" preserveRatio="true">
-               <image>
-                  <Image url="@../graphics/other/bag.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/0.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="643.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/2.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="63.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/1.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="662.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/0.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="650.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/2.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="71.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/1.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="711.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/0.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="208.0" layoutY="658.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/2.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="79.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/1.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="26.0" layoutY="395.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/0.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/2.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="689.0" layoutY="389.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/1.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/cloud.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="283.0" layoutY="365.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/cloud.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="150.0" layoutX="432.0" layoutY="470.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/islands/cloud.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="32.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="56.0" fitWidth="47.0" layoutX="423.0" layoutY="195.0" preserveRatio="true">
-               <image>
-                  <Image url="@../graphics/pieces/mothernature/plant.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
-         <children>
-            <ImageView fx:id="schoolBoardImage" fitHeight="411.0" fitWidth="940.0" layoutX="16.0" layoutY="90.0">
-               <image>
-                  <Image url="@../graphics/schoolboard.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <GridPane fx:id="professorsGrid" layoutX="672.0" layoutY="126.0" prefHeight="340.0" prefWidth="60.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.66650390625" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="118.66668701171875" minHeight="10.0" prefHeight="65.3333740234375" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="209.99993896484375" minHeight="10.0" prefHeight="67.66664632161456" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="69.66666666666669" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="67.66664632161456" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="204.3333740234375" minHeight="10.0" prefHeight="67.66668701171875" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="redDining" layoutX="187.0" layoutY="208.0" prefHeight="43.0" prefWidth="450.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="greenDining" layoutX="187.0" layoutY="139.0" prefHeight="43.0" prefWidth="450.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <ImageView fitHeight="75.0" fitWidth="43.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/pieces/green_student.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="75.0" fitWidth="43.0" preserveRatio="true" GridPane.columnIndex="1">
-                     <image>
-                        <Image url="@../graphics/pieces/green_student.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </GridPane>
-            <GridPane fx:id="cyanDining" layoutX="187.0" layoutY="408.0" prefHeight="43.0" prefWidth="450.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="magentaDining" layoutX="187.0" layoutY="341.0" prefHeight="43.0" prefWidth="450.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="yellowDining" layoutX="187.0" layoutY="274.0" prefHeight="43.0" prefWidth="450.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="223.333251953125" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="0.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="96.0" minWidth="6.333251953125" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="409.3333740234375" minWidth="10.0" prefWidth="50.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="entranceGrid" layoutX="36.0" layoutY="126.0" prefHeight="335.0" prefWidth="117.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="64.33333333333334" minWidth="10.0" prefWidth="58.333333333333336" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="64.66668701171875" minWidth="10.0" prefWidth="59.00000000000001" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <GridPane fx:id="towersGrid" layoutX="780.0" layoutY="171.0" prefHeight="233.0" prefWidth="126.0" style="-fx-alignment: center;">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="1">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="2">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.rowIndex="3">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="47.0" fitWidth="48.0" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <image>
-                        <Image url="@../graphics/pieces/towers/tower_white.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </GridPane>
-            <GridPane fx:id="schoolboardButtonsGrid" layoutX="49.0" layoutY="24.0" prefHeight="47.0" prefWidth="450.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="181.666748046875" minWidth="10.0" prefWidth="150.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" style="-fx-background-color: grey; -fx-background-radius: 12; -fx-border-width: 2; -fx-border-radius: 10;" text="Username1" textFill="WHITE">
-                     <font>
-                        <Font size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" styleClass="schoolboardButton" stylesheets="@../css/game.css" text="Username2" textFill="WHITE" GridPane.columnIndex="1">
+                  <Label fx:id="characterNameLabel" alignment="CENTER" layoutX="68.0" layoutY="26.0" text="CharacterName">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Bold" size="40.0" />
                      </font>
-                  </Button>
+                  </Label>
                </children>
-            </GridPane>
-            <StackPane fx:id="coinsPane" layoutX="845.0" layoutY="9.0" prefHeight="75.0" prefWidth="80.0">
+            </Pane>
+            <ImageView fx:id="closeCharacterPaneButton" fitHeight="109.0" fitWidth="100.0" layoutX="883.0" layoutY="-36.0" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@../graphics/other/cancel.png" />
+               </image>
+            </ImageView>
+            <StackPane fx:id="coinsPane13" layoutX="80.0" layoutY="55.0" prefHeight="81.0" prefWidth="80.0">
                <children>
-                  <ImageView fitHeight="62.0" fitWidth="65.0" preserveRatio="true">
+                  <ImageView fitHeight="80.0" fitWidth="84.0" preserveRatio="true">
                      <image>
                         <Image url="@../graphics/other/coin.png" />
                      </image>
                   </ImageView>
+                  <Text fx:id="characterCostText" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5" wrappingWidth="29.91015625">
+                     <font>
+                        <Font name="System Bold" size="52.0" />
+                     </font>
+                  </Text>
                </children>
             </StackPane>
          </children>
       </Pane>
-      <Pane fx:id="assistantsPane" layoutX="907.0" layoutY="912.0" prefHeight="167.0" prefWidth="1013.0">
-         <children>
-            <ImageView fx:id="assistant5" fitHeight="200.0" fitWidth="90.0" layoutX="412.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/5.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant4" fitHeight="200.0" fitWidth="90.0" layoutX="313.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/4.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant3" fitHeight="200.0" fitWidth="90.0" layoutX="215.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/3.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant2" fitHeight="200.0" fitWidth="90.0" layoutX="118.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/2.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant1" fitHeight="200.0" fitWidth="90.0" layoutX="19.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant9" fitHeight="200.0" fitWidth="90.0" layoutX="805.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/9.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant8" fitHeight="200.0" fitWidth="90.0" layoutX="705.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/8.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant7" fitHeight="200.0" fitWidth="90.0" layoutX="609.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/7.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant6" fitHeight="200.0" fitWidth="90.0" layoutX="511.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/6.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="assistant10" fitHeight="200.0" fitWidth="90.0" layoutX="905.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/assistants/front/10.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <Pane fx:id="charactersPane" layoutX="960.0" layoutY="205.0" prefHeight="167.0" prefWidth="471.0">
-         <children>
-            <ImageView fx:id="characterInfoButton" fitHeight="62.0" fitWidth="65.0" layoutX="381.0" layoutY="53.0" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/other/info.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="characterImage0" fitHeight="200.0" fitWidth="100.0" layoutX="24.0" layoutY="9.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/characters/CarteTOT_front.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="characterImage1" fitHeight="200.0" fitWidth="100.0" layoutX="138.0" layoutY="9.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/characters/CarteTOT_front7.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="characterImage2" fitHeight="200.0" fitWidth="100.0" layoutX="249.0" layoutY="9.0" preserveRatio="true" style="-fx-cursor: hand;">
-               <image>
-                  <Image url="@../graphics/characters/CarteTOT_front10.jpg" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0" style="-fx-cursor: hand;">
-         <image>
-            <Image url="@../graphics/other/next.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="errorMsg" layoutX="1048.0" layoutY="75.0" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
-         <font>
-            <Font size="16.0" />
-         </font></Label>
    </children>
 </AnchorPane>

@@ -24,3 +24,34 @@
 	-fx-text-fill: white;
 	-fx-alignment: center;
 }
+
+.coinNumber{
+	-fx-font-size: 30;
+	-fx-fill: white;
+	-fx-font-weight: bold;
+	-fx-stroke: black;
+	-fx-stroke-width: 1;
+}
+
+#characterPane{
+	-fx-background-color: #FEF9A7;
+	-fx-border-color: #FAC213;
+	-fx-background-radius: 25;
+	-fx-border-width: 10;
+	-fx-border-radius: 20;
+}
+
+#characterDescriptionPane{
+	-fx-border-color: #FAC213;
+	-fx-border-width: 4;
+	-fx-border-radius: 5;
+}
+
+#activateCharacterButton{
+	-fx-background-color: #FAC213;
+	-fx-cursor: hand;
+}
+
+#activateCharacterButton:hover{
+	-fx-background-color: #F77E21;
+}
