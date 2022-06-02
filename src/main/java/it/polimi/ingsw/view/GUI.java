@@ -25,7 +25,7 @@ public class GUI extends Application {
     private static boolean creatingLobby;
 
     public static void main(String[] args) {
-   //     System.setProperty("prism.allowhidpi", "false"); // FIXME: does this works for all OS?
+   //     System.setProperty("prism.allowhidpi", "false");
         launch(args);
     }
 

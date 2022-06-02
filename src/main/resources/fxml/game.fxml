@@ -71,7 +71,7 @@
                </children>
             </GridPane>
          </children></Pane>
-      <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/waterr.gif');">
+      <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('../graphics/backgrounds/water.gif');">
          <children>
             <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
                <image>

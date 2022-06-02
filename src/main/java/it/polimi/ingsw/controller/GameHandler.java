@@ -40,8 +40,6 @@ public class GameHandler implements Serializable {
     }
 
     // Given a lobbyPlayer, it finds the matching player (by username) in the current GameHandler
-    // TODO: do we want a more generic method (maybe static) that requires a networkManager or even that
-    //  searches in the entire server?
     public Player lobbyPlayerToPlayer(LobbyPlayer lobbyPlayer){
         return model.getPlayers().stream()
                 .filter(player -> player.getUsername().equals(lobbyPlayer.getUsername()))
