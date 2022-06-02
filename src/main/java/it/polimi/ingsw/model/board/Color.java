@@ -20,7 +20,7 @@ public enum Color implements Serializable {
         return switch (s.toString().toUpperCase()) {
             case "RED" -> RED;
             case "GREEN" -> GREEN;
-            case "BLUE" -> CYAN;
+            case "BLUE", "CYAN" -> CYAN;
             case "YELLOW" -> YELLOW;
             case "MAGENTA" -> MAGENTA;
             default -> null;

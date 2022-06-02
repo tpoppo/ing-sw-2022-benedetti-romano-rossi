@@ -15,17 +15,13 @@ public class Eriantys {
 
         if(args.length == 0) {
             System.out.println("Missing argument (server - cli - cliart - gui)");
-            return ;
-        }
-
-        if(!List.of("server", "cli", "cliart", "gui").contains(args[0].toLowerCase())){
-            System.out.println("Invalid argument given: "+args[0]);
         } else {
             switch (args[0].toLowerCase()) {
                 case "server" -> runServer(args); // app server
                 case "cli" -> runCli(args); // app cli
                 case "cliart" -> runCLIArt(args); // app cli, but fancy
                 case "gui" -> runGUI(args); // app gui
+                default -> System.out.println("Invalid argument given: " + args[0]);
             }
         }
     }

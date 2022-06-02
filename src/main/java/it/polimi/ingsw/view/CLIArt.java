@@ -138,7 +138,7 @@ public class CLIArt extends CLI {
         }
     }
 
-    private String drawBoard(){
+    protected String drawBoard(){
         Game model = view.getGameHandler().getModel();
         Player player;
 
@@ -155,7 +155,7 @@ public class CLIArt extends CLI {
         boardStr.append(ansi().bold().a("SCHOOLBOARD").reset());
 
         // displays the username of the owner if it's not the user's
-        if(!schoolBoardPlayerUsername.equals(username))
+        if(!username.equals(schoolBoardPlayerUsername))
             boardStr.append(" (").append(schoolBoardPlayerUsername).append(")");
 
         boardStr.append(Constants.NEWLINE);

@@ -157,7 +157,7 @@ public class CommandHandler {
             replacement = replacement.concat(" ");
         String finalReplacement = replacement;
 
-        return command.getDescription().replaceAll(NEWLINE, finalReplacement);
+        return command.getDescription().replace(NEWLINE, finalReplacement);
     }
 
     public static List<Command> getCommands() {
@@ -318,6 +318,9 @@ public class CommandHandler {
                         case NOTHING -> {
                             if (command.length != 3) return "Invalid number of arguments";
                         }
+                        default -> {
+                            return "This character does not exist!"; // this line should be unreachable :)
+                        }
                     }
 
                     client_socket.send(new ActivateCharacterMessage(player_choices_serializable));
@@ -404,9 +407,11 @@ public class CommandHandler {
                     }
                     return null;
                 }
+                default -> {
+                    return "Command not implemented"; // this should be impossible
+                }
             }
         }
-
         return "Invalid command";
     }
 }

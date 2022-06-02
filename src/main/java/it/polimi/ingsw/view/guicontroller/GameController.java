@@ -7,16 +7,14 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.NetworkManager;
-import it.polimi.ingsw.network.messages.ClientMessage;
-import it.polimi.ingsw.network.messages.NextStateMessage;
-import it.polimi.ingsw.network.messages.PlayAssistantMessage;
-import it.polimi.ingsw.network.messages.StatusCode;
+import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
@@ -53,6 +51,8 @@ public class GameController implements Initializable {
     @FXML
     private ImageView assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10;
     @FXML
+    private ImageView cloud0, cloud1, cloud2;
+    @FXML
     private ImageView nextTurnButton;
     @FXML
     private GridPane playOrderGrid;
@@ -80,12 +80,19 @@ public class GameController implements Initializable {
     private Button activateCharacterButton;
     @FXML
     private ImageView closeCharacterPaneButton;
+    @FXML
+    private ImageView motherNature;
+
+    @FXML //TODO: not added yet
+    private ImageView endingScreen;
 
     private ViewContent view;
     private List<ImageView> assistantCards;
     private Player thisPlayer;
     private Player schoolboardPlayer;
     private Map<Player, TowerColor> playerTowerColorMap;
+
+    private ImageView selectedEntrance;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -107,6 +114,7 @@ public class GameController implements Initializable {
         updateSchoolboard();
         setupAssistants();
         setupErrorMessage();
+        setupCloud();
         setupActions();
         setupPlayOrder();
 
@@ -120,6 +128,12 @@ public class GameController implements Initializable {
 
         if(GUI.getSelectingCharacter() != null)
             showCharacterInfo(GUI.getSelectingCharacter());
+    }
+
+    private void setupCloud() {
+        if(view.getGameHandler().getModel().getPlayers().size() == 2){
+            cloud2.setVisible(false);
+        }
     }
 
     private void setupCharacters(){
@@ -167,31 +181,122 @@ public class GameController implements Initializable {
 
         // enable and create objects depending on the current state
         String action_text = null;
-        if (gameHandler.getModel().getCurrentPlayer().getUsername().equals(GUI.getUsername())) { // if it is your turn
-            switch (gameHandler.getCurrentState()) {
-                case PLAY_ASSISTANT -> {
-                    action_text = "Play an assistant: ";
-                    preparePlayAssistant();
-                    // FIXME: I don't like this
+        if(gameHandler.getCurrentState() == GameState.ENDING){
+            action_text = "The end";
+            prepareEnding();
+        } else if (gameHandler.getModel().getCurrentPlayer().getUsername().equals(GUI.getUsername())) { // if it is your turn
+
+            if(!gameHandler.isActionCompleted()){
+                switch (gameHandler.getCurrentState()) {
+                    case PLAY_ASSISTANT -> {
+                        action_text = "Play an assistant";
+                        preparePlayAssistant();
+                        // FIXME: I don't like this
+                    }
+                    case CHOOSE_CLOUD -> {
+                        action_text = "Choose a cloud";
+                        prepareChooseCloud();
+                    }
+                    case MOVE_MOTHER_NATURE -> {
+                        action_text = "Move mother nature";
+                        prepareMotherNature();
+                    }
+                    case MOVE_STUDENT -> {
+                        action_text = "Move a student (" + gameHandler.getStudentMoves() + " left)";
+                        prepareMoveStudent();
+                    }
+                    case ACTIVATE_CHARACTER -> {
+                        action_text = "Activate a character";
+                        prepareActivateCharacter();
+                    }
                 }
-                case CHOOSE_CLOUD -> {
-                    action_text = "Choose a cloud: ";
-                }
-                case MOVE_MOTHER_NATURE -> {
-                    action_text = "Move mother nature: ";
-                }
-                case MOVE_STUDENT -> {
-                    action_text = "Move a student (" + gameHandler.getStudentMoves() + " left): ";
-                }
-                case ACTIVATE_CHARACTER -> {
-                    action_text = "Activate a character: ";
-                }
-                case ENDING -> {
-                    action_text = "The end: ";
-                }
+            } else {
+                action_text = "Pass";
             }
         }
         actionLabel.setText(action_text);
+    }
+
+    private void prepareEnding() {
+        if(view.getGameHandler().getModel().winner().getUsername().equals(GUI.getUsername())) {
+            endingScreen.setImage(new Image("graphics/other/victory.png"));
+        } else {
+            endingScreen.setImage(new Image("graphics/other/defeat.png"));
+        }
+        endingScreen.setOnMouseClicked(mouseEvent -> {
+            GUI.getClientSocket().send(new EndingMessage());
+        });
+        endingScreen.setVisible(true);
+    }
+
+    private void prepareActivateCharacter() {
+
+    }
+
+    private void prepareMoveStudent() {
+        Game game = view.getGameHandler().getModel();
+        ArrayList<Island> islands = game.getIslands();
+        for(int i=0; i<islands.size(); i++){
+            //TODO: update onclick move student
+        }
+
+        for(Node node : entranceGrid.getChildren()) {
+            ImageView imageView = (ImageView) node;
+
+            imageView.setOnMouseClicked(mouseEvent -> {
+                if(imageView != selectedEntrance) {
+                    if(selectedEntrance != null) {
+                        selectedEntrance.setEffect(null);
+                    }
+                    selectedEntrance = imageView;
+                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                } else {
+                    selectedEntrance = null;
+                    imageView.setEffect(null);
+                }
+            });
+        }
+
+        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
+                .forEach(d -> {
+                    d.setOnMouseClicked(mouseEvent -> {
+                        if(selectedEntrance != null){
+                            System.out.println(selectedEntrance.getImage().getUrl());
+                            String[] sname = selectedEntrance.getImage().getUrl().split("[^a-zA-Z]");
+                            Color color = Color.parseColor(sname[sname.length-3]);
+                            System.out.println(color + " " + sname[sname.length-3]);
+                            GUI.getClientSocket().send(new MoveStudentMessage(color));
+                        } else {
+                            updateErrorMessage("You must select a student first");
+                        }
+                    });
+                });
+    }
+
+    private void prepareMotherNature() {
+        // TODO: set the position of mother nature
+        // mothernature.setX();
+        Game game = view.getGameHandler().getModel();
+        ArrayList<Island> islands = game.getIslands();
+        for(int i=0; i<islands.size(); i++){
+            //TODO: update onclick mother nature
+        }
+    }
+
+    private void prepareChooseCloud() {
+        //TODO: add students
+        List<ImageView> clouds = List.of(cloud0, cloud1, cloud2);
+        for(int i=0; i<3; i++){
+            ChooseCloudMessage cloudMessage = new ChooseCloudMessage(i);
+            if(checkMessage(cloudMessage, view.getGameHandler().getModel().usernameToPlayer(GUI.getUsername())) == StatusCode.OK){
+                clouds.get(i).setOnMouseClicked(mouseEvent -> {
+                    GUI.getClientSocket().send(cloudMessage);
+                });
+            } else {
+                clouds.get(i).setOnMouseClicked(null);
+                clouds.get(i).setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+            }
+        }
     }
 
     private void setupState(){
@@ -203,7 +308,7 @@ public class GameController implements Initializable {
 
     private void setupErrorMessage(){
         if(view.getErrorMessage() != null){
-            errorMsg.setText(view.getErrorMessage());
+            updateErrorMessage(view.getErrorMessage());
         } else {
             errorMsg.setVisible(false);
         }
@@ -228,30 +333,19 @@ public class GameController implements Initializable {
                 imageView.setOnMouseClicked(mouseEvent -> {
                     GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)));
                 });
-
-                PlayAssistantMessage playAssistantMessage = new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant));
-                if(!(checkMessage(playAssistantMessage, thisPlayer) == StatusCode.OK)
-                        && game.getCurrentPlayer().equals(thisPlayer)
-                        && gameHandler.getCurrentState() == GameState.PLAY_ASSISTANT) {
-                    imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-                }
-            } else {
-                imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+            } else { // it is not in your hand
+                imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.75, 0.0));
                 imageView.setOnMouseEntered(null);
                 imageView.setOnMouseExited(null);
             }
         }
     }
+
     private void preparePlayAssistant() {
         for(Assistant assistant : Assistant.getAssistants(thisPlayer.getWizard())){
             ImageView imageView = assistantCards.get(assistant.getPower() - 1);
-
-            if(checkMessage(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)), thisPlayer) == StatusCode.OK) { // can be used
-                imageView.setOnMouseClicked(mouseEvent -> {
-                    GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)));
-                });
-            } else {
-                imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+            if(checkMessage(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)), thisPlayer) != StatusCode.OK) {
+                if(imageView.getEffect() == null) imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
             }
         }
     }
@@ -419,9 +513,13 @@ public class GameController implements Initializable {
 
         characterNameLabel.setText(characterName);
         characterDescriptionLabel.setText(description);
-        activateCharacterButton.setOnMouseClicked(mouseEvent -> {
-            // TODO: checks & send message
-        });
+        if(checkMessage(new SelectedCharacterMessage(id), thisPlayer) == StatusCode.OK){
+            activateCharacterButton.setOnMouseClicked(mouseEvent -> {
+                GUI.getClientSocket().send(new SelectedCharacterMessage(id));
+            });
+        } else {
+            activateCharacterButton.setDisable(true);
+        }
 
         closeCharacterPaneButton.setOnMouseClicked(mouseEvent -> closeCharacterInfo());
     }
@@ -430,5 +528,10 @@ public class GameController implements Initializable {
         characterPane.setVisible(false);
         mainPane.setEffect(null);
         GUI.setSelectingCharacter(null);
+    }
+
+    private void updateErrorMessage(String s){
+        errorMsg.setText(s);
+        errorMsg.setVisible(true);
     }
 }

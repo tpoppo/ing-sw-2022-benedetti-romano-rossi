@@ -430,7 +430,7 @@ public class CLI {
     }
 
 
-    private String drawBoard(){
+    protected String drawBoard(){
         StringBuilder boardStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();

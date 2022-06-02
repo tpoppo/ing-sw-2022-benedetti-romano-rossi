@@ -21,6 +21,10 @@ public class MoveStudentMessage extends ClientMessage {
         super.message_type = MessageType.GAME;
     }
 
+    public MoveStudentMessage(Color color) {
+        this(color, null);
+    }
+
     @Override
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
         StatusCode status_code = preambleGameCheck(network_manager, lobby_player, GameState.MOVE_STUDENT, false);
