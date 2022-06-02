@@ -55,3 +55,15 @@
 #activateCharacterButton:hover{
 	-fx-background-color: #F77E21;
 }
+
+#colorSelectionPane{
+	-fx-background-color: #FEF9A7;
+	-fx-border-color: #FAC213;
+	-fx-background-radius: 25;
+	-fx-border-width: 10;
+	-fx-border-radius: 20;
+}
+
+.colorOption:hover{
+	-fx-effect: Glow;
+}

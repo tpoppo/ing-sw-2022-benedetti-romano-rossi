@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -13,6 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -77,16 +79,11 @@
                   </GridPane>
                </children>
             </Pane>
-            <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('../graphics/backgrounds/water.gif');">
+            <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
                <children>
                   <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
                      <image>
                         <Image url="@../graphics/other/arrow_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="109.0" fitWidth="111.0" layoutX="725.0" layoutY="734.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/other/bag.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
@@ -183,6 +180,23 @@
                         <Image url="@../graphics/pieces/mothernature/plant.png" />
                      </image>
                   </ImageView>
+                  <StackPane layoutX="710.0" layoutY="720.0" prefHeight="137.0" prefWidth="135.0">
+                     <children>
+                        <ImageView fx:id="bagImage" fitHeight="126.0" fitWidth="115.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/other/bag.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="bagCapacityText" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="90" wrappingWidth="46.015625" StackPane.alignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="40.0" />
+                           </font>
+                           <StackPane.margin>
+                              <Insets top="30.0" />
+                           </StackPane.margin>
+                        </Text>
+                     </children>
+                  </StackPane>
                </children>
             </Pane>
             <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
@@ -515,7 +529,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </ImageView>
-                              <StackPane fx:id="coinsPane1" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
                                  <children>
                                     <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
                                        <image>
@@ -529,6 +543,7 @@
                                     </Text>
                                  </children>
                               </StackPane>
+                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
                            </children>
                         </Pane>
                         <Pane GridPane.columnIndex="1">
@@ -541,7 +556,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </ImageView>
-                              <StackPane fx:id="coinsPane11" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
                                  <children>
                                     <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
                                        <image>
@@ -555,6 +570,7 @@
                                     </Text>
                                  </children>
                               </StackPane>
+                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
                            </children>
                         </Pane>
                         <Pane GridPane.columnIndex="2">
@@ -567,7 +583,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </ImageView>
-                              <StackPane fx:id="coinsPane12" layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
                                  <children>
                                     <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
                                        <image>
@@ -581,6 +597,7 @@
                                     </Text>
                                  </children>
                               </StackPane>
+                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
                            </children>
                         </Pane>
                      </children>
@@ -621,7 +638,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Button>
-                  <Label fx:id="characterNameLabel" alignment="CENTER" layoutX="68.0" layoutY="26.0" text="CharacterName">
+                  <Label fx:id="characterNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="27.0" prefHeight="58.0" prefWidth="350.0" text="CharacterName" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="40.0" />
                      </font>
@@ -647,6 +664,55 @@
                   </Text>
                </children>
             </StackPane>
+            <VBox fx:id="characterStuff" alignment="TOP_CENTER" layoutX="350.0" layoutY="96.0" prefHeight="401.0" prefWidth="71.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="colorSelectionPane" layoutX="585.0" layoutY="362.0" prefHeight="355.0" prefWidth="749.0" stylesheets="@../css/game.css" visible="false">
+         <children>
+            <Label layoutX="236.0" layoutY="51.0" text="Choose a color">
+               <font>
+                  <Font name="System Bold" size="40.0" />
+               </font></Label>
+            <ImageView fitHeight="200.0" fitWidth="120.0" layoutX="315.0" layoutY="145.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+               <image>
+                  <Image url="@../graphics/pieces/green_student.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="120.0" layoutX="588.0" layoutY="144.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+               <image>
+                  <Image url="@../graphics/pieces/magenta_student.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="193.0" fitWidth="120.0" layoutX="452.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+               <image>
+                  <Image url="@../graphics/pieces/cyan_student.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="123.0" fitWidth="120.0" layoutX="47.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+               <image>
+                  <Image url="@../graphics/pieces/red_student.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="197.0" fitWidth="120.0" layoutX="183.0" layoutY="147.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+               <image>
+                  <Image url="@../graphics/pieces/yellow_student.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children>
       </Pane>
       <ImageView fx:id="endingScreen" fitHeight="500.0" preserveRatio="true" layoutX="500.0" layoutY="500.0" visible="false">

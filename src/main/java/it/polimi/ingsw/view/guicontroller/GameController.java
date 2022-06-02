@@ -18,12 +18,14 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -58,6 +60,8 @@ public class GameController implements Initializable {
     private GridPane playOrderGrid;
     @FXML
     private Label errorMsg;
+    @FXML
+    private Text bagCapacityText;
 
     // expert mode components
     @FXML
@@ -76,6 +80,8 @@ public class GameController implements Initializable {
     private Label characterDescriptionLabel;
     @FXML
     private Text characterCostText;
+    @FXML
+    private VBox characterStuff;
     @FXML
     private Button activateCharacterButton;
     @FXML
@@ -117,6 +123,7 @@ public class GameController implements Initializable {
         setupCloud();
         setupActions();
         setupPlayOrder();
+        bagCapacityText.setText(String.valueOf(game.getBag().capacity()));
 
         // expert mode
         if(view.getGameHandler().getModel().getExpertMode()) {
@@ -152,6 +159,35 @@ public class GameController implements Initializable {
             // setting coin number
             Text coinText = (Text)((StackPane)((Pane)charactersGrid.getChildren().get(count)).getChildren().get(1)).getChildren().get(1);
             coinText.setText(String.valueOf(character.getCost()));
+
+            VBox characterStuffSmall = (VBox)((Pane)charactersGrid.getChildren().get(count)).getChildren().get(2);
+            characterStuffSmall.setSpacing(3);
+
+            // setting students (if any)
+            if(character.getStudents() != null){
+                int totalStudents = character.getStudents().count();
+
+                for(Color studentColor : character.getStudents().keySet()) {
+                    int numOfStudents = character.getStudents().get(studentColor);
+
+                    for(int i=0; i<numOfStudents; i++){
+                        int size = 112 / totalStudents; // FIXME: this probably creates funny stuff with few students
+
+                        ImageView studentImage = new ImageView("graphics/pieces/"+studentColor.toString().toLowerCase()+"_student.png");
+                        studentImage = resizeImageView(studentImage, size, size);
+
+                        characterStuffSmall.getChildren().add(studentImage);
+                    }
+                }
+            }
+
+            // setting noEntryTiles (if any)
+            for(int i=0; i<character.getNoEntryTiles(); i++){
+                ImageView tileImage = new ImageView("graphics/other/no_entry_tile.png");
+                tileImage = resizeImageView(tileImage, 25, 25);
+
+                characterStuffSmall.getChildren().add(tileImage);
+            }
 
             count++;
         }
@@ -511,6 +547,31 @@ public class GameController implements Initializable {
         characterImage.setImage(new Image("graphics/characters/" + characterName + ".jpg"));
         characterCostText.setText(String.valueOf(character.getCost()));
 
+        characterStuff.setSpacing(5);
+        characterStuff.getChildren().clear();
+
+        // setting students (if any)
+        if(character.getStudents() != null){
+            for(Color studentColor : character.getStudents().keySet()) {
+                int numOfStudents = character.getStudents().get(studentColor);
+
+                for(int i=0; i<numOfStudents; i++){
+                    ImageView studentImage = new ImageView("graphics/pieces/"+studentColor.toString().toLowerCase()+"_student.png");
+                    studentImage = resizeImageView(studentImage, 60, 60);
+
+                    characterStuff.getChildren().add(studentImage);
+                }
+            }
+        }
+
+        // setting noEntryTiles (if any)
+        for(int i=0; i<character.getNoEntryTiles(); i++){
+            ImageView tileImage = new ImageView("graphics/other/no_entry_tile.png");
+            tileImage = resizeImageView(tileImage, 60, 60);
+
+            characterStuff.getChildren().add(tileImage);
+        }
+
         characterNameLabel.setText(characterName);
         characterDescriptionLabel.setText(description);
         if(checkMessage(new SelectedCharacterMessage(id), thisPlayer) == StatusCode.OK){
@@ -533,5 +594,13 @@ public class GameController implements Initializable {
     private void updateErrorMessage(String s){
         errorMsg.setText(s);
         errorMsg.setVisible(true);
+    }
+
+    public void addGlowEffect(MouseEvent event){
+        ((ImageView)event.getTarget()).setEffect(new Glow(1));
+    }
+
+    public void removeGlowEffect(MouseEvent event){
+        ((ImageView)event.getTarget()).setEffect(null);
     }
 }
