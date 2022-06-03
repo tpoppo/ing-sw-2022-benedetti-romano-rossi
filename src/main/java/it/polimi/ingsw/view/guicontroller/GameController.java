@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.DeepCopy;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
@@ -27,15 +28,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import it.polimi.ingsw.model.board.Assistant;
-import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.model.board.Students;
-import it.polimi.ingsw.network.messages.ClientMessage;
-import it.polimi.ingsw.network.messages.NextStateMessage;
-import it.polimi.ingsw.network.messages.PlayAssistantMessage;
-import it.polimi.ingsw.network.messages.StatusCode;
-import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.utils.Pair;
 
 import java.net.URL;
 import java.util.*;
@@ -62,8 +54,6 @@ public class GameController implements Initializable {
     private Label usernameLabel;
     @FXML
     private ImageView assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10;
-    @FXML
-    private ImageView cloud0, cloud1, cloud2;
     @FXML
     private ImageView nextTurnButton;
     @FXML
@@ -98,8 +88,7 @@ public class GameController implements Initializable {
     private ImageView closeCharacterPaneButton;
     @FXML
     private ImageView motherNature;
-
-    @FXML //TODO: not added yet
+    @FXML
     private ImageView endingScreen;
 
     @FXML
@@ -110,8 +99,12 @@ public class GameController implements Initializable {
     private Player thisPlayer;
     private Player schoolboardPlayer;
     private Map<Player, TowerColor> playerTowerColorMap;
-
     private ImageView selectedEntrance;
+    private List<Pane> cloudPanes;
+
+    private final String PIECE_CLASS = "piece";
+
+    // FIXME: split class
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -121,6 +114,8 @@ public class GameController implements Initializable {
 
         GameHandler gameHandler = view.getGameHandler();
         Game game = gameHandler.getModel();
+
+        cloudPanes = new ArrayList<>();
         assistantCards = List.of(assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10);
         playerTowerColorMap = new HashMap<>();
         thisPlayer = game.usernameToPlayer(GUI.getUsername());
@@ -134,9 +129,12 @@ public class GameController implements Initializable {
         updateSchoolboard();
         setupAssistants();
         setupErrorMessage();
-        setupCloud();
+        setupClouds();
         setupActions();
         setupPlayOrder();
+        setupIslands();
+
+        // displaying bag capacity
         bagCapacityText.setText(String.valueOf(game.getBag().capacity()));
 
         // expert mode
@@ -149,118 +147,145 @@ public class GameController implements Initializable {
 
         if(GUI.getSelectingCharacter() != null)
             showCharacterInfo(GUI.getSelectingCharacter());
-
-        playerTowerColorMap = new HashMap<>();
-
-        // setting up player - towerColor association
-        for(int i=0; i<view.getGameHandler().getModel().getPlayers().size(); i++)
-            playerTowerColorMap.put(view.getGameHandler().getModel().getPlayers().get(i), TowerColor.values()[i]);
-
-        double x = islandsPane.getWidth();
-        double y = islandsPane.getHeight();
-        double cx = x + (islandsPane.getPrefWidth()) / 2;
-        double cy = y + (islandsPane.getPrefHeight()) / 2;
-        ArrayList<Island> islands = view.getGameHandler().getModel().getIslands();
-        int n_items = islands.size();
-        double delta_angle = 360 / n_items;
-        double current_angle = 180;
-        ArrayList<Double> angle = new ArrayList<Double>();
-        for(int i=0; i<n_items; i++){
-            angle.add(current_angle);
-            current_angle -= delta_angle;
-        }
-        ArrayList<Pair<Double, Double> > islands_centers = new ArrayList<>();
-        double d = 300;
-        for(int i=0; i<n_items; i++){
-            Pair pair = new Pair(cx + d * Math.cos(angle.get(i) * Math.PI / 180), cy - d * Math.sin(angle.get(i) * Math.PI / 180));
-            islands_centers.add(pair);
-        }
-        for(int i=0; i<n_items; i++){
-            ImageView image_view = new ImageView();
-            Image image = new Image("/graphics/islands/" + i % 3 + ".png");
-            image_view.setImage(image);
-            int dimx = (int)(0.5 * image.getWidth());
-            int dimy = (int)(0.5 * image.getHeight());
-            image_view = resizeImageView(image_view, dimx, dimy);
-            image_view.setX(islands_centers.get(i).getFirst() - image_view.getFitWidth() / 2);
-            image_view.setY(islands_centers.get(i).getSecond() - image_view.getFitHeight() / 2);
-            islandsPane.getChildren().add(image_view);
-        }
-
-        for(int i=0; i<n_items; i++){
-            int n_students = 0;
-            for(Map.Entry<Color, Integer> entry : islands.get(i).getStudents().entrySet()) {
-                Color key = entry.getKey();
-                int value = entry.getValue();
-                if (value > 0) {
-                    n_students++;
-                }
-            }
-            switch(n_students){
-                //:TODO case(0), case(1), case(2)
-                default:
-                    System.out.println(i);
-                    ImageView image_view = new ImageView();
-                    Image image = new Image("/graphics/islands/" + i % 3 + ".png");
-                    double cix = islands_centers.get(i).getFirst();
-                    double ciy = islands_centers.get(i).getSecond();
-                    double xi = cix - image_view.getFitWidth() / 2;
-                    double yi = ciy - image_view.getFitHeight() / 2;
-                    ArrayList<Double> angle_island = new ArrayList<Double>();
-                    double delta_angle_island = 360 / n_students;
-                    double current_angle_island = 180;
-                    for(int j=0; j<n_students; j++){
-                        angle_island.add(current_angle_island);
-                        current_angle_island -= delta_angle_island;
-                    }
-                    ArrayList<Pair<Double, Double> > students_centers = new ArrayList<>();
-                    double di = 35;
-                    for(int j=0; j<n_students; j++){
-                        Pair pair = new Pair(cix + di * Math.cos(angle_island.get(j) * Math.PI / 180), ciy - di * Math.sin(angle_island.get(j) * Math.PI / 180));
-                        students_centers.add(pair);
-                    }
-                    int position = 0;
-                    for(Map.Entry<Color, Integer> entry : islands.get(i).getStudents().entrySet()){
-                        Color key = entry.getKey();
-                        int value = entry.getValue();
-                        String current_color = new String();
-                        if(key == Color.CYAN) current_color = "cyan";
-                        if(key == Color.GREEN) current_color = "green";
-                        if(key == Color.MAGENTA) current_color = "magenta";
-                        if(key == Color.RED) current_color = "red";
-                        if(key == Color.YELLOW) current_color = "yellow";
-                        if(value > 0){
-                            ImageView image_view1 = new ImageView();
-                            Image image1 = new Image("/graphics/pieces/" + current_color + "_student.png");
-                            image_view1.setImage(image1);
-                            int dimxi = (int)(0.1 * image1.getWidth());
-                            int dimyi = (int)(0.1 * image1.getHeight());
-                            image_view1 = resizeImageView(image_view1, dimxi, dimyi);
-                            image_view1.setX(students_centers.get(position).getFirst() - image_view1.getFitWidth() / 2);
-                            image_view1.setY(students_centers.get(position).getSecond() - image_view1.getFitHeight() / 2);
-                            Text coin_number = new Text(String.valueOf(value));
-                            coin_number.setX(students_centers.get(position).getFirst());
-                            coin_number.setY(students_centers.get(position).getSecond());
-                            islandsPane.getChildren().add(image_view1);
-                            islandsPane.getChildren().add(coin_number);
-                            //:FIXME seems that the link passed at towercolor is'nt right
-                            /*String towerColor = String.valueOf(playerTowerColorMap.get(islands.get(i).getOwner())).toLowerCase();
-                            ImageView tower_image = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
-                            tower_image.setX(islands_centers.get(i).getFirst() - tower_image.getFitWidth() / 2);
-                            tower_image.setY(islands_centers.get(i).getSecond() - tower_image.getFitHeight() / 2);
-                            islandsPane.getChildren().add(tower_image);*/
-                            position++;
-                        }
-                    }
-                    break;
-            }
-        }
     }
 
-    private void setupCloud() {
-        if(view.getGameHandler().getModel().getPlayers().size() == 2){
-            cloud2.setVisible(false);
+    private void setupIslands() {
+        List<Island> islands = view.getGameHandler().getModel().getIslands();
+        List<Node> islandNodes = new ArrayList<>();
+
+        for (int i = 0; i < islands.size(); i++) {
+            // every island has its own pane
+            Pane islandPane = new Pane();
+            List<Node> studentNodes = new ArrayList<>();
+            int islandSize = islands.get(i).getNumIslands();
+
+            // adding island image
+            ImageView islandImage = new ImageView("/graphics/islands/" + i % 3 + ".png");
+            Image image = new Image("/graphics/islands/" + i % 3 + ".png");
+            islandImage.setImage(image);
+
+            // FIXME: cut island images so that they are standard (possibly in a square)
+
+            int dimX = (int) (0.4 * image.getWidth()) * islandSize; // FIXME: choose a better scale factor
+            int dimY = (int) (0.4 * image.getHeight()) * islandSize;
+            islandImage = resizeImageView(islandImage, dimX, dimY);
+
+            islandPane.getChildren().add(islandImage);
+
+            // adding island's elements on top (creating a list of nodes of every component to be shown)
+            // adding students, getting the colors of the students currently on the island
+            HashMap<Color, Integer> presentStudents = new HashMap<>();
+            islands.get(i).getStudents().forEach((color, quantity) -> {
+                if (quantity > 0)
+                    presentStudents.put(color, quantity);
+            });
+
+            if (presentStudents.keySet().size() > 0) {
+                // creating a stackPane with image + quantity for each student color present
+                for (Color studentColor : presentStudents.keySet()) {
+                    int numStudents = presentStudents.get(studentColor);
+
+                    StackPane studentStackPane = new StackPane();
+                    ImageView studentImage = new ImageView("/graphics/pieces/" + studentColor + "_student.png");
+                    studentImage = resizeImageView(studentImage, 30, 30);
+                    studentImage.getStyleClass().add(PIECE_CLASS);
+
+                    Text studentNumber = new Text(String.valueOf(numStudents));
+                    studentNumber.getStyleClass().add("borderedText");
+                    // FIXME: resize text
+
+                    studentStackPane.setPrefSize(studentImage.getFitWidth(), studentImage.getFitHeight());
+                    studentStackPane.getChildren().add(studentImage);
+                    studentStackPane.getChildren().add(studentNumber);
+
+                    studentNodes.add(studentStackPane);
+                }
+
+                // adding towers
+                int numTowers = islands.get(i).getNumTowers();
+                if (numTowers > 0) {
+                    StackPane towerStackPane = new StackPane();
+                    String towerColor = String.valueOf(playerTowerColorMap.get(islands.get(i).getOwner())).toLowerCase();
+
+                    ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
+                    towerImage = resizeImageView(towerImage, 35, 35);
+                    towerImage.getStyleClass().add(PIECE_CLASS);
+
+                    Text towerNumber = new Text(String.valueOf(numTowers));
+                    towerNumber.getStyleClass().add("borderedText");
+                    // FIXME: resize text
+
+                    towerStackPane.getChildren().add(towerImage);
+                    towerStackPane.getChildren().add(towerNumber);
+
+                    double x = islandPane.getBoundsInParent().getWidth() / 2 - towerStackPane.getBoundsInParent().getWidth() / 2;
+                    double y = islandPane.getBoundsInParent().getHeight() / 2 - towerStackPane.getBoundsInParent().getHeight() / 2;
+                    // if there's only one student color, the tower gets added on top of it, otherwise it is displayed in the center
+                    if (presentStudents.size() == 1)
+                        y -= 30; // TODO: check if this gets displayed correctly
+
+                    towerStackPane.setLayoutX(x);
+                    towerStackPane.setLayoutY(y);
+                    islandPane.getChildren().add(towerStackPane);
+                }
+
+                // adding all the pieces on top of the islandPane
+                double radius = islandPane.getBoundsInParent().getWidth() / 4;
+                placeNodes(islandPane, studentNodes, radius);
+
+                // adding the updated islandPane to the list
+                islandNodes.add(islandPane);
+            }
+
         }
+
+        // making a regular polygon with the provided nodes in the given container
+        double radius = islandsPane.getBoundsInParent().getWidth() * 2 / 3 / 2;
+        placeNodes(islandsPane, islandNodes, radius);
+    }
+
+    private void setupClouds() {
+        Game model = view.getGameHandler().getModel();
+
+        for(Students cloud : model.getClouds()){
+            Pane cloudPane = new Pane();
+            ImageView cloudImage = new ImageView("graphics/islands/cloud.png");
+            cloudImage = resizeImageView(cloudImage, 128, 128); // TODO: parametrize these
+
+            cloudPane.getChildren().add(cloudImage);
+
+            if(cloud.count() == 0)
+                cloudImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)); // TODO: add effect on utils or something
+            else {
+                List<Node> cloudTopping = new ArrayList<>();
+                for(Color key : cloud.keySet()){
+                    if(cloud.get(key) > 0) {
+                        StackPane cloudStackPane = new StackPane();
+
+                        ImageView studentImage = new ImageView("graphics/pieces/" + key.toString().toLowerCase() + "_student.png");
+                        studentImage = resizeImageView(studentImage, 30, 30);
+                        studentImage.getStyleClass().add(PIECE_CLASS);
+
+                        Text quantity = new Text(String.valueOf(cloud.get(key)));
+                        quantity.getStyleClass().add("borderedText");
+
+                        cloudStackPane.getChildren().add(studentImage);
+                        cloudStackPane.getChildren().add(quantity);
+
+                        cloudTopping.add(cloudStackPane);
+                    }
+                }
+
+                double radius = cloudPane.getBoundsInParent().getWidth() / 4;
+                placeNodes(cloudPane, cloudTopping, radius);
+
+                cloudPanes.add(cloudPane);
+            }
+        }
+
+        List<Node> cloudNodes = new ArrayList<>(cloudPanes);
+        double radius = islandsPane.getBoundsInParent().getWidth() * 1 / 5 / 2;
+        placeNodes(islandsPane, cloudNodes, radius);
     }
 
     private void setupCharacters(){
@@ -419,8 +444,8 @@ public class GameController implements Initializable {
                         if(selectedEntrance != null){
                             System.out.println(selectedEntrance.getImage().getUrl());
                             String[] sname = selectedEntrance.getImage().getUrl().split("[^a-zA-Z]");
-                            Color color = Color.parseColor(sname[sname.length-3]);
-                            System.out.println(color + " " + sname[sname.length-3]);
+                            Color color = Color.parseColor(sname[sname.length - 3]);
+                            System.out.println(color + " " + sname[sname.length - 3]);
                             GUI.getClientSocket().send(new MoveStudentMessage(color));
                         } else {
                             updateErrorMessage("You must select a student first");
@@ -440,17 +465,17 @@ public class GameController implements Initializable {
     }
 
     private void prepareChooseCloud() {
-        //TODO: add students
-        List<ImageView> clouds = List.of(cloud0, cloud1, cloud2);
-        for(int i=0; i<3; i++){
+        for(int i=0; i<cloudPanes.size(); i++){
+            Pane cloudPane = cloudPanes.get(i);
             ChooseCloudMessage cloudMessage = new ChooseCloudMessage(i);
+
             if(checkMessage(cloudMessage, view.getGameHandler().getModel().usernameToPlayer(GUI.getUsername())) == StatusCode.OK){
-                clouds.get(i).setOnMouseClicked(mouseEvent -> {
+                cloudPane.setOnMouseClicked(mouseEvent -> {
                     GUI.getClientSocket().send(cloudMessage);
                 });
             } else {
-                clouds.get(i).setOnMouseClicked(null);
-                clouds.get(i).setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                cloudPane.setOnMouseClicked(null);
+                cloudPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
             }
         }
     }
@@ -479,9 +504,6 @@ public class GameController implements Initializable {
     }
 
     private void setupAssistants(){
-        GameHandler gameHandler = view.getGameHandler();
-        Game game = gameHandler.getModel();
-
         for(Assistant assistant : Assistant.getAssistants(thisPlayer.getWizard())){
             ImageView imageView = assistantCards.get(assistant.getPower()-1);
 
@@ -534,6 +556,7 @@ public class GameController implements Initializable {
                 ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                 studentImage = resizeImageView(studentImage, 50, 50);
                 studentImage.setCursor(Cursor.HAND);
+                studentImage.getStyleClass().add(PIECE_CLASS);
                 entranceGrid.add(studentImage, 1 - count%2, 4 - count/2);
 
                 count++;
@@ -557,6 +580,7 @@ public class GameController implements Initializable {
             ImageView professorImage = new ImageView("graphics/pieces/" + professorColor.toString().toLowerCase() + "_professor.png");
             professorImage = resizeImageView(professorImage, 55, 55, 90);
             professorImage.setCursor(Cursor.HAND);
+            professorImage.getStyleClass().add(PIECE_CLASS);
 
             switch (professorColor){
                 case YELLOW -> professorsGrid.addRow(2, professorImage);
@@ -575,6 +599,7 @@ public class GameController implements Initializable {
             ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
             towerImage = resizeImageView(towerImage, 50, 50);
             towerImage.setCursor(Cursor.HAND);
+            towerImage.getStyleClass().add(PIECE_CLASS);
             towersGrid.add(towerImage, count%2, count/2);
 
             count++;
@@ -583,9 +608,6 @@ public class GameController implements Initializable {
         // coins
         Text coinNumber = new Text(String.valueOf(coins));
         coinNumber.getStyleClass().add("coinNumber");
-        ImageView coinsImage = new ImageView("graphics/other/coin.png");
-        coinsImage = resizeImageView(coinsImage, 50, 50);
-        coinsPane.getChildren().add(coinsImage);
         coinsPane.getChildren().add(coinNumber);
     }
 
@@ -597,6 +619,7 @@ public class GameController implements Initializable {
             ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
             studentImage = resizeImageView(studentImage, 45, 45);
             studentImage.setCursor(Cursor.HAND);
+            studentImage.getStyleClass().add(PIECE_CLASS);
 
             colorGrid.addColumn(i, studentImage);
         }
@@ -624,35 +647,6 @@ public class GameController implements Initializable {
 
             count++;
         }
-    }
-
-    private ImageView resizeImageView(ImageView image, int width, int heigth){
-        return resizeImageView(image, width, heigth, 0);
-    }
-
-    private ImageView resizeImageView(ImageView image, int width, int heigth, int rotate){
-        ImageView newImage = new ImageView(image.getImage());
-        newImage.setFitWidth(width);
-        newImage.setFitHeight(heigth);
-        newImage.setRotate(rotate);
-
-        return newImage;
-    }
-
-    public void onMouseEnteredAssistant(MouseEvent event) {
-        ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(imageView.getY() - 50);
-    }
-
-    public void onMouseExitedAssistant(MouseEvent event) {
-        ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(imageView.getY() + 50);
-    }
-
-    private StatusCode checkMessage(ClientMessage clientMessage, Player player){
-        GameHandler gameHandler = (GameHandler) DeepCopy.copy(GUI.getView().getGameHandler());
-        NetworkManager networkManager = NetworkManager.createNetworkManager(gameHandler);
-        return clientMessage.handle(networkManager, player);
     }
 
     private void showCharacterInfo(int id){
@@ -711,9 +705,68 @@ public class GameController implements Initializable {
         GUI.setSelectingCharacter(null);
     }
 
+    private StatusCode checkMessage(ClientMessage clientMessage, Player player) {
+        GameHandler gameHandler = (GameHandler) DeepCopy.copy(GUI.getView().getGameHandler());
+        NetworkManager networkManager = NetworkManager.createNetworkManager(gameHandler);
+        return clientMessage.handle(networkManager, player);
+    }
+
+    private void placeNodes(Pane container, List<Node> nodes, double radius) {
+        int numNodes = nodes.size();
+        double containerCenterX = container.getBoundsInParent().getWidth() / 2;
+        double containerCenterY = container.getBoundsInParent().getHeight() / 2;
+        double delta_angle = (double) 360 / numNodes;
+        double current_angle = 180;
+        ArrayList<Double> angle = new ArrayList<>();
+
+        if (numNodes == 1) radius = 0;
+
+        // computing some angle
+        for (int i = 0; i < numNodes; i++) {
+            angle.add(current_angle);
+            current_angle -= delta_angle;
+        }
+
+        // adding nodes
+        for (int i = 0; i < numNodes; i++) {
+            Node node = nodes.get(i);
+            Pair<Double, Double> nodeCenter = new Pair<>(containerCenterX + radius * Math.cos(angle.get(i) * Math.PI / 180), containerCenterY - radius * Math.sin(angle.get(i) * Math.PI / 180));
+
+            // wrapping each node in a pane
+            Pane nodePane = new Pane(node);
+            nodePane.setLayoutX(nodeCenter.getFirst() - nodePane.getBoundsInParent().getWidth() / 2);
+            nodePane.setLayoutY(nodeCenter.getSecond() - nodePane.getBoundsInParent().getHeight() / 2);
+
+            container.getChildren().add(nodePane);
+        }
+    }
+
     private void updateErrorMessage(String s){
         errorMsg.setText(s);
         errorMsg.setVisible(true);
+    }
+
+    private ImageView resizeImageView(ImageView image, int width, int height){
+        return resizeImageView(image, width, height, 0);
+    }
+
+    private ImageView resizeImageView(ImageView image, int width, int height, int rotate){
+        ImageView newImage = new ImageView(image.getImage());
+        newImage.setFitWidth(width);
+        newImage.setFitHeight(height);
+        newImage.setRotate(rotate);
+
+        return newImage;
+    }
+
+    public void onMouseEnteredAssistant(MouseEvent event) {
+        ImageView imageView = (ImageView) event.getSource();
+        imageView.setY(imageView.getY() - 50);
+    }
+
+    public void onMouseExitedAssistant(MouseEvent event) {
+        ImageView imageView = (ImageView) event.getSource();
+        imageView.setY(imageView.getY() + 50);
     }
 
     public void addGlowEffect(MouseEvent event){

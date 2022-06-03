@@ -25,7 +25,11 @@
 	-fx-alignment: center;
 }
 
-.coinNumber{
+.piece{
+	-fx-effect: dropshadow(gaussian, #000000, 10, 0, 0.0, 0.0);
+}
+
+.borderedText{
 	-fx-font-size: 30;
 	-fx-fill: white;
 	-fx-font-weight: bold;

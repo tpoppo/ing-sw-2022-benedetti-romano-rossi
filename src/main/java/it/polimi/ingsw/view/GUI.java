@@ -34,7 +34,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws IOException {
         GUI.stage = stage;
         stage.setTitle("Eriantys");
-        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/other/icon.png")));
+        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/other/coin.png")));
         stage.setFullScreenExitHint("");
 
         switchScene("/fxml/login.fxml");

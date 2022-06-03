@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -75,21 +87,6 @@
                         <Image url="@../graphics/other/arrow_white.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="cloud0" fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/cloud.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="cloud1" fitHeight="128.0" fitWidth="150.0" layoutX="283.0" layoutY="365.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/cloud.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="cloud2" fitHeight="128.0" fitWidth="150.0" layoutX="432.0" layoutY="470.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/cloud.png" />
-                     </image>
-                  </ImageView>
                   <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="32.0" />
@@ -107,7 +104,7 @@
                               <Image url="@../graphics/other/bag.png" />
                            </image>
                         </ImageView>
-                        <Text fx:id="bagCapacityText" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="90" wrappingWidth="46.015625" StackPane.alignment="CENTER">
+                        <Text fx:id="bagCapacityText" fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="999" textAlignment="CENTER" wrappingWidth="84.01562881469727" StackPane.alignment="CENTER">
                            <font>
                               <Font name="System Bold" size="40.0" />
                            </font>
@@ -179,6 +176,9 @@
                            <image>
                               <Image url="@../graphics/pieces/green_student.png" />
                            </image>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </ImageView>
                         <ImageView fitHeight="75.0" fitWidth="43.0" preserveRatio="true" GridPane.columnIndex="1">
                            <image>
