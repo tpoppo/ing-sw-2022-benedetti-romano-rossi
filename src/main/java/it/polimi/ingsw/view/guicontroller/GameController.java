@@ -27,9 +27,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import it.polimi.ingsw.model.board.Assistant;
+import it.polimi.ingsw.model.board.Color;
+import it.polimi.ingsw.model.board.Students;
+import it.polimi.ingsw.network.messages.ClientMessage;
+import it.polimi.ingsw.network.messages.NextStateMessage;
+import it.polimi.ingsw.network.messages.PlayAssistantMessage;
+import it.polimi.ingsw.network.messages.StatusCode;
+import it.polimi.ingsw.model.board.Island;
+import it.polimi.ingsw.utils.Pair;
 
 import java.net.URL;
 import java.util.*;
+
 
 public class GameController implements Initializable {
     @FXML
@@ -92,6 +102,9 @@ public class GameController implements Initializable {
     @FXML //TODO: not added yet
     private ImageView endingScreen;
 
+    @FXML
+    private Pane islandsPane;
+
     private ViewContent view;
     private List<ImageView> assistantCards;
     private Player thisPlayer;
@@ -103,6 +116,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.view = GUI.getView();
+        ViewContent view = GUI.getView();
         System.out.println(view);
 
         GameHandler gameHandler = view.getGameHandler();
@@ -135,6 +149,112 @@ public class GameController implements Initializable {
 
         if(GUI.getSelectingCharacter() != null)
             showCharacterInfo(GUI.getSelectingCharacter());
+
+        playerTowerColorMap = new HashMap<>();
+
+        // setting up player - towerColor association
+        for(int i=0; i<view.getGameHandler().getModel().getPlayers().size(); i++)
+            playerTowerColorMap.put(view.getGameHandler().getModel().getPlayers().get(i), TowerColor.values()[i]);
+
+        double x = islandsPane.getWidth();
+        double y = islandsPane.getHeight();
+        double cx = x + (islandsPane.getPrefWidth()) / 2;
+        double cy = y + (islandsPane.getPrefHeight()) / 2;
+        ArrayList<Island> islands = view.getGameHandler().getModel().getIslands();
+        int n_items = islands.size();
+        double delta_angle = 360 / n_items;
+        double current_angle = 180;
+        ArrayList<Double> angle = new ArrayList<Double>();
+        for(int i=0; i<n_items; i++){
+            angle.add(current_angle);
+            current_angle -= delta_angle;
+        }
+        ArrayList<Pair<Double, Double> > islands_centers = new ArrayList<>();
+        double d = 300;
+        for(int i=0; i<n_items; i++){
+            Pair pair = new Pair(cx + d * Math.cos(angle.get(i) * Math.PI / 180), cy - d * Math.sin(angle.get(i) * Math.PI / 180));
+            islands_centers.add(pair);
+        }
+        for(int i=0; i<n_items; i++){
+            ImageView image_view = new ImageView();
+            Image image = new Image("/graphics/islands/" + i % 3 + ".png");
+            image_view.setImage(image);
+            int dimx = (int)(0.5 * image.getWidth());
+            int dimy = (int)(0.5 * image.getHeight());
+            image_view = resizeImageView(image_view, dimx, dimy);
+            image_view.setX(islands_centers.get(i).getFirst() - image_view.getFitWidth() / 2);
+            image_view.setY(islands_centers.get(i).getSecond() - image_view.getFitHeight() / 2);
+            islandsPane.getChildren().add(image_view);
+        }
+
+        for(int i=0; i<n_items; i++){
+            int n_students = 0;
+            for(Map.Entry<Color, Integer> entry : islands.get(i).getStudents().entrySet()) {
+                Color key = entry.getKey();
+                int value = entry.getValue();
+                if (value > 0) {
+                    n_students++;
+                }
+            }
+            switch(n_students){
+                //:TODO case(0), case(1), case(2)
+                default:
+                    System.out.println(i);
+                    ImageView image_view = new ImageView();
+                    Image image = new Image("/graphics/islands/" + i % 3 + ".png");
+                    double cix = islands_centers.get(i).getFirst();
+                    double ciy = islands_centers.get(i).getSecond();
+                    double xi = cix - image_view.getFitWidth() / 2;
+                    double yi = ciy - image_view.getFitHeight() / 2;
+                    ArrayList<Double> angle_island = new ArrayList<Double>();
+                    double delta_angle_island = 360 / n_students;
+                    double current_angle_island = 180;
+                    for(int j=0; j<n_students; j++){
+                        angle_island.add(current_angle_island);
+                        current_angle_island -= delta_angle_island;
+                    }
+                    ArrayList<Pair<Double, Double> > students_centers = new ArrayList<>();
+                    double di = 35;
+                    for(int j=0; j<n_students; j++){
+                        Pair pair = new Pair(cix + di * Math.cos(angle_island.get(j) * Math.PI / 180), ciy - di * Math.sin(angle_island.get(j) * Math.PI / 180));
+                        students_centers.add(pair);
+                    }
+                    int position = 0;
+                    for(Map.Entry<Color, Integer> entry : islands.get(i).getStudents().entrySet()){
+                        Color key = entry.getKey();
+                        int value = entry.getValue();
+                        String current_color = new String();
+                        if(key == Color.CYAN) current_color = "cyan";
+                        if(key == Color.GREEN) current_color = "green";
+                        if(key == Color.MAGENTA) current_color = "magenta";
+                        if(key == Color.RED) current_color = "red";
+                        if(key == Color.YELLOW) current_color = "yellow";
+                        if(value > 0){
+                            ImageView image_view1 = new ImageView();
+                            Image image1 = new Image("/graphics/pieces/" + current_color + "_student.png");
+                            image_view1.setImage(image1);
+                            int dimxi = (int)(0.1 * image1.getWidth());
+                            int dimyi = (int)(0.1 * image1.getHeight());
+                            image_view1 = resizeImageView(image_view1, dimxi, dimyi);
+                            image_view1.setX(students_centers.get(position).getFirst() - image_view1.getFitWidth() / 2);
+                            image_view1.setY(students_centers.get(position).getSecond() - image_view1.getFitHeight() / 2);
+                            Text coin_number = new Text(String.valueOf(value));
+                            coin_number.setX(students_centers.get(position).getFirst());
+                            coin_number.setY(students_centers.get(position).getSecond());
+                            islandsPane.getChildren().add(image_view1);
+                            islandsPane.getChildren().add(coin_number);
+                            //:FIXME seems that the link passed at towercolor is'nt right
+                            /*String towerColor = String.valueOf(playerTowerColorMap.get(islands.get(i).getOwner())).toLowerCase();
+                            ImageView tower_image = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
+                            tower_image.setX(islands_centers.get(i).getFirst() - tower_image.getFitWidth() / 2);
+                            tower_image.setY(islands_centers.get(i).getSecond() - tower_image.getFitHeight() / 2);
+                            islandsPane.getChildren().add(tower_image);*/
+                            position++;
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     private void setupCloud() {

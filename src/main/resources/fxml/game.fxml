@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -85,75 +74,6 @@
                      <image>
                         <Image url="@../graphics/other/arrow_white.png" />
                      </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="216.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="643.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="63.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/1.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="662.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="650.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/2.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="71.0" layoutY="541.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/1.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="365.0" layoutY="711.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="208.0" layoutY="658.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="79.0" layoutY="244.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/1.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="26.0" layoutY="395.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="522.0" layoutY="127.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="689.0" layoutY="389.0" preserveRatio="true" style="-fx-cursor: hand;">
-                     <image>
-                        <Image url="@../graphics/islands/1.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
                   </ImageView>
                   <ImageView fx:id="cloud0" fitHeight="128.0" fitWidth="150.0" layoutX="450.0" layoutY="324.0" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
@@ -715,9 +635,9 @@
             </ImageView>
          </children>
       </Pane>
-      <ImageView fx:id="endingScreen" fitHeight="500.0" preserveRatio="true" layoutX="500.0" layoutY="500.0" visible="false">
+      <ImageView fx:id="endingScreen" fitHeight="500.0" layoutX="500.0" layoutY="500.0" preserveRatio="true" visible="false">
          <image>
-            <Image url="@../graphics/other/victory.png"/>
+            <Image url="@../graphics/other/victory.png" />
          </image>
       </ImageView>
    </children>
