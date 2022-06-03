@@ -47,6 +47,7 @@ public class NextStateMessage extends ClientMessage {
             }
             case CHOOSE_CLOUD -> {
                 game.nextTurn();
+                gameHandler.setSelectedCharacter(null);
                 gameHandler.setStudentMoves(3);
                 if (game.getCurrentPlayer() == null) { // end of the round
                     if (game.checkEndGame()) {

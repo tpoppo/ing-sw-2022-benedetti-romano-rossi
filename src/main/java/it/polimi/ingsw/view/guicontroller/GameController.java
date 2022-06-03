@@ -31,6 +31,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
+import java.util.function.Consumer;
 
 
 public class GameController implements Initializable {
@@ -94,6 +95,11 @@ public class GameController implements Initializable {
     @FXML
     private Pane islandsPane;
 
+    @FXML
+    private Pane colorSelectionPane;
+    @FXML
+    private ImageView chooseRed, chooseYellow, chooseGreen, chooseCyan, chooseMagenta;
+
     private ViewContent view;
     private List<ImageView> assistantCards;
     private Player thisPlayer;
@@ -105,6 +111,17 @@ public class GameController implements Initializable {
     private final String PIECE_CLASS = "piece";
 
     // FIXME: split class
+    private ImageView selectedStudentCard;
+    private ArrayList<ImageView> selectedOnCard;
+    private ArrayList<ImageView> selectedOnEntrance;
+    private ArrayList<ImageView> selectedOnDining;
+
+
+    private ArrayList<Pane> islandPanes;
+    private Map<Color, ImageView> chooseColor;
+    private HashMap<Integer, VBox> characterStuffSmallMap;
+
+    private ArrayList<Consumer<Player>> onfillSchoolboard;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -117,22 +134,31 @@ public class GameController implements Initializable {
 
         cloudPanes = new ArrayList<>();
         assistantCards = List.of(assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10);
+        chooseColor = Map.of(Color.RED, chooseRed, Color.YELLOW, chooseYellow, Color.GREEN, chooseGreen, Color.CYAN, chooseCyan, Color.MAGENTA, chooseMagenta);
         playerTowerColorMap = new HashMap<>();
+        selectedOnDining = new ArrayList<>();
+        selectedOnEntrance = new ArrayList<>();
+        selectedOnCard = new ArrayList<>();
         thisPlayer = game.usernameToPlayer(GUI.getUsername());
         schoolboardPlayer = thisPlayer;
+        islandPanes = new ArrayList<>();
+        characterStuffSmallMap = new HashMap<>();
+        onfillSchoolboard = new ArrayList<>();
 
         // setting up player - towerColor association
         for(int i=0; i<view.getGameHandler().getModel().getPlayers().size(); i++)
             playerTowerColorMap.put(view.getGameHandler().getModel().getPlayers().get(i), TowerColor.values()[i]);
 
         setupState();
+        setupIslands();
         updateSchoolboard();
         setupAssistants();
         setupErrorMessage();
         setupClouds();
+        setupMotherNature();
         setupActions();
         setupPlayOrder();
-        setupIslands();
+
 
         // displaying bag capacity
         bagCapacityText.setText(String.valueOf(game.getBag().capacity()));
@@ -147,6 +173,11 @@ public class GameController implements Initializable {
 
         if(GUI.getSelectingCharacter() != null)
             showCharacterInfo(GUI.getSelectingCharacter());
+
+        // adding the listeners after building the schoolboard (the first time)
+        for(Consumer<Player> f : onfillSchoolboard) {
+            f.accept(thisPlayer);
+        }
     }
 
     private void setupIslands() {
@@ -186,7 +217,7 @@ public class GameController implements Initializable {
                     int numStudents = presentStudents.get(studentColor);
 
                     StackPane studentStackPane = new StackPane();
-                    ImageView studentImage = new ImageView("/graphics/pieces/" + studentColor + "_student.png");
+                    ImageView studentImage = new ImageView("/graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                     studentImage = resizeImageView(studentImage, 30, 30);
                     studentImage.getStyleClass().add(PIECE_CLASS);
 
@@ -235,6 +266,7 @@ public class GameController implements Initializable {
 
                 // adding the updated islandPane to the list
                 islandNodes.add(islandPane);
+                islandPanes.add(islandPane);
             }
 
         }
@@ -243,6 +275,7 @@ public class GameController implements Initializable {
         double radius = islandsPane.getBoundsInParent().getWidth() * 2 / 3 / 2;
         placeNodes(islandsPane, islandNodes, radius);
     }
+
 
     private void setupClouds() {
         Game model = view.getGameHandler().getModel();
@@ -306,6 +339,7 @@ public class GameController implements Initializable {
             coinText.setText(String.valueOf(character.getCost()));
 
             VBox characterStuffSmall = (VBox)((Pane)charactersGrid.getChildren().get(count)).getChildren().get(2);
+            characterStuffSmallMap.put(id, characterStuffSmall);
             characterStuffSmall.setSpacing(3);
 
             // setting students (if any)
@@ -398,6 +432,16 @@ public class GameController implements Initializable {
         actionLabel.setText(action_text);
     }
 
+    private void setupMotherNature() {
+        int position = view.getGameHandler().getModel().findMotherNaturePosition();
+        Pane island = islandPanes.get(position);
+        System.out.println(position);
+
+        motherNature.setLayoutX(island.getLayoutX()+island.getBoundsInParent().getWidth()/2);
+        motherNature.setLayoutY(island.getLayoutY()+island.getBoundsInParent().getHeight());
+        island.getChildren().add(motherNature);
+    }
+
     private void prepareEnding() {
         if(view.getGameHandler().getModel().winner().getUsername().equals(GUI.getUsername())) {
             endingScreen.setImage(new Image("graphics/other/victory.png"));
@@ -411,56 +455,354 @@ public class GameController implements Initializable {
     }
 
     private void prepareActivateCharacter() {
+        Game game = view.getGameHandler().getModel();
+        Character character = view.getGameHandler().getSelectedCharacter();
+        if(character == null) {
+            updateErrorMessage("Invalid character"); // it should be unreachable
+            return;
+        }
+        // get the position of the selected character
+        int position = 0;
 
+        while(!game.getCharacters().get(position).equals(character)) position++;
+        System.out.println(position);
+        switch(character.require()){
+            case ISLAND -> {
+                // it wants a single island
+                for(int i = 0; i< islandPanes.size(); i++) {
+                    int finalI = i;
+                    Pane islandPane = islandPanes.get(i);
+                    islandPane.setOnMouseClicked(mouseEvent -> {
+                        PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                        playerChoicesSerializable.setIsland(finalI);
+                        GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                    });
+                    islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                }
+            }
+
+            case STUDENT_COLOR -> {
+                // it wants a color
+                colorSelectionPane.setVisible(true);
+                for (var entry : chooseColor.entrySet()) {
+                    entry.getValue().setOnMouseClicked(mouseEvent -> {
+                        PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                        playerChoicesSerializable.setStudent(entry.getKey());
+                        GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                    });
+                }
+            }
+
+            case CARD_STUDENT ->  {
+                // it wants a color available in the card
+                VBox characterStuffSmall = characterStuffSmallMap.get(position);
+                characterStuffSmall.getChildren().forEach(node -> {
+                    ImageView imageView = (ImageView) node;
+                    imageView.setOnMouseClicked(e -> {
+                        // get the color of the student
+                        Color color = imageViewToColor(imageView);
+
+                        // send the message
+                        PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                        playerChoicesSerializable.setStudent(color);
+                        GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                    });
+                });
+            }
+
+            case NOTHING -> {
+                // it wants nothing
+                PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+            }
+            case MOVE_CARD_ISLAND -> {
+                // it wants a student from this card and an island
+
+                // 1) select a student from this card
+                VBox characterStuffSmall = characterStuffSmallMap.get(position);
+                characterStuffSmall.getChildren().forEach(node -> {
+                    ImageView imageView = (ImageView) node;
+                    imageView.setOnMouseClicked(e -> {
+                        if(selectedStudentCard == imageView){
+                            selectedStudentCard = null;
+                            selectedStudentCard.setEffect(null);
+                            islandPanes.forEach(island -> island.setEffect(null));
+                        } else {
+                            if (selectedStudentCard != null) {
+                                selectedStudentCard.setEffect(null);
+                            }
+                            selectedStudentCard = imageView;
+                            selectedStudentCard.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                            islandPanes.forEach(island -> island.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)));
+                        }
+                    });
+                });
+
+                // 2) select an island
+                for(int i = 0; i< islandPanes.size(); i++) {
+                    int finalI = i;
+                    Pane islandPane = islandPanes.get(i);
+                    islandPane.setOnMouseClicked(mouseEvent -> {
+                        if(selectedStudentCard != null){
+                            Color color = imageViewToColor(selectedEntrance);
+                            PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                            playerChoicesSerializable.setIsland(finalI);
+                            playerChoicesSerializable.setStudent(color);
+                            GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                        } else {
+                            updateErrorMessage("You must select a student from the character first");
+                        }
+                    });
+                    islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                }
+            }
+
+            case SWAP_CARD_ENTRANCE -> {
+                // it wants up to 3 students from the entrance and up to 3 students from the entrance
+                int finalPosition = position;
+                onfillSchoolboard.add(player -> {
+                    // setup global variables and objects
+                    selectedOnEntrance.clear();
+                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+
+                    // student can be selected only if this is my schoolboard!
+                    if(!player.equals(thisPlayer)) return;
+
+
+                    // 1) select up to 3 students from this card
+                    VBox characterStuffSmall = characterStuffSmallMap.get(finalPosition);
+                    characterStuffSmall.getChildren().forEach(node -> {
+                        ImageView imageView = (ImageView) node;
+                        imageView.setOnMouseClicked(e -> {
+                            if (selectedOnCard.contains(imageView)) { // deselect a student
+                                selectedOnCard.remove(imageView);
+                                imageView.setEffect(null);
+                            } else {
+                                selectedOnCard.add(imageView);
+                                imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                                if (selectedOnCard.size() > 3) { // remove the first, if there are more than 3 cards
+                                    selectedOnCard.get(0).setEffect(null);
+                                    selectedOnCard.remove(0);
+                                }
+                            }
+
+                            if (selectedOnCard.size() == selectedOnEntrance.size()) {
+                                nextTurnButton.setEffect(null);
+                            } else {
+                                nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                            }
+                        });
+                    });
+
+                    // 2) select up to 3 students from the entrance
+                    entranceGrid.getChildren().forEach(node -> {
+                        ImageView imageView = (ImageView) node;
+
+                        imageView.setOnMouseClicked(e -> {
+                            if (selectedOnEntrance.contains(imageView)) { // deselect a student
+                                selectedOnEntrance.remove(imageView);
+                                imageView.setEffect(null);
+                            } else {
+                                selectedOnEntrance.add(imageView);
+                                imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                                if (selectedOnEntrance.size() > 3) { // remove the first, if there are more than 3 cards
+                                    selectedOnEntrance.get(0).setEffect(null);
+                                    selectedOnEntrance.remove(0);
+                                }
+                                if (selectedOnCard.size() == selectedOnEntrance.size()) {
+                                    nextTurnButton.setEffect(null);
+                                } else {
+                                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                                }
+                            }
+                        });
+                    });
+
+                    // 3) confirm selection
+                    nextTurnButton.setOnMouseClicked(mouseEvent -> {
+                        if (selectedOnCard.size() == selectedOnEntrance.size()) {
+                            PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                            for (int i = 0; i < selectedOnCard.size(); i++) {
+                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
+                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnCard.get(i)));
+                            }
+                            GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                        } else {
+                            updateErrorMessage("You must select the same number of students");
+                        }
+                    });
+                });
+            }
+
+            case SWAP_DINING_ENTRANCE -> {
+
+                // it wants up to 2 students from the entrance and up to 2 students from the entrance
+                onfillSchoolboard.add(player -> {
+                    // setup global variables
+                    selectedOnEntrance.clear();
+                    selectedOnDining.clear();
+                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+
+                    // student can be selected only if this is my schoolboard!
+                    if(!player.equals(thisPlayer)) return;
+
+                    // 1) select up to 2 students from this card
+                      List.of(greenDining, magentaDining, cyanDining, redDining, yellowDining).forEach(gridPane -> {
+                          gridPane.getChildren().forEach(node -> {
+                              ImageView imageView = (ImageView) node;
+
+                              imageView.setOnMouseClicked(e -> {
+                                  if (selectedOnDining.contains(imageView)) { // deselect a student
+                                      selectedOnDining.remove(imageView);
+                                      imageView.setEffect(null);
+                                  } else {
+                                      selectedOnDining.add(imageView);
+                                      imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                                      if (selectedOnDining.size() > 2) { // remove the first, if there are more than 3 cards
+                                          selectedOnDining.get(0).setEffect(null);
+                                          selectedOnDining.remove(0);
+                                      }
+                                  }
+
+                                  if (selectedOnDining.size() == selectedOnEntrance.size()) {
+                                      nextTurnButton.setEffect(null);
+                                  } else {
+                                      nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                                  }
+                              });
+
+                          });
+                      });
+
+                      // 2) select up to 3 students from the entrance
+                      entranceGrid.getChildren().forEach(node -> {
+                          ImageView imageView = (ImageView) node;
+
+                          imageView.setOnMouseClicked(e -> {
+                              if(selectedOnEntrance.contains(imageView)){ // deselect a student
+                                  selectedOnEntrance.remove(imageView);
+                                  imageView.setEffect(null);
+                              } else {
+                                  selectedOnEntrance.add(imageView);
+                                  imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                                  if(selectedOnEntrance.size() > 2){ // remove the first, if there are more than 3 cards
+                                      selectedOnEntrance.get(0).setEffect(null);
+                                      selectedOnEntrance.remove(0);
+                                  }
+                              }
+
+                              if(selectedOnDining.size() == selectedOnEntrance.size()){
+                                  nextTurnButton.setEffect(null);
+                              } else {
+                                  nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                              }
+                          });
+                      });
+
+                      // 3) confirm selection
+                      nextTurnButton.setOnMouseClicked(mouseEvent -> {
+                          if(selectedOnDining.size() == selectedOnEntrance.size()) {
+                              PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                              for(int i=0; i<selectedOnDining.size(); i++){
+                                  playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
+                                  playerChoicesSerializable.setStudent(imageViewToColor(selectedOnDining.get(i)));
+                              }
+                              GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+                          } else {
+                              updateErrorMessage("You must select the same number of students");
+                          }
+                      });
+                  });
+            }
+        }
     }
 
     private void prepareMoveStudent() {
         Game game = view.getGameHandler().getModel();
         ArrayList<Island> islands = game.getIslands();
         for(int i=0; i<islands.size(); i++){
-            //TODO: update onclick move student
-        }
-
-        for(Node node : entranceGrid.getChildren()) {
-            ImageView imageView = (ImageView) node;
-
-            imageView.setOnMouseClicked(mouseEvent -> {
-                if(imageView != selectedEntrance) {
-                    if(selectedEntrance != null) {
-                        selectedEntrance.setEffect(null);
-                    }
-                    selectedEntrance = imageView;
-                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-                } else {
+            int finalI = i;
+            islandPanes.get(i).setOnMouseClicked(mouseEvent -> {
+                if(selectedEntrance != null){
+                    Color color = imageViewToColor(selectedEntrance);
+                    GUI.getClientSocket().send(new MoveStudentMessage(color, finalI));
                     selectedEntrance = null;
-                    imageView.setEffect(null);
+                } else {
+                    updateErrorMessage("You must select a student first");
                 }
             });
         }
 
-        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
-                .forEach(d -> {
-                    d.setOnMouseClicked(mouseEvent -> {
-                        if(selectedEntrance != null){
-                            System.out.println(selectedEntrance.getImage().getUrl());
-                            String[] sname = selectedEntrance.getImage().getUrl().split("[^a-zA-Z]");
-                            Color color = Color.parseColor(sname[sname.length - 3]);
-                            System.out.println(color + " " + sname[sname.length - 3]);
-                            GUI.getClientSocket().send(new MoveStudentMessage(color));
-                        } else {
-                            updateErrorMessage("You must select a student first");
+        onfillSchoolboard.add(player -> {
+            // student can be selected only if this is my schoolboard!
+            if(!player.equals(thisPlayer)) return;
+
+            for(Node node : entranceGrid.getChildren()) {
+                ImageView imageView = (ImageView) node;
+
+                imageView.setOnMouseClicked(mouseEvent -> {
+                    if(imageView != selectedEntrance) { // select a student
+                        if(selectedEntrance != null) {
+                            selectedEntrance.setEffect(null);
                         }
-                    });
+                        selectedEntrance = imageView;
+                        imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                        // highlight valid action
+                        islandPanes.forEach(e -> e.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)));
+                        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
+                                .forEach(e -> e.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)));
+
+                    } else { // when clicked on the selected image -> deselect it
+                        selectedEntrance = null;
+
+                        // disable highlighting
+                        imageView.setEffect(null);
+                        islandPanes.forEach(e -> e.setEffect(null));
+                        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
+                                .forEach(e -> e.setEffect(null));
+                    }
                 });
+            }
+            List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
+                    .forEach(d -> {
+                        d.setOnMouseClicked(mouseEvent -> {
+                            if(selectedEntrance != null){
+
+                                Color color = imageViewToColor(selectedEntrance);
+                                GUI.getClientSocket().send(new MoveStudentMessage(color));
+                            } else {
+                                updateErrorMessage("You must select a student first");
+                            }
+                        });
+                    });
+        });
+
+
+
     }
 
+
+
     private void prepareMotherNature() {
-        // TODO: set the position of mother nature
-        // mothernature.setX();
         Game game = view.getGameHandler().getModel();
-        ArrayList<Island> islands = game.getIslands();
-        for(int i=0; i<islands.size(); i++){
-            //TODO: update onclick mother nature
+        for(int i = 0; i< islandPanes.size(); i++){
+            Pane islandPane = islandPanes.get(i);
+            System.out.println(i + ": " + checkMessage(new MoveMotherNatureMessage(i), thisPlayer));
+            if(checkMessage(new MoveMotherNatureMessage(i), thisPlayer) == StatusCode.OK){
+                int finalI = i;
+
+                islandPane.setOnMouseClicked(mouseEvent -> {
+                    GUI.getClientSocket().send(new MoveMotherNatureMessage(finalI));
+                });
+                islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+            } else {
+                islandPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+            }
         }
     }
 
@@ -609,6 +951,11 @@ public class GameController implements Initializable {
         Text coinNumber = new Text(String.valueOf(coins));
         coinNumber.getStyleClass().add("coinNumber");
         coinsPane.getChildren().add(coinNumber);
+
+        // adding the listeners after building the schoolboard
+        for(Consumer<Player> f : onfillSchoolboard) {
+            f.accept(player);
+        }
     }
 
     private void fillDining(Students diningStudents, Color studentColor, GridPane colorGrid) {
@@ -776,4 +1123,11 @@ public class GameController implements Initializable {
     public void removeGlowEffect(MouseEvent event){
         ((ImageView)event.getTarget()).setEffect(null);
     }
+
+    public Color imageViewToColor(ImageView imageView) {
+        // split the file name to get the color of the student
+        String[] sname = imageView.getImage().getUrl().split("[^a-zA-Z]");
+        return Color.parseColor(sname[sname.length-3]);
+    }
+
 }

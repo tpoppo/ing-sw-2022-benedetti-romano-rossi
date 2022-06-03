@@ -36,6 +36,7 @@ public class GUI extends Application {
         stage.setTitle("Eriantys");
         stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/other/coin.png")));
         stage.setFullScreenExitHint("");
+        stage.setResizable(false);
 
         switchScene("/fxml/login.fxml");
         stage.getScene().getStylesheets().add("css/login.css");
@@ -68,6 +69,7 @@ public class GUI extends Application {
                         try {
                             switchScene("/fxml/menu.fxml");
                             stage.getScene().getStylesheets().add("css/menu.css");
+                            stage.setFullScreen(false);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -90,6 +92,7 @@ public class GUI extends Application {
                                     try {
                                         switchScene("/fxml/lobby.fxml");
                                         stage.getScene().getStylesheets().add("css/lobby.css");
+                                        stage.setFullScreen(false);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }

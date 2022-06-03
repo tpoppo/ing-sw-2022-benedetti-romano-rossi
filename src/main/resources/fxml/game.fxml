@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
@@ -92,7 +93,7 @@
                         <Font name="System Bold" size="32.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" layoutX="423.0" layoutY="195.0" preserveRatio="true">
+                  <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
                      <image>
                         <Image url="@../graphics/pieces/mothernature/plant.png" />
                      </image>
@@ -553,7 +554,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="activateCharacterButton" layoutX="139.0" layoutY="363.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="150.0" text="ACTIVATE">
+                  <Button fx:id="activateCharacterButton" layoutX="101.0" layoutY="363.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="226.0" text="ACTIVATE">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -593,7 +594,7 @@
                <font>
                   <Font name="System Bold" size="40.0" />
                </font></Label>
-            <ImageView fitHeight="200.0" fitWidth="120.0" layoutX="315.0" layoutY="145.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+            <ImageView fx:id="chooseGreen" fitHeight="200.0" fitWidth="120.0" layoutX="315.0" layoutY="145.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
                <image>
                   <Image url="@../graphics/pieces/green_student.png" />
                </image>
@@ -601,7 +602,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="120.0" layoutX="588.0" layoutY="144.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+            <ImageView fx:id="chooseMagenta" fitHeight="200.0" fitWidth="120.0" layoutX="588.0" layoutY="144.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
                <image>
                   <Image url="@../graphics/pieces/magenta_student.png" />
                </image>
@@ -609,7 +610,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="120.0" layoutX="452.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+            <ImageView fx:id="chooseCyan" fitHeight="193.0" fitWidth="120.0" layoutX="452.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
                <image>
                   <Image url="@../graphics/pieces/cyan_student.png" />
                </image>
@@ -617,7 +618,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fitHeight="123.0" fitWidth="120.0" layoutX="47.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+            <ImageView fx:id="chooseRed" fitHeight="123.0" fitWidth="120.0" layoutX="47.0" layoutY="148.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
                <image>
                   <Image url="@../graphics/pieces/red_student.png" />
                </image>
@@ -625,7 +626,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fitHeight="197.0" fitWidth="120.0" layoutX="183.0" layoutY="147.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
+            <ImageView fx:id="chooseYellow" fitHeight="197.0" fitWidth="120.0" layoutX="183.0" layoutY="147.0" onMouseEntered="#addGlowEffect" onMouseExited="#removeGlowEffect" preserveRatio="true" styleClass="colorOption">
                <image>
                   <Image url="@../graphics/pieces/yellow_student.png" />
                </image>
@@ -635,7 +636,7 @@
             </ImageView>
          </children>
       </Pane>
-      <ImageView fx:id="endingScreen" fitHeight="500.0" layoutX="500.0" layoutY="500.0" preserveRatio="true" visible="false">
+      <ImageView fx:id="endingScreen" fitHeight="692.0" fitWidth="792.0" layoutX="618.0" layoutY="171.0" preserveRatio="true" visible="false">
          <image>
             <Image url="@../graphics/other/victory.png" />
          </image>
