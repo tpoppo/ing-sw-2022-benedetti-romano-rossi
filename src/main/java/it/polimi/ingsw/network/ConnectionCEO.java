@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.messages.ClientMessage;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -124,6 +125,9 @@ public class ConnectionCEO extends Thread {
 
             // Removes the player from the global player list of the server
             boolean res = server.getPlayerList().remove(player.getUsername());
+            MenuManager.getInstance().unsubscribe(this);
+            if(networkManager != null) networkManager.unsubscribe(this);
+
             LOGGER.log(Level.INFO, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
 
         }
@@ -153,5 +157,16 @@ public class ConnectionCEO extends Thread {
 
     public void setNetworkManager(NetworkManager networkManager) {
         this.networkManager = networkManager;
+    }
+
+    @Override
+    public String toString() {
+        return "ConnectionCEO{" +
+                "clientSocket=" + clientSocket +
+                ", networkManager=" + networkManager +
+                ", player=" + player +
+                ", inputStream=" + inputStream +
+                ", outputStream=" + outputStream +
+                '}';
     }
 }
