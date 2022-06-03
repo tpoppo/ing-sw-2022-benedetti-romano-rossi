@@ -16,7 +16,7 @@ public class Bard extends Character{
         setDescription("""
                 You may exchange up to 2 Students between your Entrance and your Dining Room.
 
-                Requirements: <color of the student in the entrance> <color of the student in the entrance> <color of the student in the entrance>.
+                Requirements: <color of the student in the entrance> <color of the student in the dining>.
                 You can also use only the first 2 arguments""");
     }
 

@@ -41,6 +41,12 @@ public class Juggler extends Character{
         if(playerChoices.getStudent().size() % 2 != 0){
             throw new BadPlayerChoiceException();
         }
+
+        // there must be less than 7 students
+        if(playerChoices.getStudent().size() >= 7){
+            throw new BadPlayerChoiceException();
+        }
+
         Player player = game.getCurrentPlayer();
         Students entrance_students = player.getSchoolBoard().getEntranceStudents();
         Students card_student = new Students(students);
