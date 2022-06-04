@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+//TODO: Added errorMessage
 public class MenuController implements GUIController{
     @FXML
     private Text usernameLabel;

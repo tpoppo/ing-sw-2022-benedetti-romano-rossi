@@ -120,15 +120,14 @@ public class GameController implements GUIController {
             playerTowerColorMap.put(view.getGameHandler().getModel().getPlayers().get(i), TowerColor.values()[i]);
 
 
-        // all these functions are less than 300 ms. Less than 20%
+        resetBoard();
         setupState();
-        setupIslands();
+        setupIslands();         // FIXME: it does not work. it does not show the tokens
         updateSchoolboard();
         setupAssistants();
         setupErrorMessage();
-        setupClouds();
+        setupClouds();          // FIXME: inconsistent behavior of color adjustment
         setupMotherNature();
-        setupActions();
         setupPlayOrder();
 
         // displaying bag capacity
@@ -145,13 +144,15 @@ public class GameController implements GUIController {
         if (GUI.getSelectingCharacter() != null)
             showCharacterInfo(GUI.getSelectingCharacter());
 
+        setupActions();
+
         // adding the listeners after building the schoolboard (the first time)
         for (Consumer<Player> f : onfillSchoolboard) {
             f.accept(thisPlayer);
         }
     }
 
-    private void setupIslands() { //FIXME: it does not create empty island
+    private void setupIslands() {
         List<Island> islands = view.getGameHandler().getModel().getIslands();
         List<Node> islandNodes = new ArrayList<>();
 
@@ -253,7 +254,6 @@ public class GameController implements GUIController {
 
     private void setupClouds() {
         Game model = view.getGameHandler().getModel();
-
         for (Students cloud : model.getClouds()) {
             Pane cloudPane = new Pane();
             cloudPane.setCursor(Cursor.HAND);
@@ -261,6 +261,7 @@ public class GameController implements GUIController {
             cloudImage = resizeImageView(cloudImage, 128, 128); // TODO: parametrize these
 
             cloudPane.getChildren().add(cloudImage);
+            cloudPanes.add(cloudPane);
 
             if (cloud.count() == 0)
                 cloudImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)); // TODO: add effect on utils or something
@@ -287,7 +288,6 @@ public class GameController implements GUIController {
                 double radius = cloudPane.getBoundsInParent().getWidth() / 4;
                 placeNodes(cloudPane, cloudTopping, radius);
 
-                cloudPanes.add(cloudPane);
             }
         }
 
@@ -439,7 +439,7 @@ public class GameController implements GUIController {
         int position = 0;
 
         while (!game.getCharacters().get(position).equals(character)) position++;
-        System.out.println(position);
+
         switch (character.require()) {
             case ISLAND -> {
                 // it wants a single island
@@ -518,7 +518,7 @@ public class GameController implements GUIController {
                     Pane islandPane = islandPanes.get(i);
                     islandPane.setOnMouseClicked(mouseEvent -> {
                         if (selectedStudentCard != null) {
-                            Color color = imageViewToColor(selectedEntrance);
+                            Color color = imageViewToColor(selectedStudentCard);
                             PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
                             playerChoicesSerializable.setIsland(finalI);
                             playerChoicesSerializable.setStudent(color);
@@ -527,17 +527,26 @@ public class GameController implements GUIController {
                             updateErrorMessage("You must select a student from the character first");
                         }
                     });
-                    islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
                 }
             }
 
             case SWAP_CARD_ENTRANCE -> {
                 // it wants up to 3 students from the entrance and up to 3 students from the entrance
+
+                // method for the button dark/light effect
+                Runnable updateButton = () -> {
+                    if (selectedOnCard.size() == selectedOnEntrance.size()) {
+                        nextTurnButton.setEffect(null);
+                    } else {
+                        nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                    }
+                };
+
                 int finalPosition = position;
                 onfillSchoolboard.add(player -> {
                     // setup global variables and objects
                     selectedOnEntrance.clear();
-                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                    updateButton.run();
 
                     // student can be selected only if this is my schoolboard!
                     if (!player.equals(thisPlayer)) return;
@@ -560,12 +569,7 @@ public class GameController implements GUIController {
                                     selectedOnCard.remove(0);
                                 }
                             }
-
-                            if (selectedOnCard.size() == selectedOnEntrance.size()) {
-                                nextTurnButton.setEffect(null);
-                            } else {
-                                nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-                            }
+                            updateButton.run();
                         });
                     });
 
@@ -585,11 +589,7 @@ public class GameController implements GUIController {
                                     selectedOnEntrance.get(0).setEffect(null);
                                     selectedOnEntrance.remove(0);
                                 }
-                                if (selectedOnCard.size() == selectedOnEntrance.size()) {
-                                    nextTurnButton.setEffect(null);
-                                } else {
-                                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-                                }
+                                updateButton.run();
                             }
                         });
                     });
@@ -612,11 +612,21 @@ public class GameController implements GUIController {
 
             case SWAP_DINING_ENTRANCE -> {
                 // it wants up to 2 students from the entrance and up to 2 students from the entrance
+
+                // method for the button dark/light effect
+                Runnable updateButton = () -> {
+                    if (selectedOnDining.size() == selectedOnEntrance.size()) {
+                        nextTurnButton.setEffect(null);
+                    } else {
+                        nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                    }
+                };
+
                 onfillSchoolboard.add(player -> {
                     // setup global variables
                     selectedOnEntrance.clear();
                     selectedOnDining.clear();
-                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+                    updateButton.run();
 
                     // student can be selected only if this is my schoolboard!
                     if (!player.equals(thisPlayer)) return;
@@ -640,11 +650,7 @@ public class GameController implements GUIController {
                                     }
                                 }
 
-                                if (selectedOnDining.size() == selectedOnEntrance.size()) {
-                                    nextTurnButton.setEffect(null);
-                                } else {
-                                    nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-                                }
+                                updateButton.run();
                             });
 
                         });
@@ -668,11 +674,7 @@ public class GameController implements GUIController {
                                 }
                             }
 
-                            if (selectedOnDining.size() == selectedOnEntrance.size()) {
-                                nextTurnButton.setEffect(null);
-                            } else {
-                                nextTurnButton.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-                            }
+                            updateButton.run();
                         });
                     });
 
@@ -697,7 +699,8 @@ public class GameController implements GUIController {
     private void prepareMoveStudent() {
         Game game = view.getGameHandler().getModel();
         ArrayList<Island> islands = game.getIslands();
-        System.out.println(islands.size() + " - " + islandPanes.size());
+
+        selectedEntrance = null;
         for (int i = 0; i < islandPanes.size(); i++) {
             int finalI = i;
             islandPanes.get(i).setOnMouseClicked(mouseEvent -> {
@@ -712,6 +715,12 @@ public class GameController implements GUIController {
         }
 
         onfillSchoolboard.add(player -> {
+            // reset the current selection
+            selectedEntrance = null;
+            islandPanes.forEach(e -> e.setEffect(null));
+            List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setOnMouseClicked(null));
+            List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setEffect(null));
+
             // student can be selected only if this is my schoolboard!
             if (!player.equals(thisPlayer)) return;
 
@@ -742,21 +751,19 @@ public class GameController implements GUIController {
                     }
                 });
             }
+
             List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
                     .forEach(d ->
-                        d.setOnMouseClicked(mouseEvent -> {
-                            if (selectedEntrance != null) {
-
-                                Color color = imageViewToColor(selectedEntrance);
-                                GUI.getClientSocket().send(new MoveStudentMessage(color));
-                            } else {
-                                updateErrorMessage("You must select a student first");
-                            }
-                        })
+                            d.setOnMouseClicked(mouseEvent -> {
+                                if (selectedEntrance != null) {
+                                    Color color = imageViewToColor(selectedEntrance);
+                                    GUI.getClientSocket().send(new MoveStudentMessage(color));
+                                } else {
+                                    updateErrorMessage("You must select a student first");
+                                }
+                            })
                     );
         });
-
-
     }
 
     private void prepareMotherNature() {
@@ -799,6 +806,26 @@ public class GameController implements GUIController {
         usernameLabel.setText(thisPlayer.getUsername());
     }
 
+    private void resetBoard() {
+        // reset node to their initial value
+        nextTurnButton.setEffect(null);
+        islandsPane.getChildren().clear();
+        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setEffect(null));
+        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setOnMouseClicked(null));
+        selectedStudentCard = null;
+        selectedEntrance = null;
+
+        // update the schoolboardPlayer values
+        if(schoolboardPlayer == null){
+            schoolboardPlayer = thisPlayer;
+        }
+        schoolboardPlayer = view.getGameHandler().getModel().getPlayers()
+                .stream()
+                .filter(player -> player.getUsername().equals(schoolboardPlayer.getUsername()))
+                .findFirst().get();
+
+    }
+
     private void setupErrorMessage() {
         if (view.getErrorMessage() != null) {
             updateErrorMessage(view.getErrorMessage());
@@ -816,20 +843,20 @@ public class GameController implements GUIController {
     }
 
     private void setupAssistants() {
+        assistantLabelCards.forEach(x -> x.setText(""));
+
         for (Assistant assistant : Assistant.getAssistants(thisPlayer.getWizard())) {
             ImageView imageView = assistantCards.get(assistant.getPower() - 1);
             Label label = assistantLabelCards.get(assistant.getPower() - 1);
+
+            imageView.setY(0.0);
             Player player = view.getGameHandler().getModel().getPlayers()
                     .stream()
                     .filter(p -> assistant.equals(p.getCurrentAssistant()))
                     .findFirst().orElse(null);
             if(player != null){
-                label.setText(player.getUsername());
-            } else{
-                label.setText("");
+                label.setText(label.getText() + "\n"+ player.getUsername());
             }
-
-
 
             if (thisPlayer.getPlayerHand().contains(assistant)) {
                 imageView.setOnMouseClicked(mouseEvent ->
@@ -859,7 +886,6 @@ public class GameController implements GUIController {
     }
 
     private void updateSchoolboard() {
-        if(schoolboardPlayer == null) schoolboardPlayer = thisPlayer;
         fillSchoolboard(schoolboardPlayer);
         setSchoolBoardButtons(schoolboardPlayer);
     }
@@ -930,6 +956,7 @@ public class GameController implements GUIController {
         }
 
         // coins
+        coinsPane.getChildren().remove(1);
         Text coinNumber = new Text(String.valueOf(coins));
         coinNumber.getStyleClass().add("coinNumber");
         coinsPane.getChildren().add(coinNumber);
@@ -1019,9 +1046,12 @@ public class GameController implements GUIController {
         characterNameLabel.setText(characterName);
         characterDescriptionLabel.setText(description);
         if (checkMessage(new SelectedCharacterMessage(id), thisPlayer) == StatusCode.OK) {
-            activateCharacterButton.setOnMouseClicked(mouseEvent ->
-                GUI.getClientSocket().send(new SelectedCharacterMessage(id))
-            );
+            activateCharacterButton.setOnMouseClicked(mouseEvent -> {
+                GUI.getClientSocket().send(new SelectedCharacterMessage(id));
+                characterPane.setVisible(false);
+                mainPane.setEffect(null);
+            });
+            activateCharacterButton.setDisable(false);
         } else {
             activateCharacterButton.setDisable(true);
         }
@@ -1091,12 +1121,12 @@ public class GameController implements GUIController {
 
     public void onMouseEnteredAssistant(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(imageView.getY() - 50);
+        imageView.setY(-50);
     }
 
     public void onMouseExitedAssistant(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(imageView.getY() + 50);
+        imageView.setY(0);
     }
 
     public void addGlowEffect(MouseEvent event) {

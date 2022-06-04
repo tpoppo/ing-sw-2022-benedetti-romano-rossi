@@ -53,8 +53,16 @@ public class LobbyController implements GUIController {
     public void setup() {
         player_labels = List.of(player0, player1, player2);
         chosen_wizards = List.of(chosen_wizard0, chosen_wizard1, chosen_wizard2);
-
+        reset();
         updateLobby();
+    }
+
+    private void reset() {
+        mainPane.setDisable(false);
+        mainPane.setEffect(null);
+        background.setEffect(null);
+        wizard_grid.getChildren().clear();
+        select_wizard.setVisible(true);
     }
 
     public void startGame(ActionEvent actionEvent) {
@@ -121,7 +129,6 @@ public class LobbyController implements GUIController {
             mainPane.setEffect(null);
             background.setEffect(null);
             select_wizard.setVisible(false);
-            select_wizard.setDisable(false);
         }
 
         start_game.setDisable(!all_has_chosen || lobbyHandler.getPlayers().size() == 1);

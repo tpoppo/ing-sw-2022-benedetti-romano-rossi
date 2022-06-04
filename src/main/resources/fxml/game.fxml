@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
@@ -19,7 +27,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -82,21 +90,6 @@
             </Pane>
             <Pane fx:id="islandsPane" layoutX="14.0" layoutY="196.0" prefHeight="870.0" prefWidth="870.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
                <children>
-                  <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
-                     <image>
-                        <Image url="@../graphics/other/arrow_white.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="32.0" />
-                     </font>
-                  </Label>
-                  <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/pieces/mothernature/plant.png" />
-                     </image>
-                  </ImageView>
                   <StackPane layoutX="710.0" layoutY="720.0" prefHeight="137.0" prefWidth="135.0">
                      <children>
                         <ImageView fx:id="bagImage" fitHeight="126.0" fitWidth="115.0" preserveRatio="true">
@@ -114,6 +107,21 @@
                         </Text>
                      </children>
                   </StackPane>
+                  <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
+                     <image>
+                        <Image url="@../graphics/other/arrow_white.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/pieces/mothernature/plant.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
             <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
@@ -435,9 +443,6 @@
                   <Label fx:id="assistantLabel8" alignment="CENTER" contentDisplay="CENTER" layoutX="705.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
                   <Label fx:id="assistantLabel9" alignment="CENTER" contentDisplay="CENTER" layoutX="805.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
                   <Label fx:id="assistantLabel10" alignment="CENTER" contentDisplay="CENTER" layoutX="905.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-
-
-
 
                </children>
             </Pane>
