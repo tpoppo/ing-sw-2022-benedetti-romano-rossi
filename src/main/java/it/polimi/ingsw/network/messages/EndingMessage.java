@@ -24,17 +24,7 @@ public class EndingMessage extends ClientMessage {
             network_manager.addErrorMessage(lobby_player, "You game is not finished");
             return StatusCode.WRONG_STATE;
         }
-
-        // TODO: this will probably be useful later
-        MenuManager menuManager = MenuManager.getInstance();
-
-        for (ConnectionCEO subscriber : network_manager.getSubscribers()) {
-            menuManager.subscribe(subscriber);
-            subscriber.clean();
-        }
-        network_manager.getSubscribers().clear();
-        network_manager.destroy();
-        Server.getInstance().deleteNetworkManager(network_manager);
+        network_manager.safeDestroy();
 
         return StatusCode.OK;
     }

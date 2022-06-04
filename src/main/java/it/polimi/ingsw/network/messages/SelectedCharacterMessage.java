@@ -28,6 +28,12 @@ public class SelectedCharacterMessage extends ClientMessage {
             return StatusCode.WRONG_HANDLER;
         }
 
+        // you cannot be in the activated character state
+        if(gameHandler.getCurrentState() == GameState.ACTIVATE_CHARACTER){
+            network_manager.addErrorMessage(lobby_player, "At most one character can be activated each turn");
+            return StatusCode.WRONG_STATE;
+        }
+
         Game game = gameHandler.getModel();
 
         // Invalid player. Different players (from model and from socket)

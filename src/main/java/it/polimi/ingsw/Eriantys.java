@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import it.polimi.ingsw.view.GUI;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Eriantys {
@@ -16,12 +17,16 @@ public class Eriantys {
         if(args.length == 0) {
             System.out.println("Missing argument (server - cli - cliart - gui)");
         } else {
-            switch (args[0].toLowerCase()) {
-                case "server" -> runServer(args); // app server
-                case "cli" -> runCli(args); // app cli
-                case "cliart" -> runCLIArt(args); // app cli, but fancy
-                case "gui" -> runGUI(args); // app gui
-                default -> System.out.println("Invalid argument given: " + args[0]);
+            try {
+                switch (args[0].toLowerCase()) {
+                    case "server" -> runServer(args); // app server
+                    case "cli" -> runCli(args); // app cli
+                    case "cliart" -> runCLIArt(args); // app cli, but fancy
+                    case "gui" -> runGUI(args); // app gui
+                    default -> System.out.println("Invalid argument given: " + args[0]);
+                }
+            } catch (IOException e){
+                System.out.println("Cannot connect with the server");
             }
         }
     }
@@ -32,23 +37,24 @@ public class Eriantys {
         Server server = Server.getInstance();
     }
 
-    private static void runCli(String[] args){
+    private static void runCli(String[] args) throws IOException {
         ClientConfig clientConfig = parseInput(args, false);
         ClientSocket client_socket = new ClientSocket(clientConfig);
         CLI cli = new CLI(client_socket);
         cli.run();
     }
 
-    private static void runCLIArt(String[] args){
+    private static void runCLIArt(String[] args) throws IOException {
         ClientConfig clientConfig = parseInput(args, false);
         ClientSocket client_socket = new ClientSocket(clientConfig);
         CLIArt cli = new CLIArt(client_socket);
         cli.run();
     }
 
-    private static void runGUI(String[] args){
+    private static void runGUI(String[] args) throws IOException {
         System.out.println("Starting the GUI...\n");
         ClientConfig clientConfig = parseInput(args, false);
+
         GUI.setClientSocket(new ClientSocket(clientConfig));
         GUI.main(args);
     }
