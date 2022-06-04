@@ -2,18 +2,22 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ClientConfig;
 import it.polimi.ingsw.client.ClientSocket;
+import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.network.MenuManager;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.messages.ChooseWizardMessage;
 import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.JoinLobbyMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import it.polimi.ingsw.view.GUI;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +50,12 @@ public class AppTest {
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
-            ClientSocket client_socket = new ClientSocket(clientConfig);
+            ClientSocket client_socket = null;
+            try {
+                client_socket = new ClientSocket(clientConfig);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             CLI cli = new CLI(client_socket);
             cli.run();
         });
@@ -65,7 +74,12 @@ public class AppTest {
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
-            ClientSocket client_socket = new ClientSocket(clientConfig);
+            ClientSocket client_socket = null;
+            try {
+                client_socket = new ClientSocket(clientConfig);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             CLIArt cliArt = new CLIArt(client_socket);
             cliArt.run();
         });
@@ -87,38 +101,33 @@ public class AppTest {
                 ClientConfig clientConfig = new ClientConfig();
                 CLI cli;
                 clientConfig.setPort(TESTING_PORT);
+                ClientSocket clientSocket = null;
                 try {
-                    Thread.sleep(5*final_i);
-                } catch (InterruptedException e) {
+                    clientSocket = new ClientSocket(clientConfig);
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                ClientSocket clientSocket = new ClientSocket(clientConfig);
-                if(final_i % 2 == 0){
-                    cli = new CLIArt(clientSocket);
+
+                if (final_i % 2 == 0) {
+                    new CLIArt(clientSocket);
                 } else {
-                    cli = new CLI(clientSocket);
+                    new CLI(clientSocket);
                 }
-                String username = "username_"+final_i;
-                clientSocket.login(username);
-                try {
-                    Thread.sleep(5*final_i);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                String username = "username_" + Math.random();
+
+                if (final_i != 0)
+                    assertTrue(clientSocket.login(username));
+
+                // final_i not logged in
+                assertEquals(Server.getInstance().getPlayerList().contains(username), final_i != 0);
+
+                clientSocket.send(new JoinLobbyMessage(final_i / 3));
+                clientSocket.send(new CreateLobbyMessage(final_i % 5 + 2));
+                clientSocket.send(new CreateLobbyMessage(2));
+                for (int j = -1; j < 4; j++) {
+                    clientSocket.send(new ChooseWizardMessage(j));
                 }
-
-                assertTrue(Server.getInstance().getPlayerList().contains(username));
-
-                clientSocket.send(new JoinLobbyMessage(final_i / 5));
-                clientSocket.send(new CreateLobbyMessage(final_i % 3));
                 clientSocket.send(new StartGameMessage(final_i % 2 == 1));
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                assertEquals(0, MenuManager.getInstance().countSubscriber());
             });
         }
     }
@@ -131,11 +140,12 @@ public class AppTest {
             try{
                 runnable.run();
             } catch (Exception e){
+                e.printStackTrace(System.err);
                 exc.set(e);
             }
         });
         t.start();
-        Thread.sleep(100);
+        Thread.sleep(200);
         t.interrupt();
         assertNull(exc.get());
     }
