@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
@@ -27,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -88,7 +80,7 @@
                   </GridPane>
                </children>
             </Pane>
-            <Pane fx:id="islandsPane" layoutX="15.0" layoutY="180.0" prefHeight="889.0" prefWidth="865.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
+            <Pane fx:id="islandsPane" layoutX="14.0" layoutY="196.0" prefHeight="870.0" prefWidth="870.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
                <children>
                   <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
                      <image>
@@ -433,159 +425,115 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <Label fx:id="assistantLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="19.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="118.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel3" alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel4" alignment="CENTER" contentDisplay="CENTER" layoutX="318.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel5" alignment="CENTER" contentDisplay="CENTER" layoutX="418.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel6" alignment="CENTER" contentDisplay="CENTER" layoutX="518.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel7" alignment="CENTER" contentDisplay="CENTER" layoutX="618.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel8" alignment="CENTER" contentDisplay="CENTER" layoutX="718.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel9" alignment="CENTER" contentDisplay="CENTER" layoutX="818.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="assistantLabel10" alignment="CENTER" contentDisplay="CENTER" layoutX="918.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="assistantLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="19.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="benedar" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="118.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="ghero2025" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel3" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel4" alignment="CENTER" contentDisplay="CENTER" layoutX="313.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel5" alignment="CENTER" contentDisplay="CENTER" layoutX="412.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel6" alignment="CENTER" contentDisplay="CENTER" layoutX="511.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel7" alignment="CENTER" contentDisplay="CENTER" layoutX="609.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel8" alignment="CENTER" contentDisplay="CENTER" layoutX="705.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel9" alignment="CENTER" contentDisplay="CENTER" layoutX="805.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
+                  <Label fx:id="assistantLabel10" alignment="CENTER" contentDisplay="CENTER" layoutX="905.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
 
 
 
 
                </children>
             </Pane>
-            <Pane fx:id="charactersPane" layoutX="1082.0" layoutY="213.0" prefHeight="167.0" prefWidth="378.0">
+            <GridPane fx:id="charactersGrid" layoutX="1093.0" layoutY="221.0" prefHeight="152.0" prefWidth="357.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <GridPane fx:id="charactersGrid" layoutX="7.0" layoutY="9.0" prefHeight="152.0" prefWidth="357.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <Pane>
                      <children>
-                        <Pane>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/characters/Knight.jpg" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
                            <children>
-                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
                                  <image>
-                                    <Image url="@../graphics/characters/Knight.jpg" />
+                                    <Image url="@../graphics/other/coin.png" />
                                  </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
                               </ImageView>
-                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
-                                 <children>
-                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../graphics/other/coin.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </StackPane>
-                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
+                              <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Text>
                            </children>
-                        </Pane>
-                        <Pane GridPane.columnIndex="1">
-                           <children>
-                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../graphics/characters/Knight.jpg" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
-                                 <children>
-                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../graphics/other/coin.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </StackPane>
-                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
-                           </children>
-                        </Pane>
-                        <Pane GridPane.columnIndex="2">
-                           <children>
-                              <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../graphics/characters/Knight.jpg" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                              <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
-                                 <children>
-                                    <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../graphics/other/coin.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </StackPane>
-                              <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
-                           </children>
-                        </Pane>
+                        </StackPane>
+                        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
                      </children>
-                  </GridPane>
+                  </Pane>
+                  <Pane GridPane.columnIndex="1">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/characters/Knight.jpg" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                           <children>
+                              <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../graphics/other/coin.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </StackPane>
+                        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
+                     </children>
+                  </Pane>
+                  <Pane GridPane.columnIndex="2">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" layoutX="10.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/characters/Knight.jpg" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
+                           <children>
+                              <ImageView fitHeight="30.0" fitWidth="29.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../graphics/other/coin.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" text="5">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </StackPane>
+                        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="14.0" prefHeight="112.0" prefWidth="29.0" />
+                     </children>
+                  </Pane>
                </children>
-            </Pane>
+            </GridPane>
             <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0">
                <image>
                   <Image url="@../graphics/other/next.png" />
@@ -594,10 +542,13 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Label fx:id="errorMsg" layoutX="1013.0" layoutY="75.0" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
+            <Label fx:id="errorMsg" layoutX="1013.0" layoutY="75.0" onMouseClicked="#hideErrorLabel" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
                <font>
                   <Font size="16.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
          </children>
       </Pane>
