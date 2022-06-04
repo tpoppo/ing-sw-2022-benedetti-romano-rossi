@@ -40,6 +40,8 @@ public class Bard extends Character{
             try {
                 entranceStudents.moveTo(diningStudents, swap_list.get(i));
                 diningStudents.moveTo(entranceStudents, swap_list.get(i + 1));
+                game.updateProfessor(game.getCurrentPlayer(), swap_list.get(i));
+
             } catch (EmptyMovableException e) {
                 throw new BadPlayerChoiceException();
             }

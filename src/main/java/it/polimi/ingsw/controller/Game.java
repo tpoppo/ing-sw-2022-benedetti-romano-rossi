@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.characters.Characters;
 import it.polimi.ingsw.model.characters.PlayerChoices;
-import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.utils.exceptions.*;
 
 import java.io.*;
@@ -303,38 +302,8 @@ public class Game implements Serializable{
             }
         }
 
-        // check whether the professor has changed
-        Professors professorsTo = getCurrentPlayer().getProfessors();
-        boolean professor_in_game = false;
-        for(Player player : players) {
-            if (player.getProfessors().contains(color)) {
-                professor_in_game = true;
-            }
-        }
+        updateProfessor(getCurrentPlayer(), color);
 
-
-        if(!professor_in_game){
-            professorsTo.add(color);
-        }else{
-            Player playerFrom = null;
-            for(Player player : players){
-                if(player.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()
-                        && player.getProfessors().contains(color)
-                        && !player.equals(getCurrentPlayer())) {
-                    playerFrom = player;
-                }
-            }
-            if(playerFrom != null){
-                Professors professorsFrom = playerFrom.getProfessors();
-                try {
-                    professorsFrom.moveTo(professorsTo, color);
-                } catch (EmptyMovableException e) {
-                    e.printStackTrace(); // It should be impossible
-                }
-                playerFrom.getSchoolBoard().setProfessors(professorsFrom);
-            }
-        }
-        getCurrentPlayer().getSchoolBoard().setProfessors(professorsTo);
     }
 
     /**
@@ -514,6 +483,32 @@ public class Game implements Serializable{
 
     public void activateCharacter(Character character, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         character.activate(this, playerChoices);
+    }
+
+    public void updateProfessor(Player current_player, Color color){
+        Students dining_students = current_player.getSchoolBoard().getDiningStudents();
+
+        // check whether the professor is in game
+        Professors professorsTo = current_player.getProfessors();
+        Player professor_owner = players.stream()
+                .filter(player -> player.getProfessors().contains(color))
+                .findFirst().orElse(null);
+
+        if(professor_owner == null){
+            professorsTo.add(color);
+        } else if(!professor_owner.equals(current_player)) {
+            if(professor_owner.getSchoolBoard().getDiningStudents().get(color) < dining_students.get(color) + gameModifiers.getProfessorModifier()){
+                Professors professorsFrom = professor_owner.getProfessors();
+                try {
+                    professorsFrom.moveTo(professorsTo, color);
+                } catch (EmptyMovableException e) {
+                    e.printStackTrace(); // It should be impossible
+                }
+                professor_owner.getSchoolBoard().setProfessors(professorsFrom);
+            }
+        }
+
+        current_player.getSchoolBoard().setProfessors(professorsTo);
     }
 
     /**
