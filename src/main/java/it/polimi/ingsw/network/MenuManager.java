@@ -113,4 +113,6 @@ public class MenuManager {
     }
 
     public int countSubscriber() {return subscribers.size();}
+
+
 }

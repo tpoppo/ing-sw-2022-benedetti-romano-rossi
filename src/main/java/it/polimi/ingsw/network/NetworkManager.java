@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +38,7 @@ public class NetworkManager {
         count++;
         message_queue = new LinkedBlockingQueue<>();
         errorMessages = new HashMap<>();
-        subscribers = new HashSet<>();
+        subscribers = Collections.synchronizedSet(new HashSet<>());
 
         current_handler = HandlerType.LOBBY;
         lobby_handler = new LobbyHandler(ID, max_players);
@@ -54,7 +52,7 @@ public class NetworkManager {
         count++;
         message_queue = new LinkedBlockingQueue<>();
         errorMessages = new HashMap<>();
-        subscribers = new HashSet<>();
+        subscribers = Collections.synchronizedSet(new HashSet<>());
 
         current_handler = HandlerType.GAME;
         this.game_handler = gameHandler;
@@ -171,6 +169,20 @@ public class NetworkManager {
         message_queue.clear();
         current_handler = null;
         deleteSaveFile();
+        Server.getInstance().deleteNetworkManager(this);
+    }
+
+    public void safeDestroy(){
+        MenuManager menuManager = MenuManager.getInstance();
+
+        ArrayList<ConnectionCEO> subscribers = new ArrayList<>(getSubscribers());
+        getSubscribers().clear();
+        for (ConnectionCEO subscriber : subscribers) {
+            menuManager.subscribe(subscriber);
+            MenuManager.getInstance().addErrorMessage(subscriber.getPlayer(), "A player disconnected. The game has been terminated");
+            subscriber.clean();
+        }
+        destroy();
     }
 
     // sends an updated viewContent to all the subscribers

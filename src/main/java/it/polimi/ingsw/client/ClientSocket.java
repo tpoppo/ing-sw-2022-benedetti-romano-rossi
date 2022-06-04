@@ -23,13 +23,9 @@ public class ClientSocket {
     public final Object mutex = new Object();
 
 
-    public ClientSocket(ClientConfig client_config){
+    public ClientSocket(ClientConfig client_config) throws IOException {
         this.client_config = client_config;
-        try {
             setup();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void setup() throws IOException {
@@ -66,8 +62,9 @@ public class ClientSocket {
             String response = (String) input_stream.readObject();
 
             if(response.equals("KO")) return false;
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | ClassNotFoundException | ClassCastException e) {
+            LOGGER.log(Level.WARNING, "Invalid string parsing: {0}", new Object[]{e});
+            return false;
         }
         this.username = username;
 
@@ -84,6 +81,7 @@ public class ClientSocket {
                     }
 
                     LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", new Object[]{e});
+                    System.exit(0);
                 } catch (ClassNotFoundException e){
                     LOGGER.log(Level.INFO, "Invalid message: {0}", new Object[]{e});
                 }

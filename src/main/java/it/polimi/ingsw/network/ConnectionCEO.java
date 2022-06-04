@@ -67,20 +67,26 @@ public class ConnectionCEO extends Thread {
 
     private boolean login() throws IOException {
         // The first message must contain the username chosen by the client
-        boolean logged_in;
-        String username;
+        boolean logged_in = false;
+        String username = "";
         try {
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
             do{
-                username = (String) inputStream.readObject();
-                logged_in = true;
-                if(!server.checkUsername(username)) {
-                    logged_in = false;
-                    LOGGER.log(Level.INFO, "{0} tried to connect. Username already taken", username);
-                    outputStream.writeObject("KO");
+                Object objectUsername = (Object) inputStream.readObject();
+                if(objectUsername instanceof String){
+                    username = (String) objectUsername;
+                    logged_in = true;
+                    if(!server.checkUsername(username)) {
+                        logged_in = false;
+                        LOGGER.log(Level.INFO, "{0} tried to connect. Username already taken", username);
+                        outputStream.writeObject("KO");
+                    }
+                } else {
+                    LOGGER.log(Level.SEVERE, "Invalid username. Given: {0}", new Object[]{objectUsername});
                 }
+
             }while(!logged_in);
 
             outputStream.writeObject("OK");
@@ -102,17 +108,21 @@ public class ConnectionCEO extends Thread {
             MenuManager menuManager = MenuManager.getInstance();
 
             // Receiving and handling the messages
-            ClientMessage message;
-            while((message = (ClientMessage) inputStream.readObject()) != null){
-                LOGGER.log(Level.INFO, message.toString());
-                MessageEnvelope envelope = new MessageEnvelope(player, message, this);
+            Object objectMessage;
+            while((objectMessage = inputStream.readObject()) != null){
+                if(objectMessage instanceof ClientMessage message) {
+                    LOGGER.log(Level.INFO, message.toString());
+                    MessageEnvelope envelope = new MessageEnvelope(player, message, this);
 
-                switch (message.getMessageType()) {
-                    case MENU -> menuManager.addMessage(envelope);
-                    case GAME -> {
-                        if(networkManager != null)
-                            networkManager.addMessage(envelope);
+                    switch (message.getMessageType()) {
+                        case MENU -> menuManager.addMessage(envelope);
+                        case GAME -> {
+                            if (networkManager != null)
+                                networkManager.addMessage(envelope);
+                        }
                     }
+                } else {
+                    LOGGER.log(Level.SEVERE, "Invalid message. Given: {0}", new Object[]{objectMessage});
                 }
             }
 
@@ -123,29 +133,40 @@ public class ConnectionCEO extends Thread {
             inputStream.close();
             clientSocket.close();
         } catch (IOException | ClassNotFoundException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
+            LOGGER.log(Level.WARNING, "Invalid data ({0})", new Object[]{e.toString()});
         } finally {
+
+            try {
+                outputStream.close();
+                inputStream.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Cannot close the connection {0}", new Object[]{e});
+            }
+
 
             // Removes the player from the global player list of the server
             boolean res = server.getPlayerList().remove(player.getUsername());
             MenuManager.getInstance().unsubscribe(this);
-            if(networkManager != null) networkManager.unsubscribe(this);
-
+            if(networkManager != null) { // destroy the network manager and move all the player
+                networkManager.safeDestroy();
+                // networkManager.unsubscribe(this); for debugging
+            }
             LOGGER.log(Level.INFO, "Player {0} removed? {1}.", new Object[]{player.getUsername(), res});
-
         }
     }
 
-    public void sendViewContent(ViewContent viewContent){
+     public boolean sendViewContent(ViewContent viewContent){
         try {
             outputStream.reset();
             outputStream.writeObject(viewContent);
             outputStream.flush();
 
             LOGGER.log(Level.FINE, viewContent.toString());
+            return true;
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Cannot send: {0}. {1}", new Object[]{viewContent, e});
-            // throw new RuntimeException(e);
+            return false;
         }
     }
 
