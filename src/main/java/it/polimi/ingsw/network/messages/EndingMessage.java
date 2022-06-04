@@ -25,6 +25,7 @@ public class EndingMessage extends ClientMessage {
             return StatusCode.WRONG_STATE;
         }
 
+        // TODO: this will probably be useful later
         MenuManager menuManager = MenuManager.getInstance();
 
         for (ConnectionCEO subscriber : network_manager.getSubscribers()) {

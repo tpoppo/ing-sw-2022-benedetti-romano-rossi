@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.Constants.NEWLINE;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class CLI {
@@ -223,7 +224,7 @@ public class CLI {
     }
 
     protected void printGame(){
-        print(ansi().a(Constants.ERIANTYS.replaceAll("\n", Constants.NEWLINE)), 5, 10);
+        print(ansi().a(Constants.ERIANTYS.replaceAll("\n", NEWLINE)), 5, 10);
 
         Game model = view.getGameHandler().getModel();
 
@@ -274,12 +275,12 @@ public class CLI {
 
         Game model = view.getGameHandler().getModel();
 
-        playersStr.append(ansi().bold().a("PLAYERS").reset()).append(Constants.NEWLINE);
+        playersStr.append(ansi().bold().a("PLAYERS").reset()).append(NEWLINE);
 
         int count = 0;
         ArrayList<Player> players = model.getPlayers();
         for(Player player : players) {
-            playersStr.append(count).append(": ").append(player.getUsername()).append(Constants.NEWLINE);
+            playersStr.append(count).append(": ").append(player.getUsername()).append(NEWLINE);
 
             count++;
         }
@@ -302,7 +303,7 @@ public class CLI {
                     .reset()
                     .a(model.getCurrentPlayer().getUsername())
             );
-        stateText.append(Constants.NEWLINE);
+        stateText.append(NEWLINE);
 
         String instruction = "null";
         StringBuilder availableCommands = new StringBuilder();
@@ -314,42 +315,42 @@ public class CLI {
                 instruction = "Play an assistant: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.PLAY_ASSISTANT))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
             case CHOOSE_CLOUD -> {
                 instruction = "Choose a cloud: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.CHOOSE_CLOUD))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
             case MOVE_MOTHER_NATURE -> {
                 instruction = "Move mother nature: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_MOTHER_NATURE))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
             case MOVE_STUDENT -> {
                 instruction = "Move a student (" + gameHandler.getStudentMoves() + " left): ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.MOVE_STUDENT))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
             case ACTIVATE_CHARACTER -> {
                 instruction = "Activate a character: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.ACTIVATE_CHARACTER))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
             case ENDING -> {
                 instruction = "The end: ";
                 gameCommands.stream()
                         .filter(command -> command.getAdmittedStates().contains(GameState.ENDING))
-                        .map(command -> command.getSimpleInfo() + Constants.NEWLINE)
+                        .map(command -> command.getSimpleInfo() + NEWLINE)
                         .forEach(availableCommands::append);
             }
         }
@@ -360,7 +361,7 @@ public class CLI {
             stateText.append(ansi().fgBrightGreen().a("DONE!").reset());
         else
             stateText.append(ansi().fgBrightYellow().a("IN PROGRESS...").reset());
-        stateText.append(Constants.NEWLINE);
+        stateText.append(NEWLINE);
         stateText.append(availableCommands);
 
         return stateText.toString();
@@ -371,7 +372,7 @@ public class CLI {
 
         Game model = view.getGameHandler().getModel();
 
-        cloudsText.append(ansi().bold().a("CLOUDS").reset()).append(Constants.NEWLINE);
+        cloudsText.append(ansi().bold().a("CLOUDS").reset()).append(NEWLINE);
 
         int count = 0;
         for(Students cloud : model.getClouds()){
@@ -386,7 +387,7 @@ public class CLI {
                 }
             }
 
-            cloudsText.append(Constants.NEWLINE);
+            cloudsText.append(NEWLINE);
             count++;
         }
 
@@ -399,7 +400,7 @@ public class CLI {
 
         Game model = view.getGameHandler().getModel();
 
-        islandStr.append(ansi().bold().a("ISLANDS").reset()).append(Constants.NEWLINE);
+        islandStr.append(ansi().bold().a("ISLANDS").reset()).append(NEWLINE);
 
         for(int i=0; i<model.getIslands().size(); i++){
             Island island = model.getIslands().get(i);
@@ -423,7 +424,7 @@ public class CLI {
                     "" :
                     island.getOwner().getUsername() + " - Towers: " + island.getNumTowers()
             );
-            islandStr.append(Constants.NEWLINE);
+            islandStr.append(NEWLINE);
         }
 
         return islandStr.toString();
@@ -443,7 +444,7 @@ public class CLI {
         if(!schoolBoardPlayerUsername.equals(username))
             boardStr.append(" (").append(schoolBoardPlayerUsername).append(")");
 
-        boardStr.append(Constants.NEWLINE);
+        boardStr.append(NEWLINE);
 
         Students entranceStudents = player.getSchoolBoard().getEntranceStudents();
         Students diningStudents = player.getSchoolBoard().getDiningStudents();
@@ -455,16 +456,16 @@ public class CLI {
         // [Expert mode] Coins
         if(model.getExpertMode())
             boardStr.append("\t\t\t").append(drawCoins(player));
-        boardStr.append(Constants.NEWLINE);
+        boardStr.append(NEWLINE);
 
         boardStr.append("Entrance: ");
         for(Color studentColor : entranceStudents.keySet()){
             if(entranceStudents.get(studentColor) > 0)
                 boardStr.append(ansi().fgBright(Ansi.Color.valueOf(studentColor.toString())).a(entranceStudents.get(studentColor) + " ").reset());
         }
-        boardStr.append(Constants.NEWLINE).append(Constants.NEWLINE);
+        boardStr.append(NEWLINE).append(NEWLINE);
 
-        boardStr.append("Dining room:").append(Constants.NEWLINE).append(Constants.NEWLINE);
+        boardStr.append("Dining room:").append(NEWLINE).append(NEWLINE);
         for(Color studentColor : diningStudents.keySet()){
             boardStr.append(ansi().bg(Ansi.Color.valueOf(studentColor.toString())).fg(Ansi.Color.BLACK));
 
@@ -485,7 +486,7 @@ public class CLI {
                 boardStr.append(" P");
             else boardStr.append("  ");
 
-            boardStr.append(ansi().a(Constants.NEWLINE + Constants.NEWLINE).reset());
+            boardStr.append(ansi().a(NEWLINE + NEWLINE).reset());
         }
 
         return boardStr.toString();
@@ -516,7 +517,7 @@ public class CLI {
                 .filter(player -> player.getCurrentAssistant() != null)
                 .collect(Collectors.toMap(LobbyPlayer::getUsername, Player::getCurrentAssistant));
 
-        assistantStr.append(ansi().bold().a("ASSISTANTS").reset()).append(Constants.NEWLINE);
+        assistantStr.append(ansi().bold().a("ASSISTANTS").reset()).append(NEWLINE);
         int count = 0;
         // iterating on all assistants
         for(Assistant assistant : Assistant.getAssistants(1)){
@@ -544,7 +545,7 @@ public class CLI {
                         .toList();
                 assistantStr.append(" ").append(usernames);
             }
-            assistantStr.append(Constants.NEWLINE);
+            assistantStr.append(NEWLINE);
         }
 
         return assistantStr.toString();
@@ -567,7 +568,7 @@ public class CLI {
         Game model = view.getGameHandler().getModel();
 
         ArrayList<Character> characters = model.getCharacters();
-        charStr.append(ansi().bold().a("CHARACTERS").reset()).append(Constants.NEWLINE);
+        charStr.append(ansi().bold().a("CHARACTERS").reset()).append(NEWLINE);
 
         int count = 0;
         for(Character character : characters){
@@ -593,7 +594,7 @@ public class CLI {
             if(character.getNoEntryTiles() > 0)
                 charStr.append(ansi().bg(Ansi.Color.RED).fg(Ansi.Color.BLACK).a(character.getNoEntryTiles()).reset());
 
-            charStr.append(Constants.NEWLINE);
+            charStr.append(NEWLINE);
             count++;
         }
 
@@ -606,7 +607,7 @@ public class CLI {
         Game model = view.getGameHandler().getModel();
 
         int position = 10;
-        print(Constants.CHARACTERS.replaceAll("\n", Constants. NEWLINE), 8, 40);
+        print(Constants.CHARACTERS.replaceAll("\n", NEWLINE), 8, 40);
         for(Character character : model.getCharacters()){
             StringBuilder characterCard = new StringBuilder();
 
@@ -619,7 +620,7 @@ public class CLI {
             characterCard.append("EFFECT: ").append(character.getDescription());
             characterCard.append("\n\n");
 
-            print(addRectangle(characterCard).replaceAll("\n", Constants.NEWLINE), 20, position);
+            print(addRectangle(characterCard).replaceAll("\n", NEWLINE), 20, position);
             position += 50;
         }
 
@@ -636,11 +637,11 @@ public class CLI {
             endString.append(ansi().fgGreen().a(Constants.VICTORY).reset());
         }else {
             endString.append(ansi().fgBrightRed().a(Constants.DEFEAT).reset());
-            endString.append(Constants.NEWLINE).append(Constants.NEWLINE);
+            endString.append(NEWLINE).append(NEWLINE);
             endString.append("\t\t\t\t\t\tWinner: ").append(model.winner().getUsername());
         }
 
-        endString.append(Constants.NEWLINE).append(Constants.NEWLINE).append(Constants.NEWLINE);
+        endString.append(NEWLINE).append(NEWLINE).append(NEWLINE);
         endString.append("\t\t\t\t\tPress Enter to continue......");
 
         return endString.toString();
@@ -652,21 +653,21 @@ public class CLI {
         StringBuilder helpText = new StringBuilder();
         List<Command> commands = CommandHandler.getCommands();
 
-        helpText.append(ansi().bold().a(Constants.HELP.replaceAll("\n", Constants.NEWLINE)).reset());
-        helpText.append(Constants.NEWLINE).append(Constants.NEWLINE);
+        helpText.append(ansi().bold().a(Constants.HELP.replaceAll("\n", NEWLINE)).reset());
+        helpText.append(NEWLINE).append(NEWLINE);
 
         for(CommandType commandType : CommandType.values()){
-            helpText.append(ansi().bold().a(commandType.toString()).reset()).append(Constants.NEWLINE);
+            helpText.append(ansi().bold().a(commandType.toString()).reset()).append(NEWLINE);
             commands.stream()
                     .filter(command -> command.getCommandType().equals(commandType))
                     .forEach(command -> {
                         helpText.append(command.getName()).append(" ");
                         command.getArguments().forEach(argument -> helpText.append("[" + argument + "] "));
                         helpText.append(ansi().cursorToColumn(52).a(CommandHandler.normalizeDescription(command)));
-                        helpText.append(Constants.NEWLINE);
+                        helpText.append(NEWLINE);
                     });
-            helpText.append(Constants.NEWLINE);
-            helpText.append(Constants.NEWLINE);
+            helpText.append(NEWLINE);
+            helpText.append(NEWLINE);
         }
 
         print(helpText.toString(), 5, 11);
@@ -721,8 +722,8 @@ public class CLI {
     protected void print(String s, int row, int column) {
         out.print(ansi().cursor(row, column).a(
                         s.replaceAll(
-                                Constants.NEWLINE,
-                                ansi().a(Constants.NEWLINE).cursorRight(column - 1).toString()
+                                NEWLINE,
+                                ansi().a(NEWLINE).cursorRight(column - 1).toString()
                         )
                 )
         );

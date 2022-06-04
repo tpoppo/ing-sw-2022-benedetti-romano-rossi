@@ -23,7 +23,6 @@ public class ClientSocket {
     public final Object mutex = new Object();
 
 
-
     public ClientSocket(ClientConfig client_config){
         this.client_config = client_config;
         try {
@@ -81,7 +80,7 @@ public class ClientSocket {
                     try {
                         closeConnection();
                     } catch (IOException ex) {
-                        LOGGER.log(Level.SEVERE, "Cannot closed: {0}", new Object[]{ex});
+                        LOGGER.log(Level.SEVERE, "Cannot close: {0}", new Object[]{ex});
                     }
 
                     LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", new Object[]{e});

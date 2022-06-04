@@ -45,6 +45,9 @@ public class ConnectionCEO extends Thread {
         LOGGER.log(Level.INFO, "Connection established with {0}", player.getUsername());
 
         if((networkManager = server.findPlayerLocation(player)) != null) {
+            // this assumes that if a networkManager is found, it is in the GAME state,
+            // as savefiles are only created by networkmanager is the GAME state
+
             networkManager.getGameHandler().getModel().getPlayers().stream()
                             .filter(player -> player.getUsername().equals(this.player.getUsername()))
                             .findFirst()

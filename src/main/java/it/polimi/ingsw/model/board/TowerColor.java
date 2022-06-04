@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.guicontroller;
+package it.polimi.ingsw.model.board;
 
 public enum TowerColor {
     WHITE,
