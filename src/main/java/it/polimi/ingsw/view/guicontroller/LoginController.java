@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class LoginController {
+public class LoginController implements GUIController{
     @FXML
     private TextField usernameField;
     @FXML
@@ -39,5 +39,10 @@ public class LoginController {
     public void checkKeyPressed(KeyEvent keyEvent){
         if(keyEvent.getCode().equals(KeyCode.ENTER))
             login();
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

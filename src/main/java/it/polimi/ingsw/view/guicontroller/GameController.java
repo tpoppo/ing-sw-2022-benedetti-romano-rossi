@@ -13,7 +13,6 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -29,88 +28,58 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static it.polimi.ingsw.view.GUI.schoolboardPlayer;
 
-public class GameController implements Initializable {
-    @FXML
-    private Pane mainPane;
-    @FXML
-    private GridPane entranceGrid;
-    @FXML
-    private GridPane greenDining, redDining, yellowDining, magentaDining, cyanDining;
-    @FXML
-    private GridPane professorsGrid;
-    @FXML
-    private GridPane towersGrid;
-    @FXML
-    private GridPane schoolboardButtonsGrid;
-    @FXML
-    private Label turnLabel;
-    @FXML
-    private Label actionLabel;
-    @FXML
-    private Label usernameLabel;
-    @FXML
-    private ImageView assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10;
-    @FXML
-    private Label assistantLabel1, assistantLabel2, assistantLabel3, assistantLabel4, assistantLabel5, assistantLabel6, assistantLabel7, assistantLabel8, assistantLabel9, assistantLabel10;
-    @FXML
-    private ImageView nextTurnButton;
-    @FXML
-    private GridPane playOrderGrid;
-    @FXML
-    private Label errorMsg;
-    @FXML
-    private Text bagCapacityText;
+public class GameController implements GUIController {
+    protected static final String PIECE_CLASS = "piece";
+    protected  static final String BORDERED_TEXT = "borderedText";
+
+    @FXML private Pane mainPane;
+    @FXML private Pane islandsPane;
+
+    @FXML private GridPane playOrderGrid;
+    @FXML private Text bagCapacityText;
+
+    @FXML private GridPane entranceGrid;
+    @FXML private GridPane greenDining, redDining, yellowDining, magentaDining, cyanDining;
+    @FXML private GridPane professorsGrid;
+    @FXML private GridPane towersGrid;
+    @FXML private GridPane schoolboardButtonsGrid;
+
+    @FXML private Label turnLabel, actionLabel, usernameLabel;
+    @FXML private ImageView nextTurnButton;
+    @FXML private Label errorMsg;
+
+    @FXML private ImageView assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10;
+    @FXML private Label assistantLabel1, assistantLabel2, assistantLabel3, assistantLabel4, assistantLabel5, assistantLabel6, assistantLabel7, assistantLabel8, assistantLabel9, assistantLabel10;
 
     // expert mode components
-    @FXML
-    private Pane charactersPane;
-    @FXML
-    private StackPane coinsPane;
-    @FXML
-    private GridPane charactersGrid;
-    @FXML
-    private Pane characterPane;
-    @FXML
-    private ImageView characterImage;
-    @FXML
-    private Label characterNameLabel;
-    @FXML
-    private Label characterDescriptionLabel;
-    @FXML
-    private Text characterCostText;
-    @FXML
-    private VBox characterStuff;
-    @FXML
-    private Button activateCharacterButton;
-    @FXML
-    private ImageView closeCharacterPaneButton;
-    @FXML
-    private ImageView motherNature;
-    @FXML
-    private ImageView endingScreen;
+    @FXML private StackPane coinsPane;
+    @FXML private GridPane charactersGrid;
+    @FXML private Pane characterPane;
 
-    @FXML
-    private Pane islandsPane;
+    @FXML private ImageView characterImage;
+    @FXML private Label characterNameLabel, characterDescriptionLabel;
+    @FXML private Text characterCostText;
+    @FXML private VBox characterStuff;
+    @FXML private Button activateCharacterButton;
+    @FXML private ImageView closeCharacterPaneButton;
 
-    @FXML
-    private Pane colorSelectionPane;
-    @FXML
-    private ImageView chooseRed, chooseYellow, chooseGreen, chooseCyan, chooseMagenta;
+    @FXML private Pane colorSelectionPane;
+    @FXML private ImageView chooseRed, chooseYellow, chooseGreen, chooseCyan, chooseMagenta;
+
+    @FXML private ImageView motherNature;
+    @FXML private ImageView endingScreen;
 
     private ViewContent view;
     private List<ImageView> assistantCards;
     private Player thisPlayer;
-    private Player schoolboardPlayer;
     private Map<Player, TowerColor> playerTowerColorMap;
     private ImageView selectedEntrance;
     private List<Pane> cloudPanes;
-
-    private final String PIECE_CLASS = "piece";
 
     // FIXME: split class
     private ImageView selectedStudentCard;
@@ -122,13 +91,11 @@ public class GameController implements Initializable {
     private Map<Color, ImageView> chooseColor;
     private List<Label> assistantLabelCards;
     private HashMap<Integer, VBox> characterStuffSmallMap;
-
     private ArrayList<Consumer<Player>> onfillSchoolboard;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void setup() {
         this.view = GUI.getView();
-        ViewContent view = GUI.getView();
         System.out.println(view);
 
         GameHandler gameHandler = view.getGameHandler();
@@ -144,7 +111,6 @@ public class GameController implements Initializable {
         selectedOnEntrance = new ArrayList<>();
         selectedOnCard = new ArrayList<>();
         thisPlayer = game.usernameToPlayer(GUI.getUsername());
-        schoolboardPlayer = thisPlayer;
         islandPanes = new ArrayList<>();
         characterStuffSmallMap = new HashMap<>();
         onfillSchoolboard = new ArrayList<>();
@@ -192,18 +158,20 @@ public class GameController implements Initializable {
         for (int i = 0; i < islands.size(); i++) {
             // every island has its own pane
             Pane islandPane = new Pane();
-            List<Node> studentNodes = new ArrayList<>();
+            islandPane.setCursor(Cursor.HAND);
+            List<Node> islandTopping = new ArrayList<>();
             int islandSize = islands.get(i).getNumIslands();
 
             // adding island image
-            ImageView islandImage = new ImageView("/graphics/islands/" + i % 3 + ".png");
+            ImageView islandImage = new ImageView();
             Image image = new Image("/graphics/islands/" + i % 3 + ".png");
             islandImage.setImage(image);
 
             // FIXME: cut island images so that they are standard (possibly in a square)
 
-            int dimX = (int) (0.4 * image.getWidth()) * islandSize; // FIXME: choose a better scale factor
-            int dimY = (int) (0.4 * image.getHeight()) * islandSize;
+            double scaleFactor = islandSize * image.getWidth() / 10 - image.getWidth() / 10;
+            int dimX = (int) (0.4 * image.getWidth() + scaleFactor); // FIXME: choose a better scale factor
+            int dimY = (int) (0.4 * image.getHeight() + scaleFactor);
             islandImage = resizeImageView(islandImage, dimX, dimY);
 
             islandPane.getChildren().add(islandImage);
@@ -216,6 +184,8 @@ public class GameController implements Initializable {
                     presentStudents.put(color, quantity);
             });
 
+            presentStudents.forEach((color, quantity) -> System.out.println(color + " " + quantity));
+
             if (presentStudents.keySet().size() > 0) {
                 // creating a stackPane with image + quantity for each student color present
                 for (Color studentColor : presentStudents.keySet()) {
@@ -227,14 +197,14 @@ public class GameController implements Initializable {
                     studentImage.getStyleClass().add(PIECE_CLASS);
 
                     Text studentNumber = new Text(String.valueOf(numStudents));
-                    studentNumber.getStyleClass().add("borderedText");
+                    studentNumber.getStyleClass().add(BORDERED_TEXT);
                     // FIXME: resize text
 
                     studentStackPane.setPrefSize(studentImage.getFitWidth(), studentImage.getFitHeight());
                     studentStackPane.getChildren().add(studentImage);
                     studentStackPane.getChildren().add(studentNumber);
 
-                    studentNodes.add(studentStackPane);
+                    islandTopping.add(studentStackPane);
                 }
 
                 // adding towers
@@ -248,7 +218,7 @@ public class GameController implements Initializable {
                     towerImage.getStyleClass().add(PIECE_CLASS);
 
                     Text towerNumber = new Text(String.valueOf(numTowers));
-                    towerNumber.getStyleClass().add("borderedText");
+                    towerNumber.getStyleClass().add(BORDERED_TEXT);
                     // FIXME: resize text
 
                     towerStackPane.getChildren().add(towerImage);
@@ -267,14 +237,13 @@ public class GameController implements Initializable {
 
                 // adding all the pieces on top of the islandPane
                 double radius = islandPane.getBoundsInParent().getWidth() / 4;
-                placeNodes(islandPane, studentNodes, radius);
+                placeNodes(islandPane, islandTopping, radius);
+            }
 
                 // adding the updated islandPane to the list
                 islandNodes.add(islandPane);
                 islandPanes.add(islandPane);
             }
-
-        }
 
         // making a regular polygon with the provided nodes in the given container
         double radius = islandsPane.getBoundsInParent().getWidth() * 2 / 3 / 2;
@@ -287,6 +256,7 @@ public class GameController implements Initializable {
 
         for (Students cloud : model.getClouds()) {
             Pane cloudPane = new Pane();
+            cloudPane.setCursor(Cursor.HAND);
             ImageView cloudImage = new ImageView("graphics/islands/cloud.png");
             cloudImage = resizeImageView(cloudImage, 128, 128); // TODO: parametrize these
 
@@ -305,7 +275,7 @@ public class GameController implements Initializable {
                         studentImage.getStyleClass().add(PIECE_CLASS);
 
                         Text quantity = new Text(String.valueOf(cloud.get(key)));
-                        quantity.getStyleClass().add("borderedText");
+                        quantity.getStyleClass().add(BORDERED_TEXT);
 
                         cloudStackPane.getChildren().add(studentImage);
                         cloudStackPane.getChildren().add(quantity);
@@ -344,6 +314,7 @@ public class GameController implements Initializable {
             coinText.setText(String.valueOf(character.getCost()));
 
             VBox characterStuffSmall = (VBox) ((Pane) charactersGrid.getChildren().get(count)).getChildren().get(2);
+            characterStuffSmall.getChildren().clear();
             characterStuffSmallMap.put(id, characterStuffSmall);
             characterStuffSmall.setSpacing(3);
 
@@ -453,9 +424,7 @@ public class GameController implements Initializable {
         } else {
             endingScreen.setImage(new Image("graphics/other/defeat.png"));
         }
-        endingScreen.setOnMouseClicked(mouseEvent -> {
-            GUI.getClientSocket().send(new EndingMessage());
-        });
+        endingScreen.setOnMouseClicked(mouseEvent -> GUI.getClientSocket().send(new EndingMessage()));
         endingScreen.setVisible(true);
     }
 
@@ -529,8 +498,8 @@ public class GameController implements Initializable {
                     ImageView imageView = (ImageView) node;
                     imageView.setOnMouseClicked(e -> {
                         if (selectedStudentCard == imageView) {
-                            selectedStudentCard = null;
                             selectedStudentCard.setEffect(null);
+                            selectedStudentCard = null;
                             islandPanes.forEach(island -> island.setEffect(null));
                         } else {
                             if (selectedStudentCard != null) {
@@ -642,7 +611,6 @@ public class GameController implements Initializable {
             }
 
             case SWAP_DINING_ENTRANCE -> {
-
                 // it wants up to 2 students from the entrance and up to 2 students from the entrance
                 onfillSchoolboard.add(player -> {
                     // setup global variables
@@ -714,8 +682,8 @@ public class GameController implements Initializable {
                             PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
                             for (int i = 0; i < selectedOnDining.size(); i++) {
                                 playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
-                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnDining.get(i)));
-                            }
+                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnDining.get(i)));}
+
                             GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
                         } else {
                             updateErrorMessage("You must select the same number of students");
@@ -775,7 +743,7 @@ public class GameController implements Initializable {
                 });
             }
             List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining)
-                    .forEach(d -> {
+                    .forEach(d ->
                         d.setOnMouseClicked(mouseEvent -> {
                             if (selectedEntrance != null) {
 
@@ -784,25 +752,23 @@ public class GameController implements Initializable {
                             } else {
                                 updateErrorMessage("You must select a student first");
                             }
-                        });
-                    });
+                        })
+                    );
         });
 
 
     }
 
-
     private void prepareMotherNature() {
-        Game game = view.getGameHandler().getModel();
         for (int i = 0; i < islandPanes.size(); i++) {
             Pane islandPane = islandPanes.get(i);
             System.out.println(i + ": " + checkMessage(new MoveMotherNatureMessage(i), thisPlayer));
             if (checkMessage(new MoveMotherNatureMessage(i), thisPlayer) == StatusCode.OK) {
                 int finalI = i;
 
-                islandPane.setOnMouseClicked(mouseEvent -> {
-                    GUI.getClientSocket().send(new MoveMotherNatureMessage(finalI));
-                });
+                islandPane.setOnMouseClicked(mouseEvent ->
+                    GUI.getClientSocket().send(new MoveMotherNatureMessage(finalI))
+                );
                 islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
             } else {
                 islandPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
@@ -816,9 +782,9 @@ public class GameController implements Initializable {
             ChooseCloudMessage cloudMessage = new ChooseCloudMessage(i);
 
             if (checkMessage(cloudMessage, view.getGameHandler().getModel().usernameToPlayer(GUI.getUsername())) == StatusCode.OK) {
-                cloudPane.setOnMouseClicked(mouseEvent -> {
-                    GUI.getClientSocket().send(cloudMessage);
-                });
+                cloudPane.setOnMouseClicked(mouseEvent ->
+                    GUI.getClientSocket().send(cloudMessage)
+                );
             } else {
                 cloudPane.setOnMouseClicked(null);
                 cloudPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
@@ -866,9 +832,9 @@ public class GameController implements Initializable {
 
 
             if (thisPlayer.getPlayerHand().contains(assistant)) {
-                imageView.setOnMouseClicked(mouseEvent -> {
-                    GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)));
-                });
+                imageView.setOnMouseClicked(mouseEvent ->
+                    GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)))
+                );
             } else { // it is not in your hand
                 imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.75, 0.0));
                 imageView.setOnMouseEntered(null);
@@ -887,13 +853,13 @@ public class GameController implements Initializable {
     }
 
     private void hideExpertModeComponents() {
-        charactersPane.setVisible(false);
+        charactersGrid.setVisible(false);
         coinsPane.setVisible(false);
         nextTurnButton.setVisible(false);
     }
 
     private void updateSchoolboard() {
-        // shows this player's schoolboard by default
+        if(schoolboardPlayer == null) schoolboardPlayer = thisPlayer;
         fillSchoolboard(schoolboardPlayer);
         setSchoolBoardButtons(schoolboardPlayer);
     }
@@ -1002,6 +968,7 @@ public class GameController implements Initializable {
                 fillSchoolboard(player);
                 schoolboardButtonsGrid.getChildren().forEach(schoolboardButton -> schoolboardButton.setDisable(false));
                 button.setDisable(true);
+                schoolboardPlayer = player;
             });
 
             if (player.equals(selectedPlayer))
@@ -1052,9 +1019,9 @@ public class GameController implements Initializable {
         characterNameLabel.setText(characterName);
         characterDescriptionLabel.setText(description);
         if (checkMessage(new SelectedCharacterMessage(id), thisPlayer) == StatusCode.OK) {
-            activateCharacterButton.setOnMouseClicked(mouseEvent -> {
-                GUI.getClientSocket().send(new SelectedCharacterMessage(id));
-            });
+            activateCharacterButton.setOnMouseClicked(mouseEvent ->
+                GUI.getClientSocket().send(new SelectedCharacterMessage(id))
+            );
         } else {
             activateCharacterButton.setDisable(true);
         }
@@ -1146,4 +1113,7 @@ public class GameController implements Initializable {
         return Color.parseColor(sname[sname.length - 3]);
     }
 
+    public void hideErrorLabel(){
+        errorMsg.setVisible(false);
+    }
 }

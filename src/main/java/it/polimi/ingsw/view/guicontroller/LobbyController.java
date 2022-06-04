@@ -2,7 +2,9 @@ package it.polimi.ingsw.view.guicontroller;
 
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.ChooseWizardMessage;
+import it.polimi.ingsw.network.messages.PlayAssistantMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.view.GUI;
 import javafx.event.ActionEvent;
@@ -23,7 +25,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class LobbyController implements Initializable {
+public class LobbyController implements GUIController {
     @FXML
     private Pane mainPane;
     @FXML
@@ -48,7 +50,7 @@ public class LobbyController implements Initializable {
     private List<ImageView> chosen_wizards;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void setup() {
         player_labels = List.of(player0, player1, player2);
         chosen_wizards = List.of(chosen_wizard0, chosen_wizard1, chosen_wizard2);
 
@@ -122,9 +124,6 @@ public class LobbyController implements Initializable {
             select_wizard.setDisable(false);
         }
 
-        if(!all_has_chosen || lobbyHandler.getPlayers().size() == 1) {
-            start_game.setDisable(true);
-            start_game.setOnAction(event -> {});
-        }
+        start_game.setDisable(!all_has_chosen || lobbyHandler.getPlayers().size() == 1);
     }
 }

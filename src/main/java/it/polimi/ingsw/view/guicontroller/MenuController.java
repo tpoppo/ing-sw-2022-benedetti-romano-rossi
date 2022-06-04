@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class MenuController implements Initializable {
+public class MenuController implements GUIController{
     @FXML
     private Text usernameLabel;
     @FXML
@@ -40,7 +40,7 @@ public class MenuController implements Initializable {
     private Label errorLabel;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void setup() {
         ViewContent view = GUI.getView();
         ArrayList<ReducedLobby> lobbies = view.getLobbies();
 
