@@ -25,6 +25,7 @@ public class GUI extends Application {
     private static boolean creatingLobby;
     private static Integer selectingCharacter;
 
+
     public static void main(String[] args) {
    //     System.setProperty("prism.allowhidpi", "false");
         launch(args);
@@ -39,7 +40,7 @@ public class GUI extends Application {
         stage.setResizable(false);
 
         switchScene("/fxml/login.fxml");
-        stage.getScene().getStylesheets().add("css/login.css");
+        // stage.getScene().getStylesheets().add("css/login.css");
 
         startViewContentUpdates(stage);
         stage.setOnCloseRequest(event -> {
@@ -79,9 +80,12 @@ public class GUI extends Application {
                         case GAME -> // show the game
                                 Platform.runLater(() -> {
                                     try {
+                                        long startTime = System.currentTimeMillis();
                                         switchSceneResize("/fxml/game.fxml", 1920, 1080);
                                         stage.getScene().getStylesheets().add("css/game.css");
                                         stage.setFullScreen(true);
+                                        long estimatedTime = System.currentTimeMillis() - startTime;
+                                        System.out.println("estimatedTime: " + estimatedTime);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -129,17 +133,17 @@ public class GUI extends Application {
     }
 
     public static void switchScene(String scenePath) throws IOException{
-        Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
+        Parent root = FXMLLoader.load(ResourcesCache.getResource(scenePath));
         Scene scene = new Scene(root);
 
+        scene.getRoot().setCacheHint(CacheHint.SPEED);
         scene.getRoot().setCache(true);
-        scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
         stage.setScene(scene);
         stage.show();
     }
 
     public static void switchSceneResize(String scenePath, int width, int heigth) throws IOException {
-        Parent root = FXMLLoader.load(GUI.class.getResource(scenePath));
+        Parent root = FXMLLoader.load(ResourcesCache.getResource(scenePath));
         Scene scene = new Scene(root);
 
         Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
@@ -151,7 +155,7 @@ public class GUI extends Application {
         root.getTransforms().add(scale);
 
         scene.getRoot().setCache(true);
-        scene.getRoot().setCacheHint(CacheHint.SPEED); // Maybe CacheHint.SPEED
+        scene.getRoot().setCacheHint(CacheHint.SPEED);
         stage.setScene(scene);
         stage.show();
     }
