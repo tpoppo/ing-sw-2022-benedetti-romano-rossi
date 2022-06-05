@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Assistant;
@@ -63,7 +64,9 @@ public class MoveMotherNatureMessage extends ClientMessage {
 
         gameHandler.setActionCompleted(true);
 
-        if(!game.getExpertMode())
+        boolean isACharacterActive = game.getCharacters().stream().anyMatch(Character::isActivated);
+
+        if(!game.getExpertMode() || isACharacterActive)
             return new NextStateMessage().handle(network_manager, lobby_player);
 
         return StatusCode.OK;

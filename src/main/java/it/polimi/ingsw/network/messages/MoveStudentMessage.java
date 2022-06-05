@@ -70,10 +70,7 @@ public class MoveStudentMessage extends ClientMessage {
 
         gameHandler.setActionCompleted(true);
 
-        if(!game.getExpertMode())
-            return new NextStateMessage().handle(network_manager, lobby_player);
-
-        return StatusCode.OK;
+        return new NextStateMessage().handle(network_manager, lobby_player);
     }
 
     @Override
