@@ -110,7 +110,7 @@
                   </ImageView>
                   <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
                      <image>
-                        <Image url="@../graphics/pieces/mothernature/plant.png" />
+                        <Image url="@../graphics/pieces/mothernature/mother_nature.png" />
                      </image>
                   </ImageView>
                   <Pane fx:id="islandsPane" layoutX="42.0" layoutY="48.0" prefHeight="785.0" prefWidth="786.0" />

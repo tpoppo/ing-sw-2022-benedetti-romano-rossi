@@ -179,11 +179,9 @@ public class GameController implements GUIController {
             Image image = new Image("/graphics/islands/" + i % 3 + ".png");
             islandImage.setImage(image);
 
-            // FIXME: cut island images so that they are standard (possibly in a square)
-
-            double scaleFactor = islandSize * image.getWidth() / 10 - image.getWidth() / 10;
-            int dimX = (int) (0.4 * image.getWidth() + scaleFactor); // FIXME: choose a better scale factor
-            int dimY = (int) (0.4 * image.getHeight() + scaleFactor);
+            double scaleFactor = islandSize * 130.0 / 5 / 0.4 - 130.0 / 5 / 0.4;
+            int dimX = (int) (130 + scaleFactor); // FIXME: choose a better scale factor
+            int dimY = (int) (130 + scaleFactor);
             islandImage = resizeImageView(islandImage, dimX, dimY);
 
             islandPane.getChildren().add(islandImage);
@@ -250,7 +248,7 @@ public class GameController implements GUIController {
 
                 // adding all the pieces on top of the islandPane
                 double radius;
-                if(numTowers != 0) radius = islandPane.getBoundsInParent().getWidth() / 3;
+                if(numTowers != 0) radius = islandPane.getBoundsInParent().getWidth() / 4;
                 else radius = islandPane.getBoundsInParent().getWidth() / 5;
 
                 placeNodes(islandPane, islandTopping, radius);
