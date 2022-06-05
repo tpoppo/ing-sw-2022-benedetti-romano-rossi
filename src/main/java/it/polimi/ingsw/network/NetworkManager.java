@@ -177,12 +177,13 @@ public class NetworkManager {
 
         ArrayList<ConnectionCEO> subscribers = new ArrayList<>(getSubscribers());
         getSubscribers().clear();
+        destroy();
+
         for (ConnectionCEO subscriber : subscribers) {
-            menuManager.subscribe(subscriber);
             MenuManager.getInstance().addErrorMessage(subscriber.getPlayer(), "A player disconnected. The game has been terminated");
+            menuManager.subscribe(subscriber);
             subscriber.clean();
         }
-        destroy();
     }
 
     // sends an updated viewContent to all the subscribers

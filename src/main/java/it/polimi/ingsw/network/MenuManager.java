@@ -51,7 +51,7 @@ public class MenuManager {
                             .reduce((a, b) -> {
                                 throw new IllegalStateException("Multiple elements: " + a + ", " + b);
                             }).ifPresent(subscriber -> {
-                                notifyError(subscriber);
+                                notifySubscriber(subscriber);
                                 LOGGER.log(Level.INFO, "Subscriber found and notified");
                             });
 
@@ -81,15 +81,13 @@ public class MenuManager {
     }
 
     private void notifySubscribers() {
-        MenuContent menuContent = new MenuContent();
-
         for (ConnectionCEO subscriber : subscribers) {
-            subscriber.sendViewContent(menuContent);
+            notifySubscriber(subscriber);
         }
     }
 
     // sends a viewContent containing an errorMessage to the given subscriber
-    private void notifyError(ConnectionCEO subscriber){
+    private void notifySubscriber(ConnectionCEO subscriber){
         String errorMessage = errorMessages.get(subscriber.getPlayer());
         errorMessages.remove(subscriber.getPlayer());
 
@@ -99,8 +97,10 @@ public class MenuManager {
     }
 
     public void subscribe(ConnectionCEO connectionCEO){
+        System.out.println(errorMessages);
+
         subscribers.add(connectionCEO);
-        notifySubscribers();
+        notifySubscriber(connectionCEO);
     }
 
     public void unsubscribe(ConnectionCEO connectionCEO){
