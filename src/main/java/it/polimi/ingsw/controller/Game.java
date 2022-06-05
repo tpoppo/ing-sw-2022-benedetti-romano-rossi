@@ -26,7 +26,7 @@ public class Game implements Serializable{
     private final ArrayList<Students> clouds;
     private final ArrayList<Player> players;
     private final ArrayList<Character> characters;
-    private GameConfig gameConfig;
+    private final GameConfig gameConfig;
     private final GameModifiers gameModifiers;
 
     // FIXME: shouldn't we just give the list of LobbyPlayer (lobby.getPlayers()) instead of a LobbyHandler?
@@ -371,7 +371,7 @@ public class Game implements Serializable{
                 island.setOwner(new_owner);
                 island.setNumTowers(1);
                 new_owner.getSchoolBoard().addTowers(-1);
-            }else if(island.getOwner() != getCurrentPlayer()){
+            }else if(island.getOwner() != new_owner){
                 Player old_owner = island.getOwner();
                 int towersToMove = Math.min(new_owner.getSchoolBoard().getNumTowers(), towers_on_island);
 
