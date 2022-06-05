@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.guicontroller;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
+import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
+import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -30,8 +32,7 @@ import javafx.scene.text.Text;
 
 import java.util.*;
 import java.util.function.Consumer;
-
-import static it.polimi.ingsw.view.GUI.schoolboardPlayer;
+import java.util.stream.Collectors;
 
 public class GameController implements GUIController {
     protected static final String PIECE_CLASS = "piece";
@@ -52,9 +53,8 @@ public class GameController implements GUIController {
     @FXML private Label turnLabel, actionLabel, usernameLabel;
     @FXML private ImageView nextTurnButton;
     @FXML private Label errorMsg;
-
-    @FXML private ImageView assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10;
-    @FXML private Label assistantLabel1, assistantLabel2, assistantLabel3, assistantLabel4, assistantLabel5, assistantLabel6, assistantLabel7, assistantLabel8, assistantLabel9, assistantLabel10;
+    @FXML private Pane errorPane;
+    @FXML private Pane assistantsPane;
 
     // expert mode components
     @FXML private StackPane coinsPane;
@@ -75,8 +75,8 @@ public class GameController implements GUIController {
     @FXML private ImageView endingScreen;
 
     private ViewContent view;
-    private List<ImageView> assistantCards;
     private Player thisPlayer;
+    private String schoolboardPlayerUsername;
     private Map<Player, TowerColor> playerTowerColorMap;
     private ImageView selectedEntrance;
     private List<Pane> cloudPanes;
@@ -89,7 +89,6 @@ public class GameController implements GUIController {
 
     private ArrayList<Pane> islandPanes;
     private Map<Color, ImageView> chooseColor;
-    private List<Label> assistantLabelCards;
     private HashMap<Integer, VBox> characterStuffSmallMap;
     private ArrayList<Consumer<Player>> onfillSchoolboard;
 
@@ -102,9 +101,6 @@ public class GameController implements GUIController {
         Game game = gameHandler.getModel();
 
         cloudPanes = new ArrayList<>();
-        assistantCards = List.of(assistant1, assistant2, assistant3, assistant4, assistant5, assistant6, assistant7, assistant8, assistant9, assistant10);
-        assistantLabelCards = List.of(assistantLabel1, assistantLabel2, assistantLabel3, assistantLabel4, assistantLabel5, assistantLabel6, assistantLabel7, assistantLabel8, assistantLabel9, assistantLabel10);
-
         chooseColor = Map.of(Color.RED, chooseRed, Color.YELLOW, chooseYellow, Color.GREEN, chooseGreen, Color.CYAN, chooseCyan, Color.MAGENTA, chooseMagenta);
         playerTowerColorMap = new HashMap<>();
         selectedOnDining = new ArrayList<>();
@@ -122,8 +118,8 @@ public class GameController implements GUIController {
 
         resetBoard();
         setupState();
-        setupIslands();         // FIXME: it does not work. it does not show the tokens
-        updateSchoolboard();
+        setupIslands();
+        setupSchoolboard();
         setupAssistants();
         setupErrorMessage();
         setupClouds();          // FIXME: inconsistent behavior of color adjustment
@@ -152,16 +148,31 @@ public class GameController implements GUIController {
         }
     }
 
+    private void resetBoard() {
+        // reset node to their initial value
+        nextTurnButton.setEffect(null);
+        islandsPane.getChildren().clear();
+        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setEffect(null));
+        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setOnMouseClicked(null));
+        selectedStudentCard = null;
+        selectedEntrance = null;
+
+        if(schoolboardPlayerUsername == null)
+            schoolboardPlayerUsername = thisPlayer.getUsername();
+    }
+
     private void setupIslands() {
         List<Island> islands = view.getGameHandler().getModel().getIslands();
         List<Node> islandNodes = new ArrayList<>();
 
         for (int i = 0; i < islands.size(); i++) {
+            Island island = islands.get(i);
+
             // every island has its own pane
             Pane islandPane = new Pane();
             islandPane.setCursor(Cursor.HAND);
             List<Node> islandTopping = new ArrayList<>();
-            int islandSize = islands.get(i).getNumIslands();
+            int islandSize = island.getNumIslands();
 
             // adding island image
             ImageView islandImage = new ImageView();
@@ -177,15 +188,44 @@ public class GameController implements GUIController {
 
             islandPane.getChildren().add(islandImage);
 
-            // adding island's elements on top (creating a list of nodes of every component to be shown)
+            // adding island's elements on top
             // adding students, getting the colors of the students currently on the island
             HashMap<Color, Integer> presentStudents = new HashMap<>();
-            islands.get(i).getStudents().forEach((color, quantity) -> {
+            island.getStudents().forEach((color, quantity) -> {
                 if (quantity > 0)
                     presentStudents.put(color, quantity);
             });
 
             presentStudents.forEach((color, quantity) -> System.out.println(color + " " + quantity));
+
+            // adding towers
+            int numTowers = island.getNumTowers();
+            if (numTowers > 0) {
+                StackPane towerStackPane = new StackPane();
+                String towerColor = String.valueOf(playerTowerColorMap.get(island.getOwner())).toLowerCase();
+
+                ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
+                towerImage = resizeImageView(towerImage, 35, 35);
+                towerImage.getStyleClass().add(PIECE_CLASS);
+
+                Text towerNumber = new Text(String.valueOf(numTowers));
+                towerNumber.getStyleClass().add(BORDERED_TEXT);
+                // FIXME: resize text
+
+                towerStackPane.getChildren().add(towerImage);
+                towerStackPane.getChildren().add(towerNumber);
+
+                double x = islandPane.getBoundsInParent().getWidth() / 2 - towerStackPane.getBoundsInParent().getWidth() / 2;
+                double y = islandPane.getBoundsInParent().getHeight() / 2 - towerStackPane.getBoundsInParent().getHeight() / 2;
+
+                // if there's only one student color, the tower gets added on top of it, otherwise it is displayed in the center
+                if (presentStudents.size() == 1)
+                    y -= 35; // TODO: check if this gets displayed correctly
+
+                towerStackPane.setLayoutX(x);
+                towerStackPane.setLayoutY(y);
+                islandPane.getChildren().add(towerStackPane);
+            }
 
             if (presentStudents.keySet().size() > 0) {
                 // creating a stackPane with image + quantity for each student color present
@@ -208,49 +248,46 @@ public class GameController implements GUIController {
                     islandTopping.add(studentStackPane);
                 }
 
-                // adding towers
-                int numTowers = islands.get(i).getNumTowers();
-                if (numTowers > 0) {
-                    StackPane towerStackPane = new StackPane();
-                    String towerColor = String.valueOf(playerTowerColorMap.get(islands.get(i).getOwner())).toLowerCase();
-
-                    ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
-                    towerImage = resizeImageView(towerImage, 35, 35);
-                    towerImage.getStyleClass().add(PIECE_CLASS);
-
-                    Text towerNumber = new Text(String.valueOf(numTowers));
-                    towerNumber.getStyleClass().add(BORDERED_TEXT);
-                    // FIXME: resize text
-
-                    towerStackPane.getChildren().add(towerImage);
-                    towerStackPane.getChildren().add(towerNumber);
-
-                    double x = islandPane.getBoundsInParent().getWidth() / 2 - towerStackPane.getBoundsInParent().getWidth() / 2;
-                    double y = islandPane.getBoundsInParent().getHeight() / 2 - towerStackPane.getBoundsInParent().getHeight() / 2;
-                    // if there's only one student color, the tower gets added on top of it, otherwise it is displayed in the center
-                    if (presentStudents.size() == 1)
-                        y -= 30; // TODO: check if this gets displayed correctly
-
-                    towerStackPane.setLayoutX(x);
-                    towerStackPane.setLayoutY(y);
-                    islandPane.getChildren().add(towerStackPane);
-                }
-
                 // adding all the pieces on top of the islandPane
-                double radius = islandPane.getBoundsInParent().getWidth() / 4;
+                double radius;
+                if(numTowers != 0) radius = islandPane.getBoundsInParent().getWidth() / 3;
+                else radius = islandPane.getBoundsInParent().getWidth() / 5;
+
                 placeNodes(islandPane, islandTopping, radius);
             }
 
-                // adding the updated islandPane to the list
-                islandNodes.add(islandPane);
-                islandPanes.add(islandPane);
+            // adding no entry tiles over the island
+            if(island.getNoEntryTiles() > 0){
+                int numTiles = island.getNoEntryTiles();
+
+                StackPane noEntryTilesPane = new StackPane();
+
+                ImageView tileImage = new ImageView("graphics/other/no_entry_tile.png");
+                tileImage = resizeImageView(tileImage, 35, 35);
+
+                Text tileNumber = new Text(String.valueOf(numTiles));
+                tileNumber.getStyleClass().add(BORDERED_TEXT);
+
+                noEntryTilesPane.getChildren().add(tileImage);
+                noEntryTilesPane.getChildren().add(tileNumber);
+
+                double x = islandPane.getBoundsInParent().getWidth() / 2 - noEntryTilesPane.getBoundsInParent().getWidth() / 2;
+                double y = islandPane.getBoundsInParent().getHeight() / 2 - noEntryTilesPane.getBoundsInParent().getHeight() / 2;
+
+                noEntryTilesPane.setLayoutX(x);
+                noEntryTilesPane.setLayoutY(y + 60); // FIXME: check if this gets displayed correctly
+                islandPane.getChildren().add(noEntryTilesPane);
             }
+
+            // adding the updated islandPane to the list
+            islandNodes.add(islandPane);
+            islandPanes.add(islandPane);
+        }
 
         // making a regular polygon with the provided nodes in the given container
         double radius = islandsPane.getBoundsInParent().getWidth() * 2 / 3 / 2;
         placeNodes(islandsPane, islandNodes, radius);
     }
-
 
     private void setupClouds() {
         Game model = view.getGameHandler().getModel();
@@ -258,7 +295,7 @@ public class GameController implements GUIController {
             Pane cloudPane = new Pane();
             cloudPane.setCursor(Cursor.HAND);
             ImageView cloudImage = new ImageView("graphics/islands/cloud.png");
-            cloudImage = resizeImageView(cloudImage, 128, 128); // TODO: parametrize these
+            cloudImage = resizeImageView(cloudImage, 128, 128);
 
             cloudPane.getChildren().add(cloudImage);
             cloudPanes.add(cloudPane);
@@ -309,6 +346,11 @@ public class GameController implements GUIController {
             characterImage.setImage(new Image("graphics/characters/" + character.getClass().getSimpleName() + ".jpg"));
             characterImage.setOnMouseClicked(mouseEvent -> showCharacterInfo(id));
 
+            // if the character is selected, make it glow
+            if(character.equals(view.getGameHandler().getSelectedCharacter()))
+                characterImage.setEffect(new SepiaTone(0.65));
+            else characterImage.setEffect(null);
+
             // setting coin number
             Text coinText = (Text) ((StackPane) ((Pane) charactersGrid.getChildren().get(count)).getChildren().get(1)).getChildren().get(1);
             coinText.setText(String.valueOf(character.getCost()));
@@ -326,7 +368,7 @@ public class GameController implements GUIController {
                     int numOfStudents = character.getStudents().get(studentColor);
 
                     for (int i = 0; i < numOfStudents; i++) {
-                        int size = 112 / totalStudents; // FIXME: this probably creates funny stuff with few students
+                        int size = Math.min(112 / totalStudents, 30);
 
                         ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                         studentImage = resizeImageView(studentImage, size, size);
@@ -379,11 +421,7 @@ public class GameController implements GUIController {
 
             if (!gameHandler.isActionCompleted()) {
                 switch (gameHandler.getCurrentState()) {
-                    case PLAY_ASSISTANT -> {
-                        action_text = "Play an assistant";
-                        preparePlayAssistant();
-                        // FIXME: I don't like this
-                    }
+                    case PLAY_ASSISTANT -> action_text = "Play an assistant";
                     case CHOOSE_CLOUD -> {
                         action_text = "Choose a cloud";
                         prepareChooseCloud();
@@ -463,8 +501,14 @@ public class GameController implements GUIController {
                         PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
                         playerChoicesSerializable.setStudent(entry.getKey());
                         GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+
+                        mainPane.setDisable(false);
+                        mainPane.setEffect(null);
+                        colorSelectionPane.setVisible(false);
                     });
                 }
+                mainPane.setDisable(true);
+                mainPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
             }
 
             case CARD_STUDENT -> {
@@ -531,6 +575,8 @@ public class GameController implements GUIController {
             }
 
             case SWAP_CARD_ENTRANCE -> {
+                // FIXME: the skip button doesn't update correctly
+                //  (if you choose the correct number and then remove a selected student FROM THE ENTRANCE it remains active)
                 // it wants up to 3 students from the entrance and up to 3 students from the entrance
 
                 // method for the button dark/light effect
@@ -595,18 +641,7 @@ public class GameController implements GUIController {
                     });
 
                     // 3) confirm selection
-                    nextTurnButton.setOnMouseClicked(mouseEvent -> {
-                        if (selectedOnCard.size() == selectedOnEntrance.size()) {
-                            PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
-                            for (int i = 0; i < selectedOnCard.size(); i++) {
-                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
-                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnCard.get(i)));
-                            }
-                            GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
-                        } else {
-                            updateErrorMessage("You must select the same number of students");
-                        }
-                    });
+                    confirmSelection(selectedOnCard);
                 });
             }
 
@@ -632,73 +667,61 @@ public class GameController implements GUIController {
                     if (!player.equals(thisPlayer)) return;
 
                     // 1) select up to 2 students from this card
-                    List.of(greenDining, magentaDining, cyanDining, redDining, yellowDining).forEach(gridPane -> {
-                        gridPane.getChildren().forEach(node -> {
-                            ImageView imageView = (ImageView) node;
+                    List.of(greenDining, magentaDining, cyanDining, redDining, yellowDining).forEach(gridPane ->
+                        selectUpToTwoStudents(updateButton, gridPane, selectedOnDining)
+                    );
 
-                            imageView.setOnMouseClicked(e -> {
-                                if (selectedOnDining.contains(imageView)) { // deselect a student
-                                    selectedOnDining.remove(imageView);
-                                    imageView.setEffect(null);
-                                } else {
-                                    selectedOnDining.add(imageView);
-                                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-
-                                    if (selectedOnDining.size() > 2) { // remove the first, if there are more than 3 cards
-                                        selectedOnDining.get(0).setEffect(null);
-                                        selectedOnDining.remove(0);
-                                    }
-                                }
-
-                                updateButton.run();
-                            });
-
-                        });
-                    });
-
-                    // 2) select up to 3 students from the entrance
-                    entranceGrid.getChildren().forEach(node -> {
-                        ImageView imageView = (ImageView) node;
-
-                        imageView.setOnMouseClicked(e -> {
-                            if (selectedOnEntrance.contains(imageView)) { // deselect a student
-                                selectedOnEntrance.remove(imageView);
-                                imageView.setEffect(null);
-                            } else {
-                                selectedOnEntrance.add(imageView);
-                                imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-
-                                if (selectedOnEntrance.size() > 2) { // remove the first, if there are more than 3 cards
-                                    selectedOnEntrance.get(0).setEffect(null);
-                                    selectedOnEntrance.remove(0);
-                                }
-                            }
-
-                            updateButton.run();
-                        });
-                    });
+                    // 2) select up to 2 students from the entrance
+                    selectUpToTwoStudents(updateButton, entranceGrid, selectedOnEntrance);
 
                     // 3) confirm selection
-                    nextTurnButton.setOnMouseClicked(mouseEvent -> {
-                        if (selectedOnDining.size() == selectedOnEntrance.size()) {
-                            PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
-                            for (int i = 0; i < selectedOnDining.size(); i++) {
-                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
-                                playerChoicesSerializable.setStudent(imageViewToColor(selectedOnDining.get(i)));}
-
-                            GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
-                        } else {
-                            updateErrorMessage("You must select the same number of students");
-                        }
-                    });
+                    confirmSelection(selectedOnDining);
                 });
             }
         }
     }
 
+    private void selectUpToTwoStudents(Runnable updateButton, GridPane gridPane, ArrayList<ImageView> selectedOnDining) {
+        gridPane.getChildren().forEach(node -> {
+            ImageView imageView = (ImageView) node;
+
+            imageView.setOnMouseClicked(e -> {
+                if (selectedOnDining.contains(imageView)) { // deselect a student
+                    selectedOnDining.remove(imageView);
+                    imageView.setEffect(null);
+                } else {
+                    selectedOnDining.add(imageView);
+                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                    if (selectedOnDining.size() > 2) { // remove the first, if there are more than 3 cards
+                        selectedOnDining.get(0).setEffect(null);
+                        selectedOnDining.remove(0);
+                    }
+                }
+
+                updateButton.run();
+            });
+
+        });
+    }
+
+    private void confirmSelection(ArrayList<ImageView> selectedOnCard) {
+        nextTurnButton.setOnMouseClicked(mouseEvent -> {
+            if (selectedOnCard.size() == selectedOnEntrance.size()) {
+                PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
+                for (int i = 0; i < selectedOnCard.size(); i++) {
+                    playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
+                    playerChoicesSerializable.setStudent(imageViewToColor(selectedOnCard.get(i)));
+                }
+                GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
+            } else {
+                updateErrorMessage("You must select the same number of students");
+            }
+        });
+    }
+
     private void prepareMoveStudent() {
-        Game game = view.getGameHandler().getModel();
-        ArrayList<Island> islands = game.getIslands();
+        // FIXME: student selection in the entrance doesn't work when setup is called and you are looking at another schoolboard
 
         selectedEntrance = null;
         for (int i = 0; i < islandPanes.size(); i++) {
@@ -806,31 +829,11 @@ public class GameController implements GUIController {
         usernameLabel.setText(thisPlayer.getUsername());
     }
 
-    private void resetBoard() {
-        // reset node to their initial value
-        nextTurnButton.setEffect(null);
-        islandsPane.getChildren().clear();
-        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setEffect(null));
-        List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setOnMouseClicked(null));
-        selectedStudentCard = null;
-        selectedEntrance = null;
-
-        // update the schoolboardPlayer values
-        if(schoolboardPlayer == null){
-            schoolboardPlayer = thisPlayer;
-        }
-        schoolboardPlayer = view.getGameHandler().getModel().getPlayers()
-                .stream()
-                .filter(player -> player.getUsername().equals(schoolboardPlayer.getUsername()))
-                .findFirst().get();
-
-    }
-
     private void setupErrorMessage() {
         if (view.getErrorMessage() != null) {
             updateErrorMessage(view.getErrorMessage());
         } else {
-            errorMsg.setVisible(false);
+            errorPane.setVisible(false);
         }
     }
 
@@ -843,39 +846,55 @@ public class GameController implements GUIController {
     }
 
     private void setupAssistants() {
-        assistantLabelCards.forEach(x -> x.setText(""));
+        Game model = view.getGameHandler().getModel();
 
+        ArrayList<Assistant> assistants = thisPlayer.getPlayerHand();
+        Assistant currentAssistant = thisPlayer.getCurrentAssistant();
+        Map<String, Assistant> playedAssistantsMap = model.getPlayers().stream()
+                .filter(player -> player.getCurrentAssistant() != null)
+                .collect(Collectors.toMap(LobbyPlayer::getUsername, Player::getCurrentAssistant));
+
+        int count = 0;
         for (Assistant assistant : Assistant.getAssistants(thisPlayer.getWizard())) {
-            ImageView imageView = assistantCards.get(assistant.getPower() - 1);
-            Label label = assistantLabelCards.get(assistant.getPower() - 1);
+            Pane assistantPane = (Pane) assistantsPane.getChildren().get(count);
+            ImageView assistantImage = (ImageView) assistantPane.getChildren().get(1);
+            Label assistantOwner = (Label) assistantPane.getChildren().get(0);
 
-            imageView.setY(0.0);
-            Player player = view.getGameHandler().getModel().getPlayers()
-                    .stream()
-                    .filter(p -> assistant.equals(p.getCurrentAssistant()))
-                    .findFirst().orElse(null);
-            if(player != null){
-                label.setText(label.getText() + "\n"+ player.getUsername());
+            assistantOwner.setText("");
+            assistantPane.setLayoutY(0);
+            assistantImage.setEffect(null);
+
+            // current assistant is up
+            if(assistant.equals(currentAssistant)) {
+                assistantPane.setLayoutY(-40);
+                assistantImage.setOnMouseEntered(null);
+                assistantImage.setOnMouseExited(null);
+                // assistants played by other players are yellow
+            }else if(playedAssistantsMap.containsValue(assistant)) {
+                assistantImage.setEffect(new SepiaTone(1));
+                // already played assistants are grey
+            }else if(!assistants.contains(assistant) && !assistant.equals(currentAssistant)) {
+                assistantImage.setEffect(new ColorAdjust(0.0, 0.0, -0.75, 0.0));
+                assistantImage.setOnMouseEntered(null);
+                assistantImage.setOnMouseExited(null);
             }
 
-            if (thisPlayer.getPlayerHand().contains(assistant)) {
-                imageView.setOnMouseClicked(mouseEvent ->
-                    GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)))
+            if(playedAssistantsMap.containsValue(assistant)) {
+                List<String> usernames = playedAssistantsMap.keySet().stream()
+                        .filter(key -> playedAssistantsMap.get(key).equals(assistant))
+                        .toList();
+
+                usernames.forEach(username -> assistantOwner.setText(assistantOwner.getText() + " " + username));
+            }
+
+            // if the player has this assistant, the listener is added
+            if(assistants.contains(assistant)) {
+                assistantImage.setOnMouseClicked(mouseEvent ->
+                        GUI.getClientSocket().send(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)))
                 );
-            } else { // it is not in your hand
-                imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.75, 0.0));
-                imageView.setOnMouseEntered(null);
-                imageView.setOnMouseExited(null);
-            }
-        }
-    }
+            }else assistantImage.setOnMouseClicked(null);
 
-    private void preparePlayAssistant() {
-        for (Assistant assistant : Assistant.getAssistants(thisPlayer.getWizard())) {
-            ImageView imageView = assistantCards.get(assistant.getPower() - 1);
-            if (checkMessage(new PlayAssistantMessage(thisPlayer.getPlayerHand().indexOf(assistant)), thisPlayer) != StatusCode.OK) {
-                if (imageView.getEffect() == null) imageView.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
-            }
+            count++;
         }
     }
 
@@ -885,7 +904,9 @@ public class GameController implements GUIController {
         nextTurnButton.setVisible(false);
     }
 
-    private void updateSchoolboard() {
+    private void setupSchoolboard() {
+        Player schoolboardPlayer = view.getGameHandler().getModel().usernameToPlayer(schoolboardPlayerUsername);
+
         fillSchoolboard(schoolboardPlayer);
         setSchoolBoardButtons(schoolboardPlayer);
     }
@@ -958,7 +979,7 @@ public class GameController implements GUIController {
         // coins
         coinsPane.getChildren().remove(1);
         Text coinNumber = new Text(String.valueOf(coins));
-        coinNumber.getStyleClass().add("coinNumber");
+        coinNumber.getStyleClass().add(BORDERED_TEXT);
         coinsPane.getChildren().add(coinNumber);
 
         // adding the listeners after building the schoolboard
@@ -973,7 +994,7 @@ public class GameController implements GUIController {
         colorGrid.getChildren().clear();
         for (int i = 0; i < diningStudents.get(studentColor); i++) {
             ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
-            studentImage = resizeImageView(studentImage, 45, 45);
+            studentImage = resizeImageView(studentImage, 42, 42);
             studentImage.setCursor(Cursor.HAND);
             studentImage.getStyleClass().add(PIECE_CLASS);
 
@@ -995,7 +1016,7 @@ public class GameController implements GUIController {
                 fillSchoolboard(player);
                 schoolboardButtonsGrid.getChildren().forEach(schoolboardButton -> schoolboardButton.setDisable(false));
                 button.setDisable(true);
-                schoolboardPlayer = player;
+                schoolboardPlayerUsername = player.getUsername();
             });
 
             if (player.equals(selectedPlayer))
@@ -1011,6 +1032,7 @@ public class GameController implements GUIController {
 
         characterPane.setVisible(true);
         mainPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+        mainPane.setDisable(true);
 
         String characterName = character.getClass().getSimpleName();
         String description = character.getDescription();
@@ -1050,6 +1072,7 @@ public class GameController implements GUIController {
                 GUI.getClientSocket().send(new SelectedCharacterMessage(id));
                 characterPane.setVisible(false);
                 mainPane.setEffect(null);
+                mainPane.setDisable(false);
             });
             activateCharacterButton.setDisable(false);
         } else {
@@ -1062,6 +1085,7 @@ public class GameController implements GUIController {
     private void closeCharacterInfo() {
         characterPane.setVisible(false);
         mainPane.setEffect(null);
+        mainPane.setDisable(false);
         GUI.setSelectingCharacter(null);
     }
 
@@ -1103,7 +1127,7 @@ public class GameController implements GUIController {
 
     private void updateErrorMessage(String s) {
         errorMsg.setText(s);
-        errorMsg.setVisible(true);
+        errorPane.setVisible(true);
     }
 
     private ImageView resizeImageView(ImageView image, int width, int height) {
@@ -1119,14 +1143,14 @@ public class GameController implements GUIController {
         return newImage;
     }
 
-    public void onMouseEnteredAssistant(MouseEvent event) {
+    public void bringUpCard(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(-50);
+        imageView.getParent().setLayoutY(-40);
     }
 
-    public void onMouseExitedAssistant(MouseEvent event) {
+    public void bringDownCard(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
-        imageView.setY(0);
+        imageView.getParent().setLayoutY(0);
     }
 
     public void addGlowEffect(MouseEvent event) {
@@ -1143,7 +1167,7 @@ public class GameController implements GUIController {
         return Color.parseColor(sname[sname.length - 3]);
     }
 
-    public void hideErrorLabel(){
-        errorMsg.setVisible(false);
+    public void hideErrorPane(){
+        errorPane.setVisible(false);
     }
 }

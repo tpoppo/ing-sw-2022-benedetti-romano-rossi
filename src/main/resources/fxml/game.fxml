@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.SepiaTone?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/game.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -48,10 +40,9 @@
                         <Font size="29.0" />
                      </font>
                   </Label>
-                  <ProgressBar layoutX="623.0" layoutY="49.0" prefWidth="200.0" progress="0.3" />
                </children>
             </Pane>
-            <Pane fx:id="turnOrderLabel" layoutX="1631.0" layoutY="222.0" prefHeight="150.0" prefWidth="268.0" style="-fx-background-color: #2196f3; -fx-background-radius: 30;">
+            <Pane fx:id="turnOrderLabel" layoutX="1631.0" layoutY="205.0" prefHeight="150.0" prefWidth="268.0" style="-fx-background-color: #2196f3; -fx-background-radius: 30;">
                <children>
                   <Label layoutX="78.0" layoutY="14.0" text="Turn order" textFill="WHITE">
                      <font>
@@ -88,8 +79,13 @@
                   </GridPane>
                </children>
             </Pane>
-            <Pane fx:id="islandsPane" layoutX="14.0" layoutY="196.0" prefHeight="870.0" prefWidth="870.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
+            <Pane layoutX="14.0" layoutY="196.0" prefHeight="870.0" prefWidth="870.0" style="-fx-background-radius: 50; -fx-border-color: #2887cb; -fx-border-width: 10; -fx-background-image: url('graphics/backgrounds/water.gif')">
                <children>
+                  <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
                   <StackPane layoutX="710.0" layoutY="720.0" prefHeight="137.0" prefWidth="135.0">
                      <children>
                         <ImageView fx:id="bagImage" fitHeight="126.0" fitWidth="115.0" preserveRatio="true">
@@ -112,19 +108,15 @@
                         <Image url="@../graphics/other/arrow_white.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="usernameLabel" layoutX="46.0" layoutY="46.0" style="-fx-background-color: rgba(0,0,0,0.3);" text="USERNAME" textAlignment="RIGHT" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="32.0" />
-                     </font>
-                  </Label>
                   <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
                      <image>
                         <Image url="@../graphics/pieces/mothernature/plant.png" />
                      </image>
                   </ImageView>
+                  <Pane fx:id="islandsPane" layoutX="42.0" layoutY="48.0" prefHeight="785.0" prefWidth="786.0" />
                </children>
             </Pane>
-            <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="413.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
+            <Pane fx:id="schoolboardPane" layoutX="928.0" layoutY="390.0" prefHeight="515.0" prefWidth="971.0" style="-fx-background-color: #c5c3c4; -fx-background-radius: 30; -fx-border-width: 10; -fx-border-radius: 25;">
                <children>
                   <ImageView fx:id="schoolBoardImage" fitHeight="411.0" fitWidth="940.0" layoutX="16.0" layoutY="90.0">
                      <image>
@@ -351,102 +343,181 @@
                   </StackPane>
                </children>
             </Pane>
-            <Pane fx:id="assistantsPane" layoutX="907.0" layoutY="912.0" prefHeight="167.0" prefWidth="1013.0">
+            <Pane fx:id="assistantsPane" layoutX="935.0" layoutY="950.0">
                <children>
-                  <ImageView fx:id="assistant5" fitHeight="200.0" fitWidth="90.0" layoutX="412.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/5.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant4" fitHeight="200.0" fitWidth="90.0" layoutX="313.0" layoutY="86.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/4.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant3" fitHeight="200.0" fitWidth="90.0" layoutX="215.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/3.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant2" fitHeight="200.0" fitWidth="90.0" layoutX="118.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/2.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant1" fitHeight="200.0" fitWidth="90.0" layoutX="19.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/1.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant9" fitHeight="200.0" fitWidth="90.0" layoutX="805.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/9.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant8" fitHeight="200.0" fitWidth="90.0" layoutX="705.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/8.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant7" fitHeight="200.0" fitWidth="90.0" layoutX="609.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/7.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant6" fitHeight="200.0" fitWidth="90.0" layoutX="511.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/6.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="assistant10" fitHeight="200.0" fitWidth="90.0" layoutX="905.0" layoutY="87.0" onMouseEntered="#onMouseEnteredAssistant" onMouseExited="#onMouseExitedAssistant" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/assistants/front/10.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <Label fx:id="assistantLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="19.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="benedar" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="118.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="ghero2025" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel3" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel4" alignment="CENTER" contentDisplay="CENTER" layoutX="313.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel5" alignment="CENTER" contentDisplay="CENTER" layoutX="412.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel6" alignment="CENTER" contentDisplay="CENTER" layoutX="511.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel7" alignment="CENTER" contentDisplay="CENTER" layoutX="609.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel8" alignment="CENTER" contentDisplay="CENTER" layoutX="705.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel9" alignment="CENTER" contentDisplay="CENTER" layoutX="805.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-                  <Label fx:id="assistantLabel10" alignment="CENTER" contentDisplay="CENTER" layoutX="905.0" layoutY="47.0" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" />
-
+                  <Pane fx:id="assistantPane0">
+                     <children>
+                        <Label fx:id="assistantLabel1" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant1" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/1.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane1" layoutX="98.0">
+                     <children>
+                        <Label fx:id="assistantLabel2" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant2" fitHeight="200.0" fitWidth="90.0" layoutX="1.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/2.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane2" layoutX="197.3333282470703">
+                     <children>
+                        <Label fx:id="assistantLabel3" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant3" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/3.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane3" layoutX="295.3333435058594">
+                     <children>
+                        <Label fx:id="assistantLabel4" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant4" fitHeight="200.0" fitWidth="90.0" layoutY="39.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/4.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane4" layoutX="393.3333435058594">
+                     <children>
+                        <Label fx:id="assistantLabel5" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant5" fitHeight="200.0" fitWidth="90.0" layoutY="39.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/5.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane5" layoutX="491.3333435058594">
+                     <children>
+                        <Label fx:id="assistantLabel6" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant6" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/6.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane6" layoutX="589.3333129882812">
+                     <children>
+                        <Label fx:id="assistantLabel7" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant7" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/7.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane7" layoutX="687.3333129882812">
+                     <children>
+                        <Label fx:id="assistantLabel8" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant8" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/8.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane8" layoutX="785.3333129882812">
+                     <children>
+                        <Label fx:id="assistantLabel9" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant9" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/9.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="assistantPane9" layoutX="883.3333129882812">
+                     <children>
+                        <Label fx:id="assistantLabel10" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="90.0" text="Label" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="assistant10" fitHeight="200.0" fitWidth="90.0" layoutY="40.0" onMouseEntered="#bringUpCard" onMouseExited="#bringDownCard" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/assistants/front/10.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </Pane>
                </children>
             </Pane>
-            <GridPane fx:id="charactersGrid" layoutX="1093.0" layoutY="221.0" prefHeight="152.0" prefWidth="357.0">
+            <GridPane fx:id="charactersGrid" layoutX="1093.0" layoutY="204.0" prefHeight="152.0" prefWidth="357.0">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -519,6 +590,9 @@
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                           <effect>
+                              <SepiaTone level="0.6" />
+                           </effect>
                         </ImageView>
                         <StackPane layoutX="12.0" prefHeight="27.0" prefWidth="17.0">
                            <children>
@@ -539,6 +613,23 @@
                   </Pane>
                </children>
             </GridPane>
+            <Pane fx:id="errorPane" layoutX="1013.0" layoutY="75.0">
+               <children>
+                  <Label fx:id="errorMsg" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="43.0" fitWidth="60.0" layoutX="237.0" layoutY="53.0" onMouseClicked="#hideErrorPane" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/other/cancel.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
             <ImageView fx:id="nextTurnButton" fitHeight="150.0" fitWidth="150.0" layoutX="1690.0" layoutY="38.0">
                <image>
                   <Image url="@../graphics/other/next.png" />
@@ -547,14 +638,6 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Label fx:id="errorMsg" layoutX="1013.0" layoutY="75.0" onMouseClicked="#hideErrorLabel" prefHeight="75.0" prefWidth="516.0" style="-fx-background-color: ea99a2; -fx-alignment: center; -fx-background-radius: 20;" text="ErrorErrorErrorErrorErrorErrorErrorErrorErrorError" textAlignment="CENTER" textFill="#bc1616">
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Label>
          </children>
       </Pane>
       <Pane fx:id="characterPane" layoutX="486.0" layoutY="253.0" prefHeight="574.0" prefWidth="947.0" stylesheets="@../css/game.css" visible="false">

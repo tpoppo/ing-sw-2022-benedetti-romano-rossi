@@ -6,9 +6,9 @@ import it.polimi.ingsw.utils.ReducedLobby;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,29 +21,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
-//TODO: Added errorMessage
 public class MenuController implements GUIController{
-    @FXML
-    private Text usernameLabel;
-    @FXML
-    private VBox lobbiesBox;
-    @FXML
-    private Pane createLobbyPane;
-    @FXML
-    private ImageView background;
-    @FXML
-    private Pane mainPane;
-    @FXML
-    private Label errorLabel;
+    @FXML private Text usernameLabel;
+    @FXML private VBox lobbiesBox;
+    @FXML private Pane createLobbyPane;
+    @FXML private ImageView background;
+    @FXML private Pane mainPane;
+    @FXML private Label errorLabel;
 
     @Override
     public void setup() {
         ViewContent view = GUI.getView();
         ArrayList<ReducedLobby> lobbies = view.getLobbies();
+
+        closeLobbyCreation();
 
         // print username
         usernameLabel.setText(GUI.getUsername());
@@ -84,8 +77,16 @@ public class MenuController implements GUIController{
             }
         }
 
+        // error management
         if(availableLobbies == 0)
             errorLabel.setText("No lobbies available");
+
+        if(view.getErrorMessage() != null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("A player disconnected from the game");
+            alert.show();
+        }
 
         if(GUI.isCreatingLobby())
             openLobbyCreation();

@@ -45,6 +45,7 @@ public class MenuContent extends ViewContent {
     public String toString() {
         return "MenuContent{" +
                 "lobbies=" + lobbies +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }

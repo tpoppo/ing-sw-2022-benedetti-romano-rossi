@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.view.guicontroller.GUIController;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 import javafx.application.Application;
@@ -30,7 +29,6 @@ public class GUI extends Application {
     private static Stage stage;
     private static boolean creatingLobby;
     private static Integer selectingCharacter;
-    public static Player schoolboardPlayer;
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final HashMap<String, Scene> sceneMap = new HashMap<>();
@@ -46,7 +44,7 @@ public class GUI extends Application {
         launch(args);
     }
 
-    public void setup() {
+    private void setup() {
         List<String> fxmlList = new ArrayList<>(Arrays.asList(LOGIN, MENU, LOBBY, GAME));
         try {
             for (String path : fxmlList) {
@@ -87,14 +85,14 @@ public class GUI extends Application {
         stage.setScene(scene);
         stage.show();
 
-        startViewContentUpdates(stage);
+        startViewContentUpdates();
         stage.setOnCloseRequest(event -> {
             event.consume();
             logout();
         });
     }
 
-    private void startViewContentUpdates(Stage stage){
+    private void startViewContentUpdates(){
         new Thread(() -> {
             while (true) {
                 synchronized (client_socket.mutex) {
@@ -112,9 +110,7 @@ public class GUI extends Application {
                 if (view.getCurrentHandler() == null) { // show the menu
                     Platform.runLater(() -> {
                         try {
-                            switchScene(sceneMap.get(MENU));
-                            stage.getScene().getStylesheets().add("css/menu.css");
-                            stage.setFullScreen(false);
+                            switchScene(sceneMap.get(MENU), false);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -124,9 +120,7 @@ public class GUI extends Application {
                         case LOBBY -> // show the lobby
                                 Platform.runLater(() -> {
                                     try {
-                                        switchScene(sceneMap.get(LOBBY));
-                                        stage.getScene().getStylesheets().add("css/lobby.css");
-                                        stage.setFullScreen(false);
+                                        switchScene(sceneMap.get(LOBBY), false);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -136,9 +130,8 @@ public class GUI extends Application {
                                 Platform.runLater(() -> {
                                     try {
                                         long startTime = System.currentTimeMillis();
-                                        switchScene(sceneMap.get(GAME));
-                                        stage.getScene().getStylesheets().add("css/game.css");
-                                        stage.setFullScreen(true);
+                                        switchScene(sceneMap.get(GAME), true);
+
                                         long estimatedTime = System.currentTimeMillis() - startTime;
                                         System.out.println("estimatedTime: " + estimatedTime);
                                     } catch (IOException e) {
@@ -175,10 +168,11 @@ public class GUI extends Application {
         }
     }
 
-    public void switchScene(Scene scene) throws IOException{
+    public void switchScene(Scene scene, boolean fullscreen) throws IOException{
         stage.setScene(scene);
         controllerMap.get(scene).setup();
 
+        stage.setFullScreen(fullscreen);
         stage.show();
     }
 

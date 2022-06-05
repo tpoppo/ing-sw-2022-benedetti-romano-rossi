@@ -2,14 +2,11 @@ package it.polimi.ingsw.view.guicontroller;
 
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.ChooseWizardMessage;
-import it.polimi.ingsw.network.messages.PlayAssistantMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.view.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -21,30 +18,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class LobbyController implements GUIController {
-    @FXML
-    private Pane mainPane;
-    @FXML
-    private ImageView background;
-    @FXML
-    private CheckBox expert_mode;
-    @FXML
-    private Label player0, player1, player2;
-    @FXML
-    private ImageView chosen_wizard0, chosen_wizard1, chosen_wizard2;
-    @FXML
-    private Pane select_wizard;
-    @FXML
-    private GridPane wizard_grid;
-    @FXML
-    private Button start_game;
+    @FXML private Pane mainPane;
+    @FXML private ImageView background;
+    @FXML private CheckBox expert_mode;
+    @FXML private Label player0, player1, player2;
+    @FXML private ImageView chosen_wizard0, chosen_wizard1, chosen_wizard2;
+    @FXML private Pane select_wizard;
+    @FXML private GridPane wizard_grid;
+    @FXML private Button start_game;
 
-    @FXML
-    private Label lobby_id;
+    @FXML private Label lobby_id;
 
     private List<Label> player_labels;
     private List<ImageView> chosen_wizards;
@@ -63,14 +49,6 @@ public class LobbyController implements GUIController {
         background.setEffect(null);
         wizard_grid.getChildren().clear();
         select_wizard.setVisible(true);
-    }
-
-    public void startGame(ActionEvent actionEvent) {
-        GUI.getClientSocket().send(new StartGameMessage(expert_mode.isSelected()));
-    }
-
-    private void selectWizard(MouseEvent mouseEvent, int value){
-        GUI.getClientSocket().send(new ChooseWizardMessage(value));
     }
 
     public void updateLobby() {
@@ -132,5 +110,13 @@ public class LobbyController implements GUIController {
         }
 
         start_game.setDisable(!all_has_chosen || lobbyHandler.getPlayers().size() == 1);
+    }
+
+    public void startGame(ActionEvent actionEvent) {
+        GUI.getClientSocket().send(new StartGameMessage(expert_mode.isSelected()));
+    }
+
+    private void selectWizard(MouseEvent mouseEvent, int value) {
+        GUI.getClientSocket().send(new ChooseWizardMessage(value));
     }
 }
