@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 
@@ -76,7 +77,20 @@ public abstract class ClientMessage implements Serializable {
         return StatusCode.EMPTY;
     }
 
+    protected StatusCode getStatusCode(NetworkManager network_manager, LobbyPlayer lobby_player, GameHandler gameHandler, Game game) {
+        gameHandler.setActionCompleted(true);
+
+        boolean isACharacterActive = game.getCharacters().stream().anyMatch(Character::isActivated);
+        boolean canAffordCharacter = gameHandler.lobbyPlayerToPlayer(lobby_player).getCoins() >= game.minCharacterCost();
+
+        if(!game.getExpertMode() || isACharacterActive || !canAffordCharacter)
+            return new NextStateMessage().handle(network_manager, lobby_player);
+
+        return StatusCode.OK;
+    }
+
     public static ArrayList<Class<?>> getAllMessageClasses(){
+        // FIXME: this is probably unnecessary
         return new ArrayList<>(List.of(ClientMessage.class.getPermittedSubclasses()));
         /*
         return new ArrayList<>(Arrays.asList(

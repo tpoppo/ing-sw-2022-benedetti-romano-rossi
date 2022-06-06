@@ -38,14 +38,7 @@ public class ChooseCloudMessage extends ClientMessage {
             return StatusCode.INVALID_ACTION;
         }
 
-        gameHandler.setActionCompleted(true);
-
-        boolean isACharacterActive = game.getCharacters().stream().anyMatch(Character::isActivated);
-
-        if(!game.getExpertMode() || isACharacterActive)
-            return new NextStateMessage().handle(network_manager, lobby_player);
-
-        return StatusCode.OK;
+        return getStatusCode(network_manager, lobby_player, gameHandler, game);
     }
 
     @Override

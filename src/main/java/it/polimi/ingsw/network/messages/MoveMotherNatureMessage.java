@@ -57,19 +57,7 @@ public class MoveMotherNatureMessage extends ClientMessage {
         game.moveMotherNature(game.getIslands().get(mother_nature_position));
         game.conquerIsland();
 
-        /*
-         TODO: check victory immediately
-          if (game.checkVictory()) {...}
-         */
-
-        gameHandler.setActionCompleted(true);
-
-        boolean isACharacterActive = game.getCharacters().stream().anyMatch(Character::isActivated);
-
-        if(!game.getExpertMode() || isACharacterActive)
-            return new NextStateMessage().handle(network_manager, lobby_player);
-
-        return StatusCode.OK;
+        return getStatusCode(network_manager, lobby_player, gameHandler, game);
     }
 
     @Override
