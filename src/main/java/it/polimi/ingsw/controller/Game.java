@@ -21,6 +21,7 @@ public class Game implements Serializable{
     private final boolean expert_mode;
     private Player first_player;
     private Queue<Player> play_order;
+    private ArrayList<Player> planning_order;
     private final ArrayList<Island> islands;
     private Bag bag;
     private final ArrayList<Students> clouds;
@@ -52,6 +53,7 @@ public class Game implements Serializable{
         Random rng = new Random();
 
         // Parsing the json
+        assert file_path != null;
         gameConfig = gson.fromJson(new BufferedReader(new InputStreamReader(file_path)), GameConfig.class);
 
         // 1: Placing the # of islands on the table
@@ -186,6 +188,8 @@ public class Game implements Serializable{
         // Removes the current_assistant from each player
         for(Player player : players)
             player.setCurrentAssistant(null);
+
+        planning_order = new ArrayList<>(play_order);
     }
 
     public void playAssistant(Assistant assistant) throws AssistantAlreadyPlayedException {
@@ -219,9 +223,6 @@ public class Game implements Serializable{
     public void endPlanning(){
         ArrayList<Player> new_play_order = new ArrayList<>(players);
 
-        // The old play_order is copied to an array list so that we can use indexOf() later
-        ArrayList<Player> copy_play_order = new ArrayList<>(play_order);
-
         // Computing the new player order
         new_play_order.sort((o1, o2) -> {
             int power1, power2;
@@ -239,7 +240,7 @@ public class Game implements Serializable{
 
             // If the assistants powers' are equal, the priority should be given to the one who played their assistant first
             // (that is the first player among the two in the player order of the planning phase)
-            return Integer.compare(copy_play_order.indexOf(o1), copy_play_order.indexOf(o2));
+            return Integer.compare(planning_order.indexOf(o1), planning_order.indexOf(o2));
         });
 
         // Copying the new play_order to the official queue
@@ -559,6 +560,14 @@ public class Game implements Serializable{
 
     public Queue<Player> getPlayOrder() {
         return new LinkedList<>(play_order);
+    }
+
+    public int minCharacterCost(){
+        return characters.stream().map(Character::getCost).reduce(Integer::min).orElseThrow();
+    }
+
+    public Optional<Character> getActiveCharacter(){
+        return characters.stream().filter(Character::isActivated).findFirst();
     }
 
     @Override

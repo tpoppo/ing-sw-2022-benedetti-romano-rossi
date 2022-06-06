@@ -7,7 +7,10 @@ import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serial;
+
 public class Thief extends Character{
+    @Serial
     private static final long serialVersionUID = 2326534445678915384L;
     final private int THEFT_COUNT = 3;
 

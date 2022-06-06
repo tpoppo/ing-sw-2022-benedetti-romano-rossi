@@ -3,7 +3,10 @@ package it.polimi.ingsw.model.characters;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
+import java.io.Serial;
+
 public class Headmaster extends Character{
+    @Serial
     private static final long serialVersionUID = 2286509594470422106L;
 
     public Headmaster() {

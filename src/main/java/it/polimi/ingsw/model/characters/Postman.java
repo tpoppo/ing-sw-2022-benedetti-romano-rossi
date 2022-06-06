@@ -3,8 +3,10 @@ package it.polimi.ingsw.model.characters;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameModifiers;
 
-public class Postman extends Character{
+import java.io.Serial;
 
+public class Postman extends Character{
+    @Serial
     private static final long serialVersionUID = -4653799686486683334L;
 
     public Postman() {

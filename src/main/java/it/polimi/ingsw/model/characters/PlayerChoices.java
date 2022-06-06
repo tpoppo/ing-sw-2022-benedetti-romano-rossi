@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PlayerChoices {
@@ -30,7 +29,7 @@ public class PlayerChoices {
     }
 
     public void setStudent(Color color){
-        if(student == null) student = new ArrayList<Color>();
+        if(student == null) student = new ArrayList<>();
         student.add(color);
     }
 }

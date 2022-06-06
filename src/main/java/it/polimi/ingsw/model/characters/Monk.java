@@ -8,9 +8,11 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serial;
 import java.util.ArrayList;
 
 public class Monk extends Character{
+    @Serial
     private static final long serialVersionUID = -6153301158581915577L;
     Students students;
 

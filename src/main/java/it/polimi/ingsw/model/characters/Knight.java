@@ -2,8 +2,10 @@ package it.polimi.ingsw.model.characters;
 
 import it.polimi.ingsw.controller.Game;
 
-public class Knight extends Character{
+import java.io.Serial;
 
+public class Knight extends Character{
+    @Serial
     private static final long serialVersionUID = 3470080749611807623L;
 
     public Knight() {

@@ -6,9 +6,11 @@ import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serial;
 import java.util.ArrayList;
 
 public class Bard extends Character{
+    @Serial
     private static final long serialVersionUID = -4064825437837380668L;
 
     public Bard() {

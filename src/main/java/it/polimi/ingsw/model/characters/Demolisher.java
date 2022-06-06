@@ -2,7 +2,10 @@ package it.polimi.ingsw.model.characters;
 
 import it.polimi.ingsw.controller.Game;
 
+import java.io.Serial;
+
 public class Demolisher extends Character{
+    @Serial
     private static final long serialVersionUID = -6527201778112407383L;
 
     public Demolisher() {

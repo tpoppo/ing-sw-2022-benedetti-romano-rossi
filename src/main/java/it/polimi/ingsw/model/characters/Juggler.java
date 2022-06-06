@@ -8,7 +8,10 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 
+import java.io.Serial;
+
 public class Juggler extends Character{
+    @Serial
     private static final long serialVersionUID = -7901721705819512488L;
     Students students;
 
