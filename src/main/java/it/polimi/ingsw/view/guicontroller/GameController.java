@@ -71,7 +71,6 @@ public class GameController implements GUIController {
     @FXML private Pane colorSelectionPane;
     @FXML private ImageView chooseRed, chooseYellow, chooseGreen, chooseCyan, chooseMagenta;
 
-    @FXML private ImageView motherNature;
     @FXML private ImageView endingScreen;
 
     private ViewContent view;
@@ -445,13 +444,23 @@ public class GameController implements GUIController {
     }
 
     private void setupMotherNature() {
+        final double lamdba = 0.3; // convex interpolation factor. It must be in [0, 1]
         int position = view.getGameHandler().getModel().findMotherNaturePosition();
         Pane island = islandPanes.get(position);
-        System.out.println(position);
-
-        motherNature.setLayoutX(island.getLayoutX() + island.getBoundsInParent().getWidth() / 2);
-        motherNature.setLayoutY(island.getLayoutY() + island.getBoundsInParent().getHeight());
+        ImageView motherNature = new ImageView(new Image("/graphics/pieces/mothernature/mother_nature.png"));
+        motherNature = resizeImageView(motherNature, 32, 32);
         island.getChildren().add(motherNature);
+
+        double centerX = -island.getParent().getBoundsInParent().getCenterX() + islandsPane.getBoundsInParent().getWidth() / 2;
+        double centerY = -island.getParent().getBoundsInParent().getCenterY() + islandsPane.getBoundsInParent().getHeight() / 2;
+        double islandX = 0;
+        double islandY = 0;
+
+        System.out.println("center: " + centerX + " " + centerY);
+        System.out.println("island:" + islandX + " " + islandY);
+
+        motherNature.setLayoutX(lamdba * centerX + (1-lamdba) * islandX - motherNature.getBoundsInParent().getWidth()  / 2 + island.getBoundsInParent().getWidth() / 2);
+        motherNature.setLayoutY(lamdba * centerY + (1-lamdba) * islandY - motherNature.getBoundsInParent().getHeight() / 2 + island.getBoundsInParent().getHeight() / 2);
     }
 
     private void prepareEnding() {

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
@@ -19,7 +27,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/game.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/game.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.guicontroller.GameController">
    <children>
       <Pane fx:id="mainPane">
          <children>
@@ -106,11 +114,6 @@
                   <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="725.0" layoutY="48.0" preserveRatio="true" rotate="90.0">
                      <image>
                         <Image url="@../graphics/other/arrow_white.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="motherNature" fitHeight="56.0" fitWidth="47.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/pieces/mothernature/mother_nature.png" />
                      </image>
                   </ImageView>
                   <Pane fx:id="islandsPane" layoutX="42.0" layoutY="48.0" prefHeight="785.0" prefWidth="786.0" />

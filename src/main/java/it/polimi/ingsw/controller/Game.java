@@ -52,7 +52,6 @@ public class Game implements Serializable{
         Random rng = new Random();
 
         // Parsing the json
-        System.out.println(file_path);
         gameConfig = gson.fromJson(new BufferedReader(new InputStreamReader(file_path)), GameConfig.class);
 
         // 1: Placing the # of islands on the table

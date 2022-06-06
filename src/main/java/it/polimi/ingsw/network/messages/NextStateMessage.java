@@ -24,6 +24,7 @@ public class NextStateMessage extends ClientMessage {
             case ACTIVATE_CHARACTER -> {
                 gameHandler.setCurrentState(gameHandler.getSavedState());
                 gameHandler.setSavedState(null);
+                gameHandler.setActionCompleted(gameHandler.isSavedActionCompleted());
             }
             case PLAY_ASSISTANT -> {
                 game.nextTurn();
