@@ -7,6 +7,8 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.Colorblind;
+import it.polimi.ingsw.model.characters.Demolisher;
 import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.DeepCopy;
@@ -164,6 +166,9 @@ public class GameController implements GUIController {
         List<Island> islands = view.getGameHandler().getModel().getIslands();
         List<Node> islandNodes = new ArrayList<>();
 
+        // getting the active character for later usage
+        Optional<Character> activeCharacter = view.getGameHandler().getModel().getActiveCharacter();
+
         for (int i = 0; i < islands.size(); i++) {
             Island island = islands.get(i);
 
@@ -178,9 +183,10 @@ public class GameController implements GUIController {
             Image image = new Image("/graphics/islands/" + i % 3 + ".png");
             islandImage.setImage(image);
 
-            double scaleFactor = islandSize * 130.0 / 5 / 0.4 - 130.0 / 5 / 0.4;
-            int dimX = (int) (130 + scaleFactor); // FIXME: choose a better scale factor
-            int dimY = (int) (130 + scaleFactor);
+            int islandImageSize = 130;
+            double scaleFactor = (double) islandSize * islandImageSize / 5 / 0.4 - (double) islandImageSize / 5 / 0.4;
+            int dimX = (int) (islandImageSize + scaleFactor); // FIXME: choose a better scale factor
+            int dimY = (int) (islandImageSize + scaleFactor);
             islandImage = resizeImageView(islandImage, dimX, dimY);
 
             islandPane.getChildren().add(islandImage);
@@ -204,6 +210,11 @@ public class GameController implements GUIController {
                 ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
                 towerImage = resizeImageView(towerImage, 35, 35);
                 towerImage.getStyleClass().add(PIECE_CLASS);
+
+                // if the demolisher is active, add a filter to the towers
+                if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Demolisher)){
+                    towerImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                }
 
                 Text towerNumber = new Text(String.valueOf(numTowers));
                 towerNumber.getStyleClass().add(BORDERED_TEXT);
@@ -233,6 +244,10 @@ public class GameController implements GUIController {
                     ImageView studentImage = new ImageView("/graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                     studentImage = resizeImageView(studentImage, 30, 30);
                     studentImage.getStyleClass().add(PIECE_CLASS);
+
+                    if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Colorblind)){
+                        studentImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                    }
 
                     Text studentNumber = new Text(String.valueOf(numStudents));
                     studentNumber.getStyleClass().add(BORDERED_TEXT);
@@ -839,9 +854,7 @@ public class GameController implements GUIController {
     private void setupErrorMessage() {
         if (view.getErrorMessage() != null) {
             updateErrorMessage(view.getErrorMessage());
-        } else {
-            errorPane.setVisible(false);
-        }
+        } else errorPane.setVisible(GUI.isShowingError());
     }
 
     private void setupNextTurnButton() {
@@ -871,14 +884,18 @@ public class GameController implements GUIController {
             assistantPane.setLayoutY(0);
             assistantImage.setEffect(null);
 
+            int indexOfAssistant = thisPlayer.getPlayerHand().indexOf(assistant);
+
             // current assistant is up
             if(assistant.equals(currentAssistant)) {
                 assistantPane.setLayoutY(-40);
                 assistantImage.setOnMouseEntered(null);
                 assistantImage.setOnMouseExited(null);
                 // assistants played by other players are yellow
-            }else if(playedAssistantsMap.containsValue(assistant)) {
+            }else if(playedAssistantsMap.containsValue(assistant) && checkMessage(new PlayAssistantMessage(indexOfAssistant), thisPlayer) == StatusCode.OK) {
                 assistantImage.setEffect(new SepiaTone(1));
+                assistantImage.setOnMouseEntered(null);
+                assistantImage.setOnMouseExited(null);
                 // already played assistants are grey
             }else if(!assistants.contains(assistant) && !assistant.equals(currentAssistant)) {
                 assistantImage.setEffect(new ColorAdjust(0.0, 0.0, -0.75, 0.0));
@@ -1135,6 +1152,7 @@ public class GameController implements GUIController {
     private void updateErrorMessage(String s) {
         errorMsg.setText(s);
         errorPane.setVisible(true);
+        GUI.setShowingError(true);
     }
 
     private ImageView resizeImageView(ImageView image, int width, int height) {
@@ -1176,5 +1194,6 @@ public class GameController implements GUIController {
 
     public void hideErrorPane(){
         errorPane.setVisible(false);
+        GUI.setShowingError(false);
     }
 }

@@ -29,6 +29,7 @@ public class GUI extends Application {
     private static Stage stage;
     private static boolean creatingLobby;
     private static Integer selectingCharacter;
+    private static boolean showingError;
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final HashMap<String, Scene> sceneMap = new HashMap<>();
@@ -222,5 +223,13 @@ public class GUI extends Application {
 
     public static void setSelectingCharacter(Integer selectingCharacter) {
         GUI.selectingCharacter = selectingCharacter;
+    }
+
+    public static boolean isShowingError() {
+        return showingError;
+    }
+
+    public static void setShowingError(boolean showingError) {
+        GUI.showingError = showingError;
     }
 }
