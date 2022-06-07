@@ -54,7 +54,8 @@ public class Eriantys {
     private static void runGUI(String[] args) throws IOException {
         System.out.println("Starting the GUI...\n");
         ClientConfig clientConfig = parseInput(args, false);
-
+        System.out.println("Server Address: " + clientConfig.getAddress());
+        System.out.println("Server Port: " + clientConfig.getPort());
         GUI.setClientSocket(new ClientSocket(clientConfig));
         GUI.main(args);
     }

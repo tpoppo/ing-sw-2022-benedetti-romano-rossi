@@ -25,7 +25,7 @@ public class NetworkManager {
     public final int ID;
     private HandlerType current_handler;
     private final LinkedBlockingQueue<MessageEnvelope> message_queue;
-    private final HashMap<LobbyPlayer, String> errorMessages;
+    private final Map<LobbyPlayer, String> errorMessages;
     private LobbyHandler lobby_handler;
     private GameHandler game_handler;
     private final Set<ConnectionCEO> subscribers;
@@ -37,7 +37,7 @@ public class NetworkManager {
         ID = count;
         count++;
         message_queue = new LinkedBlockingQueue<>();
-        errorMessages = new HashMap<>();
+        errorMessages = Collections.synchronizedMap(new HashMap<>());
         subscribers = Collections.synchronizedSet(new HashSet<>());
 
         current_handler = HandlerType.LOBBY;
@@ -51,7 +51,7 @@ public class NetworkManager {
         ID = count;
         count++;
         message_queue = new LinkedBlockingQueue<>();
-        errorMessages = new HashMap<>();
+        errorMessages = Collections.synchronizedMap(new HashMap<>());
         subscribers = Collections.synchronizedSet(new HashSet<>());
 
         current_handler = HandlerType.GAME;

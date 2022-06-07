@@ -18,13 +18,13 @@ public class NextStateMessage extends ClientMessage {
 
         GameHandler gameHandler = network_manager.getGameHandler();
         Game game = gameHandler.getModel();
-
+        boolean next_action_completed = false;
 
         switch (gameHandler.getCurrentState()) {
             case ACTIVATE_CHARACTER -> {
                 gameHandler.setCurrentState(gameHandler.getSavedState());
                 gameHandler.setSavedState(null);
-                gameHandler.setActionCompleted(gameHandler.isSavedActionCompleted());
+                next_action_completed = gameHandler.isSavedActionCompleted();
             }
             case PLAY_ASSISTANT -> {
                 game.nextTurn();
@@ -66,7 +66,7 @@ public class NextStateMessage extends ClientMessage {
             }
         }
 
-        gameHandler.setActionCompleted(false);
+        gameHandler.setActionCompleted(next_action_completed);
         return StatusCode.OK;
     }
 
