@@ -91,7 +91,7 @@ public class GameController implements GUIController {
     private ArrayList<Pane> islandPanes;
     private Map<Color, ImageView> chooseColor;
     private HashMap<Integer, VBox> characterStuffSmallMap;
-    private ArrayList<Consumer<Player>> onfillSchoolboard;
+    private ArrayList<Consumer<String>> onfillSchoolboard;
 
     @Override
     public void setup() {
@@ -144,8 +144,8 @@ public class GameController implements GUIController {
         setupActions();
 
         // adding the listeners after building the schoolboard (the first time)
-        for (Consumer<Player> f : onfillSchoolboard) {
-            f.accept(thisPlayer);
+        for (Consumer<String> f : onfillSchoolboard) {
+            f.accept(schoolboardPlayerUsername);
         }
     }
 
@@ -425,40 +425,31 @@ public class GameController implements GUIController {
         GameHandler gameHandler = view.getGameHandler();
 
         // enable and create objects depending on the current state
-        String action_text = null;
         if (gameHandler.getCurrentState() == GameState.ENDING) {
-            action_text = "The end";
             prepareEnding();
         } else if (gameHandler.getModel().getCurrentPlayer().getUsername().equals(GUI.getUsername())) { // if it is your turn
 
             if (!gameHandler.isActionCompleted()) {
                 switch (gameHandler.getCurrentState()) {
-                    case PLAY_ASSISTANT -> action_text = "Play an assistant";
                     case CHOOSE_CLOUD -> {
-                        action_text = "Choose a cloud";
                         prepareChooseCloud();
                     }
                     case MOVE_MOTHER_NATURE -> {
-                        action_text = "Move mother nature";
                         prepareMotherNature();
                     }
                     case MOVE_STUDENT -> {
-                        action_text = "Move a student (" + gameHandler.getStudentMoves() + " left)";
                         prepareMoveStudent();
                     }
                     case ACTIVATE_CHARACTER -> {
-                        action_text = "Activate a character";
                         prepareActivateCharacter();
                     }
                 }
-            } else {
-                action_text = "Pass";
             }
         }
-        actionLabel.setText(action_text);
     }
 
     private void setupMotherNature() {
+        // the position of the mother nature is the convex interpolation between the center and the island (in which mother nature is currently placed)
         final double lamdba = 0.3; // convex interpolation factor. It must be in [0, 1]
         int position = view.getGameHandler().getModel().findMotherNaturePosition();
         Pane island = islandPanes.get(position);
@@ -597,8 +588,6 @@ public class GameController implements GUIController {
             }
 
             case SWAP_CARD_ENTRANCE -> {
-                // FIXME: the skip button doesn't update correctly
-                //  (if you choose the correct number and then remove a selected student FROM THE ENTRANCE it remains active)
                 // it wants up to 3 students from the entrance and up to 3 students from the entrance
 
                 // method for the button dark/light effect
@@ -617,7 +606,7 @@ public class GameController implements GUIController {
                     updateButton.run();
 
                     // student can be selected only if this is my schoolboard!
-                    if (!player.equals(thisPlayer)) return;
+                    if (!player.equals(thisPlayer.getUsername())) return;
 
 
                     // 1) select up to 3 students from this card
@@ -657,8 +646,8 @@ public class GameController implements GUIController {
                                     selectedOnEntrance.get(0).setEffect(null);
                                     selectedOnEntrance.remove(0);
                                 }
-                                updateButton.run();
                             }
+                            updateButton.run();
                         });
                     });
 
@@ -686,7 +675,7 @@ public class GameController implements GUIController {
                     updateButton.run();
 
                     // student can be selected only if this is my schoolboard!
-                    if (!player.equals(thisPlayer)) return;
+                    if (!player.equals(thisPlayer.getUsername())) return;
 
                     // 1) select up to 2 students from this card
                     List.of(greenDining, magentaDining, cyanDining, redDining, yellowDining).forEach(gridPane ->
@@ -743,8 +732,6 @@ public class GameController implements GUIController {
     }
 
     private void prepareMoveStudent() {
-        // FIXME: student selection in the entrance doesn't work when setup is called and you are looking at another schoolboard
-
         selectedEntrance = null;
         for (int i = 0; i < islandPanes.size(); i++) {
             int finalI = i;
@@ -767,7 +754,7 @@ public class GameController implements GUIController {
             List.of(greenDining, cyanDining, redDining, magentaDining, yellowDining).forEach(e -> e.setEffect(null));
 
             // student can be selected only if this is my schoolboard!
-            if (!player.equals(thisPlayer)) return;
+            if (!player.equals(thisPlayer.getUsername())) return;
 
             for (Node node : entranceGrid.getChildren()) {
                 ImageView imageView = (ImageView) node;
@@ -849,6 +836,35 @@ public class GameController implements GUIController {
 
         turnLabel.setText("Turn: " + currentPlayerUsername);
         usernameLabel.setText(thisPlayer.getUsername());
+
+        GameHandler gameHandler = view.getGameHandler();
+
+        // update the action state
+        String action_text = null;
+        if (gameHandler.getCurrentState() == GameState.ENDING) {
+            action_text = "The end";
+        } else {
+            if (!gameHandler.isActionCompleted()) {
+                switch (gameHandler.getCurrentState()) {
+                    case PLAY_ASSISTANT -> action_text = "Play an assistant";
+                    case CHOOSE_CLOUD -> {
+                        action_text = "Choose a cloud";
+                    }
+                    case MOVE_MOTHER_NATURE -> {
+                        action_text = "Move mother nature";
+                    }
+                    case MOVE_STUDENT -> {
+                        action_text = "Move a student (" + gameHandler.getStudentMoves() + " left)";
+                    }
+                    case ACTIVATE_CHARACTER -> {
+                        action_text = "Activate a character";
+                    }
+                }
+            } else {
+                action_text = "Pass";
+            }
+        }
+        actionLabel.setText(action_text);
     }
 
     private void setupErrorMessage() {
@@ -1007,8 +1023,8 @@ public class GameController implements GUIController {
         coinsPane.getChildren().add(coinNumber);
 
         // adding the listeners after building the schoolboard
-        for (Consumer<Player> f : onfillSchoolboard) {
-            f.accept(player);
+        for (Consumer<String> f : onfillSchoolboard) {
+            f.accept(player.getUsername());
         }
     }
 
