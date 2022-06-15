@@ -5,7 +5,15 @@ import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 
+import java.io.Serial;
+
+/**
+ * This message is used to close the game after it has ended
+ */
 public class EndingMessage extends ClientMessage {
+    @Serial
+    private static final long serialVersionUID = -5172580025871070512L;
+
     public EndingMessage() {
         super.message_type = MessageType.GAME;
     }

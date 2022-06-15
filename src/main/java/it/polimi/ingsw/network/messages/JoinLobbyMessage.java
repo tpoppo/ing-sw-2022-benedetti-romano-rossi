@@ -13,13 +13,13 @@ public class JoinLobbyMessage extends ClientMessage {
     }
 
     @Override
-    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
+    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer lobby_player) {
         if(!menuManager.isSubscribed(connectionCEO)){
-            menuManager.addErrorMessage(player, "You must be in the Menu");
+            menuManager.addErrorMessage(lobby_player, "You must be in the Menu");
             return StatusCode.WRONG_STATE;
         }
         Server server = Server.getInstance();
-        Optional<NetworkManager> network_manager = server.joinLobby(id, player);
+        Optional<NetworkManager> network_manager = server.joinLobby(id, lobby_player);
 
         if(network_manager.isPresent()){
             connectionCEO.setNetworkManager(network_manager.get());
@@ -29,7 +29,7 @@ public class JoinLobbyMessage extends ClientMessage {
             return StatusCode.OK;
         }
 
-        menuManager.addErrorMessage(player, "Please choose a valid lobby");
+        menuManager.addErrorMessage(lobby_player, "Please choose a valid lobby");
         return StatusCode.INVALID_ACTION;
     }
 

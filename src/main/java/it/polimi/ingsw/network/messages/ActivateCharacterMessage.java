@@ -8,7 +8,14 @@ import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
+import java.io.Serial;
+
+/**
+ * This message is used to activate the character during the game (after it has been selected)
+ */
 public class ActivateCharacterMessage extends ClientMessage {
+    @Serial
+    private static final long serialVersionUID = 4917209518181302573L;
     PlayerChoicesSerializable player_choices;
 
     public ActivateCharacterMessage(PlayerChoicesSerializable player_choices) {

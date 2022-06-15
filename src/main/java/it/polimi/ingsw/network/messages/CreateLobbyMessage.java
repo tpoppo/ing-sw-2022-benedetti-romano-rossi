@@ -17,19 +17,19 @@ public class CreateLobbyMessage extends ClientMessage {
     /**
      * It creates the lobby and joins it.
      *
-     * @param player The caller (the current lobby player)
+     * @param lobby_player The caller (the current lobby player)
      * @return the status response.
      */
     @Override
-    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
+    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer lobby_player) {
         if(!menuManager.isSubscribed(connectionCEO)){
-            menuManager.addErrorMessage(player, "You must be in the Menu");
+            menuManager.addErrorMessage(lobby_player, "You must be in the Menu");
             return StatusCode.WRONG_STATE;
         }
 
         // We check whether max_players is 2 or 3?
         if(max_players != 3 && max_players != 2) {
-            menuManager.addErrorMessage(player, "Lobby size can be only 2 or 3! Given : " + max_players);
+            menuManager.addErrorMessage(lobby_player, "Lobby size can be only 2 or 3! Given : " + max_players);
             return StatusCode.INVALID_ACTION;
         }
 
@@ -38,9 +38,9 @@ public class CreateLobbyMessage extends ClientMessage {
         NetworkManager network_manager = server.createLobby(max_players);
         LobbyHandler lobby_handler = network_manager.getLobbyHandler();
         try {
-            lobby_handler.addPlayer(player);
+            lobby_handler.addPlayer(lobby_player);
         } catch (FullLobbyException e) { // It means that the lobby is full. It should be impossible.
-            menuManager.addErrorMessage(player, "Lobby is full (this shouldn't have happened) :/");
+            menuManager.addErrorMessage(lobby_player, "Lobby is full (this shouldn't have happened) :/");
             return StatusCode.INVALID_ACTION;
         }
         connectionCEO.setNetworkManager(network_manager);

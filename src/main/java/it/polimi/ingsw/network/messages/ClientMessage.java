@@ -5,25 +5,43 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the message sent by the client to execute the various actions
+ */
 public abstract class ClientMessage implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 657653770765716348L;
     protected MessageType message_type;
 
+    /**
+     * This method is called when the client message is received in the lobby or in the game
+     * @param network_manager the NetworkManager in the game and in the lobby
+     * @param lobby_player the LobbyPlayer that sent the message
+     * @return a status code depending on the result (e.g. OK valid, INVALID_ACTION invalid parameters)
+     */
     public StatusCode handle(NetworkManager network_manager, LobbyPlayer lobby_player) {
         return StatusCode.NOT_IMPLEMENTED;
     }
 
-    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer player) {
+    /**
+     * This method is called when the client message is received in the menu
+     * @param connectionCEO the ConnectionCEO of the sender
+     * @param menuManager the used MenuManager
+     * @param lobby_player the LobbyPlayer that sent the message
+     * @return a status code depending on the result (e.g. OK valid, INVALID_ACTION invalid parameters)
+     */
+    public StatusCode handle(ConnectionCEO connectionCEO, MenuManager menuManager, LobbyPlayer lobby_player) {
         return StatusCode.NOT_IMPLEMENTED;
     }
 
     public MessageType getMessageType() {
         return message_type;
     }
-
 
     /**
      * Check whether the game state is required_state and the player is valid (same player from the game and from the socket)
@@ -87,26 +105,6 @@ public abstract class ClientMessage implements Serializable {
             return new NextStateMessage().handle(network_manager, lobby_player);
 
         return StatusCode.OK;
-    }
-
-    public static ArrayList<Class<?>> getAllMessageClasses(){
-        // FIXME: this is probably unnecessary
-        return new ArrayList<>(List.of(ClientMessage.class.getPermittedSubclasses()));
-        /*
-        return new ArrayList<>(Arrays.asList(
-                    ActivateCharacterMessage.class,
-                    ChooseCloudMessage.class,
-                    ChooseWizardMessage.class,
-                    CreateLobbyMessage.class,
-                    JoinLobbyMessage.class,
-                    MoveMotherNatureMessage.class,
-                    MoveStudentMessage.class,
-                    NextStateMessage.class,
-                    PlayAssistantMessage.class,
-                    SelectedCharacterMessage.class,
-                    StartGameMessage.class
-        ));
-         */
     }
 
     @Override

@@ -4,8 +4,15 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 
+import java.io.Serial;
+
+/**
+ * This message is used to select the wizard in the lobby.
+ */
 public class ChooseWizardMessage extends ClientMessage{
-    private int wizard;
+    @Serial
+    private static final long serialVersionUID = 4553028616933916085L;
+    private final int wizard;
 
     public ChooseWizardMessage(int wizard){
         this.wizard = wizard;
@@ -16,7 +23,6 @@ public class ChooseWizardMessage extends ClientMessage{
         StatusCode status_code = preambleLobbyCheck(network_manager, lobby_player);
         if(status_code != StatusCode.EMPTY) return status_code;
 
-        // TODO: better error handling
         if(lobby_player.getWizard() != null) {
             network_manager.addErrorMessage(lobby_player, "You have already chosen a wizard");
             return StatusCode.INVALID_ACTION;

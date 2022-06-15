@@ -7,7 +7,14 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.exceptions.EmptyCloudException;
 
+import java.io.Serial;
+
+/**
+ * This message is used to select the cloud
+ */
 public class ChooseCloudMessage extends ClientMessage {
+    @Serial
+    private static final long serialVersionUID = -6567465369692086533L;
     int cloud_position;
 
     public ChooseCloudMessage(int cloud_position) {
