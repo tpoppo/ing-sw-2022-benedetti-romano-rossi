@@ -6,7 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test of the class bag
+ */
 public class BagTest {
+    /**
+     * Test that the number of possible extractions are equal to the number of expected students in bag
+     * @throws EmptyBagException if the bag is empty and someone tries to draw a student
+     */
     @Test
     public void Bag() throws EmptyBagException {
         Bag bag = new Bag();
@@ -21,6 +28,10 @@ public class BagTest {
         assertEquals(student, bag2.getStudents());
     }
 
+    /**
+     * Test that when the bag is empty and someone tries to draw a student the exception EmptyBagException is called
+     * @throws EmptyBagException when the bag is empty and someone tries to draw a student
+     */
     @Test
     public void BagException() throws EmptyBagException {
         Bag bag = new Bag();

@@ -6,7 +6,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test of the class Professors
+ */
 public class ProfessorsTest {
+    /**
+     * test getter and setter of the class
+     */
     @Test
     public void GetterSetter(){
         Professors professor1 = new Professors();
@@ -28,6 +34,10 @@ public class ProfessorsTest {
         assertEquals(professor1, professor3);
     }
 
+    /**
+     * Test the method moveTo moving a color from a professor to another
+     * @throws EmptyMovableException if the color that the method is trying to move isn't in the professor's set
+     */
     @Test
     public void moveTo() throws EmptyMovableException {
         Professors professor1 = new Professors();
@@ -45,6 +55,9 @@ public class ProfessorsTest {
         assertEquals(true, professor2.contains(Color.MAGENTA));
     }
 
+    /**
+     * Test that, when the color that the method is trying to move isn't in the professor's set, the exception moveToException is called
+     */
     @Test
     public void moveToException(){
         Professors professor1 = new Professors();

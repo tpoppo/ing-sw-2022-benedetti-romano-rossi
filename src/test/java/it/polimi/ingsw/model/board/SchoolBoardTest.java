@@ -4,7 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the class Schoolboard
+ */
 public class SchoolBoardTest {
+    /**
+     * Test the getter, setter of the class
+     */
     @Test
     public void checkConstructorSettersGetters(){
         Professors professor = new Professors();

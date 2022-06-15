@@ -7,8 +7,14 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the class Island
+ */
 public class IslandTest {
 
+    /**
+     * Test getter, setter and merge between two islands
+     */
     @Test
     public void checkConstructorSettersGettersMerge() {
         Island island1 = new Island();
@@ -46,6 +52,9 @@ public class IslandTest {
         assertEquals(2, island1.getNumIslands());
     }
 
+    /**
+     * Test a merge between three islands
+     */
     @Test
     public void Mergelist(){
         ArrayList islands = new ArrayList();

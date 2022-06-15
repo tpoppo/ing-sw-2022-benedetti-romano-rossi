@@ -6,8 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test of the class Students
+ */
 public class StudentsTest {
 
+    /**
+     * Test of the getter, setter of the class
+     */
     @Test
     public void StudentsGetterSetter(){
         Students student = new Students(2, 5, 1, 0, 2);
@@ -18,6 +24,10 @@ public class StudentsTest {
         assertEquals(0, student.count());
     }
 
+    /**
+     * Test the method moveTo moving a color from a student's set to another
+     * @throws EmptyMovableException if the color that the method is trying to move isn't in the student's set
+     */
     @Test
     public void moveTo() throws EmptyMovableException {
         Students student1 = new Students(1, 2, 1, 3, 2);
@@ -27,6 +37,10 @@ public class StudentsTest {
         assertEquals(1, student1.get(color));
         assertEquals(4, student2.get(color));
     }
+
+    /**
+     * Test that, when the color that the method is trying to move isn't in the student's set, the exception moveToException is called
+     */
     @Test
     public void moveToException() {
         Students student1 = new Students(0, 2, 1, 3, 2);

@@ -6,7 +6,13 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the class Assistant
+ */
 public class AssistantTest {
+    /**
+     * Test the initialization of the assistant's cards
+     */
     @Test
     public void getAssistant(){
         ArrayList<Assistant> wizard1;
