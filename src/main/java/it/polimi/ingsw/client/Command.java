@@ -5,6 +5,9 @@ import it.polimi.ingsw.controller.GameState;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class helps to define a command in the CLI shell and to check which command are usable in each state
+ */
 public class Command {
     private final String name;
     private final List<String> aliases;

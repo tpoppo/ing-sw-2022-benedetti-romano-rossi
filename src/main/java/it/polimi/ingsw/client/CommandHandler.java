@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.network.HandlerType;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.utils.Constants;
-import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 
@@ -16,10 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class manage command received by the CLI (both the Cli and the CliArt)
+ */
 public class CommandHandler {
     private static final List<Command> commands = new ArrayList<>();
     protected static final String NEWLINE = "<--NEWLINE-->";
 
+    /**
+     * It defines the commands available
+     */
     public static void createCommands(){
         // General clientside commands
         Command clean = new Command("clean", CommandType.GENERAL);
@@ -120,7 +125,7 @@ public class CommandHandler {
     }
 
     public static String normalizeDescription(Command command){
-        /*
+        /* FIXME: to remove?
         Optional<Integer> maxLen;
 
         maxLen = commands.stream()
@@ -168,6 +173,13 @@ public class CommandHandler {
         return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
     }
 
+    /**
+     * It parses and send the given command input.
+     * @param inputCommand command that must be parsed
+     * @param client_socket where to send the message
+     * @param cli the cli that sent the input
+     * @return null if there are no errors otherwise the string with an error
+     */
     public static String sendInput(String inputCommand, ClientSocket client_socket, CLI cli){
         String[] command = inputCommand.split(" ");
         if(command.length == 0) return "No command found";
@@ -341,7 +353,6 @@ public class CommandHandler {
                     return null;
                 }
 
-                // FIXME: maybe it's better to specify the number of steps (instead of the arrival island's id)
                 case "mothernature" -> {
                     if (command.length != 2) return "Invalid number of arguments";
                     if(cli.getView().getCurrentHandler() != HandlerType.GAME) return "You cannot use this command here";

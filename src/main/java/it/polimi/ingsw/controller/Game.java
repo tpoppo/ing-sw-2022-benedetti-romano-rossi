@@ -12,6 +12,10 @@ import it.polimi.ingsw.utils.exceptions.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * This class keeps all the objects used during the game.
+ * It provides the methods to perform the action of the turn.
+ */
 public class Game implements Serializable{
     @Serial
     private static final long serialVersionUID = -8385917117979059599L;
@@ -252,9 +256,9 @@ public class Game implements Serializable{
 
     /**
      * It moves the student from the entrance to the given island
-     * @param color
-     * @param island
-     * @throws EmptyMovableException
+     * @param color the color of the student in the entrance
+     * @param island the target island
+     * @throws EmptyMovableException if there are no student of the required color in the entrance
      */
     public void moveStudent(Color color, Island island) throws EmptyMovableException {
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
@@ -269,9 +273,9 @@ public class Game implements Serializable{
 
     /**
      * It moves the student from the entrance to the dining room
-     * It also moves the professor is needed
-     * @param color
-     * @throws EmptyMovableException
+     * It also updates the professor is needed
+     * @param color color of the student that it is moved into the dining room
+     * @throws EmptyMovableException if there are no student of the required color in the entrance
      */
     public void moveStudent(Color color) throws EmptyMovableException, FullDiningRoomException {
         SchoolBoard schoolboard = getCurrentPlayer().getSchoolBoard();
@@ -309,6 +313,7 @@ public class Game implements Serializable{
     /**
      * It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
      * The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
+     * @param island where mother nature will move to
      */
     public void moveMotherNature(Island island) {
         int next_position = islands.indexOf(island);
@@ -318,6 +323,10 @@ public class Game implements Serializable{
         islands.get(next_position).setMotherNature(true);
     }
 
+    /**
+     * Execute the conquering island phase on the island where mother nature is currently placed.
+     * It calls conquerIsland(Island island), where island is the island where mother nature is currently placed.
+     */
     public void conquerIsland(){
         int mother_nature_position = findMotherNaturePosition();
         conquerIsland(islands.get(mother_nature_position));
@@ -405,7 +414,7 @@ public class Game implements Serializable{
 
     /**
      * It moves students from the selected cloud to the player's entrance. Additionally, it deactivates the characters
-     * @param cloud
+     * @param cloud selected cloud
      */
     public void chooseCloud(Students cloud) throws EmptyCloudException {
         if(cloud.count() == 0) throw new EmptyCloudException();
@@ -481,6 +490,12 @@ public class Game implements Serializable{
         return -1; // shouldn't happen
     }
 
+    /**
+     * Activate the selected character with the given parameters
+     * @param character the character you want to activate
+     * @param playerChoices the parameters of the character activation
+     * @throws BadPlayerChoiceException if the parameters are invalid
+     */
     public void activateCharacter(Character character, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         character.activate(this, playerChoices);
     }
@@ -563,7 +578,7 @@ public class Game implements Serializable{
     }
 
     public int minCharacterCost(){
-        return characters.stream().map(Character::getCost).reduce(Integer::min).orElseThrow();
+        return characters.stream().map(Character::getCost).reduce(Integer::min).orElse(1000000);
     }
 
     public Optional<Character> getActiveCharacter(){

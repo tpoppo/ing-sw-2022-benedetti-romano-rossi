@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.characters.Character;
 
-import java.util.Map;
 import java.util.Set;
 
 public class SelectedCharacterMessage extends ClientMessage {

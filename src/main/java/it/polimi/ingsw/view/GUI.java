@@ -69,7 +69,7 @@ public class GUI extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         setup();
 
         resizeScenes(List.of(GAME), 1920, 1080);
@@ -110,34 +110,22 @@ public class GUI extends Application {
 
                 if (view.getCurrentHandler() == null) { // show the menu
                     Platform.runLater(() -> {
-                        try {
-                            switchScene(sceneMap.get(MENU), false);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        switchScene(sceneMap.get(MENU), false);
                     });
                 } else {
                     switch (view.getCurrentHandler()) {
                         case LOBBY -> // show the lobby
                                 Platform.runLater(() -> {
-                                    try {
-                                        switchScene(sceneMap.get(LOBBY), false);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
+                                    switchScene(sceneMap.get(LOBBY), false);
                                 });
 
                         case GAME -> // show the game
                                 Platform.runLater(() -> {
-                                    try {
-                                        long startTime = System.currentTimeMillis();
-                                        switchScene(sceneMap.get(GAME), true);
+                                    long startTime = System.currentTimeMillis();
+                                    switchScene(sceneMap.get(GAME), true);
 
-                                        long estimatedTime = System.currentTimeMillis() - startTime;
-                                        System.out.println("estimatedTime: " + estimatedTime);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
+                                    long estimatedTime = System.currentTimeMillis() - startTime;
+                                    System.out.println("estimatedTime: " + estimatedTime);
                                 });
                     }
                 }
@@ -169,7 +157,7 @@ public class GUI extends Application {
         }
     }
 
-    public void switchScene(Scene scene, boolean fullscreen) throws IOException{
+    public void switchScene(Scene scene, boolean fullscreen) {
         stage.setScene(scene);
         controllerMap.get(scene).setup();
 

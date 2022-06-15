@@ -287,7 +287,7 @@ public class GameTest {
     }
     
     @RepeatedTest(200)
-    public void simpleRun3Player() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, MoveMotherNatureException {
+    public void simpleRun3Player() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -437,7 +437,7 @@ public class GameTest {
     }
 
     @RepeatedTest(100)
-    public void PlanningPhase() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
+    public void PlanningPhase() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -511,7 +511,7 @@ public class GameTest {
     }
 
     @RepeatedTest(100)
-    public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException, EmptyMovableException {
+    public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

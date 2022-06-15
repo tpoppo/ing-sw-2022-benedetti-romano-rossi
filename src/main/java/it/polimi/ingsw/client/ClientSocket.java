@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class manage the client side connection to the server
+ */
 public class ClientSocket {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private Socket clientSocket;
@@ -28,12 +30,20 @@ public class ClientSocket {
             setup();
     }
 
+    /**
+     * it setups the connection and it creates the socket and input/output streams.
+     * @throws IOException if it cannot create the socket or a stream
+     */
     private void setup() throws IOException {
         clientSocket = new Socket(client_config.getAddress(), client_config.getPort());
         output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
     }
 
+    /**
+     * It sends the given message to the server
+     * @param message client message to send
+     */
     public void send(ClientMessage message) {
         try {
             output_stream.reset();
@@ -50,10 +60,18 @@ public class ClientSocket {
         clientSocket.close();
     }
 
+    /**
+     * @return it returns where the socket is still open
+     */
     public boolean isOpened() {
         return !clientSocket.isClosed();
     }
 
+    /**
+     * It log in the client with the given username
+     * @param username username of the player
+     * @return true if the login was successful otherwise it returns false
+     */
     public boolean login(String username) {
         try {
             output_stream.reset();

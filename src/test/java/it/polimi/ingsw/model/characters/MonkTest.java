@@ -21,7 +21,7 @@ import java.util.Random;
 public class MonkTest {
 
     @Test
-    public void Recruiter() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
+    public void Recruiter() throws BadPlayerChoiceException, EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -63,7 +63,7 @@ public class MonkTest {
     }
 
     @Test
-    public void BadPlayerChoiceException() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
+    public void BadPlayerChoiceException() throws EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -98,7 +98,7 @@ public class MonkTest {
     }
 
     @Test
-    public void BadPlayerChoiceException2() throws BadPlayerChoiceException, EmptyMovableException, EmptyBagException, FullLobbyException {
+    public void BadPlayerChoiceException2() throws EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

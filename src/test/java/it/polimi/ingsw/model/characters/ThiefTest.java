@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ThiefTest {
 
     @Test
-    public void Thief() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
+    public void Thief() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer lobby_player1 = new LobbyPlayer("Player 1");
         LobbyPlayer lobby_player2 = new LobbyPlayer("Player 2");

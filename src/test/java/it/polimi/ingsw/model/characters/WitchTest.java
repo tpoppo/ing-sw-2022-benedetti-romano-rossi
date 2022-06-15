@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WitchTest {
 
     @Test
-    public void NatureBlocker() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
+    public void NatureBlocker() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

@@ -15,7 +15,7 @@ import java.util.Random;
 public class ClientmessageTest {
 
     @RepeatedTest(5)
-    public void RandomTest() throws FullLobbyException, EmptyMovableException, EmptyBagException, WizardNotAvailableException {
+    public void RandomTest() throws FullLobbyException, WizardNotAvailableException {
         NetworkManager networkmanager = NetworkManager.createNetworkManager(2);
         ArrayList<LobbyPlayer> players = new ArrayList<>();
         for(int i=0; i<4; i++){

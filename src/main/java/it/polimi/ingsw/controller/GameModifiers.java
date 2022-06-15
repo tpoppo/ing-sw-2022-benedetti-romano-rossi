@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.board.Color;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * This class contains the modifiers used in the game and updated by the characters.
+ */
 public class GameModifiers implements Serializable {
     @Serial
     private static final long serialVersionUID = 7267446910559981331L;

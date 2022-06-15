@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Player;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

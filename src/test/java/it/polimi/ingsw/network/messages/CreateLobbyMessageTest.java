@@ -13,7 +13,7 @@ import java.util.Random;
 public class CreateLobbyMessageTest {
 
     @Test
-    public void CreateLobbyMessage() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void CreateLobbyMessage() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

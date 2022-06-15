@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BardTest {
 
     @Test
-    public void Bard() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
+    public void Bard() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -63,7 +63,7 @@ public class BardTest {
 
     //try an Exception with an odd number of Students in input
     @Test
-    public void BadPlayerChoiceException1() throws BadPlayerChoiceException, FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void BadPlayerChoiceException1() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -97,7 +97,7 @@ public class BardTest {
 
     //try an Exception when Students aren't in the dining room or entrance room
     @Test
-    public void BadPlayerChoiceException2() throws BadPlayerChoiceException, FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void BadPlayerChoiceException2() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

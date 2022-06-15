@@ -5,15 +5,14 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AssistantTest {
     @Test
     public void getAssistant(){
-        ArrayList<Assistant> wizard1 = new ArrayList<>();
-        ArrayList<Assistant> wizard2 = new ArrayList<>();
-        ArrayList<Assistant> wizard3 = new ArrayList<>();
-        ArrayList<Assistant> wizard4 = new ArrayList<>();
+        ArrayList<Assistant> wizard1;
+        ArrayList<Assistant> wizard2;
+        ArrayList<Assistant> wizard3;
+        ArrayList<Assistant> wizard4;
 
         wizard1 = Assistant.getAssistants(1);
         wizard2 = Assistant.getAssistants(2);

@@ -14,12 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Random;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoveMotherNatureMessageTest {
 
     @Test
-    public void MoveMotherNatureMessage() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void MoveMotherNatureMessage() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

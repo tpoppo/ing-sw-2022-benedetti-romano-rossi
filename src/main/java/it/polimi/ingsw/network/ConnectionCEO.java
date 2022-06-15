@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.messages.ClientMessage;
 import it.polimi.ingsw.network.messages.MessageEnvelope;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
 
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -74,7 +73,7 @@ public class ConnectionCEO extends Thread {
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
             do{
-                Object objectUsername = (Object) inputStream.readObject();
+                Object objectUsername = inputStream.readObject();
                 if(objectUsername instanceof String){
                     username = (String) objectUsername;
                     logged_in = true;

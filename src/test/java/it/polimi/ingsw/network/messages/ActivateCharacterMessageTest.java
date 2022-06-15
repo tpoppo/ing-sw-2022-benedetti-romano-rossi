@@ -14,7 +14,7 @@ import java.util.Random;
 public class ActivateCharacterMessageTest {
 
     @Test
-    public void ActivateCharacterMessage () throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void ActivateCharacterMessage () throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");

@@ -3,7 +3,6 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.client.ClientConfig;
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
 import it.polimi.ingsw.view.GUI;

@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * This class manage the game and contains all the information (both state of the pieces and the game phase)
+ */
 public class GameHandler implements Serializable {
     @Serial
     private static final long serialVersionUID = -1563449150961541286L;
@@ -19,6 +22,12 @@ public class GameHandler implements Serializable {
     private boolean action_completed;
     private boolean saved_action_completed;
 
+    /**
+     * It creates a new game given the lobby.
+     * @param ID game id
+     * @param expert_mode in which mode the game must start
+     * @param lobby_handler lobby (with the player data)
+     */
     public GameHandler(int ID, boolean expert_mode, LobbyHandler lobby_handler) {
         this.ID = ID;
 

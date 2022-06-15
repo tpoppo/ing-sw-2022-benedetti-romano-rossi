@@ -15,7 +15,7 @@ public class Headmaster extends Character{
     }
 
     @Override
-    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) {
         game.getGameModifiers().setProfessorModifier(1);
     }
 

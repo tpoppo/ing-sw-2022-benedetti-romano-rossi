@@ -2,8 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ClientConfig;
 import it.polimi.ingsw.client.ClientSocket;
-import it.polimi.ingsw.controller.LobbyHandler;
-import it.polimi.ingsw.network.MenuManager;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.messages.ChooseWizardMessage;
 import it.polimi.ingsw.network.messages.CreateLobbyMessage;
@@ -11,8 +9,6 @@ import it.polimi.ingsw.network.messages.JoinLobbyMessage;
 import it.polimi.ingsw.network.messages.StartGameMessage;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.CLIArt;
-import it.polimi.ingsw.view.GUI;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
