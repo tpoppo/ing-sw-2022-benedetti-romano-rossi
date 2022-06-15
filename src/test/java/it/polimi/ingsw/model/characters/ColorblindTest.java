@@ -38,12 +38,12 @@ public class ColorblindTest {
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice.setStudent(Color.RED);
 
-        colorblind.onActivation(game, playerchoice);
+        colorblind.activate(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(Color.RED, gameModifiers.getInhibitColor());
 
-        colorblind.onDeactivation(game);
+        colorblind.deactivate(game);
         assertEquals(null, gameModifiers.getInhibitColor());
     }
 }

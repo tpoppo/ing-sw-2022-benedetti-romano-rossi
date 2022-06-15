@@ -14,12 +14,12 @@ public class Demolisher extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices){
+    protected void onActivation(Game game, PlayerChoices playerChoices){
         game.getGameModifiers().setInhibitTowers(true);
     }
 
     @Override
-    void onDeactivation(Game game){
+    protected void onDeactivation(Game game){
         game.getGameModifiers().setInhibitTowers(false);
     }
 }

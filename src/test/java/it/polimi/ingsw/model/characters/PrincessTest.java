@@ -54,7 +54,7 @@ public class PrincessTest {
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setStudent(Chefcolor);
 
-        princess.onActivation(game, playerChoices);
+        princess.activate(game, playerChoices);
 
         Students expected_students = new Students(2, 1, 0, 3, 0);
         expected_students.add(Chefcolor);

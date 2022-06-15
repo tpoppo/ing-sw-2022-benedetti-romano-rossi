@@ -24,14 +24,14 @@ public class Colorblind extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         Color chosen_color = playerChoices.getStudent().get(0);
 
         game.getGameModifiers().setInhibitColor(chosen_color);
     }
 
     @Override
-    void onDeactivation(Game game){
+    protected void onDeactivation(Game game){
         game.getGameModifiers().setInhibitColor(null);
     }
 

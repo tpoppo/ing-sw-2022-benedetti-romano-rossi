@@ -21,7 +21,7 @@ public class Witch extends  Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         if(tiles <= 0) throw new BadPlayerChoiceException();
         tiles--;
         Island island = playerChoices.getIsland();
@@ -29,7 +29,7 @@ public class Witch extends  Character{
     }
 
     @Override
-    void onDeactivation(Game game) {
+    protected void onDeactivation(Game game) {
 
     }
 

@@ -28,7 +28,7 @@ public class Bard extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         ArrayList<Color> swap_list = playerChoices.getStudent();
         Students entranceStudents = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
         Students diningStudents = game.getCurrentPlayer().getSchoolBoard().getDiningStudents();
@@ -54,5 +54,5 @@ public class Bard extends Character{
     }
 
     @Override
-    void onDeactivation(Game game) {}
+    protected void onDeactivation(Game game) {}
 }

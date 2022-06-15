@@ -25,13 +25,13 @@ public class Herald extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         chosen_island = playerChoices.getIsland();
         game.conquerIsland(chosen_island);
     }
 
     @Override
-    void onDeactivation(Game game){
+    protected void onDeactivation(Game game){
         boolean overlying_mother_nature = true;
 
         for(Island island : game.getIslands()) {

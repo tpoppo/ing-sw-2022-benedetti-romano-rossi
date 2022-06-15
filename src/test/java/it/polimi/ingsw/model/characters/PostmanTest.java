@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameModifiers;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class PostmanTest {
 
     @Test
-    public void NatureMover() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void NatureMover() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -34,12 +35,12 @@ public class PostmanTest {
         Postman Postman = new Postman();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        Postman.onActivation(game, playerchoice);
+        Postman.activate(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getExtraSteps());
 
-        Postman.onDeactivation(game);
+        Postman.deactivate(game);
         assertEquals(0, gameModifiers.getExtraSteps());
     }
 }

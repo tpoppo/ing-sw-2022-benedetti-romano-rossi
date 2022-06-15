@@ -40,11 +40,11 @@ public class WitchTest {
         island.setNoEntryTiles(2);
         playerChoices.setIsland(island);
 
-        natureblocker.onActivation(game, playerChoices);
+        natureblocker.activate(game, playerChoices);
 
         assertEquals(3, islands.get(0).getNoEntryTiles());
         assertEquals(3, natureblocker.getNoEntryTiles());
 
-        natureblocker.onDeactivation(game);
+        natureblocker.deactivate(game);
     }
 }

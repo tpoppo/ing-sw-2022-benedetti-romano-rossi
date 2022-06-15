@@ -48,7 +48,7 @@ public class ThiefTest {
         thief.require();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice.setStudent(Color.GREEN);
-        thief.onActivation(game, playerchoice);
+        thief.activate(game, playerchoice);
 
         Students expected_student1 = new Students(1, 0, 0, 0, 0);
         Students expected_student2 = new Students(0, 0, 0, 0, 0);

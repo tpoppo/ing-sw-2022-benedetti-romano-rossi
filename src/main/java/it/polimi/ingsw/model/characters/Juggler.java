@@ -38,7 +38,7 @@ public class Juggler extends Character{
      * @throws BadPlayerChoiceException
      */
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
 
         // there must be an even number of students
         if(playerChoices.getStudent().size() % 2 != 0){
@@ -68,7 +68,7 @@ public class Juggler extends Character{
     }
 
     @Override
-    void onDeactivation(Game game) {
+    protected void onDeactivation(Game game) {
 
     }
 

@@ -14,12 +14,12 @@ public class Knight extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) {
+    protected void onActivation(Game game, PlayerChoices playerChoices) {
         game.getGameModifiers().setBuffInfluence(2);
     }
 
     @Override
-    void onDeactivation(Game game) {
+    protected void onDeactivation(Game game) {
         game.getGameModifiers().setBuffInfluence(0);
     }
 }

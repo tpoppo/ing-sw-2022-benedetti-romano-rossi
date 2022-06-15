@@ -72,9 +72,9 @@ abstract public class Character implements Serializable {
 
     public boolean isActivated() { return activated; }
 
-    abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
+    protected abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
 
-    abstract void onDeactivation(Game game);
+    protected abstract void onDeactivation(Game game);
 
     public void setDescription(String description) {
         this.description = description;

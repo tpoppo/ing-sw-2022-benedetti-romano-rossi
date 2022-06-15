@@ -15,12 +15,12 @@ public class Headmaster extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
+    protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {
         game.getGameModifiers().setProfessorModifier(1);
     }
 
     @Override
-    void onDeactivation(Game game) {
+    protected void onDeactivation(Game game) {
         game.getGameModifiers().setProfessorModifier(0);
     }
 }

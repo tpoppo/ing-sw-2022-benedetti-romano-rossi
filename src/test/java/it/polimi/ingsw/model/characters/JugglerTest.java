@@ -58,7 +58,7 @@ public class JugglerTest {
         change.add(Jugglercolor);
         playerchoice.setStudent(change);
 
-        juggler.onActivation(game, playerchoice);
+        juggler.activate(game, playerchoice);
 
         Students expected_student = new Students(2, 2, 0, 4, 2);
         expected_student.add(Jugglercolor);
@@ -104,7 +104,7 @@ public class JugglerTest {
         change.add(Color.GREEN);
         playerchoice.setStudent(change);
 
-        assertThrows(BadPlayerChoiceException.class, () -> juggler.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> juggler.activate(game, playerchoice));
     }
 
     @Test
@@ -145,6 +145,6 @@ public class JugglerTest {
         change.add(Jugglercolor);
         playerchoice.setStudent(change);
 
-        assertThrows(BadPlayerChoiceException.class, () -> juggler.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> juggler.activate(game, playerchoice));
     }
 }

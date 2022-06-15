@@ -55,7 +55,7 @@ public class MonkTest {
         playerchoice.setIsland(island);
         assertEquals(1, playerchoice.getStudent().size());
 
-        monk.onActivation(game, playerchoice);
+        monk.activate(game, playerchoice);
 
         Students expected_student = new Students();
         expected_student.add(color);
@@ -94,7 +94,7 @@ public class MonkTest {
         playerchoice.setStudent(students);
         playerchoice.setIsland(island);
 
-        assertThrows(BadPlayerChoiceException.class, () -> monk.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> monk.activate(game, playerchoice));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class MonkTest {
         playerchoice.setStudent(color);
         playerchoice.setIsland(island);
 
-        assertThrows(BadPlayerChoiceException.class, () -> monk.onActivation(game, playerchoice));
+        assertThrows(BadPlayerChoiceException.class, () -> monk.activate(game, playerchoice));
     }
 
 }

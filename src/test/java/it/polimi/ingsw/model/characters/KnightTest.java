@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameModifiers;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
+import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class KnightTest {
 
     @Test
-    public void Influencer() throws FullLobbyException, EmptyMovableException, EmptyBagException {
+    public void Influencer() throws FullLobbyException, EmptyMovableException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player1 = new LobbyPlayer("Player 1");
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
@@ -32,12 +33,12 @@ public class KnightTest {
         Knight knight = new Knight();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        knight.onActivation(game, playerchoice);
+        knight.activate(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(2, gameModifiers.getBuffInfluence());
 
-        knight.onDeactivation(game);
+        knight.deactivate(game);
         assertEquals(0, gameModifiers.getBuffInfluence());
     }
 }

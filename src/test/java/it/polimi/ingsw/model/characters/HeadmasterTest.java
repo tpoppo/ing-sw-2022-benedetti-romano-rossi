@@ -35,11 +35,11 @@ public class HeadmasterTest {
         Headmaster Headmaster = new Headmaster();
         PlayerChoices playerchoice = new PlayerChoices();
         playerchoice = null;
-        Headmaster.onActivation(game, playerchoice);
+        Headmaster.activate(game, playerchoice);
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(1, gameModifiers.getProfessorModifier());
 
-        Headmaster.onDeactivation(game);
+        Headmaster.deactivate(game);
         assertEquals(0, gameModifiers.getProfessorModifier());
     }
 }

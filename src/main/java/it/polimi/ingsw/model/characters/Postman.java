@@ -15,13 +15,13 @@ public class Postman extends Character{
     }
 
     @Override
-    void onActivation(Game game, PlayerChoices playerChoices) {
+    protected void onActivation(Game game, PlayerChoices playerChoices) {
         GameModifiers gameModifiers = game.getGameModifiers();
         gameModifiers.setExtraSteps(2);
     }
 
     @Override
-    void onDeactivation(Game game) {
+    protected void onDeactivation(Game game) {
         GameModifiers gameModifiers = game.getGameModifiers();
         gameModifiers.setExtraSteps(0);
     }
