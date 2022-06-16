@@ -104,7 +104,7 @@ public class CLI {
 
             LOGGER.log(Level.INFO, "isOpened: {0}", new Object[]{client_socket.isOpened()});
         }
-        // FIXME: this is the end.
+        System.out.println("The game has ended");
         System.exit(0);
     }
 
@@ -128,10 +128,10 @@ public class CLI {
     private void startRendering(){
         new Thread(() -> {
             while(true){
-                synchronized (client_socket.mutex){
+                synchronized (client_socket.mutex_view){
                     while(client_socket.getView() == null) {
                         try {
-                            client_socket.mutex.wait();
+                            client_socket.mutex_view.wait();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -164,9 +164,9 @@ public class CLI {
                     }
                 }
 
-                synchronized (client_socket.mutex){
+                synchronized (client_socket.mutex_view){
                     client_socket.setView(null);
-                    client_socket.mutex.notifyAll();
+                    client_socket.mutex_view.notifyAll();
                 }
             }
         }).start();

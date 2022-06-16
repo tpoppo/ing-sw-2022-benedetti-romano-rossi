@@ -22,7 +22,8 @@ public class ClientSocket {
     private ViewContent view;
     final private ClientConfig client_config;
 
-    public final Object mutex = new Object();
+    public final Object mutex_view = new Object();
+    public final Object mutex_closed = new Object();
 
 
     public ClientSocket(ClientConfig client_config) throws IOException {
@@ -99,18 +100,20 @@ public class ClientSocket {
                     }
 
                     LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", new Object[]{e});
-                    System.exit(0);
+                    synchronized (mutex_closed){
+                        mutex_closed.notifyAll();
+                    }
                 } catch (ClassNotFoundException e){
                     LOGGER.log(Level.INFO, "Invalid message: {0}", new Object[]{e});
                 }
 
                 if(view != null) {
-                    synchronized (mutex){
-                        mutex.notifyAll();
+                    synchronized (mutex_view){
+                        mutex_view.notifyAll();
 
                         // FIXME:
                         try {
-                            mutex.wait();
+                            mutex_view.wait();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }

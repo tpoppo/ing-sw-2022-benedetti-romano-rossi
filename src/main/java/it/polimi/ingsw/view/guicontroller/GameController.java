@@ -832,12 +832,15 @@ public class GameController implements GUIController {
     }
 
     private void setupState() {
-        String currentPlayerUsername = view.getGameHandler().getModel().getCurrentPlayer().getUsername();
+        GameHandler gameHandler = view.getGameHandler();
+
+        String currentPlayerUsername = gameHandler.getModel().getCurrentPlayer() != null ?
+                gameHandler.getModel().getCurrentPlayer().getUsername() :
+                "";
 
         turnLabel.setText("Turn: " + currentPlayerUsername);
         usernameLabel.setText(thisPlayer.getUsername());
 
-        GameHandler gameHandler = view.getGameHandler();
 
         // update the action state
         String action_text = null;

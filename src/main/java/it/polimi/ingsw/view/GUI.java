@@ -91,15 +91,38 @@ public class GUI extends Application {
             event.consume();
             logout();
         });
+
+        new Thread(() -> {
+            while(true) {
+                synchronized (client_socket.mutex_closed){
+                    try {
+                        client_socket.mutex_closed.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (!client_socket.isOpened()) {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Server shutdown");
+                            alert.setHeaderText("The server stopped. You are about to exit the game");
+                            alert.showAndWait();
+
+                            stage.close();
+                            System.exit(0);
+                        });
+                    }
+                }
+            }
+        }).start();
     }
 
     private void startViewContentUpdates(){
         new Thread(() -> {
             while (true) {
-                synchronized (client_socket.mutex) {
+                synchronized (client_socket.mutex_view) {
                     while (client_socket.getView() == null) {
                         try {
-                            client_socket.mutex.wait();
+                            client_socket.mutex_view.wait();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -130,9 +153,9 @@ public class GUI extends Application {
                     }
                 }
 
-                synchronized (client_socket.mutex){
+                synchronized (client_socket.mutex_view){
                     client_socket.setView(null);
-                    client_socket.mutex.notifyAll();
+                    client_socket.mutex_view.notifyAll();
                 }
             }
         }).start();
