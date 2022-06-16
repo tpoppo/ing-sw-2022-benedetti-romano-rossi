@@ -10,6 +10,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class handle the connection between the client and the server.
+ * It routes the message to the right manager ({@link MenuManager} or {@link NetworkManager})
+ */
 public class ConnectionCEO extends Thread {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private final Socket clientSocket;
@@ -24,6 +28,9 @@ public class ConnectionCEO extends Thread {
         this.clientSocket = clientSocket;
     }
 
+    /**
+     * Manage the login and message routing.
+     */
     @Override
     public void run() {
         try{
@@ -64,6 +71,11 @@ public class ConnectionCEO extends Thread {
         handleMessages();
     }
 
+    /**
+     * Manage the login phase
+     * @return true if the login has been successful otherwise false
+     * @throws IOException thrown by the ObjectInputStream and ObjectOutputStream.
+     */
     private boolean login() throws IOException {
         // The first message must contain the username chosen by the client
         boolean logged_in = false;
@@ -102,6 +114,9 @@ public class ConnectionCEO extends Thread {
         return true;
     }
 
+    /**
+     * Handle the message received by the client
+     */
     private void handleMessages(){
         try {
             MenuManager menuManager = MenuManager.getInstance();
@@ -155,20 +170,26 @@ public class ConnectionCEO extends Thread {
         }
     }
 
-     public boolean sendViewContent(ViewContent viewContent){
+    /**
+     * Helper function used to send {@link ViewContent} to the client
+     * @param viewContent view sent to the client
+     */
+     public void sendViewContent(ViewContent viewContent){
         try {
             outputStream.reset();
             outputStream.writeObject(viewContent);
             outputStream.flush();
 
             LOGGER.log(Level.FINE, viewContent.toString());
-            return true;
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Cannot send: {0}. {1}", new Object[]{viewContent, e});
-            return false;
         }
     }
 
+    /**
+     * Reset the ConnectionCEO state to the menu state.
+     * It keeps the username information.
+     */
     public void clean(){
         this.networkManager = null;
         player.setWizard(null);

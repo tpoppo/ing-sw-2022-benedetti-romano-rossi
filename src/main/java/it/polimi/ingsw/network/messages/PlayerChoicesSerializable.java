@@ -8,7 +8,10 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/**
+ * This class represents the PlayerChoices sent to the server.
+ * It is used in the {@link ActivateCharacterMessage}.
+ */
 public class PlayerChoicesSerializable implements Serializable {
     @Serial
     private static final long serialVersionUID = -1509324086180147284L;

@@ -2,6 +2,11 @@ package it.polimi.ingsw.utils;
 
 import java.util.Objects;
 
+/**
+ * Helper class to represent pairs of objects (e.g. coordinates)
+ * @param <T> first type
+ * @param <K> second type
+ */
 public class Pair <T, K>{
     private T first;
     private K second;

@@ -4,6 +4,9 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.NetworkManager;
 
+/**
+ * This message is used in the lobby to start the game given the selected mode
+ */
 public class StartGameMessage extends ClientMessage{
     private final boolean expert_mode;
     public StartGameMessage(boolean expert_mode) {

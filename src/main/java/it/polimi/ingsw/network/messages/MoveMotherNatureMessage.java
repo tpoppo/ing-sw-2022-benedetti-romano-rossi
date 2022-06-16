@@ -7,7 +7,9 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Assistant;
-
+/**
+ * This message is used to move mother nature and can be used while the sender is in game
+ */
 public class MoveMotherNatureMessage extends ClientMessage {
 
     int mother_nature_position;

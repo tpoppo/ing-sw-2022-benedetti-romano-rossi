@@ -7,7 +7,10 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
-
+/**
+ * This message is used to select an assistant.
+ * It can be used while you are in game.
+ */
 public class PlayAssistantMessage extends ClientMessage {
     int card_position;
 

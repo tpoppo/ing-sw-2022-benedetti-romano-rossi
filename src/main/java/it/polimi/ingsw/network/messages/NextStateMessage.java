@@ -5,7 +5,10 @@ import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
-
+/**
+ * This message is used to confirm an action and to go to the next state
+ * It can be used while you are in game.
+ */
 public class NextStateMessage extends ClientMessage {
     public NextStateMessage() {
         super.message_type = MessageType.GAME;

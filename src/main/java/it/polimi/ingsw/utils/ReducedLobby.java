@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * This class represent the information sent to the client (via the {@link it.polimi.ingsw.view.viewcontent.MenuContent}).
+ * It contains the most important information of the lobby.
+ */
 public class ReducedLobby implements Serializable {
     @Serial
     private static final long serialVersionUID = 5047237163325726667L;

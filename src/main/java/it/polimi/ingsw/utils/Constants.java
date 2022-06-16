@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils;
 
 import java.util.Set;
 
+/**
+ * This class contains all the most important game constant.
+ */
 public class Constants {
     // Server info
     public static final String SERVER_ADDR = "127.0.0.1";

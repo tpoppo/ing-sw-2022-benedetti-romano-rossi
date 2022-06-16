@@ -15,6 +15,7 @@ import it.polimi.ingsw.utils.DeepCopy;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.viewcontent.ViewContent;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -91,7 +92,7 @@ public class GameController implements GUIController {
     private ArrayList<Pane> islandPanes;
     private Map<Color, ImageView> chooseColor;
     private HashMap<Integer, VBox> characterStuffSmallMap;
-    private ArrayList<Consumer<String>> onfillSchoolboard;
+    private ArrayList<Consumer<String>> onFillSchoolboard;
 
     @Override
     public void setup() {
@@ -110,7 +111,7 @@ public class GameController implements GUIController {
         thisPlayer = game.usernameToPlayer(GUI.getUsername());
         islandPanes = new ArrayList<>();
         characterStuffSmallMap = new HashMap<>();
-        onfillSchoolboard = new ArrayList<>();
+        onFillSchoolboard = new ArrayList<>();
 
         // setting up player - towerColor association
         for (int i = 0; i < view.getGameHandler().getModel().getPlayers().size(); i++)
@@ -144,7 +145,7 @@ public class GameController implements GUIController {
         setupActions();
 
         // adding the listeners after building the schoolboard (the first time)
-        for (Consumer<String> f : onfillSchoolboard) {
+        for (Consumer<String> f : onFillSchoolboard) {
             f.accept(schoolboardPlayerUsername);
         }
     }
@@ -450,7 +451,7 @@ public class GameController implements GUIController {
 
     private void setupMotherNature() {
         // the position of the mother nature is the convex interpolation between the center and the island (in which mother nature is currently placed)
-        final double lamdba = 0.3; // convex interpolation factor. It must be in [0, 1]
+        final double lambda = 0.3; // convex interpolation factor. It must be in [0, 1]
         int position = view.getGameHandler().getModel().findMotherNaturePosition();
         Pane island = islandPanes.get(position);
         ImageView motherNature = new ImageView(new Image("/graphics/pieces/mothernature/mother_nature.png"));
@@ -465,8 +466,8 @@ public class GameController implements GUIController {
         System.out.println("center: " + centerX + " " + centerY);
         System.out.println("island:" + islandX + " " + islandY);
 
-        motherNature.setLayoutX(lamdba * centerX + (1-lamdba) * islandX - motherNature.getBoundsInParent().getWidth()  / 2 + island.getBoundsInParent().getWidth() / 2);
-        motherNature.setLayoutY(lamdba * centerY + (1-lamdba) * islandY - motherNature.getBoundsInParent().getHeight() / 2 + island.getBoundsInParent().getHeight() / 2);
+        motherNature.setLayoutX(lambda * centerX + (1-lambda) * islandX - motherNature.getBoundsInParent().getWidth()  / 2 + island.getBoundsInParent().getWidth() / 2);
+        motherNature.setLayoutY(lambda * centerY + (1-lambda) * islandY - motherNature.getBoundsInParent().getHeight() / 2 + island.getBoundsInParent().getHeight() / 2);
     }
 
     private void prepareEnding() {
@@ -600,7 +601,7 @@ public class GameController implements GUIController {
                 };
 
                 int finalPosition = position;
-                onfillSchoolboard.add(player -> {
+                onFillSchoolboard.add(player -> {
                     // setup global variables and objects
                     selectedOnEntrance.clear();
                     updateButton.run();
@@ -611,45 +612,10 @@ public class GameController implements GUIController {
 
                     // 1) select up to 3 students from this card
                     VBox characterStuffSmall = characterStuffSmallMap.get(finalPosition);
-                    characterStuffSmall.getChildren().forEach(node -> {
-                        ImageView imageView = (ImageView) node;
-                        imageView.setOnMouseClicked(e -> {
-                            if (selectedOnCard.contains(imageView)) { // deselect a student
-                                selectedOnCard.remove(imageView);
-                                imageView.setEffect(null);
-                            } else {
-                                selectedOnCard.add(imageView);
-                                imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-
-                                if (selectedOnCard.size() > 3) { // remove the first, if there are more than 3 cards
-                                    selectedOnCard.get(0).setEffect(null);
-                                    selectedOnCard.remove(0);
-                                }
-                            }
-                            updateButton.run();
-                        });
-                    });
+                    selectStudent(updateButton, characterStuffSmall.getChildren(), selectedOnCard);
 
                     // 2) select up to 3 students from the entrance
-                    entranceGrid.getChildren().forEach(node -> {
-                        ImageView imageView = (ImageView) node;
-
-                        imageView.setOnMouseClicked(e -> {
-                            if (selectedOnEntrance.contains(imageView)) { // deselect a student
-                                selectedOnEntrance.remove(imageView);
-                                imageView.setEffect(null);
-                            } else {
-                                selectedOnEntrance.add(imageView);
-                                imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-
-                                if (selectedOnEntrance.size() > 3) { // remove the first, if there are more than 3 cards
-                                    selectedOnEntrance.get(0).setEffect(null);
-                                    selectedOnEntrance.remove(0);
-                                }
-                            }
-                            updateButton.run();
-                        });
-                    });
+                    selectStudent(updateButton, entranceGrid.getChildren(), selectedOnEntrance);
 
                     // 3) confirm selection
                     confirmSelection(selectedOnCard);
@@ -668,7 +634,7 @@ public class GameController implements GUIController {
                     }
                 };
 
-                onfillSchoolboard.add(player -> {
+                onFillSchoolboard.add(player -> {
                     // setup global variables
                     selectedOnEntrance.clear();
                     selectedOnDining.clear();
@@ -690,6 +656,27 @@ public class GameController implements GUIController {
                 });
             }
         }
+    }
+
+    private void selectStudent(Runnable updateButton, ObservableList<Node> children, ArrayList<ImageView> selectedOnCard) {
+        children.forEach(node -> {
+            ImageView imageView = (ImageView) node;
+            imageView.setOnMouseClicked(e -> {
+                if (selectedOnCard.contains(imageView)) { // deselect a student
+                    selectedOnCard.remove(imageView);
+                    imageView.setEffect(null);
+                } else {
+                    selectedOnCard.add(imageView);
+                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+
+                    if (selectedOnCard.size() > 3) { // remove the first, if there are more than 3 cards
+                        selectedOnCard.get(0).setEffect(null);
+                        selectedOnCard.remove(0);
+                    }
+                }
+                updateButton.run();
+            });
+        });
     }
 
     private void selectUpToTwoStudents(Runnable updateButton, GridPane gridPane, ArrayList<ImageView> selectedOnDining) {
@@ -746,7 +733,7 @@ public class GameController implements GUIController {
             });
         }
 
-        onfillSchoolboard.add(player -> {
+        onFillSchoolboard.add(player -> {
             // reset the current selection
             selectedEntrance = null;
             islandPanes.forEach(e -> e.setEffect(null));
@@ -1026,7 +1013,7 @@ public class GameController implements GUIController {
         coinsPane.getChildren().add(coinNumber);
 
         // adding the listeners after building the schoolboard
-        for (Consumer<String> f : onfillSchoolboard) {
+        for (Consumer<String> f : onFillSchoolboard) {
             f.accept(player.getUsername());
         }
     }

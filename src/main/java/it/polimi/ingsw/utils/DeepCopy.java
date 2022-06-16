@@ -2,6 +2,10 @@ package it.polimi.ingsw.utils;
 
 import java.io.*;
 
+/**
+ * Helper class used to copy an object.
+ * Mainly used simulate a message without sending it.
+ */
 public class DeepCopy {
 
     public static Object copy(Serializable object){

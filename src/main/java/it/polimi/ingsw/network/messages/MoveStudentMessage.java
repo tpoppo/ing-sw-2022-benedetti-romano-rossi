@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullDiningRoomException;
 
+/**
+ * This message is used to move a student from the entrance to the dining room or a given island and can be used while you are in game
+ */
 public class MoveStudentMessage extends ClientMessage {
 
     private final Color color;

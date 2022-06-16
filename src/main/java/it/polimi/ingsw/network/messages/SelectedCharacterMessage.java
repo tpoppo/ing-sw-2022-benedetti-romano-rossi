@@ -10,6 +10,10 @@ import it.polimi.ingsw.model.characters.Character;
 
 import java.util.Set;
 
+/**
+ * This message is used to select a character given its position.
+ * It can be sent by the player during their turn in the game.
+ */
 public class SelectedCharacterMessage extends ClientMessage {
     int character_position;
     public SelectedCharacterMessage(int character_position) {

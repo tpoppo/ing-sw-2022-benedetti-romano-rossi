@@ -5,6 +5,9 @@ import it.polimi.ingsw.network.*;
 
 import java.util.Optional;
 
+/**
+ * This message is used to join a lobby given an ID and can be used while you are in the menu
+ */
 public class JoinLobbyMessage extends ClientMessage {
     int id;
     public JoinLobbyMessage(int id){

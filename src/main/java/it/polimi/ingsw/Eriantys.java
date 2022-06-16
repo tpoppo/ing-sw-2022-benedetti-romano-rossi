@@ -10,6 +10,9 @@ import it.polimi.ingsw.view.GUI;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class parses the command line argument and starts the right mode.
+ */
 public class Eriantys {
     public static void main(String[] args ) {
 
@@ -30,12 +33,20 @@ public class Eriantys {
         }
     }
 
+    /**
+     * Start the server
+     * @param args the command line arguments
+     */
     private static void runServer(String[] args){
         ClientConfig clientConfig = parseInput(args, true);
         Server.setPort(clientConfig.getPort());
         Server server = Server.getInstance();
     }
 
+    /**
+     * Start the client cli
+     * @param args the command line arguments
+     */
     private static void runCli(String[] args) throws IOException {
         ClientConfig clientConfig = parseInput(args, false);
         ClientSocket client_socket = new ClientSocket(clientConfig);
@@ -43,6 +54,10 @@ public class Eriantys {
         cli.run();
     }
 
+    /**
+     * Start the client cli art
+     * @param args the command line arguments
+     */
     private static void runCLIArt(String[] args) throws IOException {
         ClientConfig clientConfig = parseInput(args, false);
         ClientSocket client_socket = new ClientSocket(clientConfig);
@@ -50,6 +65,10 @@ public class Eriantys {
         cli.run();
     }
 
+    /**
+     * Start the client gui
+     * @param args the command line arguments
+     */
     private static void runGUI(String[] args) throws IOException {
         System.out.println("Starting the GUI...\n");
         ClientConfig clientConfig = parseInput(args, false);
@@ -59,6 +78,12 @@ public class Eriantys {
         GUI.main(args);
     }
 
+    /**
+     * Parse the command line arguments and convert them into an object.
+     * @param args the command line arguments
+     * @param is_server used by the server
+     * @return the {@link ClientConfig} used by {@link CLI}, {@link GUI} and {@link CLIArt}.
+     */
     static ClientConfig parseInput(String[] args, boolean is_server){
         ClientConfig client_config = new ClientConfig();
         ArrayList<String> largs = new ArrayList<>(Arrays.asList(args));
