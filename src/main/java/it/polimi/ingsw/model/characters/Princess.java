@@ -39,22 +39,29 @@ public class Princess extends Character{
             throw new BadPlayerChoiceException();
         }
 
-        Color color = colors.get(0);
+        Color selected_color = colors.get(0);
         Students dining_students = game.getCurrentPlayer().getSchoolBoard().getDiningStudents();
+        Students princess_students = new Students(students);
+
+        // the dining room must not be full
+        if(dining_students.get(selected_color) >= Game.MAX_DINING_STUDENTS){
+            throw new BadPlayerChoiceException();
+        }
 
         try {
-            students.moveTo(dining_students, color);
+            princess_students.moveTo(dining_students, selected_color);
         } catch (EmptyMovableException e) { // Invalid input. There must be at least one student of that color on this card.
             throw new BadPlayerChoiceException();
         }
-        game.getCurrentPlayer().getSchoolBoard().setDiningStudents(dining_students);
 
         try {
-            color = game.drawStudentFromBag();
-            students.put(color, students.get(color) + 1);
-        } catch (EmptyBagException e) { // the bag is empty
-            throw new BadPlayerChoiceException();
-        }
+            Color bag_color = game.drawStudentFromBag();
+            princess_students.put(bag_color, princess_students.get(bag_color) + 1);
+        } catch (EmptyBagException e) {} // the bag is empty
+
+        students = princess_students;
+        game.getCurrentPlayer().getSchoolBoard().setDiningStudents(dining_students);
+        game.updateProfessor(game.getCurrentPlayer(), selected_color);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class GameTest {
         for(Island island : islands){
             islands_tiles_counter += island.getNumIslands();
         }
-        assertEquals(islands_tiles_counter, 12);
+        assertEquals(islands_tiles_counter, game.getGameConfig().NUM_ISLANDS);
 
         // sum of students equal to Bag.MAX_STUDENTS
         int students_cnt = 0;
@@ -110,10 +110,8 @@ public class GameTest {
                 for (Island island : game.getIslands()) {
                     if (player.equals(island.getOwner())) towers += island.getNumTowers();
                 }
-                if (towers != 8)
-                    System.out.println(game);
 
-                assertEquals(8, towers);
+                assertEquals(towers, game.getGameConfig().NUM_TOWERS);
             }
         }
 
@@ -132,7 +130,15 @@ public class GameTest {
         }
     }
 
-    @RepeatedTest(1000)
+    /**
+     * This test simulates a full 2 players game.
+     * @throws FullLobbyException should never happen
+     * @throws EmptyMovableException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     * @throws FullDiningRoomException should never happen
+     */
+    @RepeatedTest(200)
     public void simpleRun2Player() throws FullLobbyException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException, FullDiningRoomException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
         LobbyPlayer player0 = new LobbyPlayer("Player 1");
@@ -285,7 +291,15 @@ public class GameTest {
             checkInvariant(game);
         }
     }
-    
+
+    /**
+     * This test simulates a full 3 players game.
+     * @throws FullLobbyException should never happen
+     * @throws EmptyMovableException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     * @throws FullDiningRoomException should never happen
+     */
     @RepeatedTest(200)
     public void simpleRun3Player() throws FullLobbyException, FullDiningRoomException, EmptyMovableException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
@@ -359,7 +373,7 @@ public class GameTest {
             // action phase
             for (int player_id = 0; player_id < 3; player_id++) {
                 // step 1
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < game.getGameConfig().NUM_STUDENTS_MOVES; i++) {
                     // move a random student from the player's entrance to a random island
                     Students students = game.getCurrentPlayer().getSchoolBoard().getEntranceStudents();
                     Optional<Color> color = students.entrySet().stream().filter(

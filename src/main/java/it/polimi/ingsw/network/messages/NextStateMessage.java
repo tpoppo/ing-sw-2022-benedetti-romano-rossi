@@ -33,7 +33,7 @@ public class NextStateMessage extends ClientMessage {
                 game.nextTurn();
                 if (game.getCurrentPlayer() == null) { // end of the subphase
                     game.endPlanning();
-                    gameHandler.setStudentMoves(3);
+                    gameHandler.setStudentMoves(game.getGameConfig().NUM_STUDENTS_MOVES);
                     gameHandler.setCurrentState(GameState.MOVE_STUDENT);
                 }
             }
@@ -52,7 +52,7 @@ public class NextStateMessage extends ClientMessage {
             case CHOOSE_CLOUD -> {
                 game.nextTurn();
                 gameHandler.setSelectedCharacter(null);
-                gameHandler.setStudentMoves(3);
+                gameHandler.setStudentMoves(game.getGameConfig().NUM_STUDENTS_MOVES);
                 if (game.getCurrentPlayer() == null) { // end of the round
                     if (game.checkEndGame()) {
                         gameHandler.setCurrentState(GameState.ENDING);

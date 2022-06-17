@@ -125,6 +125,11 @@ public class NetworkManager {
         return new NetworkManager(gameHandler);
     }
 
+    /**
+     * It is call when the game starts
+     * It creates the GameHandler and the Game
+     * @param expert_mode the selected mode
+     */
     public void startGame(boolean expert_mode){
         game_handler = new GameHandler(ID, expert_mode, lobby_handler);
         current_handler = HandlerType.GAME;

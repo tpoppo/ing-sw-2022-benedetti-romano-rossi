@@ -500,6 +500,11 @@ public class Game implements Serializable{
         character.activate(this, playerChoices);
     }
 
+    /**
+     * Update the professors values after a player has placed a student
+     * @param current_player player that placed the student in the dining room
+     * @param color color of the student
+     */
     public void updateProfessor(Player current_player, Color color){
         Students dining_students = current_player.getSchoolBoard().getDiningStudents();
 
@@ -559,6 +564,10 @@ public class Game implements Serializable{
     
     public boolean getExpertMode() {
         return expert_mode;
+    }
+
+    public GameConfig getGameConfig() {
+        return gameConfig;
     }
 
     /**

@@ -42,14 +42,14 @@ public class Monk extends Character{
         }
 
         Color color = colors.get(0);
-
+        Students character_students = new Students(students);
         Students island_students = island.getStudents();
         try {
-            students.moveTo(island_students, color);
+            character_students.moveTo(island_students, color);
         } catch (EmptyMovableException e) {  // not enough students on this card.
             throw new BadPlayerChoiceException();
         }
-
+        students = character_students;
         island.setStudents(island_students);
     }
 

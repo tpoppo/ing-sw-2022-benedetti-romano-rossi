@@ -116,11 +116,11 @@ public class PrincessTest {
 
         Students Chef_students = princess.getStudents();
         Color Chefcolor = null;
-        Boolean choosen = false;
+        boolean choosen = false;
 
         //choose a color that is not in the princess student's
         for (Color color : Chef_students.keySet()) {
-            if(Chef_students.get(color) == 0 && choosen == false){
+            if(Chef_students.get(color) == 0 && !choosen){
                 Chefcolor = color;
                 choosen = true;
             }
@@ -128,51 +128,6 @@ public class PrincessTest {
 
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setStudent(Chefcolor);
-
-        assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
-    }
-
-    //Test when the bag is empty
-    @Test
-    public void BadPlayerChoiceException3() throws FullLobbyException, EmptyBagException {
-        LobbyHandler lobby = new LobbyHandler(0, 2);
-        LobbyPlayer player1 = new LobbyPlayer("Player 1");
-        LobbyPlayer player2 = new LobbyPlayer("Player 2");
-        player1.setWizard(1);
-        player2.setWizard(2);
-        Random rng = new Random();
-
-        lobby.addPlayer(player1);
-        lobby.addPlayer(player2);
-
-        Game game = new Game(true, lobby);
-        game.beginPlanning();
-
-        Students students = new Students(2, 2, 2, 2, 1);
-        game.getCurrentPlayer().getSchoolBoard().setDiningStudents(students);
-
-        Princess princess = new Princess(game);
-
-        Students Chef_students = princess.getStudents();
-
-        Color Chefcolor = null;
-        Boolean choosen = false;
-        for (Color color : Chef_students.keySet()) {
-            if(Chef_students.get(color) !=0 && choosen == false){
-                Chefcolor = color;
-                choosen = true;
-            }
-        }
-
-        PlayerChoices playerChoices = new PlayerChoices();
-        playerChoices.setStudent(Chefcolor);
-
-        Bag bag = new Bag();
-        bag = game.getBag();
-
-        while(bag.capacity() > 0){
-            game.drawStudentFromBag();
-        }
 
         assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
     }
