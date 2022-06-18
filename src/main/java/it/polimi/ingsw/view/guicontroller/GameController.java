@@ -308,7 +308,7 @@ public class GameController implements GUIController {
             Pane cloudPane = new Pane();
             cloudPane.setCursor(Cursor.HAND);
             ImageView cloudImage = new ImageView("graphics/islands/cloud.png");
-            cloudImage = resizeImageView(cloudImage, 128, 128);
+            cloudImage = resizeImageView(cloudImage, 100, 100);
 
             cloudPane.getChildren().add(cloudImage);
             cloudPanes.add(cloudPane);
