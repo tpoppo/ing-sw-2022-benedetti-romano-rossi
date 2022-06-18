@@ -18,21 +18,18 @@ public class ReducedLobby implements Serializable {
     private final int ID;
     private final int numPlayer;
     private final int maxPlayers;
-    private final ArrayList<String> usernames; // FIXME: this parameters is never used. Should we remove it?
 
-    public ReducedLobby(int id, int numPlayer, int maxPlayers, ArrayList<String> usernames) {
+    public ReducedLobby(int id, int numPlayer, int maxPlayers) {
         ID = id;
         this.numPlayer = numPlayer;
         this.maxPlayers = maxPlayers;
-        this.usernames = new ArrayList<>(usernames);
     }
 
     public ReducedLobby(NetworkManager networkManager){
         this(
                 networkManager.ID,
                 networkManager.getLobbyHandler().getPlayers().size(),
-                networkManager.getLobbyHandler().getMaxPlayers(),
-                networkManager.getLobbyHandler().getPlayers().stream().map(LobbyPlayer::getUsername).collect(Collectors.toCollection(ArrayList::new))
+                networkManager.getLobbyHandler().getMaxPlayers()
         );
     }
 

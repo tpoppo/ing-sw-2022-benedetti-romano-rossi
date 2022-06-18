@@ -28,7 +28,7 @@ public class MoveMotherNatureMessage extends ClientMessage {
         Game game = gameHandler.getModel();
         Player player = gameHandler.lobbyPlayerToPlayer(lobby_player);
 
-        // Invalid current assistant. Check whether the current assistant is present
+        // Invalid current assistant. Checks whether the current assistant is present
         Assistant assistant = player.getCurrentAssistant();
         if(assistant == null){
             network_manager.addErrorMessage(lobby_player, "The assistant has not been selected");

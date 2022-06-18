@@ -93,7 +93,11 @@ public class Command {
         return new ArrayList<>(aliases);
     }
 
-    // TODO: javadocs
+    /**
+     * Checks whether the command is call the with given command name.
+     * @param command command name
+     * @return true if the name is callable with the given name
+     */
     public boolean checkName(String command){
         if(name.equalsIgnoreCase(command)) return true;
         for(String alias : aliases){

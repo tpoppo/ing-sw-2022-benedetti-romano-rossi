@@ -366,6 +366,7 @@ public class Game implements Serializable{
         for(Player player : players){
             int student_influence = 0;
             int tower_influence = 0;
+            int buff_influence = 0;
 
             // Students influence
             for(Color professor_color : player.getProfessors()){
@@ -377,8 +378,12 @@ public class Game implements Serializable{
             if(island.getOwner() != null && island.getOwner().equals(player) && !gameModifiers.isInhibitTowers())
                 tower_influence = towers_on_island;
 
+            // Buff Influence
+            if(player.equals(getCurrentPlayer()))
+                buff_influence = gameModifiers.getBuffInfluence();
+
             // Also adding the gameModifier here
-            influence.put(player, student_influence + tower_influence + gameModifiers.getBuffInfluence());
+            influence.put(player, student_influence + tower_influence + buff_influence);
         }
 
         // Computing max_influence value
@@ -535,7 +540,7 @@ public class Game implements Serializable{
     public void updateProfessor(Player current_player, Color color){
         Students dining_students = current_player.getSchoolBoard().getDiningStudents();
 
-        // check whether the professor is in game
+        // checks whether the professor is in game
         Professors professorsTo = current_player.getProfessors();
         Player professor_owner = players.stream()
                 .filter(player -> player.getProfessors().contains(color))

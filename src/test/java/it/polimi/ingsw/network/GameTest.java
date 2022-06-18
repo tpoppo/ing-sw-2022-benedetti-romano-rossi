@@ -29,7 +29,7 @@ public class GameTest {
     }
 
     /**
-     * Check whether the invariants of the game are respected
+     * Checks whether the invariants of the game are respected
      * @param game the current game to check
      */
     void checkInvariant(Game game){

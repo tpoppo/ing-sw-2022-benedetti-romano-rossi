@@ -44,7 +44,7 @@ public abstract class ClientMessage implements Serializable {
     }
 
     /**
-     * Check whether the game state is required_state and the player is valid (same player from the game and from the socket)
+     * Checks whether the game state is required_state and the player is valid (same player from the game and from the socket)
      *
      * @param network_manager current game
      * @param lobby_player    current player (from the socket)
