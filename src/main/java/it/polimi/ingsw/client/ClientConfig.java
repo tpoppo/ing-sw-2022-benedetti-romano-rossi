@@ -3,14 +3,14 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.utils.Constants;
 
 /**
- * It contains the config used by the ClientSocket to connect to the server
+ * Contains the config used by the ClientSocket to connect to the server.
  */
 public class ClientConfig {
     String address;
     int port;
 
     /**
-     * Create an object with the default values
+     * Creates an object with the default values
      */
     public ClientConfig(){
         port = Constants.SERVER_PORT;

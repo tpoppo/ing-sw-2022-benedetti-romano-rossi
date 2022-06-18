@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board;
 import java.io.Serializable;
 import java.util.Random;
 
+// TODO: javadocs
 public enum Color implements Serializable {
     RED,
     GREEN,

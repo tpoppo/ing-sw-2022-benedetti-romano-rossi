@@ -6,7 +6,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Random;
 
-
+/**
+ * Class Bad represent the bag containing the students.
+ */
 public class Bag implements Serializable {
     public final static int MAX_STUDENTS = 130;
     @Serial
@@ -14,16 +16,25 @@ public class Bag implements Serializable {
     private Students students;
     private final Random rng = new Random();
 
+    /**
+     * Constructor, creates a bag filled with the given students.
+     *
+     * @param students the students that form the bag.
+     */
     public Bag(Students students) {
         this.students = new Students(students);
     }
 
+    /**
+     * Constructor, creates a bag with the default number of students.
+     */
     public Bag(){
         students = new Students(24, 24, 24, 24, 24);
     }
 
     /**
-     * Draw a random student from the bag
+     * Draws a random student from the bag
+     *
      * @return the drawn color
      * @throws EmptyBagException if the bag is empty
      */
@@ -48,7 +59,9 @@ public class Bag implements Serializable {
         return null;
     }
 
-    // Returns the number of students in the bag, no matter the color
+    /**
+     * @return the number of students in the bag, no matter the color
+     */
     public int capacity(){
         return students.count();
     }

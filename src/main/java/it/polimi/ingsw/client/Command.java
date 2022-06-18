@@ -16,28 +16,17 @@ public class Command {
     private final CommandType commandType;
     private final List<GameState> admittedStates;
 
-    public Command(String name, List<String> aliases, List<String> arguments, String description, CommandType commandType, List<GameState> admittedStates) {
-        this.name = name;
-        this.aliases = aliases;
-        this.arguments = arguments;
-        this.description = description;
-        this.commandType = commandType;
-        this.admittedStates = admittedStates;
-    }
-
+    /**
+     * Constructor, creates a Command with the given name and sets its type.
+     *
+     * @param name the name of the command.
+     * @param commandType the type of the command.
+     */
     public Command(String name, CommandType commandType){
         this.name = name;
         this.commandType = commandType;
         this.arguments = new ArrayList<>();
         this.aliases = new ArrayList<>();
-        admittedStates = new ArrayList<>();
-    }
-
-    public Command(String name, List<String> aliases, CommandType commandType){
-        this.name = name;
-        this.aliases = aliases;
-        this.commandType = commandType;
-        this.arguments = new ArrayList<>();
         admittedStates = new ArrayList<>();
     }
 
@@ -104,6 +93,7 @@ public class Command {
         return new ArrayList<>(aliases);
     }
 
+    // TODO: javadocs
     public boolean checkName(String command){
         if(name.equalsIgnoreCase(command)) return true;
         for(String alias : aliases){

@@ -9,6 +9,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Class Player represents a Player in the Game state.
+ */
 public class Player extends LobbyPlayer implements Serializable {
     @Serial
     private static final long serialVersionUID = -2605603161368085648L;
@@ -17,6 +20,16 @@ public class Player extends LobbyPlayer implements Serializable {
     final private SchoolBoard schoolBoard;
     private ArrayList<Assistant> playerHand;
 
+    /**
+     * Constructor, creates a Player with the given parameters.
+     *
+     * @param username the username of the Player.
+     * @param current_assistant the Player's current assistant.
+     * @param coins the number of coins held by this Player.
+     * @param schoolBoard the schoolboard of this Player.
+     * @param playerHand the deck of assistant of this Player.
+     * @param wizard the wizard ID chosen by this Player.
+     */
     public Player(String username, Assistant current_assistant, int coins, SchoolBoard schoolBoard, ArrayList<Assistant> playerHand, int wizard) {
         super(username);
         setWizard(wizard);
@@ -26,6 +39,12 @@ public class Player extends LobbyPlayer implements Serializable {
         this.playerHand = playerHand;
     }
 
+    /**
+     * Constructor, creates a "vanilla" player.
+     *
+     * @param username the username of the Player.
+     * @param wizard the wizard ID chosen by this Player.
+     */
     public Player(String username, int wizard){
         super(username);
         setWizard(wizard);
@@ -35,6 +54,11 @@ public class Player extends LobbyPlayer implements Serializable {
         playerHand = Assistant.getAssistants(wizard);
     }
 
+    /**
+     * Constructor, creates a player starting from the given lobbyPlayer.
+     *
+     * @param player the lobbyPlayer to create the Player from.
+     */
     public Player(LobbyPlayer player){
         this(player.getUsername(), player.getWizard()); // this should always be != null (as every lobbyPlayer must choose a wizard when entering the lobby)
     }

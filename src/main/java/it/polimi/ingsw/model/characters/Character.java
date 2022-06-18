@@ -7,6 +7,10 @@ import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Class Character represents a character of the game.
+ * The actual character classes extends this class.
+ */
 abstract public class Character implements Serializable {
     @Serial
     private static final long serialVersionUID = -6948735520110438443L;
@@ -14,11 +18,23 @@ abstract public class Character implements Serializable {
     private boolean activated;
     private String description;
 
+    /**
+     * Constructor, creates a Character with the given cost.
+     *
+     * @param cost the cost to be paid to activate the character.
+     */
     public Character(int cost){
         this.cost = cost;
         activated = false;
     }
 
+    /**
+     * Creates the provided character.
+     *
+     * @param character_to_create the character to be created.
+     * @param game the controller to modify.
+     * @return the created character.
+     */
     public static Character createCharacter(Characters character_to_create, Game game){
         return switch (character_to_create) {
             case PRINCESS -> new Princess(game);
@@ -42,7 +58,8 @@ abstract public class Character implements Serializable {
     }
 
     /**
-     * Activate the character by calling onActivation, increasing the cost value and updating the activated value
+     * Activates the character by calling onActivation, increasing the cost value and updating the activated value
+     *
      * @param game current game
      * @param playerChoices character parameters
      * @throws BadPlayerChoiceException if the parameters are invalid
@@ -54,7 +71,8 @@ abstract public class Character implements Serializable {
     }
 
     /**
-     * Activate the character by calling onDeactivation and updating the activated value
+     * Activates the character by calling onDeactivation and updating the activated value
+     *
      * @param game current game
      */
     public void deactivate(Game game){
@@ -66,6 +84,7 @@ abstract public class Character implements Serializable {
 
     /**
      * Tells which students are on top of the card
+     *
      * @return students on the card
      */
     public Students getStudents(){
@@ -74,6 +93,7 @@ abstract public class Character implements Serializable {
 
     /**
      * Returns what the character requires
+     *
      * @return the requirement of the character
      */
     public Requirements require(){
@@ -82,6 +102,7 @@ abstract public class Character implements Serializable {
 
     /**
      * Number of no entry tiles
+     *
      * @return Number of no entry tiles
      */
     public int getNoEntryTiles(){
@@ -90,8 +111,10 @@ abstract public class Character implements Serializable {
 
     public boolean isActivated() { return activated; }
 
+    // FIXME:
     /**
      * when the character is activated
+     *
      * @param game current game
      * @param playerChoices character parameters
      * @throws BadPlayerChoiceException if the parameters are invalid

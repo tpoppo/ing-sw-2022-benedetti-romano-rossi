@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.characters;
 
+/**
+ * Class Requirements is a list of the possible requirements of the characters.
+ */
 public enum Requirements {
     ISLAND,
     STUDENT_COLOR,

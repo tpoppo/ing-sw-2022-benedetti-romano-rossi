@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class Island represents an Island.
+ */
 public class Island implements Serializable {
     @Serial
     private static final long serialVersionUID = -3072123057338700620L;
@@ -17,6 +20,16 @@ public class Island implements Serializable {
     private int no_entry_tiles;
     private int num_islands;
 
+    /**
+     * Constructor, creates an island with the given parameters.
+     *
+     * @param num_towers the number of towers on top of this island.
+     * @param owner the owner of this island.
+     * @param mother_nature true if mother nature is currently standing on this island.
+     * @param students the students on top of this island.
+     * @param no_entry_tiles the number of no entry tiles on top of this island.
+     * @param num_islands the number of islands that form this island.
+     */
     public Island(int num_towers, Player owner, boolean mother_nature, Students students, int no_entry_tiles, int num_islands) {
         this.num_towers = num_towers;
         this.owner = owner;
@@ -26,10 +39,19 @@ public class Island implements Serializable {
         this.num_islands = num_islands;
     }
 
+    /**
+     * Constructor, creates a "clean" island.
+     */
     public Island(){
         this(0, null, false, new Students(), 0, 1);
     }
 
+    /**
+     * Merges the provided island with this island.
+     * It gets all the values from the provided island and "adds" them to this island.
+     *
+     * @param island the island to be merged.
+     */
     public void merge(Island island){
         num_towers += island.num_towers;
         mother_nature |= island.mother_nature;
@@ -43,6 +65,11 @@ public class Island implements Serializable {
         }
     }
 
+    /**
+     * Merges the provided islands with this island, one at the time.
+     *
+     * @param islands the list of islands to be merged with this one.
+     */
     public void merge(List<Island> islands){
         for(Island island_to_merge : islands){
             merge(island_to_merge);

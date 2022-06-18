@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Class Assistant represent an assistant card.
+ */
 public class Assistant implements Serializable {
     @Serial
     private static final long serialVersionUID = -5617454978786526667L;
@@ -13,6 +16,14 @@ public class Assistant implements Serializable {
     final private int ID;
     final private int wizard;
 
+    /**
+     * Constructor, creates an assistant with the given parameters.
+     *
+     * @param power the assistant's power.
+     * @param steps the number of steps that mother nature can do when this assistant is played.
+     * @param id the assistant's ID
+     * @param wizard the wizard ID.
+     */
     private Assistant(int power, int steps, int id, int wizard) {
         this.power = power;
         this.steps = steps;
@@ -20,7 +31,12 @@ public class Assistant implements Serializable {
         this.wizard = wizard;
     }
 
-    // Returns all the assistant of the specified wizard
+    /**
+     * Returns all the assistants of the specified wizard
+     *
+     * @param wizard the wizard ID.
+     * @return all the assistants of the specified wizard.
+     */
     static public ArrayList<Assistant> getAssistants(int wizard){
         ArrayList<Assistant> assistants = new ArrayList<Assistant>();
 

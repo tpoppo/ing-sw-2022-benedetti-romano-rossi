@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.board;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Class SchoolBoard represents the schoolboard and its functionalities.
+ */
 public class SchoolBoard implements Serializable {
     @Serial
     private static final long serialVersionUID = 8344161602434039242L;
@@ -11,6 +14,14 @@ public class SchoolBoard implements Serializable {
     private Students dining_students;
     private Students entrance_students;
 
+    /**
+     * Constructor, creates a schoolboard with the given parameters.
+     *
+     * @param num_towers the number of towers on top of this schoolboard.
+     * @param professors the professors on top of this schoolboard.
+     * @param dining_students the dining students on top of this schoolboard.
+     * @param entrance_students the entrance students on top of this schoolboard.
+     */
     public SchoolBoard(int num_towers, Professors professors, Students dining_students, Students entrance_students) {
         this.num_towers = num_towers;
         this.professors = professors;
@@ -18,6 +29,11 @@ public class SchoolBoard implements Serializable {
         this.entrance_students = entrance_students;
     }
 
+    /**
+     * Constructor, creates a "clean" schoolboard.
+     *
+     * @param num_towers the number of towers on top of this schoolboard.
+     */
     public SchoolBoard(int num_towers){
         this.num_towers = num_towers;
         professors = new Professors();
@@ -25,7 +41,11 @@ public class SchoolBoard implements Serializable {
         entrance_students = new Students();
     }
 
-    // Adds (or remove if argument is negative) the num_towers from this.num_towers
+    /**
+     * Adds (or remove if argument is negative) the num_towers from this.num_towers
+     *
+     * @param num_towers the number of towers to be added to this schoolboard.
+     */
     public void addTowers(int num_towers){
         this.num_towers += num_towers;
     }

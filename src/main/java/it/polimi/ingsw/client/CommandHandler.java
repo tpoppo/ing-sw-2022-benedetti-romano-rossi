@@ -23,7 +23,7 @@ public class CommandHandler {
     protected static final String NEWLINE = "<--NEWLINE-->";
 
     /**
-     * It defines the commands available
+     * Creates and defines the available commands.
      */
     public static void createCommands(){
         // General clientside commands
@@ -124,39 +124,13 @@ public class CommandHandler {
         commands.add(activate);
     }
 
+    /**
+     * Normalizes the length of the command's description.
+     *
+     * @param command the command whose description is to be normalized.
+     * @return the String representing the normalized description.
+     */
     public static String normalizeDescription(Command command){
-        /* FIXME: to remove?
-        Optional<Integer> maxLen;
-
-        maxLen = commands.stream()
-                .map(command -> command.getName().length() + command.getArguments().stream().mapToInt(String::length)
-                .sum())
-                .reduce((a, b) -> a > b ? a : b);
-
-        if(maxLen.isPresent()){
-            String replacement = "\n";
-
-            for(int i=0; i<maxLen.get(); i++)
-                replacement = replacement.concat(" ");
-
-            String newlineReplacement = replacement;
-
-            commands.forEach(command -> {
-                StringBuilder firstSpaces = new StringBuilder();
-
-                int spacesToAdd = maxLen.get() - command.getCommandInfo().indexOf("-");
-
-                firstSpaces.append(" ".repeat(Math.max(0, spacesToAdd)));
-
-                formattedCommands.append(
-                        command.getCommandInfo()
-                                .replace("-", firstSpaces.toString())
-                                .replaceAll(NEWLINE, newlineReplacement)
-                );
-            });
-        }
-        */
-
         String replacement = "\n";
         for(int i=0; i<51; i++)
             replacement = replacement.concat(" ");
@@ -169,12 +143,19 @@ public class CommandHandler {
         return commands;
     }
 
+    /**
+     * Finds and returns the Command with the given name
+     *
+     * @param name the name of the command to be searched.
+     * @return the Command with the given name.
+     */
     public static Command get(String name){
         return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
     }
 
     /**
-     * It parses and send the given command input.
+     * Parses and sends the given command.
+     *
      * @param inputCommand command that must be parsed
      * @param client_socket where to send the message
      * @param cli the cli that sent the input

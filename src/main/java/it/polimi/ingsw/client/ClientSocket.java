@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class manage the client side connection to the server
+ * This class manages the client side connection to the server
  */
 public class ClientSocket {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
@@ -26,13 +26,19 @@ public class ClientSocket {
     public final Object mutex_closed = new Object();
 
 
+    /**
+     * Constructor, creates a ClientSocket with given config.
+     *
+     * @param client_config the config for the ClientSocket.
+     * @throws IOException if it cannot create the socket or a stream.
+     */
     public ClientSocket(ClientConfig client_config) throws IOException {
         this.client_config = client_config;
             setup();
     }
 
     /**
-     * it setups the connection and it creates the socket and input/output streams.
+     * Setups the connection and creates the socket and input/output streams.
      * @throws IOException if it cannot create the socket or a stream
      */
     private void setup() throws IOException {
@@ -42,7 +48,8 @@ public class ClientSocket {
     }
 
     /**
-     * It sends the given message to the server
+     * Sends the given message to the server
+     *
      * @param message client message to send
      */
     public void send(ClientMessage message) {
@@ -57,21 +64,27 @@ public class ClientSocket {
         }
     }
 
+    /**
+     * Closes the connection with the socket.
+     *
+     * @throws IOException if an I/O error occurs when closing this socket
+     */
     public void closeConnection() throws IOException {
         clientSocket.close();
     }
 
     /**
-     * @return it returns where the socket is still open
+     * @return true if the socket is still open
      */
     public boolean isOpened() {
         return !clientSocket.isClosed();
     }
 
     /**
-     * It log in the client with the given username
+     * It logs in the client with the given username
+     *
      * @param username username of the player
-     * @return true if the login was successful otherwise it returns false
+     * @return true if the login was successful, otherwise it returns false
      */
     public boolean login(String username) {
         try {

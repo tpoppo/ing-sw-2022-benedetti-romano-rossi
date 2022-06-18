@@ -150,7 +150,9 @@ public class Game implements Serializable{
         }
     }
 
-    // Manages the progress of the play_order queue
+    /**
+     * Manages the progress of the play_order queue
+     */
     public void nextTurn(){
         play_order.remove();
     }
@@ -174,8 +176,10 @@ public class Game implements Serializable{
         return true;
     }
 
-    // Computes the player_order for the planning phase based on the first_player
-    // Removes current_assistant from each player
+    /**
+     * Computes the player_order for the planning phase based on the first_player
+     * Removes current_assistant from each player
+     */
     public void beginPlanning(){
         int first_player_index = players.indexOf(first_player);
 
@@ -196,6 +200,12 @@ public class Game implements Serializable{
         planning_order = new ArrayList<>(play_order);
     }
 
+    /**
+     * Sets the current player's assistant
+     *
+     * @param assistant the assistant to be played
+     * @throws AssistantAlreadyPlayedException if the provided assistant has already been played by another player (and the player has other assistants)
+     */
     public void playAssistant(Assistant assistant) throws AssistantAlreadyPlayedException {
         boolean assistant_already_played = false;
         Set<Assistant> played_assistants = new HashSet<>();
@@ -223,7 +233,9 @@ public class Game implements Serializable{
         current_player.setPlayerHand(updated_player_hand);
     }
 
-    // Computes the player_order for the action phase and sets the first_player for the new round
+    /**
+     * Computes the player_order for the action phase and sets the first_player for the new round
+     */
     public void endPlanning(){
         ArrayList<Player> new_play_order = new ArrayList<>(players);
 
@@ -255,7 +267,8 @@ public class Game implements Serializable{
     }
 
     /**
-     * It moves the student from the entrance to the given island
+     * It moves a student from the entrance to the given island
+     *
      * @param color the color of the student in the entrance
      * @param island the target island
      * @throws EmptyMovableException if there are no student of the required color in the entrance
@@ -272,8 +285,9 @@ public class Game implements Serializable{
     }
 
     /**
-     * It moves the student from the entrance to the dining room
-     * It also updates the professor is needed
+     * It moves a student from the entrance to the dining room
+     * It also updates the professor if needed
+     *
      * @param color color of the student that it is moved into the dining room
      * @throws EmptyMovableException if there are no student of the required color in the entrance
      */
@@ -313,6 +327,7 @@ public class Game implements Serializable{
     /**
      * It moves mother nature to the target island, if the target island is too far it throws MoveMotherNatureException.
      * The maximum distance is given by the current assistant. It assumes that the current assistant and getCurrentPlayer are not null.
+     *
      * @param island where mother nature will move to
      */
     public void moveMotherNature(Island island) {
@@ -324,7 +339,7 @@ public class Game implements Serializable{
     }
 
     /**
-     * Execute the conquering island phase on the island where mother nature is currently placed.
+     * Execute the island conquering phase on the island where mother nature is currently placed.
      * It calls conquerIsland(Island island), where island is the island where mother nature is currently placed.
      */
     public void conquerIsland(){
@@ -332,6 +347,11 @@ public class Game implements Serializable{
         conquerIsland(islands.get(mother_nature_position));
     }
 
+    /**
+     * Execute the island conquering phase on the given island.
+     *
+     * @param island the island to be conquered
+     */
     public void conquerIsland(Island island){
         // if there are NoEntryTiles skip conquerIsland
         if(island.getNoEntryTiles() > 0){
@@ -413,7 +433,8 @@ public class Game implements Serializable{
     }
 
     /**
-     * It moves students from the selected cloud to the player's entrance. Additionally, it deactivates the characters
+     * It moves the students from the selected cloud to the player's entrance. Additionally, it deactivates the characters
+     *
      * @param cloud selected cloud
      */
     public void chooseCloud(Students cloud) throws EmptyCloudException {
@@ -439,7 +460,8 @@ public class Game implements Serializable{
 
 
     /**
-     * checkVictory returns true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table.
+     * Checks whether the victory conditions are met
+     *
      * @return true if a player builds the last Tower or there are only 3 groups of Islands remaining on the table
      */
     public boolean checkVictory(){
@@ -452,7 +474,8 @@ public class Game implements Serializable{
     }
 
     /**
-     * checkEndGame returns true if the bag is empty or if the hand of a player is empty.
+     * Checks whether the end-game conditions are met
+     *
      * @return true if the bag is empty or if the hand of a player is empty
      */
     public boolean checkEndGame(){
@@ -464,8 +487,9 @@ public class Game implements Serializable{
     }
 
     /**
-     * winner returns the winner of the game. It assumes that the game has ended.
+     * Returns the winner of the game. It assumes that the game has ended.
      * The player who has built the most Towers on Islands wins the game. In case of a tie, the player who controls the most Professors wins the game.
+     *
      * @return the winner of the game
      */
     public Player winner(){
@@ -477,11 +501,12 @@ public class Game implements Serializable{
             }
             return Integer.compare(a.getSchoolBoard().getNumTowers(), b.getSchoolBoard().getNumTowers());
         });
+
         return candidate_winner.get(0);
     }
 
     /**
-     * It returns the position of MotherNature in the islands arraylist.
+     * Returns the position of MotherNature in the islands arraylist.
      */
     public int findMotherNaturePosition(){
         for(int i=0; i<islands.size(); i++) {
@@ -491,7 +516,8 @@ public class Game implements Serializable{
     }
 
     /**
-     * Activate the selected character with the given parameters
+     * Activates the selected character with the given parameters
+     *
      * @param character the character you want to activate
      * @param playerChoices the parameters of the character activation
      * @throws BadPlayerChoiceException if the parameters are invalid
@@ -501,7 +527,8 @@ public class Game implements Serializable{
     }
 
     /**
-     * Update the professors values after a player has placed a student
+     * Updates the professors values after a player has placed a student in his dining room
+     *
      * @param current_player player that placed the student in the dining room
      * @param color color of the student
      */
@@ -532,7 +559,7 @@ public class Game implements Serializable{
     }
 
     /**
-     * It returns the current player if it exists, otherwise it returns null.
+     * Returns the current player if it exists, otherwise it returns null.
      */
     public Player getCurrentPlayer(){
         return play_order.peek();
@@ -571,13 +598,20 @@ public class Game implements Serializable{
     }
 
     /**
-     * Draw a student from a bag
+     * Draws a student from a bag
+     *
      * @return color drawn
      */
     public Color drawStudentFromBag() throws EmptyBagException {
         return bag.drawStudent();
     }
 
+    /**
+     * Searches and returns the Player with the provided username.
+     *
+     * @param username the username of the player
+     * @return the Player with the given username
+     */
     public Player usernameToPlayer(String username){
         return getPlayers().stream().filter(player -> player.getUsername().equals(username)).toList().get(0);
     }
@@ -586,10 +620,16 @@ public class Game implements Serializable{
         return new LinkedList<>(play_order);
     }
 
+    /**
+     * @return the minimum cost of the characters in play
+     */
     public int minCharacterCost(){
         return characters.stream().map(Character::getCost).reduce(Integer::min).orElse(1000000);
     }
 
+    /**
+     * @return the currently active Character, if any
+     */
     public Optional<Character> getActiveCharacter(){
         return characters.stream().filter(Character::isActivated).findFirst();
     }

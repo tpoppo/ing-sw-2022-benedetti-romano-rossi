@@ -17,6 +17,9 @@ public class GameModifiers implements Serializable {
     private int professor_modifier; // reduce the number of student needed to get the control of the professor
     private int extra_steps;
 
+    /**
+     * Constructor, sets the modifiers to their default values.
+     */
     public GameModifiers(){
         buff_influence = 0;
         inhibit_color = null;

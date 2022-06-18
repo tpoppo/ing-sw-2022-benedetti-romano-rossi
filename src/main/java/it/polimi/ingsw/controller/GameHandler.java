@@ -8,7 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * This class manage the game and contains all the information (both state of the pieces and the game phase)
+ * This class manages the game and contains all the information (both state of the pieces and the game phase)
  */
 public class GameHandler implements Serializable {
     @Serial
@@ -23,7 +23,8 @@ public class GameHandler implements Serializable {
     private boolean saved_action_completed;
 
     /**
-     * It creates a new game given the lobby.
+     * Creates a new game given the lobby.
+     *
      * @param ID game id
      * @param expert_mode in which mode the game must start
      * @param lobby_handler lobby (with the player data)
@@ -48,7 +49,12 @@ public class GameHandler implements Serializable {
         action_completed = false;
     }
 
-    // Given a lobbyPlayer, it finds the matching player (by username) in the current GameHandler
+    /**
+     * Given a lobbyPlayer, it finds the matching player (by username) in the current GameHandler
+     *
+     * @param lobbyPlayer the LobbyPlayer to be translated
+     * @return the matching Player in the current GameHandler
+     */
     public Player lobbyPlayerToPlayer(LobbyPlayer lobbyPlayer){
         return model.getPlayers().stream()
                 .filter(player -> player.getUsername().equals(lobbyPlayer.getUsername()))
