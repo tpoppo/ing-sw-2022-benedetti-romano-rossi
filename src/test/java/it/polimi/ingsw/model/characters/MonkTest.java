@@ -17,8 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Test the character Monk
+ */
 public class MonkTest {
 
+    /**
+     * Test that when a player activate this card he can move a student on an Island of his choice
+     * @throws BadPlayerChoiceException if the students number in input is different from one or the chosen student from the card isn't in the card
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     */
     @Test
     public void Recruiter() throws BadPlayerChoiceException, EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -61,6 +70,11 @@ public class MonkTest {
         expected_student.forEach((key, value) -> assertEquals(value, islands.get(3).getStudents().getOrDefault(key, -1), "key: "+key));
     }
 
+    /**
+     * Test the number of students in input is greater than one the exception BadPlayerChoiceException is called
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     */
     @Test
     public void BadPlayerChoiceException() throws EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -96,6 +110,11 @@ public class MonkTest {
         assertThrows(BadPlayerChoiceException.class, () -> monk.activate(game, playerchoice));
     }
 
+    /**
+     * Test that when a player tries to swap a student that isn't in the card the exception BadPlayerChoiceException is called
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     */
     @Test
     public void BadPlayerChoiceException2() throws EmptyBagException, FullLobbyException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

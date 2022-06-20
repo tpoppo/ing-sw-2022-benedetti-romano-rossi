@@ -16,8 +16,17 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test the character Princess
+ */
 public class PrincessTest {
 
+    /**
+     * Test that when a player activate this card he can take a student from this card and place it in his Dining Room
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if there is more than one Student in input or there isn't the chosen Student in this card
+     */
     @Test
     public void Chef() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -60,7 +69,11 @@ public class PrincessTest {
         assertEquals(expected_students, game.getCurrentPlayer().getSchoolBoard().getDiningStudents());
     }
 
-    //Test when there are more than one colors in playerchoice
+    /**
+     * Test that when there are more than one color in input the exception BadPlayerChoiceException is called
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     */
     @Test
     public void BadPlayerChoiceException() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -91,7 +104,11 @@ public class PrincessTest {
         assertThrows(BadPlayerChoiceException.class, () -> princess.activate(game, playerChoices));
     }
 
-    //Test when there is not the choosen color in the dining room
+    /**
+     * Test that when there isn't the chosen Student in the Dining Room the Exception BadPlayerChoiceException is called
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     */
     @Test
     public void BadPlayerChoiceException2() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

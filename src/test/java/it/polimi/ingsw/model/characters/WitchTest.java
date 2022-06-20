@@ -14,8 +14,17 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the character Witch
+ */
 public class WitchTest {
 
+    /**
+     * Test that when a player activate this card a No entry tile is placed on the chosen island
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if tiles are equals to zero
+     */
     @Test
     public void NatureBlocker() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

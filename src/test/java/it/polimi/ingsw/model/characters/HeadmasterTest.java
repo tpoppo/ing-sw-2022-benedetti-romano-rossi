@@ -22,7 +22,7 @@ public class HeadmasterTest {
      * even if he has the same number of Students as the player who currently controls them
      * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
      * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
-     * @throws BadPlayerChoiceException if the player choice has a wrong format
+     * @throws BadPlayerChoiceException if game is null
      */
     @Test
     public void Headmaster() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {

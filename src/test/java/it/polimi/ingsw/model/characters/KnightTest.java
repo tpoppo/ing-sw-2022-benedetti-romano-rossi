@@ -13,8 +13,17 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test the character Knight
+ */
 public class KnightTest {
 
+    /**
+     * Test that when a player activate this character his influence is increased by two
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if game is null
+     */
     @Test
     public void Influencer() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

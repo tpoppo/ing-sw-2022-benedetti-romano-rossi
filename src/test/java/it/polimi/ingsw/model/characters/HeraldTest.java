@@ -19,7 +19,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * test the character Herald
+ */
 public class HeraldTest {
+
+    /**
+     * Test that when a player activate the character Herald is calculated the influence on the chosen island as Mother Nature had ended her movement there
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if the chosen island is null
+     * @throws AssistantAlreadyPlayedException a player play an assistant card that he has already played
+     */
     @RepeatedTest(100)
     public void Herald() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

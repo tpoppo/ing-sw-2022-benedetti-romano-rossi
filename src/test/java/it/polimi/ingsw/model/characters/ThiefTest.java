@@ -15,8 +15,17 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the character Thief
+ */
 public class ThiefTest {
 
+    /**
+     * Test that when a player activate this card every player return 3 students of the chosen color from the dining room
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if the chosen student is null
+     */
     @Test
     public void Thief() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

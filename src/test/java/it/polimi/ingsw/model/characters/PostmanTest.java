@@ -14,8 +14,17 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test the character Postman
+ */
 public class PostmanTest {
 
+    /**
+     * Test that when a player activate this card he can move mother nature 2 position longer than the power of the assistant that he has already played
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if game is null
+     */
     @Test
     public void NatureMover() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
