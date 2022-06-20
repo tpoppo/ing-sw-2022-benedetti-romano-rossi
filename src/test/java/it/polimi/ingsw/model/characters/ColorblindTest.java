@@ -15,8 +15,17 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the character Colorblind
+ */
 public class ColorblindTest {
 
+    /**
+     * Test that when the character Colorblind is activated the game will not consider the choosen color for the influence calculation
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if the choosen student is null
+     */
     @Test
     public void Colorblind() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);

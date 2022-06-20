@@ -12,8 +12,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test of the character Headmaster
+ */
 public class HeadmasterTest {
 
+    /**
+     * Test that when a player activate the character Headmaster this player can take control of any number of Professors
+     * even if he has the same number of Students as the player who currently controls them
+     * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
+     * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
+     * @throws BadPlayerChoiceException if the player choice has a wrong format
+     */
     @Test
     public void Headmaster() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
