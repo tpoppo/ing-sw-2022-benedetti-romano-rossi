@@ -340,7 +340,7 @@ public class Game implements Serializable{
 
     /**
      * Execute the island conquering phase on the island where mother nature is currently placed.
-     * It calls conquerIsland(Island island), where island is the island where mother nature is currently placed.
+     * It calls conquerIsland(Island), where island is the island where mother nature is currently placed.
      */
     public void conquerIsland(){
         int mother_nature_position = findMotherNaturePosition();

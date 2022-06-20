@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
 
 public class CreateLobbyMessage extends ClientMessage {
-    int max_players;
+    final int max_players;
 
     public CreateLobbyMessage(int max_players) {
         this.max_players = max_players;

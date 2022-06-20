@@ -15,7 +15,7 @@ import java.util.Set;
  * It can be sent by the player during their turn in the game.
  */
 public class SelectedCharacterMessage extends ClientMessage {
-    int character_position;
+    final int character_position;
     public SelectedCharacterMessage(int character_position) {
         this.character_position = character_position;
         super.message_type = MessageType.GAME;

@@ -7,7 +7,6 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,6 @@ public class PostmanTest {
 
         Postman Postman = new Postman();
         PlayerChoices playerchoice = new PlayerChoices();
-        playerchoice = null;
         Postman.activate(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();

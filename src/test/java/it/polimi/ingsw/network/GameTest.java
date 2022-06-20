@@ -592,68 +592,6 @@ public class GameTest {
         }
     }
 
-    /*
-    These tests were done when game.mergeisland was public
-    // Test with all the owner equals
-    @Test
-    public void Merge() throws FullLobbyException, EmptyMovableException, EmptyBagException {
-        Lobby lobby = new Lobby(2);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
-        Random rng = new Random();
-
-        lobby.addPlayer(player1);
-        lobby.addPlayer(player2);
-
-        Game game = new Game(true, lobby);
-        ArrayList<Island> islands = game.getIslands();
-
-        //Set all the islands with the same Owner
-        for(Island island : islands){
-            island.setOwner(player1);
-        }
-        ArrayList<Island> expectedislands = new ArrayList<Island>();
-        expectedislands.add(islands.get(0));
-        game.mergeIslands();
-        assertEquals(expectedislands, islands);
-    }
-
-    //Test with first and last Owner equals
-    @Test
-    public void Merge2() throws FullLobbyException, EmptyMovableException, EmptyBagException {
-        Lobby lobby = new Lobby(2);
-        Player player1 = new Player("Player 1", 1);
-        Player player2 = new Player("Player 2", 2);
-        Random rng = new Random();
-
-        lobby.addPlayer(player1);
-        lobby.addPlayer(player2);
-
-        Game game = new Game(true, lobby);
-        ArrayList<Island> islands = game.getIslands();
-
-        //Set player2 as Owner of the first and last island, player1 as Owner of all the other islands
-        int position = 0;
-        for(Island island : islands){
-            if(position == 0){
-                island.setOwner(player2);
-                position++;
-                continue;
-            }
-            if(position == islands.size()-1){
-                island.setOwner(player2);
-                position++;
-                continue;
-            }
-            island.setOwner(player1);
-            position++;
-        }
-        game.mergeIslands();
-        assertEquals(2, islands.size());
-        assertEquals(player1, islands.get(0).getOwner());
-        assertEquals(player2, islands.get(islands.size() - 1).getOwner());
-    }*/
-
     //Test when a player play the same assistant card of the previous player in the same turn
     @Test
     public void AssistantAlreadyPlayedExceptionTest1() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
@@ -951,7 +889,7 @@ public class GameTest {
         witch.activate(game, playerChoices);
         game.conquerIsland();
 
-        //Check that island don't change after activate that character
+        //Check that island doesn't change after activate that character
         for(int i=0; i<islands.size(); i++){
             assertEquals(islands_copy.get(i).getOwner(), islands.get(i).getOwner());
             assertEquals(islands_copy.get(i).getNumIslands(), islands.get(i).getNumIslands());

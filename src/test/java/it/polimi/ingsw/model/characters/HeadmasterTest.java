@@ -7,11 +7,8 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +21,6 @@ public class HeadmasterTest {
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
         player2.setWizard(2);
-        Random rng = new Random();
 
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
@@ -33,7 +29,6 @@ public class HeadmasterTest {
 
         Headmaster Headmaster = new Headmaster();
         PlayerChoices playerchoice = new PlayerChoices();
-        playerchoice = null;
         Headmaster.activate(game, playerchoice);
         GameModifiers gameModifiers = game.getGameModifiers();
         assertEquals(1, gameModifiers.getProfessorModifier());

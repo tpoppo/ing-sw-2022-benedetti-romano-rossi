@@ -7,8 +7,6 @@ import it.polimi.ingsw.model.Player;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class represents the message sent by the client to execute the various actions

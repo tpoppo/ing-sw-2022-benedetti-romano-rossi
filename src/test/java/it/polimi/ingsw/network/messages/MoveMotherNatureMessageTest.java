@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.model.GameConfig;
 import it.polimi.ingsw.model.board.Island;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
@@ -36,11 +35,7 @@ public class MoveMotherNatureMessageTest {
         int pos = 0;
 
         for(Island island : islands){
-            if(pos == 0){
-                island.setMotherNature(true);
-            }else{
-                island.setMotherNature(false);
-            }
+            island.setMotherNature(pos == 0);
             pos++;
         }
 

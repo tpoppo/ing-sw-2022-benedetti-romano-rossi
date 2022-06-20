@@ -56,8 +56,8 @@ public class IslandTest {
      * Test a merge between three islands
      */
     @Test
-    public void Mergelist(){
-        ArrayList islands = new ArrayList();
+    public void mergeListTest(){
+        ArrayList<Island> islands = new ArrayList<>();
         Island island1 = new Island();
         Island island2 = new Island();
         Island island3 = new Island();

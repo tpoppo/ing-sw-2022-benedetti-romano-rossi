@@ -38,10 +38,6 @@ public class Command {
         aliases.add(alias);
     }
 
-    public void addAliases(List<String> aliases){
-        this.aliases.addAll(aliases);
-    }
-
     public void addState(GameState state){
         admittedStates.add(state);
     }
@@ -87,10 +83,6 @@ public class Command {
 
     public List<GameState> getAdmittedStates() {
         return admittedStates;
-    }
-
-    public List<String> getAliases(){
-        return new ArrayList<>(aliases);
     }
 
     /**

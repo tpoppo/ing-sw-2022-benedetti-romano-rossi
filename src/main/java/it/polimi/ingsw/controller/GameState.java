@@ -11,5 +11,5 @@ public enum GameState implements Serializable {
     MOVE_MOTHER_NATURE,
     CHOOSE_CLOUD,
     ACTIVATE_CHARACTER,
-    ENDING;
+    ENDING
 }

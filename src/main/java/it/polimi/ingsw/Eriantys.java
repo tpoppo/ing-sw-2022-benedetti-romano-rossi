@@ -40,7 +40,7 @@ public class Eriantys {
     private static void runServer(String[] args){
         ClientConfig clientConfig = parseInput(args, true);
         Server.setPort(clientConfig.getPort());
-        Server server = Server.getInstance();
+        Server.getInstance();
     }
 
     /**

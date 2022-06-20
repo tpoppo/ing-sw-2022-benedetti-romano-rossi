@@ -79,7 +79,6 @@ public class CLI {
 
         username = read_stream.nextLine();
         while(!client_socket.login(username)) {
-            // TODO: better error handling
             out.print(ansi().fgBrightRed().a("Username already taken").reset());
             out.print(ansi().cursorUpLine().eraseLine().a("Username: "));
             username = read_stream.nextLine();

@@ -15,7 +15,7 @@ import java.io.Serial;
 public class ChooseCloudMessage extends ClientMessage {
     @Serial
     private static final long serialVersionUID = -6567465369692086533L;
-    int cloud_position;
+    final int cloud_position;
 
     public ChooseCloudMessage(int cloud_position) {
         super.message_type = MessageType.GAME;

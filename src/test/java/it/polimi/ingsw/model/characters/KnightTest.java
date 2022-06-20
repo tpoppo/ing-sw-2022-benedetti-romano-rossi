@@ -6,7 +6,6 @@ import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +31,6 @@ public class KnightTest {
 
         Knight knight = new Knight();
         PlayerChoices playerchoice = new PlayerChoices();
-        playerchoice = null;
         knight.activate(game, playerchoice);
 
         GameModifiers gameModifiers = game.getGameModifiers();

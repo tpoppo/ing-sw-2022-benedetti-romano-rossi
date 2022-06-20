@@ -29,7 +29,7 @@ public class Constants {
     public static final Set<String> TRUE_STRING = Set.of("yes", "true", "1");  // immutable set of true
     public static final Set<String> FALSE_STRING = Set.of("no", "false", "0"); // immutable set of false
 
-    public static String ERIANTYS = """
+    public static final String ERIANTYS = """
 
             ███████╗██████╗ ██╗ █████╗ ███╗   ██╗████████╗██╗   ██╗███████╗
             ██╔════╝██╔══██╗██║██╔══██╗████╗  ██║╚══██╔══╝╚██╗ ██╔╝██╔════╝
@@ -40,7 +40,7 @@ public class Constants {
                                                                           \s
             """;
 
-    public static String MENU = """
+    public static final String MENU = """
 
             ███╗   ███╗███████╗███╗   ██╗██╗   ██╗
             ████╗ ████║██╔════╝████╗  ██║██║   ██║
@@ -51,7 +51,7 @@ public class Constants {
                                                  \s
             """;
 
-    public static String LOBBY = """
+    public static final String LOBBY = """
 
             ██╗      ██████╗ ██████╗ ██████╗ ██╗   ██╗
             ██║     ██╔═══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝
@@ -62,7 +62,7 @@ public class Constants {
                                                      \s
             """;
 
-    public static String HELP = """
+    public static final String HELP = """
 
             ██╗  ██╗███████╗██╗     ██████╗\s
             ██║  ██║██╔════╝██║     ██╔══██╗
@@ -73,7 +73,7 @@ public class Constants {
                                            \s
             """;
 
-    public static String CHARACTERS = """
+    public static final String CHARACTERS = """
 
              ██████╗██╗  ██╗ █████╗ ██████╗  █████╗  ██████╗████████╗███████╗██████╗ ███████╗
             ██╔════╝██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝
@@ -84,7 +84,7 @@ public class Constants {
                                                                                             \s
             """;
 
-    public static String VICTORY = "" + NEWLINE +
+    public static final String VICTORY = "" + NEWLINE +
             "                                                                                                                " + NEWLINE +
             "`8.`888b           ,8'  8 8888     ,o888888o.8888888 8888888888 ,o888888o.     8 888888888o. `8.`8888.      ,8' " + NEWLINE +
             " `8.`888b         ,8'   8 8888    8888     `88.    8 8888    . 8888     `88.   8 8888    `88. `8.`8888.    ,8'  " + NEWLINE +
@@ -97,7 +97,7 @@ public class Constants {
             "        `8.`8'          8 8888    8888     ,88'    8 8888    ` 8888     ,88'   8 8888   `8b.        8 8888      " + NEWLINE +
             "         `8.`           8 8888     `8888888P'      8 8888       `8888888P'     8 8888     `88.      8 8888      " + NEWLINE;
 
-    public static String DEFEAT = "" + NEWLINE +
+    public static final String DEFEAT = "" + NEWLINE +
             "                                                                                                   " + NEWLINE +
             "8 888888888o.      8 8888888888   8 8888888888   8 8888888888            .8.    8888888 8888888888 " + NEWLINE +
             "8 8888    `^888.   8 8888         8 8888         8 8888                 .888.         8 8888       " + NEWLINE +

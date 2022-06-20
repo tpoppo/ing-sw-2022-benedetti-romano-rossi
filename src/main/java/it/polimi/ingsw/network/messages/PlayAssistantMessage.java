@@ -12,7 +12,7 @@ import it.polimi.ingsw.utils.exceptions.AssistantAlreadyPlayedException;
  * It can be used while you are in game.
  */
 public class PlayAssistantMessage extends ClientMessage {
-    int card_position;
+    final int card_position;
 
     public PlayAssistantMessage(int card_position) {
         this.card_position = card_position;

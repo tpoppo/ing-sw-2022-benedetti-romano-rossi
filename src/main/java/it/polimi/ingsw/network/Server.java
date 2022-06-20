@@ -23,14 +23,13 @@ public class Server{
     private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
     static private int PORT_INIT;
     private static Server instance;
-    final private int PORT;
     private ServerSocket serverSocket;
 
     private final List<NetworkManager> networkManagers;
     private final List<String> player_list;
 
     private Server(){
-        PORT = PORT_INIT;
+        int PORT = PORT_INIT;
         networkManagers = Collections.synchronizedList(new ArrayList<>());
         player_list = Collections.synchronizedList(new ArrayList<>());
 
@@ -64,12 +63,8 @@ public class Server{
     }
 
     private void run() throws IOException {
-        while(true)
+        while(!serverSocket.isClosed())
             new ConnectionCEO(serverSocket.accept()).start();
-    }
-
-    private void closeConnection() throws IOException {
-        serverSocket.close();
     }
 
     private void retrieveSavedState(){

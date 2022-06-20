@@ -29,7 +29,7 @@ public class AppTest {
     void RunServer() throws InterruptedException {
         runThread(() -> {
             Server.setPort(TESTING_PORT);
-            Server server = Server.getInstance();
+            Server.getInstance();
         });
 }
 
@@ -38,7 +38,7 @@ public class AppTest {
     void RunCli() throws InterruptedException {
         runThread(() -> {
             Server.setPort(TESTING_PORT);
-            Server server = Server.getInstance();
+            Server.getInstance();
         });
 
         Thread.sleep(20);
@@ -62,7 +62,7 @@ public class AppTest {
     void RunCliArt() throws InterruptedException {
         runThread(() -> {
             Server.setPort(TESTING_PORT);
-            Server server = Server.getInstance();
+            Server.getInstance();
         });
 
         Thread.sleep(20);
@@ -86,7 +86,7 @@ public class AppTest {
     void ClientSocketCliCliArtMenuCheck() throws InterruptedException {
         runThread(() -> {
             Server.setPort(TESTING_PORT);
-            Server server = Server.getInstance();
+            Server.getInstance();
         });
 
         Thread.sleep(20);
@@ -95,9 +95,8 @@ public class AppTest {
             final int final_i = i;
             runThread(() -> {
                 ClientConfig clientConfig = new ClientConfig();
-                CLI cli;
                 clientConfig.setPort(TESTING_PORT);
-                ClientSocket clientSocket = null;
+                ClientSocket clientSocket;
                 try {
                     clientSocket = new ClientSocket(clientConfig);
                 } catch (IOException e) {
@@ -114,7 +113,7 @@ public class AppTest {
                 if (final_i != 0)
                     assertTrue(clientSocket.login(username));
 
-                // final_i not logged in
+                // final_i has not logged in
                 assertEquals(Server.getInstance().getPlayerList().contains(username), final_i != 0);
 
                 clientSocket.send(new JoinLobbyMessage(final_i / 3));

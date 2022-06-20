@@ -16,7 +16,7 @@ import java.io.Serial;
 public class ActivateCharacterMessage extends ClientMessage {
     @Serial
     private static final long serialVersionUID = 4917209518181302573L;
-    PlayerChoicesSerializable player_choices;
+    final PlayerChoicesSerializable player_choices;
 
     public ActivateCharacterMessage(PlayerChoicesSerializable player_choices) {
         this.player_choices = player_choices;

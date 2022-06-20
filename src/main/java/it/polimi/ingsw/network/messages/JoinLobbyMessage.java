@@ -9,7 +9,7 @@ import java.util.Optional;
  * This message is used to join a lobby given an ID and can be used while you are in the menu
  */
 public class JoinLobbyMessage extends ClientMessage {
-    int id;
+    final int id;
     public JoinLobbyMessage(int id){
         this.id = id;
         super.message_type = MessageType.MENU;

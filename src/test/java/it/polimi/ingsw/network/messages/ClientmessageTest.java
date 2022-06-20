@@ -3,8 +3,6 @@ package it.polimi.ingsw.network.messages;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.model.board.Color;
-import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import it.polimi.ingsw.utils.exceptions.WizardNotAvailableException;
 import org.junit.jupiter.api.RepeatedTest;

@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.board.Assistant;
  */
 public class MoveMotherNatureMessage extends ClientMessage {
 
-    int mother_nature_position;
+    final int mother_nature_position;
 
     public MoveMotherNatureMessage(int mother_nature_position) {
         this.mother_nature_position = mother_nature_position;

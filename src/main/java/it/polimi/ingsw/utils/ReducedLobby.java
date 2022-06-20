@@ -1,12 +1,9 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.NetworkManager;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * This class represent the information sent to the client (via the {@link it.polimi.ingsw.view.viewcontent.MenuContent}).

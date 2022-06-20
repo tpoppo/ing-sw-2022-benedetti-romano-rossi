@@ -3,12 +3,10 @@ package it.polimi.ingsw.model.characters;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
-import it.polimi.ingsw.model.board.Bag;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 import it.polimi.ingsw.utils.exceptions.EmptyBagException;
-import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
@@ -44,11 +42,11 @@ public class PrincessTest {
         Students Chef_students = princess.getStudents();
 
         Color Chefcolor = null;
-        Boolean choosen = false;
+        boolean chosen = false;
         for (Color color : Chef_students.keySet()) {
-            if(Chef_students.get(color) !=0 && choosen == false){
+            if(Chef_students.get(color) !=0 && !chosen){
                 Chefcolor = color;
-                choosen = true;
+                chosen = true;
             }
         }
         PlayerChoices playerChoices = new PlayerChoices();
