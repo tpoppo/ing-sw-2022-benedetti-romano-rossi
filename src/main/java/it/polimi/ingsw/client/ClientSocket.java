@@ -60,7 +60,7 @@ public class ClientSocket {
 
             LOGGER.log(Level.FINE, "Message sent: {0}", message);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Could not send message: {0}. Exception: {1}", new Object[]{message, e});
+            LOGGER.log(Level.INFO, "Could not send message: {0}. Exception: {1}", new Object[]{message, e});
         }
     }
 
@@ -95,7 +95,7 @@ public class ClientSocket {
 
             if(response.equals("KO")) return false;
         } catch (IOException | ClassNotFoundException | ClassCastException e) {
-            LOGGER.log(Level.WARNING, "Invalid string parsing: {0}", new Object[]{e});
+            LOGGER.log(Level.INFO, "Invalid string parsing: {0}", new Object[]{e});
             return false;
         }
         this.username = username;
@@ -104,15 +104,14 @@ public class ClientSocket {
             while(isOpened()) {
                 try {
                     view = (ViewContent) input_stream.readObject();
-                    System.out.println("view:"+view);
                 } catch (IOException e) {
                     try {
                         closeConnection();
                     } catch (IOException ex) {
-                        LOGGER.log(Level.SEVERE, "Cannot close: {0}", new Object[]{ex});
+                        LOGGER.log(Level.WARNING, "Cannot close: {0}", new Object[]{ex});
                     }
 
-                    LOGGER.log(Level.SEVERE, "Server closed. Exception: {0}", new Object[]{e});
+                    LOGGER.log(Level.WARNING, "Server closed. Exception: {0}", new Object[]{e});
                     synchronized (mutex_closed){
                         mutex_closed.notifyAll();
                     }
