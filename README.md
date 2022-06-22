@@ -34,7 +34,7 @@ The project includes:
 | Complete rules |  🟢   |
 | Socket         |  🟢   |
 | CLI            |  🟢   |
-| GUI            |  🟡   |
+| GUI            |  🟢   |
 | All Characters |  🟢   |
 | Multiple games |  🟢   |
 | Persistence    |  🟢   |
@@ -48,3 +48,27 @@ The project includes:
 - **AstahUML**: UML Diagrams
 - **IntelliJ IDEA Ultimate**: Main IDE
 - **SonarQube**: Code analysis
+
+## Quick start guide
+There is a unique jar file for both the client and the server. Therefore, you can select which mode you want to use in the arguments.
+### For the client
+It is possible to set the IP and the port you want to connect to by using the optional argument port and IP.
+##### For the cli
+In the terminal, run:
+```bash
+java -jar Eriantys.jar cli [port <port number>] [ip <ip address>]
+```
+##### For the gui
+In the terminal, run:
+```bash
+java -jar Eriantys.jar gui [port <port number>] [ip <ip address>]
+```
+<img src=".github/assets/game_gui.png">
+
+
+### For the sever
+It is possible to set the port you want to use.
+In the terminal, run:
+```bash
+java -jar Eriantys.jar server [port <port number>]
+```
