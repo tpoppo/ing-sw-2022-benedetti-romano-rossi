@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+// TODO: javadocs
 public class MenuManager {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static MenuManager instance;

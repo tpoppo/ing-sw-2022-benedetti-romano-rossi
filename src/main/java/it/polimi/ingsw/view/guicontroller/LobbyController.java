@@ -20,6 +20,9 @@ import javafx.scene.layout.Pane;
 
 import java.util.List;
 
+/**
+ * It manages all the components of the lobby in the GUI
+ */
 public class LobbyController implements GUIController {
     @FXML private Pane mainPane;
     @FXML private ImageView background;
@@ -35,6 +38,9 @@ public class LobbyController implements GUIController {
     private List<Label> player_labels;
     private List<ImageView> chosen_wizards;
 
+    /**
+     * It initializes the elements
+     */
     @Override
     public void setup() {
         player_labels = List.of(player0, player1, player2);
@@ -43,6 +49,9 @@ public class LobbyController implements GUIController {
         updateLobby();
     }
 
+    /**
+     * It clears all the components
+     */
     private void reset() {
         mainPane.setDisable(false);
         mainPane.setEffect(null);
@@ -51,6 +60,9 @@ public class LobbyController implements GUIController {
         select_wizard.setVisible(true);
     }
 
+    /**
+     * It updates the elements depending on the current view
+     */
     public void updateLobby() {
         LobbyHandler lobbyHandler = GUI.getView().getLobbyHandler();
 
@@ -112,10 +124,19 @@ public class LobbyController implements GUIController {
         start_game.setDisable(!all_has_chosen || lobbyHandler.getPlayers().size() == 1);
     }
 
+    /**
+     * It sends the {@link StartGameMessage}
+     * @param actionEvent from the onAction event
+     */
     public void startGame(ActionEvent actionEvent) {
         GUI.getClientSocket().send(new StartGameMessage(expert_mode.isSelected()));
     }
 
+    /**
+     * It sends the {@link ChooseWizardMessage}
+     * @param mouseEvent from the onAction event
+     * @param value selected wizard
+     */
     private void selectWizard(MouseEvent mouseEvent, int value) {
         GUI.getClientSocket().send(new ChooseWizardMessage(value));
     }

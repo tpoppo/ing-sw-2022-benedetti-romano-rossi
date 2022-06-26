@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Test of the character Colorblind
@@ -51,6 +52,6 @@ public class ColorblindTest {
         assertEquals(Color.RED, gameModifiers.getInhibitColor());
 
         colorblind.deactivate(game);
-        assertEquals(null, gameModifiers.getInhibitColor());
+        assertNull(gameModifiers.getInhibitColor());
     }
 }

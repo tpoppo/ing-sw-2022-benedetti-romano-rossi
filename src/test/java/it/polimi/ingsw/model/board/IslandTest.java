@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test of the class Island
@@ -44,7 +45,7 @@ public class IslandTest {
 
         island1.merge(island2);
 
-        assertEquals(true, island1.hasMotherNature());
+        assertTrue(island1.hasMotherNature());
         assertEquals(sum_student, island1.getStudents());
         assertEquals(3, island1.getNumTowers());
         assertEquals(player1, island1.getOwner());
@@ -95,7 +96,7 @@ public class IslandTest {
 
         Students sum_student = new Students(6, 11, 7, 8, 6);
 
-        assertEquals(true, island1.hasMotherNature());
+        assertTrue(island1.hasMotherNature());
         assertEquals(sum_student, island1.getStudents());
         assertEquals(4, island1.getNumTowers());
         assertEquals(player1, island1.getOwner());

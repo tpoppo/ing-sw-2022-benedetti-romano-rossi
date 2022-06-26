@@ -37,6 +37,9 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * It manages all the components of the game in the GUI
+ */
 public class GameController implements GUIController {
     protected static final String PIECE_CLASS = "piece";
     protected  static final String BORDERED_TEXT = "borderedText";
@@ -94,6 +97,9 @@ public class GameController implements GUIController {
     private HashMap<Integer, VBox> characterStuffSmallMap;
     private ArrayList<Consumer<String>> onFillSchoolboard;
 
+    /**
+     * It initializes oll the elements
+     */
     @Override
     public void setup() {
         this.view = GUI.getView();
@@ -150,6 +156,9 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It initializes the schoolboard
+     */
     private void resetBoard() {
         // reset node to their initial value
         nextTurnButton.setEffect(null);
@@ -163,6 +172,9 @@ public class GameController implements GUIController {
             schoolboardPlayerUsername = thisPlayer.getUsername();
     }
 
+    /**
+     * It generates and initializes the islands
+     */
     private void setupIslands() {
         List<Island> islands = view.getGameHandler().getModel().getIslands();
         List<Node> islandNodes = new ArrayList<>();
@@ -302,6 +314,9 @@ public class GameController implements GUIController {
         placeNodes(islandsPane, islandNodes, radius);
     }
 
+    /**
+     * It generates and initializes the islands
+     */
     private void setupClouds() {
         Game model = view.getGameHandler().getModel();
         for (Students cloud : model.getClouds()) {
@@ -346,6 +361,9 @@ public class GameController implements GUIController {
         placeNodes(islandsPane, cloudNodes, radius);
     }
 
+    /**
+     * It generates and initializes the character cards
+     */
     private void setupCharacters() {
         Game model = view.getGameHandler().getModel();
 
@@ -403,6 +421,9 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It generates and initializes the labels with the order of the players
+     */
     private void setupPlayOrder() {
         Queue<Player> playOrder = view.getGameHandler().getModel().getPlayOrder();
 
@@ -422,6 +443,10 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It is the initialization part that is dependent on the current action state.
+     * It calls the specific method depending on the current {@link GameState}.
+     */
     private void setupActions() {
         GameHandler gameHandler = view.getGameHandler();
 
@@ -449,6 +474,9 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It generates and initializes the mother nature image
+     */
     private void setupMotherNature() {
         // the position of the mother nature is the convex interpolation between the center and the island (in which mother nature is currently placed)
         final double lambda = 0.3; // convex interpolation factor. It must be in [0, 1]
@@ -470,6 +498,9 @@ public class GameController implements GUIController {
         motherNature.setLayoutY(lambda * centerY + (1-lambda) * islandY - motherNature.getBoundsInParent().getHeight() / 2 + island.getBoundsInParent().getHeight() / 2);
     }
 
+    /**
+     * It generates and initializes the end of the game logos and images
+     */
     private void prepareEnding() {
         if (view.getGameHandler().getModel().winner().getUsername().equals(GUI.getUsername())) {
             endingScreen.setImage(new Image("graphics/other/victory.png"));
@@ -480,6 +511,9 @@ public class GameController implements GUIController {
         endingScreen.setVisible(true);
     }
 
+    /**
+     * It generates and initializes the elements when the {@link GameState} is ACTIVATE_CHARACTER.
+     */
     private void prepareActivateCharacter() {
         Game game = view.getGameHandler().getModel();
         Character character = view.getGameHandler().getSelectedCharacter();
@@ -658,20 +692,26 @@ public class GameController implements GUIController {
         }
     }
 
-    private void selectStudent(Runnable updateButton, ObservableList<Node> children, ArrayList<ImageView> selectedOnCard) {
+    /**
+     * It adds the onclick effect used to manage the student selection and glowing effect.
+     * @param updateButton it updates the button state (called at the end of the function)
+     * @param children list of object in which the on click effect must be added
+     * @param selected students selected
+     */
+    private void selectStudent(Runnable updateButton, ObservableList<Node> children, ArrayList<ImageView> selected) {
         children.forEach(node -> {
             ImageView imageView = (ImageView) node;
             imageView.setOnMouseClicked(e -> {
-                if (selectedOnCard.contains(imageView)) { // deselect a student
-                    selectedOnCard.remove(imageView);
+                if (selected.contains(imageView)) { // deselect a student
+                    selected.remove(imageView);
                     imageView.setEffect(null);
                 } else {
-                    selectedOnCard.add(imageView);
+                    selected.add(imageView);
                     imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
 
-                    if (selectedOnCard.size() > 3) { // remove the first, if there are more than 3 cards
-                        selectedOnCard.get(0).setEffect(null);
-                        selectedOnCard.remove(0);
+                    if (selected.size() > 3) { // remove the first, if there are more than 3 cards
+                        selected.get(0).setEffect(null);
+                        selected.remove(0);
                     }
                 }
                 updateButton.run();
@@ -679,21 +719,27 @@ public class GameController implements GUIController {
         });
     }
 
-    private void selectUpToTwoStudents(Runnable updateButton, GridPane gridPane, ArrayList<ImageView> selectedOnDining) {
-        gridPane.getChildren().forEach(node -> {
+    /**
+     * It adds the onclick effect used to manage the student selection and glowing effect.
+     * @param updateButton it updates the button state (called at the end of the function)
+     * @param children list of object in which the on click effect must be added
+     * @param selected selected student
+     */
+    private void selectUpToTwoStudents(Runnable updateButton, GridPane children, ArrayList<ImageView> selected) {
+        children.getChildren().forEach(node -> {
             ImageView imageView = (ImageView) node;
 
             imageView.setOnMouseClicked(e -> {
-                if (selectedOnDining.contains(imageView)) { // deselect a student
-                    selectedOnDining.remove(imageView);
+                if (selected.contains(imageView)) { // deselect a student
+                    selected.remove(imageView);
                     imageView.setEffect(null);
                 } else {
-                    selectedOnDining.add(imageView);
+                    selected.add(imageView);
                     imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
 
-                    if (selectedOnDining.size() > 2) { // remove the first, if there are more than 3 cards
-                        selectedOnDining.get(0).setEffect(null);
-                        selectedOnDining.remove(0);
+                    if (selected.size() > 2) { // remove the first, if there are more than 3 cards
+                        selected.get(0).setEffect(null);
+                        selected.remove(0);
                     }
                 }
 
@@ -703,13 +749,18 @@ public class GameController implements GUIController {
         });
     }
 
-    private void confirmSelection(ArrayList<ImageView> selectedOnCard) {
+    /**
+     * It adds the OnMouseClicked event to the nextTurnButton object to confirm the selected students
+     * The selected students are from the selected parameter and the selectedOnEntrance one (the students selected from the entrance)
+     * @param selected selected students
+     */
+    private void confirmSelection(ArrayList<ImageView> selected) {
         nextTurnButton.setOnMouseClicked(mouseEvent -> {
-            if (selectedOnCard.size() == selectedOnEntrance.size()) {
+            if (selected.size() == selectedOnEntrance.size()) {
                 PlayerChoicesSerializable playerChoicesSerializable = new PlayerChoicesSerializable();
-                for (int i = 0; i < selectedOnCard.size(); i++) {
+                for (int i = 0; i < selected.size(); i++) {
                     playerChoicesSerializable.setStudent(imageViewToColor(selectedOnEntrance.get(i)));
-                    playerChoicesSerializable.setStudent(imageViewToColor(selectedOnCard.get(i)));
+                    playerChoicesSerializable.setStudent(imageViewToColor(selected.get(i)));
                 }
                 GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
             } else {
@@ -718,6 +769,9 @@ public class GameController implements GUIController {
         });
     }
 
+    /**
+     * It generates and initializes the objects used in the {@link GameState} MOVE_STUDENT
+     */
     private void prepareMoveStudent() {
         selectedEntrance = null;
         for (int i = 0; i < islandPanes.size(); i++) {
@@ -785,6 +839,9 @@ public class GameController implements GUIController {
         });
     }
 
+    /**
+     * It generates and initializes the {@link GameState} MOVE_MOTHER_NATURE
+     */
     private void prepareMotherNature() {
         for (int i = 0; i < islandPanes.size(); i++) {
             Pane islandPane = islandPanes.get(i);
@@ -802,6 +859,9 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It generates and initializes the {@link GameState} CHOOSE_CLOUD
+     */
     private void prepareChooseCloud() {
         for (int i = 0; i < cloudPanes.size(); i++) {
             Pane cloudPane = cloudPanes.get(i);
@@ -817,7 +877,9 @@ public class GameController implements GUIController {
             }
         }
     }
-
+    /**
+     * It generates and initializes the name of the current player and the current action
+     */
     private void setupState() {
         GameHandler gameHandler = view.getGameHandler();
 
@@ -857,12 +919,19 @@ public class GameController implements GUIController {
         actionLabel.setText(action_text);
     }
 
+    /**
+     * It shows the error message (if present)
+     */
     private void setupErrorMessage() {
         if (view.getErrorMessage() != null) {
             updateErrorMessage(view.getErrorMessage());
         } else errorPane.setVisible(GUI.isShowingError());
     }
 
+    /**
+     * It generates and initializes the next turn button.
+     * It is used to send the {@link NextStateMessage}
+     */
     private void setupNextTurnButton() {
         if (checkMessage(new NextStateMessage(), thisPlayer) == StatusCode.OK) {
             nextTurnButton.setOnMouseClicked(mouseEvent -> GUI.getClientSocket().send(new NextStateMessage()));
@@ -871,6 +940,9 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It updates the onclick effect of the assistants
+     */
     private void setupAssistants() {
         Game model = view.getGameHandler().getModel();
 
@@ -928,12 +1000,18 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It hides the components only used in the expert mode (characters, coins and next turn button).
+     */
     private void hideExpertModeComponents() {
         charactersGrid.setVisible(false);
         coinsPane.setVisible(false);
         nextTurnButton.setVisible(false);
     }
 
+    /**
+     * It generates and initializes the schoolboard.
+     */
     private void setupSchoolboard() {
         Player schoolboardPlayer = view.getGameHandler().getModel().usernameToPlayer(schoolboardPlayerUsername);
 
@@ -941,6 +1019,10 @@ public class GameController implements GUIController {
         setSchoolBoardButtons(schoolboardPlayer);
     }
 
+    /**
+     * It generates and initializes the schoolboard and the students on it.
+     * @param player the owner of the schoolboard
+     */
     private void fillSchoolboard(Player player) {
         SchoolBoard schoolBoard = player.getSchoolBoard();
         Students entranceStudents = schoolBoard.getEntranceStudents();
@@ -1018,20 +1100,6 @@ public class GameController implements GUIController {
         }
     }
 
-    private void fillDining(Students diningStudents, Color studentColor, GridPane colorGrid) {
-        System.out.println("Adding " + diningStudents.get(studentColor) + " " + studentColor);
-
-        colorGrid.getChildren().clear();
-        for (int i = 0; i < diningStudents.get(studentColor); i++) {
-            ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
-            studentImage = resizeImageView(studentImage, 42, 42);
-            studentImage.setCursor(Cursor.HAND);
-            studentImage.getStyleClass().add(PIECE_CLASS);
-
-            colorGrid.addColumn(i, studentImage);
-        }
-    }
-
     private void setSchoolBoardButtons(Player selectedPlayer) {
         ArrayList<Player> players = view.getGameHandler().getModel().getPlayers();
 
@@ -1057,6 +1125,22 @@ public class GameController implements GUIController {
         }
     }
 
+    // TODO: javadocs
+    private void fillDining(Students diningStudents, Color studentColor, GridPane colorGrid) {
+        System.out.println("Adding " + diningStudents.get(studentColor) + " " + studentColor);
+
+        colorGrid.getChildren().clear();
+        for (int i = 0; i < diningStudents.get(studentColor); i++) {
+            ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
+            studentImage = resizeImageView(studentImage, 42, 42);
+            studentImage.setCursor(Cursor.HAND);
+            studentImage.getStyleClass().add(PIECE_CLASS);
+
+            colorGrid.addColumn(i, studentImage);
+        }
+    }
+
+    // TODO: javadocs
     private void showCharacterInfo(int id) {
         Character character = view.getGameHandler().getModel().getCharacters().get(id);
 
@@ -1112,6 +1196,7 @@ public class GameController implements GUIController {
         closeCharacterPaneButton.setOnMouseClicked(mouseEvent -> closeCharacterInfo());
     }
 
+    // TODO: javadocs
     private void closeCharacterInfo() {
         characterPane.setVisible(false);
         mainPane.setEffect(null);
@@ -1119,12 +1204,14 @@ public class GameController implements GUIController {
         GUI.setSelectingCharacter(null);
     }
 
+    // TODO: javadocs
     private StatusCode checkMessage(ClientMessage clientMessage, Player player) {
         GameHandler gameHandler = (GameHandler) DeepCopy.copy(GUI.getView().getGameHandler());
         NetworkManager networkManager = NetworkManager.createNetworkManager(gameHandler);
         return clientMessage.handle(networkManager, player);
     }
 
+    // TODO: javadocs
     private void placeNodes(Pane container, List<Node> nodes, double radius) {
         int numNodes = nodes.size();
         double containerCenterX = container.getBoundsInParent().getWidth() / 2;
@@ -1155,16 +1242,35 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * Add an error message
+     * @param s error message
+     */
     private void updateErrorMessage(String s) {
         errorMsg.setText(s);
         errorPane.setVisible(true);
         GUI.setShowingError(true);
     }
 
+    /**
+     * It resizes a given {@link ImageView}
+     * @param image given image
+     * @param width target width
+     * @param height target height
+     * @return resized image
+     */
     private ImageView resizeImageView(ImageView image, int width, int height) {
         return resizeImageView(image, width, height, 0);
     }
 
+    /**
+     * It resizes a given {@link ImageView}
+     * @param image given image
+     * @param width target width
+     * @param height target height
+     * @param rotate target rotation factor
+     * @return resized image
+     */
     private ImageView resizeImageView(ImageView image, int width, int height, int rotate) {
         ImageView newImage = new ImageView(image.getImage());
         newImage.setFitWidth(width);
@@ -1174,30 +1280,48 @@ public class GameController implements GUIController {
         return newImage;
     }
 
+    /**
+     * It brings up the given card (used by the assistant cards)
+     * @param event OnMouseEntered event
+     */
     public void bringUpCard(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
         imageView.getParent().setLayoutY(-40);
     }
 
+    /**
+     * It brings down the given card (used by the assistant cards)
+     * @param event OnMouseExited event
+     */
     public void bringDownCard(MouseEvent event) {
         ImageView imageView = (ImageView) event.getSource();
         imageView.getParent().setLayoutY(0);
     }
 
+    // TODO: javadocs
     public void addGlowEffect(MouseEvent event) {
         ((ImageView) event.getTarget()).setEffect(new Glow(1));
     }
 
+    // TODO: javadocs
     public void removeGlowEffect(MouseEvent event) {
         ((ImageView) event.getTarget()).setEffect(null);
     }
 
+    /**
+     * It parses to the image url to obtain the student color.
+     * @param imageView {@link ImageView} of a student
+     * @return color of the student
+     */
     public Color imageViewToColor(ImageView imageView) {
         // split the file name to get the color of the student
-        String[] sname = imageView.getImage().getUrl().split("[^a-zA-Z]");
-        return Color.parseColor(sname[sname.length - 3]);
+        String[] split_name = imageView.getImage().getUrl().split("[^a-zA-Z]");
+        return Color.parseColor(split_name[split_name.length - 3]);
     }
 
+    /**
+     * It hides the error message
+     */
     public void hideErrorPane(){
         errorPane.setVisible(false);
         GUI.setShowingError(false);

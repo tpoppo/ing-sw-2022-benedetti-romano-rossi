@@ -95,8 +95,5 @@ public class ClientmessageTest {
                     endingMessage.toString();
             }
         }
-        /*StartGameMessage startgamemesage = new StartGameMessage(true);
-        startgamemesage.handle(networkmanager, player1);
-        startgamemesage.handle(networkmanager, player2);*/
     }
 }

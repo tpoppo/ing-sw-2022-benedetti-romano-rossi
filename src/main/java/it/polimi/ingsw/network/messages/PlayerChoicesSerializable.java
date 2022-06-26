@@ -37,7 +37,7 @@ public class PlayerChoicesSerializable implements Serializable {
     }
 
     public void setStudent(Color color){
-        if(student == null) student = new ArrayList<Color>();
+        if(student == null) student = new ArrayList<>();
         student.add(color);
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+// TODO: javadocs
 public class Server{
     private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
     static private int PORT_INIT;

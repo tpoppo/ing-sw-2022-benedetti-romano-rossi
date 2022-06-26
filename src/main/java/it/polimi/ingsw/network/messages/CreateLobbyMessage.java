@@ -5,8 +5,14 @@ import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
+import java.io.Serial;
 
+/**
+ * This message is used to create and join a new lobby
+ */
 public class CreateLobbyMessage extends ClientMessage {
+    @Serial
+    private static final long serialVersionUID = 703942620318630480L;
     final int max_players;
 
     public CreateLobbyMessage(int max_players) {

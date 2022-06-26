@@ -10,7 +10,7 @@ import it.polimi.ingsw.utils.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test of the character Demolisher
@@ -41,9 +41,9 @@ public class DemolisherTest {
 
         demolisher.activate(game, playerchoice);
         GameModifiers gameModifiers = game.getGameModifiers();
-        assertEquals(true, gameModifiers.isInhibitTowers());
+        assertTrue(gameModifiers.isInhibitTowers());
 
         demolisher.deactivate(game);
-        assertEquals(false, gameModifiers.isInhibitTowers());
+        assertFalse(gameModifiers.isInhibitTowers());
     }
 }

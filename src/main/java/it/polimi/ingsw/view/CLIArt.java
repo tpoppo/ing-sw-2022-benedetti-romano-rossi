@@ -2,8 +2,6 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.ClientSocket;
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.GameHandler;
-import it.polimi.ingsw.controller.GameState;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
@@ -19,7 +17,13 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
 
+/**
+ * This class is used to show an alternative version of the client cli)
+ */
 public class CLIArt extends CLI {
+    /**
+     * List of constants for the elements position.
+     */
     private final Pair<Integer, Integer> STD_CURSOR_POSITION = new Pair<>(53, 1);
     private final Pair<Integer, Integer> STD_USERNAME_POSITION = new Pair<>(2, 80);
     private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(3, 80);
@@ -45,6 +49,10 @@ public class CLIArt extends CLI {
     }
 
 
+    /**
+     * It shows the current view.
+     * It assumes the player is in the state game
+     */
     @Override
     protected void printGame(){
         print(ansi().a(Constants.ERIANTYS), 1, 1);
@@ -73,45 +81,24 @@ public class CLIArt extends CLI {
         if(errorMessage != null) printErrorRelative();
     }
 
-    // NOT USED
-    private void printState(){
-        final int row_position = STD_STATUS_POSITION.getSecond() + 1;
-        final int columns_position = STD_STATUS_POSITION.getFirst();
-        GameHandler gameHandler = view.getGameHandler();
-        Game model = gameHandler.getModel();
-
-        Player current_player = model.getCurrentPlayer();
-        print(ansi().bg(Ansi.Color.DEFAULT).a("Turn: ").reset(), STD_STATUS_POSITION.getSecond() , STD_STATUS_POSITION.getFirst());
-        print(ansi().bg(Ansi.Color.DEFAULT).a(current_player.getUsername()).reset(), STD_STATUS_POSITION.getSecond(), STD_STATUS_POSITION.getFirst());
-        GameState gamestate = gameHandler.getCurrentState();
-
-        if(username.equals(current_player.getUsername())){
-            switch (gamestate){
-                case PLAY_ASSISTANT -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, play an assistant card...").reset(), row_position, columns_position);
-                case CHOOSE_CLOUD -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, choose a cloud...").reset(), row_position, columns_position);
-                case MOVE_MOTHER_NATURE -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, move mother nature...").reset(), row_position, columns_position);
-                case MOVE_STUDENT -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, move a student...").reset(), row_position, columns_position);
-                case ACTIVATE_CHARACTER -> print(ansi().bg(Ansi.Color.DEFAULT).a("It's your turn, activate a character...").reset(), row_position, columns_position);
-                case ENDING -> print(ansi().bg(Ansi.Color.DEFAULT).a("Finished").reset(), row_position, columns_position);
-            }
-        }else{
-            print(ansi().bg(Ansi.Color.DEFAULT).a("It's " + current_player.getUsername() + " turn, wait...").reset(), row_position, columns_position);
-        }
-        print(ansi().bg(Ansi.Color.DEFAULT), 0, 0);
-    }
-
+    /**
+     * It shows the clouds
+     */
     private void printClouds(){
         Game model = view.getGameHandler().getModel();
 
         int cnt = 0;
         for(Students students : model.getClouds()){
-            String cloudString = drawCloud(students, cnt^SEED);
+            String cloudString = drawCloud(students);
             print("Cloud: "+cnt, STD_CLOUDS_POSITION.getFirst(), (1+CLOUD_SHAPE.getSecond())*cnt+STD_CLOUDS_POSITION.getSecond());
             print(cloudString, STD_CLOUDS_POSITION.getFirst()+1, (1+CLOUD_SHAPE.getSecond())*cnt+STD_CLOUDS_POSITION.getSecond());
             cnt++;
         }
     }
 
+    /**
+     * It shows the islands
+     */
     private void printIslands(){
         Game model = view.getGameHandler().getModel();
 
@@ -126,7 +113,7 @@ public class CLIArt extends CLI {
 
         int cnt = 0;
         for(Island island : model.getIslands()){
-            String islandString = drawIsland(island, 0xdeadcafe^cnt^SEED);
+            String islandString = drawIsland(island);
             String owner = island.getOwner() == null ? "" : "- " + island.getOwner().getUsername();
             print("%d %s".formatted(cnt, owner),
                     STD_ISLANDS_POSITION.getFirst() + (1+ISLAND_SHAPE.getFirst())*(cnt/divisor),
@@ -138,6 +125,10 @@ public class CLIArt extends CLI {
         }
     }
 
+    /**
+     * It returns a string that shows the schoolboard
+     * @return the schoolboard ascii art
+     */
     protected String drawBoard(){
         Game model = view.getGameHandler().getModel();
         Player player;
@@ -212,10 +203,15 @@ public class CLIArt extends CLI {
         return boardStr.toString();
     }
 
-    private boolean[][] generateMaskTile(int row, int column, int dim, int seed){
-        Random rng = new Random(seed);
+    /**
+     * It generates a boolean mask used to generate clouds and islands
+     * @param row number of rows
+     * @param column number of columns
+     * @param dim size of the mask
+     * @return the mask
+     */
+    private boolean[][] generateMaskTile(int row, int column, int dim){
         boolean[][] mat = new boolean[row][column];
-        ArrayList<Pair<Integer, Integer>> coast = new ArrayList<Pair<Integer, Integer>>();
 
         for(int i=-row/2; i<(1+row)/2; i++){
             for(int j=-column/2; j<(1+column)/2; j++){
@@ -225,20 +221,42 @@ public class CLIArt extends CLI {
         return mat;
     }
 
-    private String drawCloud(Students cloud, int seed){
+    /**
+     * It returns the cloud ascii art
+     * @param cloud the cloud to show
+     * @return the ascii art of the cloud
+     */
+    private String drawCloud(Students cloud){
         return drawTile(cloud, 0,0,  false, 20,
-                        seed, Ansi.Color.WHITE, CLOUD_SHAPE.getFirst(), CLOUD_SHAPE.getSecond());
+                Ansi.Color.WHITE, CLOUD_SHAPE.getFirst(), CLOUD_SHAPE.getSecond());
     }
 
-    private String drawIsland(Island island, int seed){
+    /**
+     * It returns the island ascii art
+     * @param island the island to show
+     * @return the ascii art of the island
+     */
+    private String drawIsland(Island island){
         // dim must be >= 36 (in the worst case)
         return drawTile(island.getStudents(), island.getNumTowers(), island.getNoEntryTiles(),
-                        island.hasMotherNature(), 12 + 5*island.getNumIslands(), seed,
-                        Ansi.Color.GREEN, ISLAND_SHAPE.getFirst(), ISLAND_SHAPE.getSecond());
+                        island.hasMotherNature(), 12 + 5*island.getNumIslands(),
+                Ansi.Color.GREEN, ISLAND_SHAPE.getFirst(), ISLAND_SHAPE.getSecond());
     }
 
-    private String drawTile(Students students, int num_towers, int no_entry_tiles, boolean has_mother_nature, int dim, int seed, Ansi.Color bg_color, int row, int column){
-        boolean[][] mask = generateMaskTile(row, column, dim, seed);
+    /**
+     * It returns an ascii art of a tile given the items to show.
+     * @param students students to show
+     * @param num_towers number of towers
+     * @param no_entry_tiles number of no entry tiles
+     * @param has_mother_nature whether it has mother nature
+     * @param dim size of the tile
+     * @param bg_color background color
+     * @param row number of rows
+     * @param column number of columns
+     * @return the ascii art
+     */
+    private String drawTile(Students students, int num_towers, int no_entry_tiles, boolean has_mother_nature, int dim, Ansi.Color bg_color, int row, int column){
+        boolean[][] mask = generateMaskTile(row, column, dim);
         String[][] canvas = new String[mask.length][mask[0].length];
         int position = 0;
 

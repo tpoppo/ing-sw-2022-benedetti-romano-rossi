@@ -47,7 +47,7 @@ public class JugglerTest {
         game.getCurrentPlayer().getSchoolBoard().setEntranceStudents(student);
 
         PlayerChoices playerchoice= new PlayerChoices();
-        ArrayList<Color> change = new ArrayList<Color>();
+        ArrayList<Color> change = new ArrayList<>();
 
         Juggler juggler = new Juggler(game);
         juggler.require();
@@ -98,7 +98,7 @@ public class JugglerTest {
         game.getCurrentPlayer().getSchoolBoard().setEntranceStudents(student);
 
         PlayerChoices playerchoice= new PlayerChoices();
-        ArrayList<Color> change = new ArrayList<Color>();
+        ArrayList<Color> change = new ArrayList<>();
 
         Juggler juggler = new Juggler(game);
         juggler.require();
@@ -143,7 +143,7 @@ public class JugglerTest {
         game.getCurrentPlayer().getSchoolBoard().setEntranceStudents(student);
 
         PlayerChoices playerchoice= new PlayerChoices();
-        ArrayList<Color> change = new ArrayList<Color>();
+        ArrayList<Color> change = new ArrayList<>();
 
         Juggler juggler = new Juggler(game);
         juggler.require();

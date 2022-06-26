@@ -38,7 +38,7 @@ public class Assistant implements Serializable {
      * @return all the assistants of the specified wizard.
      */
     static public ArrayList<Assistant> getAssistants(int wizard){
-        ArrayList<Assistant> assistants = new ArrayList<Assistant>();
+        ArrayList<Assistant> assistants = new ArrayList<>();
 
         // NOTE: WizardID starts from 1
         // Inserting all the assistant cards

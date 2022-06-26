@@ -29,7 +29,7 @@ public class EndingMessage extends ClientMessage {
         }
 
         if(gameHandler.getCurrentState() != GameState.ENDING){
-            network_manager.addErrorMessage(lobby_player, "You game is not finished");
+            network_manager.addErrorMessage(lobby_player, "Your game is not finished");
             return StatusCode.WRONG_STATE;
         }
         network_manager.safeDestroy();

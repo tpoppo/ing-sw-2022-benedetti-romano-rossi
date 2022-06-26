@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO: javadocs
+/**
+ * This class is used to manage the GUI (via javafx)
+ */
 public class GUI extends Application {
     private static ViewContent view;
     private static ClientSocket client_socket;
@@ -40,6 +44,10 @@ public class GUI extends Application {
 
     private final HashMap<Scene, GUIController> controllerMap = new HashMap<>();
 
+    /**
+     * It is used to start a new GUI
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
    //     System.setProperty("prism.allowhidpi", "false");
         launch(args);
@@ -76,7 +84,7 @@ public class GUI extends Application {
 
         GUI.stage = stage;
         stage.setTitle("Eriantys");
-        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/graphics/other/coin.png")));
+        stage.getIcons().add(new Image("/graphics/other/coin.png"));
         stage.setFullScreenExitHint("");
         stage.setResizable(false);
 
@@ -92,6 +100,7 @@ public class GUI extends Application {
             logout();
         });
 
+        // it manages the server shutdown
         new Thread(() -> {
             while(true) {
                 synchronized (client_socket.mutex_closed){
@@ -116,6 +125,9 @@ public class GUI extends Application {
         }).start();
     }
 
+    /**
+     * It starts a thread that updates the view whenever a {@link ViewContent} is received.
+     */
     private void startViewContentUpdates(){
         new Thread(() -> {
             while (true) {
@@ -138,9 +150,7 @@ public class GUI extends Application {
                 } else {
                     switch (view.getCurrentHandler()) {
                         case LOBBY -> // show the lobby
-                                Platform.runLater(() -> {
-                                    switchScene(sceneMap.get(LOBBY), false);
-                                });
+                                Platform.runLater(() -> switchScene(sceneMap.get(LOBBY), false));
 
                         case GAME -> // show the game
                                 Platform.runLater(() -> {
@@ -161,6 +171,9 @@ public class GUI extends Application {
         }).start();
     }
 
+    /**
+     * It is called when a player tries to log out.
+     */
     private static void logout(){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit");

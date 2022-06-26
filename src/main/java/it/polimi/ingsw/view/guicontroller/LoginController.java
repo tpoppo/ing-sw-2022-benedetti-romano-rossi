@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+// TODO: javadocs
 public class LoginController implements GUIController{
     @FXML
     private TextField usernameField;

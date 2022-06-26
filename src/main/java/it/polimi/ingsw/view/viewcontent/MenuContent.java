@@ -5,11 +5,18 @@ import it.polimi.ingsw.network.NetworkManager;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.ReducedLobby;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents a view sent by the server while the client is in the menu.
+ * It contains the list of available lobbies and an errorMessage if present.
+ */
 public class MenuContent extends ViewContent {
+    @Serial
+    private static final long serialVersionUID = 1203122335979397573L;
     private final ArrayList<ReducedLobby> lobbies;
     private final String errorMessage;
 
@@ -17,6 +24,10 @@ public class MenuContent extends ViewContent {
         this(null);
     }
 
+    /**
+     * It initializes a new menu content given an error message
+     * @param errorMessage The error message (if missing it can be set to null)
+     */
     public MenuContent(String errorMessage){
         this.lobbies = new ArrayList<>();
 

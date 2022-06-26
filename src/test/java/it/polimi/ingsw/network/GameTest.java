@@ -879,10 +879,7 @@ public class GameTest {
         ArrayList<Island> islands = game.getIslands();
         islands.get(game.findMotherNaturePosition()).setMotherNature(false);
         islands.get(rng.nextInt(islands.size())).setMotherNature(true);
-        ArrayList<Island> islands_copy = new ArrayList<>();
-        for(Island island : islands){
-            islands_copy.add(island);
-        }
+        ArrayList<Island> islands_copy = new ArrayList<>(islands);
         Witch witch = new Witch();
         PlayerChoices playerChoices = new PlayerChoices();
         playerChoices.setIsland(islands.get(game.findMotherNaturePosition()));

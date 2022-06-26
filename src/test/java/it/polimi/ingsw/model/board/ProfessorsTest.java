@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.board;
 import it.polimi.ingsw.utils.exceptions.EmptyMovableException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test of the class Professors
@@ -27,8 +26,8 @@ public class ProfessorsTest {
         professor2.add(Color.MAGENTA);
         professor2.add(Color.YELLOW);
 
-        assertEquals(true, professor1.contains(Color.RED));
-        assertEquals(false, professor2.contains(Color.RED));
+        assertTrue(professor1.contains(Color.RED));
+        assertFalse(professor2.contains(Color.RED));
 
         Professors professor3 = new Professors(professor1);
         assertEquals(professor1, professor3);
@@ -52,7 +51,7 @@ public class ProfessorsTest {
         professor2.add(Color.YELLOW);
 
         professor1.moveTo(professor2, Color.MAGENTA);
-        assertEquals(true, professor2.contains(Color.MAGENTA));
+        assertTrue(professor2.contains(Color.MAGENTA));
     }
 
     /**
@@ -71,6 +70,6 @@ public class ProfessorsTest {
         professor2.add(Color.YELLOW);
 
         assertThrows(EmptyMovableException.class, () -> professor1.moveTo(professor2, Color.RED));
-        assertEquals(false, professor2.contains(Color.RED));
+        assertFalse(professor2.contains(Color.RED));
     }
 }

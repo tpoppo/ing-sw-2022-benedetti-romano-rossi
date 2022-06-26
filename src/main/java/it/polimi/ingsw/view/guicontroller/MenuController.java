@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
+// TODO: javadocs
 public class MenuController implements GUIController{
     @FXML private Text usernameLabel;
     @FXML private VBox lobbiesBox;

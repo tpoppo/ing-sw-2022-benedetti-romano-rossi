@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.Constants.NEWLINE;
 import static org.fusesource.jansi.Ansi.ansi;
 
+/**
+ * TODO: javadocs
+ */
 public class CLI {
     final protected Logger LOGGER = Logger.getLogger(getClass().getName());
     final protected ClientSocket client_socket;

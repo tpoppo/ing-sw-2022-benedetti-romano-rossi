@@ -19,6 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//TODO: javadocs
 public class NetworkManager {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static int count = 0;

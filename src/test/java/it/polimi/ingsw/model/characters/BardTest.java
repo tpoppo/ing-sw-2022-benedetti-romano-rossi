@@ -25,7 +25,7 @@ public class BardTest {
      * Test the character Bard swapping two students between the entrance room and dining room
      * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
      * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
-     * @throws BadPlayerChoiceException if there aren't the choosen students in the entrance and dining room or the number of students in input are odd
+     * @throws BadPlayerChoiceException if there aren't the chosen students in the entrance and dining room or the number of students in input are odd
      * or greater than four
      */
     @Test
