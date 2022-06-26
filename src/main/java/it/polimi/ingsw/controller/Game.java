@@ -34,7 +34,13 @@ public class Game implements Serializable{
     private final GameConfig gameConfig;
     private final GameModifiers gameModifiers;
 
-    // FIXME: shouldn't we just give the list of LobbyPlayer (lobby.getPlayers()) instead of a LobbyHandler?
+    /**
+     * Constructor, creates the main Game controller
+     *
+     * @param expert_mode true if the game is in expert mode.
+     * @param lobby the lobby of the game.
+     * @throws EmptyBagException if the bag has not been correctly initialized.
+     */
     public Game(boolean expert_mode, LobbyHandler lobby) throws EmptyBagException {
         int num_players = lobby.getPlayers().size();
         this.expert_mode = expert_mode;
@@ -210,7 +216,6 @@ public class Game implements Serializable{
         boolean assistant_already_played = false;
         Set<Assistant> played_assistants = new HashSet<>();
         Player current_player = getCurrentPlayer();
-        assert current_player != null;  // FIXME: do we like this?
 
         // checks if exists a player who've already played the chosen assistant
         // the check is done on the players that have already played an assistant

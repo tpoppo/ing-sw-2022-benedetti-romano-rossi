@@ -31,7 +31,7 @@ import static it.polimi.ingsw.utils.Constants.NEWLINE;
 import static org.fusesource.jansi.Ansi.ansi;
 
 /**
- * TODO: javadocs
+ * Class CLI is used to manage the Command Line Interface. It contains methods for printing all the game data and handling of user's inputs.
  */
 public class CLI {
     final protected Logger LOGGER = Logger.getLogger(getClass().getName());
@@ -56,6 +56,13 @@ public class CLI {
     private final Pair<Integer, Integer> STD_ENDING_POSITION = new Pair<>(25, 25);
     private final Pair<Integer, Integer> STD_BAG_POSITION = new Pair<>(20, 60);
 
+    /**
+     * Creates a CLI instance with the given parameters.
+     *
+     * @param client_socket the client socket to bind the CLI to.
+     * @param out the PrintStream to be used to display the data.
+     * @param read_stream the InputStream to be used to retrieve user's inputs.
+     */
     public CLI(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         this.client_socket = client_socket;
         this.out = out;
@@ -63,10 +70,20 @@ public class CLI {
         CommandHandler.createCommands();
         playing = true;
     }
+
+    /**
+     * Creates a CLI instance with the given parameters. It uses System.in and System.out as InputStream and PrintStream.
+     *
+     * @param client_socket the client socket to bind the CLI to.
+     */
     public CLI(ClientSocket client_socket) {
         this(client_socket, System.out, System.in);
     }
 
+    /**
+     * Starts the CLI.
+     * Prints the intro screen and starts handling user input.
+     */
     public void run(){
         AnsiConsole.systemInstall();
 
@@ -110,6 +127,10 @@ public class CLI {
         System.exit(0);
     }
 
+    /**
+     * Reads the user's input from the InputStream and sends it to the Server.
+     * Prints an error message if the Server sends an error.
+     */
     private void getInput(){
         read_stream.reset();
         String input = read_stream.nextLine();
@@ -127,6 +148,9 @@ public class CLI {
         out.flush();
     }
 
+    /**
+     * Starts the rendering of the ViewContents received from the Server.
+     */
     private void startRendering(){
         new Thread(() -> {
             while(true){
@@ -174,6 +198,9 @@ public class CLI {
         }).start();
     }
 
+    /**
+     * Prints the Menu screen.
+     */
     protected void printMenu() {
         out.println(Constants.MENU);
         ArrayList<ReducedLobby> reduced_lobbies = view.getLobbies();
@@ -195,6 +222,9 @@ public class CLI {
         if(errorMessage != null) printErrorRelative();
     }
 
+    /**
+     * Prints the Lobby screen.
+     */
     protected void printLobby(){
         out.println(Constants.LOBBY);
 
@@ -225,6 +255,9 @@ public class CLI {
         if(errorMessage != null) printErrorRelative();
     }
 
+    /**
+     * Prints the Game screen.
+     */
     protected void printGame(){
         print(ansi().a(Constants.ERIANTYS.replaceAll("\n", NEWLINE)), 5, 10);
 
@@ -249,18 +282,30 @@ public class CLI {
         if(errorMessage != null) printErrorRelative();
     }
 
+    /**
+     * Prints the error message relatively to the cursor position.
+     */
     protected void printErrorRelative(){
         out.print(ansi().cursorDownLine(2).eraseLine());
         out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
     }
 
+    /**
+     * Prints the clientside error message relatively to the cursor position.
+     * This method counts the newline added when the command gets sent from the client.
+     */
     private void printClientError(){
         out.print(ansi().cursorDownLine(1).eraseLine());
         out.print(ansi().fgBrightRed().a("ERROR: " + errorMessage).reset());
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
     }
 
+    /**
+     * Creates a string containing the info about the bag status.
+     *
+     * @return the bag info string.
+     */
     protected String drawBag(){
         StringBuilder bagStr = new StringBuilder();
 
@@ -272,6 +317,11 @@ public class CLI {
         return bagStr.toString();
     }
 
+    /**
+     * Creates a string containing the info about the players' status.
+     *
+     * @return the players' info string.
+     */
     protected String drawPlayers(){
         StringBuilder playersStr = new StringBuilder();
 
@@ -290,6 +340,11 @@ public class CLI {
         return playersStr.toString();
     }
 
+    /**
+     * Creates a string containing the info about the current state of the game.
+     *
+     * @return the state info string.
+     */
     protected String drawState(){
         StringBuilder stateText = new StringBuilder();
 
@@ -369,6 +424,11 @@ public class CLI {
         return stateText.toString();
     }
 
+    /**
+     * Creates a string containing the info about the clouds' status.
+     *
+     * @return the clouds' info string.
+     */
     private String drawClouds(){
         StringBuilder cloudsText = new StringBuilder();
 
@@ -396,6 +456,11 @@ public class CLI {
         return cloudsText.toString();
     }
 
+    /**
+     * Creates a string containing the info about the islands' status.
+     *
+     * @return the islands' info string.
+     */
     private String drawIslands(){
         // TODO: add influence on island
         StringBuilder islandStr = new StringBuilder();
@@ -432,7 +497,11 @@ public class CLI {
         return islandStr.toString();
     }
 
-
+    /**
+     * Creates a string containing the info about the schoolBoardPlayerUsername's board.
+     *
+     * @return the board info string.
+     */
     protected String drawBoard(){
         StringBuilder boardStr = new StringBuilder();
 
@@ -494,6 +563,9 @@ public class CLI {
         return boardStr.toString();
     }
 
+    /**
+     * Prints the boards of the players by calling drawBoard for each player username.
+     */
     private void printBoards(){
         final int DISTANCE = 49;
         List<String> usernames = view.getGameHandler().getModel().getPlayers().stream()
@@ -508,6 +580,11 @@ public class CLI {
         }
     }
 
+    /**
+     * Creates a string containing the info about the assistants' status.
+     *
+     * @return the assistants' info string.
+     */
     protected String drawAssistants(){
         StringBuilder assistantStr = new StringBuilder();
 
@@ -553,6 +630,12 @@ public class CLI {
         return assistantStr.toString();
     }
 
+    /**
+     * Creates a string containing the info about the provided player's coins.
+     *
+     * @param player the player whose coins you want to show.
+     * @return the coin info string.
+     */
     private String drawCoins(Player player){
         StringBuilder coinsStr = new StringBuilder();
 
@@ -564,6 +647,11 @@ public class CLI {
         return coinsStr.toString();
     }
 
+    /**
+     * Creates a string containing the info about the characters' status.
+     *
+     * @return the characters' info string.
+     */
     protected String drawCharacters(){
         StringBuilder charStr = new StringBuilder();
 
@@ -603,6 +691,9 @@ public class CLI {
         return charStr.toString();
     }
 
+    /**
+     * Prints the character's info screen.
+     */
     public void printCharacterInfo(){
         clearScreen();
 
@@ -629,6 +720,11 @@ public class CLI {
         out.print(ansi().cursor(40, 1));
     }
 
+    /**
+     * Creates a string containing the ending screen.
+     *
+     * @return the ending-screen string.
+     */
     private String drawEndingScreen(){
         StringBuilder endString = new StringBuilder();
 
@@ -649,6 +745,9 @@ public class CLI {
         return endString.toString();
     }
 
+    /**
+     * Prints the help screen with all the available commands.
+     */
     public void printHelpScreen(){
         clearScreen();
 
@@ -664,7 +763,7 @@ public class CLI {
                     .filter(command -> command.getCommandType().equals(commandType))
                     .forEach(command -> {
                         helpText.append(command.getName()).append(" ");
-                        command.getArguments().forEach(argument -> helpText.append("[" + argument + "] "));
+                        command.getArguments().forEach(argument -> helpText.append("[").append(argument).append("] "));
                         helpText.append(ansi().cursorToColumn(52).a(CommandHandler.normalizeDescription(command)));
                         helpText.append(NEWLINE);
                     });
@@ -675,12 +774,18 @@ public class CLI {
         print(helpText.toString(), 5, 11);
     }
 
+    /**
+     * Clears the error message in its default position.
+     */
     public void cleanErrorMessage(){
         this.errorMessage = null;
         out.print(ansi().cursorDownLine(1).eraseLine());
         out.print(ansi().cursorUpLine(2).cursorRight(2).eraseLine());
     }
 
+    /**
+     * Prints the requested player's board.
+     */
     public void printRequestedBoard(){
         int rowFrom = STD_BOARD_POSITION.getFirst();
         int columnFrom = STD_BOARD_POSITION.getSecond();
@@ -692,6 +797,10 @@ public class CLI {
         print(ansi().eraseLine().a("> ").reset(), STD_CURSOR_POSITION);
     }
 
+    /**
+     * Refreshes the screen.
+     * Clears the screen and prints the info contained in the last viewContent received.
+     */
     public void refresh(){
         clearScreen();
 
@@ -736,18 +845,6 @@ public class CLI {
         print(s, coordinates.getFirst(), coordinates.getSecond());
     }
 
-    protected void drawBox(Ansi.Color color, int rowFrom, int columnFrom, int rowTo, int columnTo){
-        out.print(ansi().bg(color));
-
-        for(int i=rowFrom; i<rowTo; i++) {
-            out.print(ansi().cursor(i, columnFrom));
-            for (int k = columnFrom; k < columnTo; k++)
-                out.print(ansi().a(" "));
-        }
-
-        out.print(ansi().reset());
-    }
-
     protected void eraseBox(int rowFrom, int columnFrom, int rowTo, int columnTo){
         for(int i=rowFrom; i<rowTo; i++) {
             out.print(ansi().cursor(i, columnFrom));
@@ -756,6 +853,12 @@ public class CLI {
         }
     }
 
+    /**
+     * Wraps the provided text inside a rectangle.
+     *
+     * @param text the text to wrap.
+     * @return a string containing the provided text wrapped in a box.
+     */
     private String addRectangle(StringBuilder text){
         int MAXLEN = 36;
 
