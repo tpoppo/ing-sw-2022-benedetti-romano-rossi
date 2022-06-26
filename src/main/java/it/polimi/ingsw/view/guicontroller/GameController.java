@@ -507,6 +507,9 @@ public class GameController implements GUIController {
         } else {
             endingScreen.setImage(new Image("graphics/other/defeat.png"));
         }
+        mainPane.setDisable(true);
+        mainPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
+
         endingScreen.setOnMouseClicked(mouseEvent -> GUI.getClientSocket().send(new EndingMessage()));
         endingScreen.setVisible(true);
     }
