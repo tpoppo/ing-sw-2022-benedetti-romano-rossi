@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-// TODO: javadocs
+/**
+ * This class manages the server instance. It is a singleton and when initialized for the first time it starts a server socket at the port PORT_INIT
+ */
 public class Server{
     private static final Logger LOGGER = Logger.getLogger(Server.class.getName());
     static private int PORT_INIT;
@@ -28,6 +30,9 @@ public class Server{
     private final List<NetworkManager> networkManagers;
     private final List<String> player_list;
 
+    /**
+     * Private constructor called by getInstance
+     */
     private Server(){
         int PORT = PORT_INIT;
         networkManagers = Collections.synchronizedList(new ArrayList<>());
@@ -47,6 +52,10 @@ public class Server{
         PORT_INIT = port;
     }
 
+    /**
+     * It returns the server instance. The first times it also constructs the server.
+     * @return Server instance
+     */
     public static Server getInstance(){
         if(instance == null) {
             instance = new Server();
@@ -62,11 +71,18 @@ public class Server{
         return instance;
     }
 
+    /**
+     * Listen for new connection and create a {@link ConnectionCEO} on them.
+     * @throws IOException thrown by {@link ServerSocket}
+     */
     private void run() throws IOException {
         while(!serverSocket.isClosed())
             new ConnectionCEO(serverSocket.accept()).start();
     }
 
+    /**
+     * Load the saved game state into the memory
+     */
     private void retrieveSavedState(){
         String path = Constants.PATH_SAVES;
 
@@ -92,12 +108,27 @@ public class Server{
                     throw new RuntimeException(e);
                 }
             }
+
+            // it rebuilds  the save file directory with the new files
+            for (File file : files) {
+                if(!file.delete()){
+                    LOGGER.log(Level.WARNING, "Cannot remove file {0}", new Object[]{file});
+                }
+            }
+            networkManagers.forEach(NetworkManager::saveState);
+
         }else {
             if(!directory.mkdir())
                 LOGGER.log(Level.SEVERE, "Could not create directory in path {0}", new Object[]{directory.getAbsolutePath()});
         }
+
     }
 
+    /**
+     * It creates a new lobby
+     * @param max_players maximum number of players
+     * @return networkManager for the new lobby
+     */
     public NetworkManager createLobby(int max_players){
         NetworkManager new_networkManager = NetworkManager.createNetworkManager(max_players);
         networkManagers.add(new_networkManager);
@@ -105,6 +136,12 @@ public class Server{
         return new_networkManager;
     }
 
+    /**
+     * The player join the given lobbyID
+     * @param lobbyID ID of the lobby
+     * @param player player
+     * @return an empty optional if the lobby is full otherwise the {@link NetworkManager} of the selected lobby
+     */
     public Optional<NetworkManager> joinLobby(int lobbyID, LobbyPlayer player){
         Optional<NetworkManager> networkManager = networkManagers.stream().filter(
                 x -> x.ID == lobbyID && x.getCurrentHandler() == HandlerType.LOBBY
@@ -126,7 +163,12 @@ public class Server{
     }
 
 
-    // Checks the uniqueness of the username, and that it's not blank
+
+    /**
+     * Checks the uniqueness of the username, and that it's not blank
+     * @param username given username
+     * @return true if unique and valid otherwise false
+     */
     public boolean checkUsername(String username){
         if(username.isBlank()) return false;
 
@@ -136,11 +178,20 @@ public class Server{
         return true;
     }
 
+    /**
+     * It removes a {@link NetworkManager} from the list
+     * @param networkManager to remove
+     */
     public void deleteNetworkManager(NetworkManager networkManager){
         networkManagers.remove(networkManager);
     }
 
-    // Returns the networkManager containing the lobbyPlayer given
+
+    /**
+     * Returns the networkManager containing the given lobbyPlayer
+     * @param lobbyPlayer the player
+     * @return the requested networkManager. It returns null if it cannot find the player
+     */
     public NetworkManager findPlayerLocation(LobbyPlayer lobbyPlayer){
         for(NetworkManager networkManager : networkManagers){
             // Searches the lobbyPlayer inside the currentHandler
@@ -161,7 +212,10 @@ public class Server{
         return null;
     }
 
-    // Returns all the networkManagers currently in the lobby state
+    /**
+     * Returns all the networkManagers currently in the lobby state
+     * @return networkManagers in the lobby state
+     */
     public ArrayList<NetworkManager> getLobbies() {
         ArrayList<NetworkManager> lobbies = new ArrayList<>();
 
