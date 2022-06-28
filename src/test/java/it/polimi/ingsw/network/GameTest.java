@@ -450,6 +450,12 @@ public class GameTest {
         }
     }
 
+    /**
+     * Test th planning phase playing different characters in different turns
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     */
     @RepeatedTest(100)
     public void PlanningPhase() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
@@ -592,7 +598,12 @@ public class GameTest {
         }
     }
 
-    //Test when a player play the same assistant card of the previous player in the same turn
+    /***
+     * Test when a player play the same assistant card of the previous player in the same turn
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException when is played an assistant card that was already played in the same turn by another played
+     */
     @Test
     public void AssistantAlreadyPlayedExceptionTest1() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -615,7 +626,12 @@ public class GameTest {
         assertThrows(AssistantAlreadyPlayedException.class, () -> game.playAssistant(assistants_player2.get(0)));
     }
 
-    //Test when a player must play the same assistant card of the previous player because it's the only assistant card that he has
+    /**
+     * Test when a player must play the same assistant card of the previous player because it's the only assistant card that he has
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     */
     @Test
     public void AssistantAlreadyPlayedExceptionTest2() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -644,8 +660,13 @@ public class GameTest {
         assertEquals(0, game.getCurrentPlayer().getPlayerHand().size());
     }
 
-    //Check that the starting player of the current round is the player that played the assistant with
-    //the lower power in the previous round
+    /**
+     * Check that the starting player of the current round is the player that played the assistant with
+     * the lower power in the previous round
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     */
     @RepeatedTest(100)
     public void EndRoundTest() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -690,6 +711,11 @@ public class GameTest {
         }
     }
 
+    /**
+     * Test different movement from mother nature
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     */
     @RepeatedTest(100)
     public void moveMotherNatureTest() throws FullLobbyException, EmptyBagException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
@@ -722,7 +748,15 @@ public class GameTest {
         }
     }
 
-    //Check that the character Witch works in a game simulation
+    /**
+     * Test that the character Witch works in a game simulation
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws EmptyMovableException should never happen
+     * @throws FullDiningRoomException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     * @throws BadPlayerChoiceException should never happen
+     */
     @RepeatedTest(100)
     public void conquerIslandTest() throws FullLobbyException, EmptyBagException, EmptyMovableException, FullDiningRoomException, AssistantAlreadyPlayedException, BadPlayerChoiceException {
         LobbyHandler lobby = new LobbyHandler(0, 2);
