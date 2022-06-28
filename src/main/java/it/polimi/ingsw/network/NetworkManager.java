@@ -19,7 +19,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//TODO: javadocs
+/**
+ * This class manages the lobby and game phases of a specific game instance.
+ */
 public class NetworkManager {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static int count = 0;
@@ -32,8 +34,10 @@ public class NetworkManager {
     private final Set<ConnectionCEO> subscribers;
     private boolean alive;
 
-    // not thread safe
-    // default constructor for the NetworkManager, starts in the lobby state
+    /**
+     * default constructor for the NetworkManager, starts in the lobby state. it is not thread safe
+     * @param max_players maximum number of players
+     */
     private NetworkManager(int max_players){
         ID = count;
         count++;
@@ -47,7 +51,11 @@ public class NetworkManager {
         handleMessages();
     }
 
-    // constructor for Server.retrieveSavedState(), starts in the game state without passing through the lobby
+
+    /**
+     * constructor for Server.retrieveSavedState(), starts in the game state without passing through the lobby
+     * @param gameHandler saved {@link GameHandler}
+     */
     private NetworkManager(GameHandler gameHandler){
         ID = count;
         count++;
@@ -61,6 +69,9 @@ public class NetworkManager {
         handleMessages();
     }
 
+    /**
+     * It starts a thread to handle the new message
+     */
     private void handleMessages(){
         new Thread(() -> {
             alive = true;
@@ -159,7 +170,7 @@ public class NetworkManager {
         }
     }
 
-    private void deleteSaveFile(){
+    public void deleteSaveFile(){
         String path = Constants.PATH_SAVES;
         String fileName = path + "/SavedGame_" + ID + ".sav";
 

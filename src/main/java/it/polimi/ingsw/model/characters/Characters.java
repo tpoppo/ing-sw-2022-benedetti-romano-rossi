@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.characters;
 
 import java.util.Random;
-// TODO: javadocs
+
+/**
+ * enum that contains all the characters
+ */
 public enum Characters {
     BARD,
     PRINCESS,

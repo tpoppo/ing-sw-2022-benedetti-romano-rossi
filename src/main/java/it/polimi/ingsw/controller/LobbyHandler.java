@@ -20,8 +20,6 @@ public class LobbyHandler implements Serializable {
     private final ArrayList<LobbyPlayer> players;
     private final ArrayList<Integer> available_wizards;
 
-    // FIXME: do we like this solution for the displaying of the lobby id in the view?
-
     /**
      * Constructor that specifies both the lobby ID and the maximum number of players.
      *

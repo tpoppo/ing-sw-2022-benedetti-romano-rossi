@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.utils.exceptions.BadPlayerChoiceException;
 
 import java.io.Serial;
-// TODO: javadocs
 public class Colorblind extends Character{
     @Serial
     private static final long serialVersionUID = -3440315359225311324L;

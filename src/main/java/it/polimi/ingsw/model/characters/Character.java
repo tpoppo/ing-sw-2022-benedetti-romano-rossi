@@ -111,10 +111,8 @@ abstract public class Character implements Serializable {
 
     public boolean isActivated() { return activated; }
 
-    // FIXME:
     /**
-     * when the character is activated
-     *
+     * It is called when the character is activated
      * @param game current game
      * @param playerChoices character parameters
      * @throws BadPlayerChoiceException if the parameters are invalid
@@ -122,7 +120,7 @@ abstract public class Character implements Serializable {
     protected abstract void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException;
 
     /**
-     * when the character is deactivated
+     * It is called when the character is deactivated
      * @param game current game
      */
     protected abstract void onDeactivation(Game game);

@@ -11,7 +11,11 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-// TODO: javadocs
+
+/**
+ * This class manages all the message from the players ({@link ConnectionCEO}) in the Menu.
+ * This class is a singleton.
+ */
 public class MenuManager {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static MenuManager instance;
@@ -19,6 +23,9 @@ public class MenuManager {
     private final Set<ConnectionCEO> subscribers;
     private final HashMap<LobbyPlayer, String> errorMessages;
 
+    /**
+     * private constructor called by the getInstance method
+     */
     private MenuManager(){
         message_queue = new LinkedBlockingQueue<>();
         subscribers = new HashSet<>();
@@ -67,26 +74,46 @@ public class MenuManager {
         }).start();
     }
 
+    /**
+     * It returns the MenuManager instance. The first times it creates a new object.
+     * @return the {@link MenuManager} instance
+     */
     public static MenuManager getInstance(){
         if(instance == null) instance = new MenuManager();
         return instance;
     }
 
+    /**
+     * Add a new {@link MessageEnvelope} to the queue.
+     * @param envelope new message
+     */
     public void addMessage(MessageEnvelope envelope){
         message_queue.add(envelope);
     }
 
+    /**
+     * Add an error message to a given player
+     * @param player given player
+     * @param message error message
+     */
     public void addErrorMessage(LobbyPlayer player, String message){
         errorMessages.put(player, message);
     }
 
+    /**
+     * It calls notifySubscriber for all the subscribers.
+     */
     private void notifySubscribers() {
         for (ConnectionCEO subscriber : subscribers) {
             notifySubscriber(subscriber);
         }
     }
 
-    // sends a viewContent containing an errorMessage to the given subscriber
+
+    /**
+     * it sends a {@link it.polimi.ingsw.view.viewcontent.ViewContent} with an errorMessage (if present) to the given subscriber
+     * @param subscriber player to notify
+     */
     private void notifySubscriber(ConnectionCEO subscriber){
         String errorMessage = errorMessages.get(subscriber.getPlayer());
         errorMessages.remove(subscriber.getPlayer());
@@ -96,6 +123,10 @@ public class MenuManager {
         subscriber.sendViewContent(menuContent);
     }
 
+    /**
+     * Add a new client to the subscription list
+     * @param connectionCEO client to add
+     */
     public void subscribe(ConnectionCEO connectionCEO){
         System.out.println(errorMessages);
 
@@ -103,16 +134,23 @@ public class MenuManager {
         notifySubscriber(connectionCEO);
     }
 
+    /**
+     * Remove the client to the subscription list
+     * @param connectionCEO client to remove
+     */
     public void unsubscribe(ConnectionCEO connectionCEO){
         subscribers.remove(connectionCEO);
         notifySubscribers();
     }
 
+    /**
+     * Check whether the client is subscribed
+     * @param connectionCEO client to check
+     * @return true if it is subscribed otherwise false
+     */
     public boolean isSubscribed(ConnectionCEO connectionCEO){
         return subscribers.contains(connectionCEO);
     }
-
-    public int countSubscriber() {return subscribers.size();}
 
 
 }

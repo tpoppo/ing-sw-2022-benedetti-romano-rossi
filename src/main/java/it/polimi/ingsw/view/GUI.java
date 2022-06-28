@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO: javadocs
 /**
  * This class is used to manage the GUI (via javafx)
  */
@@ -53,6 +52,9 @@ public class GUI extends Application {
         launch(args);
     }
 
+    /**
+     * It preloads the FXML scenes
+     */
     private void setup() {
         List<String> fxmlList = new ArrayList<>(Arrays.asList(LOGIN, MENU, LOBBY, GAME));
         try {
@@ -69,6 +71,12 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It resizes the selected scenes
+     * @param scenePaths list of scenes names
+     * @param width target width
+     * @param height target height
+     */
     private void resizeScenes(List<String> scenePaths, int width, int height){
         for(String scenePath : scenePaths){
             Scene sceneToResize = sceneMap.get(scenePath);
@@ -76,6 +84,11 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It initializes all the GUI components and variables
+     * It is called when the GUI is created
+     * @param stage JavaFX GUI
+     */
     @Override
     public void start(Stage stage) {
         setup();
@@ -201,6 +214,13 @@ public class GUI extends Application {
         stage.show();
     }
 
+    /**
+     * It resizes the given string
+     * @param scene selected scene
+     * @param width selected width
+     * @param height selected height
+     * @return resized scene
+     */
     public Scene resizeScene(Scene scene, int width, int height) {
         Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
         double currentWidth = resolution.getWidth();

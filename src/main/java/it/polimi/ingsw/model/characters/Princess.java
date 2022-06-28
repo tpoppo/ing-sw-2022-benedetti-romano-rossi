@@ -57,7 +57,7 @@ public class Princess extends Character{
         try {
             Color bag_color = game.drawStudentFromBag();
             princess_students.put(bag_color, princess_students.get(bag_color) + 1);
-        } catch (EmptyBagException ignored) {} // the bag is empty // FIXME: is this ok?
+        } catch (EmptyBagException ignored) {} // the bag is empty
 
         students = princess_students;
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(dining_students);

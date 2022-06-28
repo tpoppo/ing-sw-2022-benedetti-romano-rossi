@@ -462,7 +462,6 @@ public class CLI {
      * @return the islands' info string.
      */
     private String drawIslands(){
-        // TODO: add influence on island
         StringBuilder islandStr = new StringBuilder();
 
         Game model = view.getGameHandler().getModel();
@@ -668,7 +667,6 @@ public class CLI {
             charStr.append(ansi().reset());
 
             // print card's specific students
-            // FIXME: is null check useful?
             if(character.getStudents() != null && character.getStudents().count() > 0){
                 charStr.append("[ ");
                 for(Color studentColor : character.getStudents().keySet()) {
