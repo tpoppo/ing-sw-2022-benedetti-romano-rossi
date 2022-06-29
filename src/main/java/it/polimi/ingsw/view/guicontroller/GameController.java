@@ -86,7 +86,6 @@ public class GameController implements GUIController {
     private ImageView selectedEntrance;
     private List<Pane> cloudPanes;
 
-    // FIXME: split class
     private ImageView selectedStudentCard;
     private ArrayList<ImageView> selectedOnCard;
     private ArrayList<ImageView> selectedOnEntrance;
@@ -130,7 +129,7 @@ public class GameController implements GUIController {
         setupSchoolboard();
         setupAssistants();
         setupErrorMessage();
-        setupClouds();          // FIXME: inconsistent behavior of color adjustment
+        setupClouds();
         setupMotherNature();
         setupPlayOrder();
 
@@ -226,7 +225,7 @@ public class GameController implements GUIController {
 
                 // if the demolisher is active, add a filter to the towers
                 if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Demolisher)){
-                    towerImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                    addLightEffect(towerImage);
                 }
 
                 Text towerNumber = new Text(String.valueOf(numTowers));
@@ -241,7 +240,7 @@ public class GameController implements GUIController {
 
                 // if there's only one student color, the tower gets added on top of it, otherwise it is displayed in the center
                 if (presentStudents.size() == 1)
-                    y -= 35; // TODO: check if this gets displayed correctly
+                    y -= 35;
 
                 towerStackPane.setLayoutX(x);
                 towerStackPane.setLayoutY(y);
@@ -259,7 +258,7 @@ public class GameController implements GUIController {
                     studentImage.getStyleClass().add(PIECE_CLASS);
 
                     if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Colorblind)){
-                        studentImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                        addLightEffect(studentImage);
                     }
 
                     Text studentNumber = new Text(String.valueOf(numStudents));
@@ -328,9 +327,9 @@ public class GameController implements GUIController {
             cloudPane.getChildren().add(cloudImage);
             cloudPanes.add(cloudPane);
 
-            if (cloud.count() == 0)
-                cloudImage.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)); // TODO: add effect on utils or something
-            else {
+            if (cloud.count() == 0){
+                addLightEffect(cloudImage);
+            } else {
                 List<Node> cloudTopping = new ArrayList<>();
                 for (Color key : cloud.keySet()) {
                     if (cloud.get(key) > 0) {
@@ -540,7 +539,7 @@ public class GameController implements GUIController {
                         playerChoicesSerializable.setIsland(finalI);
                         GUI.getClientSocket().send(new ActivateCharacterMessage(playerChoicesSerializable));
                     });
-                    islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                    addLightEffect(islandPane);
                 }
             }
 
@@ -601,8 +600,8 @@ public class GameController implements GUIController {
                                 selectedStudentCard.setEffect(null);
                             }
                             selectedStudentCard = imageView;
-                            selectedStudentCard.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-                            islandPanes.forEach(island -> island.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)));
+                            addLightEffect(selectedStudentCard);
+                            islandPanes.forEach(this::addLightEffect);
                         }
                     });
                 });
@@ -710,7 +709,7 @@ public class GameController implements GUIController {
                     imageView.setEffect(null);
                 } else {
                     selected.add(imageView);
-                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                    addLightEffect(imageView);
 
                     if (selected.size() > 3) { // remove the first, if there are more than 3 cards
                         selected.get(0).setEffect(null);
@@ -738,8 +737,7 @@ public class GameController implements GUIController {
                     imageView.setEffect(null);
                 } else {
                     selected.add(imageView);
-                    imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
-
+                    addLightEffect(imageView);
                     if (selected.size() > 2) { // remove the first, if there are more than 3 cards
                         selected.get(0).setEffect(null);
                         selected.remove(0);
@@ -809,7 +807,7 @@ public class GameController implements GUIController {
                             selectedEntrance.setEffect(null);
                         }
                         selectedEntrance = imageView;
-                        imageView.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                        addLightEffect(imageView);
 
                         // highlight valid action
                         islandPanes.forEach(e -> e.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0)));
@@ -855,7 +853,7 @@ public class GameController implements GUIController {
                 islandPane.setOnMouseClicked(mouseEvent ->
                     GUI.getClientSocket().send(new MoveMotherNatureMessage(finalI))
                 );
-                islandPane.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+                addLightEffect(islandPane);
             } else {
                 islandPane.setEffect(new ColorAdjust(0.0, 0.0, -0.5, 0.0));
             }
@@ -1103,6 +1101,10 @@ public class GameController implements GUIController {
         }
     }
 
+    /**
+     * It creates a button for each player for switching schoolboard
+     * @param selectedPlayer currently selected schoolboard
+     */
     private void setSchoolBoardButtons(Player selectedPlayer) {
         ArrayList<Player> players = view.getGameHandler().getModel().getPlayers();
 
@@ -1128,10 +1130,13 @@ public class GameController implements GUIController {
         }
     }
 
-    // TODO: javadocs
+    /**
+     * It adds the students icon of a given color in the dining room. It clears the
+     * @param diningStudents students in the dining room
+     * @param studentColor selected color
+     * @param colorGrid grid with the given color
+     */
     private void fillDining(Students diningStudents, Color studentColor, GridPane colorGrid) {
-        System.out.println("Adding " + diningStudents.get(studentColor) + " " + studentColor);
-
         colorGrid.getChildren().clear();
         for (int i = 0; i < diningStudents.get(studentColor); i++) {
             ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
@@ -1143,7 +1148,10 @@ public class GameController implements GUIController {
         }
     }
 
-    // TODO: javadocs
+    /**
+     * It shows the character info of a specific character
+     * @param id the position of the character
+     */
     private void showCharacterInfo(int id) {
         Character character = view.getGameHandler().getModel().getCharacters().get(id);
 
@@ -1199,7 +1207,9 @@ public class GameController implements GUIController {
         closeCharacterPaneButton.setOnMouseClicked(mouseEvent -> closeCharacterInfo());
     }
 
-    // TODO: javadocs
+    /**
+     * It hides the character info window
+     */
     private void closeCharacterInfo() {
         characterPane.setVisible(false);
         mainPane.setEffect(null);
@@ -1207,14 +1217,24 @@ public class GameController implements GUIController {
         GUI.setSelectingCharacter(null);
     }
 
-    // TODO: javadocs
+    /**
+     * It simulates a message and check whether it is valid
+     * @param clientMessage message to check
+     * @param player sender
+     * @return status code of the message
+     */
     private StatusCode checkMessage(ClientMessage clientMessage, Player player) {
         GameHandler gameHandler = (GameHandler) DeepCopy.copy(GUI.getView().getGameHandler());
         NetworkManager networkManager = NetworkManager.createNetworkManager(gameHandler);
         return clientMessage.handle(networkManager, player);
     }
 
-    // TODO: javadocs
+    /**
+     * Place the nodes in circle inside the container with a specific radius
+     * @param container parent Pane
+     * @param nodes list of nodes to add
+     * @param radius radius of the circumference
+     */
     private void placeNodes(Pane container, List<Node> nodes, double radius) {
         int numNodes = nodes.size();
         double containerCenterX = container.getBoundsInParent().getWidth() / 2;
@@ -1301,13 +1321,26 @@ public class GameController implements GUIController {
         imageView.getParent().setLayoutY(0);
     }
 
-    // TODO: javadocs
+    /**
+     * It adds a light effect
+     * @param node target element
+     */
+    public void addLightEffect(Node node){
+        node.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+    }
+
+    /**
+     * It adds the glowing effect
+     * @param event mouse event
+     */
     public void addGlowEffect(MouseEvent event) {
         ((ImageView) event.getTarget()).setEffect(new Glow(1));
     }
 
-    // TODO: javadocs
-    public void removeGlowEffect(MouseEvent event) {
+    /**
+     * It removes the current effect
+     * @param event mouse event
+     */    public void removeGlowEffect(MouseEvent event) {
         ((ImageView) event.getTarget()).setEffect(null);
     }
 

@@ -108,7 +108,6 @@ public class JugglerTest {
         boolean choosen = false;
         for (Color color : Jugglerstudents.keySet()) {
             if(Jugglerstudents.get(color) !=0 && !choosen){
-                Jugglercolor = color;
                 choosen = true;
             }
         }

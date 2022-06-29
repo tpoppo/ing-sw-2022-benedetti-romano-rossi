@@ -35,7 +35,6 @@ public class BardTest {
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
         player2.setWizard(2);
-        Random rng = new Random();
 
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
@@ -82,7 +81,6 @@ public class BardTest {
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
         player2.setWizard(2);
-        Random rng = new Random();
 
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
@@ -120,7 +118,6 @@ public class BardTest {
         LobbyPlayer player2 = new LobbyPlayer("Player 2");
         player1.setWizard(1);
         player2.setWizard(2);
-        Random rng = new Random();
 
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);

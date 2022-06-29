@@ -8,13 +8,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-// TODO: javadocs
+/**
+ * It manages the GUI components (JavaFX) of the login phase.
+ */
 public class LoginController implements GUIController{
     @FXML
     private TextField usernameField;
     @FXML
     private Label errorLabel;
 
+    /**
+     * It tries to send a login message using the username in the usernameField.
+     */
     public void login(){
         String username = usernameField.getText();
 
@@ -37,11 +42,18 @@ public class LoginController implements GUIController{
         GUI.setUsername(username);
     }
 
+    /**
+     * It calls the login when KeyCode.ENTER is pressed
+     * @param keyEvent key pressed
+     */
     public void checkKeyPressed(KeyEvent keyEvent){
         if(keyEvent.getCode().equals(KeyCode.ENTER))
             login();
     }
 
+    /**
+     * It initializes all the components
+     */
     @Override
     public void setup() {
 

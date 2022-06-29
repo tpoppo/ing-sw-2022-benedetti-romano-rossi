@@ -35,7 +35,7 @@ public class MenuManager {
             while (true) {
                 LOGGER.log(Level.FINE, "Handling message");
 
-                MessageEnvelope envelope = null;
+                MessageEnvelope envelope;
                 try {
                     envelope = message_queue.take(); // blocking (LinkedBlockingQueue)
                 } catch (InterruptedException e) {

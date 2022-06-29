@@ -116,12 +116,10 @@ public class Server{
                 }
             }
             networkManagers.forEach(NetworkManager::saveState);
-
         }else {
             if(!directory.mkdir())
                 LOGGER.log(Level.SEVERE, "Could not create directory in path {0}", new Object[]{directory.getAbsolutePath()});
         }
-
     }
 
     /**

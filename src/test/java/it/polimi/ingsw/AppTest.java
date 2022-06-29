@@ -46,7 +46,7 @@ public class AppTest {
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
-            ClientSocket client_socket = null;
+            ClientSocket client_socket;
             try {
                 client_socket = new ClientSocket(clientConfig);
             } catch (IOException e) {
@@ -70,7 +70,7 @@ public class AppTest {
         runThread(() -> {
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.setPort(TESTING_PORT);
-            ClientSocket client_socket = null;
+            ClientSocket client_socket;
             try {
                 client_socket = new ClientSocket(clientConfig);
             } catch (IOException e) {

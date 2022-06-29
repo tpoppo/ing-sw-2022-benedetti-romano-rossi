@@ -5,7 +5,6 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.Color;
 import it.polimi.ingsw.model.board.Island;
-import it.polimi.ingsw.model.board.Professors;
 import it.polimi.ingsw.model.board.Students;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Pair;
@@ -38,14 +37,12 @@ public class CLIArt extends CLI {
     private final Pair<Integer, Integer> ISLAND_SHAPE = new Pair<>(8, 25);
     private final Pair<Integer, Integer> CLOUD_SHAPE = new Pair<>(8, 25);
 
-    private final int SEED = (int) (Math.random()*Integer.MAX_VALUE);
-
     public CLIArt(ClientSocket client_socket, PrintStream out, InputStream read_stream) {
         super(client_socket, out, read_stream);
     }
 
     public CLIArt(ClientSocket client_socket) {
-        super(client_socket);
+        this(client_socket, System.out, System.in);
     }
 
 
@@ -152,11 +149,10 @@ public class CLIArt extends CLI {
         boardStr.append(Constants.NEWLINE);
 
         int numTowers = player.getSchoolBoard().getNumTowers();
-        Professors professors = player.getProfessors();
 
         boardStr.append("Towers: ").append(numTowers).append(Constants.NEWLINE);
 
-        // draw the entrace
+        // draw the entrance
         boardStr.append("Entrance: ").append(Constants.NEWLINE).append(Constants.NEWLINE).append(Constants.NEWLINE);
         int position = 0;
         for(Color studentColor : entranceStudents.keySet()){
@@ -284,7 +280,6 @@ public class CLIArt extends CLI {
 
         // add the towers
         for(int i=0; i<num_towers; i++){
-            String s;
             // first available position
             while(!mask[position/column][position%column]) position++;
             canvas[position/column][position%column] = ansi().fg(Ansi.Color.BLACK).a("T").reset().toString();
@@ -293,7 +288,6 @@ public class CLIArt extends CLI {
 
         // ad no entry tiles
         for(int i=0; i<no_entry_tiles; i++){
-            String s;
             // first available position
             while(!mask[position/column][position%column]) position++;
             canvas[position/column][position%column] = ansi().fg(Ansi.Color.BLACK).a("X").reset().toString();
@@ -302,7 +296,6 @@ public class CLIArt extends CLI {
 
         // add mother nature
         if(has_mother_nature){
-            String s;
             // first available position
             while(!mask[position/column][position%column]) position++;
             canvas[position/column][position%column] = ansi().fg(Ansi.Color.RED).a("M").reset().toString();

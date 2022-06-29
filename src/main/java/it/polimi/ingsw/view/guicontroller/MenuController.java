@@ -23,7 +23,9 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
-// TODO: javadocs
+/**
+ * It manages the GUI components (JavaFX) of the menu
+ */
 public class MenuController implements GUIController{
     @FXML private Text usernameLabel;
     @FXML private VBox lobbiesBox;
@@ -32,6 +34,9 @@ public class MenuController implements GUIController{
     @FXML private Pane mainPane;
     @FXML private Label errorLabel;
 
+    /**
+     * It initializes all the components based on the current GUI.getView() ({@link GUI})
+     */
     @Override
     public void setup() {
         ViewContent view = GUI.getView();
@@ -93,6 +98,11 @@ public class MenuController implements GUIController{
             openLobbyCreation();
     }
 
+    /**
+     * It is the mouse event that tries to create a new lobby.
+     * It is called by the on click event of the specific button
+     * @param event mouse event
+     */
     public void createLobby(MouseEvent event){
         CreateLobbyMessage createLobbyMessage = null;
 
@@ -105,6 +115,9 @@ public class MenuController implements GUIController{
         GUI.getClientSocket().send(createLobbyMessage);
     }
 
+    /**
+     * It shows the create lobby window
+     */
     public void openLobbyCreation(){
         createLobbyPane.setVisible(true);
         mainPane.setDisable(true);
@@ -113,6 +126,9 @@ public class MenuController implements GUIController{
         GUI.setCreatingLobby(true);
     }
 
+    /**
+     * It hides the create lobby window
+     */
     public void closeLobbyCreation(){
         createLobbyPane.setVisible(false);
         mainPane.setDisable(false);

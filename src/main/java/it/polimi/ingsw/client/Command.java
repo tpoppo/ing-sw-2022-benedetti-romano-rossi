@@ -46,6 +46,10 @@ public class Command {
         admittedStates.addAll(states);
     }
 
+    /**
+     * It returns command info string
+     * @return command info
+     */
     public String getCommandInfo(){
         String info = name + " ";
 

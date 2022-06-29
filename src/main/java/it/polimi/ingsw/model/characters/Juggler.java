@@ -33,9 +33,9 @@ public class Juggler extends Character{
 
     /**
      *
-     * @param game is current game
+     * @param game is the current game
      * @param playerChoices contains a list of color with even size. (2*i, 2*i+1) values are pairs of color that must be swapped
-     * @throws BadPlayerChoiceException
+     * @throws BadPlayerChoiceException Invalid parameters in playerChoices
      */
     @Override
     protected void onActivation(Game game, PlayerChoices playerChoices) throws BadPlayerChoiceException {

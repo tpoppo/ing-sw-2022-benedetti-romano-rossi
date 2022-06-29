@@ -53,7 +53,7 @@ public class MonkTest {
 
         island.setStudents(new Students());
 
-        Color color = null;
+        Color color;
         do{
             color = Color.getRandomColor();
             if(monk.getStudents().getOrDefault(color, 0) == 0) color = null;
@@ -140,7 +140,7 @@ public class MonkTest {
 
         island.setStudents(new Students());
 
-        Color color = null;
+        Color color;
         do{
             color = Color.getRandomColor();
             if(monk.getStudents().getOrDefault(color, 0) != 0) color = null;

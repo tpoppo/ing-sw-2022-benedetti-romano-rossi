@@ -171,7 +171,7 @@ public class GameTest {
             checkInvariant(game);
 
             // player2
-            Assistant assistant = null;
+            Assistant assistant;
             boolean assistant_already_played;
             int cnt = 0;
             do{
@@ -264,7 +264,7 @@ public class GameTest {
 
                 clouds.forEach((x) -> assertTrue(x.count() == 3 || x.count() == 0));
 
-                Students students = null;
+                Students students;
                 do {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
@@ -426,7 +426,7 @@ public class GameTest {
                 // step 3 - choose cloud tiles
                 ArrayList<Students> clouds = game.getClouds();
 
-                Students students = null;
+                Students students;
                 do {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
@@ -792,7 +792,7 @@ public class GameTest {
             checkInvariant(game);
 
             // player2
-            Assistant assistant = null;
+            Assistant assistant;
             boolean assistant_already_played;
             int cnt = 0;
             do{
@@ -885,7 +885,7 @@ public class GameTest {
 
                 clouds.forEach((x) -> assertTrue(x.count() == 3 || x.count() == 0));
 
-                Students students = null;
+                Students students;
                 do {
                     students = clouds.get(rng.nextInt(clouds.size()));
                 } while (students.count() <= 0);
