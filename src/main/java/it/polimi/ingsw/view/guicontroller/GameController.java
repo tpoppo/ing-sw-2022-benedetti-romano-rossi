@@ -402,6 +402,7 @@ public class GameController implements GUIController {
 
                         ImageView studentImage = new ImageView("graphics/pieces/" + studentColor.toString().toLowerCase() + "_student.png");
                         studentImage = resizeImageView(studentImage, size, size);
+                        studentImage.setCursor(Cursor.HAND);
 
                         characterStuffSmall.getChildren().add(studentImage);
                     }
@@ -456,18 +457,10 @@ public class GameController implements GUIController {
 
             if (!gameHandler.isActionCompleted()) {
                 switch (gameHandler.getCurrentState()) {
-                    case CHOOSE_CLOUD -> {
-                        prepareChooseCloud();
-                    }
-                    case MOVE_MOTHER_NATURE -> {
-                        prepareMotherNature();
-                    }
-                    case MOVE_STUDENT -> {
-                        prepareMoveStudent();
-                    }
-                    case ACTIVATE_CHARACTER -> {
-                        prepareActivateCharacter();
-                    }
+                    case CHOOSE_CLOUD -> prepareChooseCloud();
+                    case MOVE_MOTHER_NATURE -> prepareMotherNature();
+                    case MOVE_STUDENT -> prepareMoveStudent();
+                    case ACTIVATE_CHARACTER -> prepareActivateCharacter();
                 }
             }
         }
@@ -900,18 +893,10 @@ public class GameController implements GUIController {
             if (!gameHandler.isActionCompleted()) {
                 switch (gameHandler.getCurrentState()) {
                     case PLAY_ASSISTANT -> action_text = "Play an assistant";
-                    case CHOOSE_CLOUD -> {
-                        action_text = "Choose a cloud";
-                    }
-                    case MOVE_MOTHER_NATURE -> {
-                        action_text = "Move mother nature";
-                    }
-                    case MOVE_STUDENT -> {
-                        action_text = "Move a student (" + gameHandler.getStudentMoves() + " left)";
-                    }
-                    case ACTIVATE_CHARACTER -> {
-                        action_text = "Activate a character";
-                    }
+                    case CHOOSE_CLOUD -> action_text = "Choose a cloud";
+                    case MOVE_MOTHER_NATURE -> action_text = "Move mother nature";
+                    case MOVE_STUDENT -> action_text = "Move a student (" + gameHandler.getStudentMoves() + " left)";
+                    case ACTIVATE_CHARACTER -> action_text = "Activate a character";
                 }
             } else {
                 action_text = "Pass";
