@@ -56,8 +56,6 @@ Extensive testing was performed on all parts of the software, both by writing un
 | Model      | Board                     | 130/144 (90%) |
 | Model      | Characters                | 205/219 (93%) |
 
-More info about the code coverage can be found in the [coverage report](./deliverables/CoverageReport/index.html).
-
 ## Compile
 
 To run the tests and compile the software:
