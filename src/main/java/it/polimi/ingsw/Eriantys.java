@@ -28,7 +28,7 @@ public class Eriantys {
                     default -> System.out.println("Invalid argument given: " + args[0]);
                 }
             } catch (IOException e){
-                System.out.println("Cannot connect with the server");
+                System.out.println("Cannot connect to server");
             }
         }
     }

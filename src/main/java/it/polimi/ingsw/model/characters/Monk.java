@@ -49,6 +49,12 @@ public class Monk extends Character{
         } catch (EmptyMovableException e) {  // not enough students on this card.
             throw new BadPlayerChoiceException();
         }
+
+        try {
+            Color bag_color = game.drawStudentFromBag();
+            character_students.put(bag_color, character_students.get(bag_color) + 1);
+        } catch (EmptyBagException ignored) {} // the bag is empty
+
         students = character_students;
         island.setStudents(island_students);
     }
