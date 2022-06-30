@@ -42,8 +42,6 @@ public class Bard extends Character{
             try {
                 entranceStudents.moveTo(diningStudents, swap_list.get(i));
                 diningStudents.moveTo(entranceStudents, swap_list.get(i + 1));
-                game.updateProfessor(game.getCurrentPlayer(), swap_list.get(i));
-
             } catch (EmptyMovableException e) {
                 throw new BadPlayerChoiceException();
             }
@@ -51,6 +49,10 @@ public class Bard extends Character{
 
         game.getCurrentPlayer().getSchoolBoard().setEntranceStudents(entranceStudents);
         game.getCurrentPlayer().getSchoolBoard().setDiningStudents(diningStudents);
+
+        for(int i=0; i<swap_list.size(); i+=2){
+            game.updateProfessor(game.getCurrentPlayer(), swap_list.get(i));
+        }
     }
 
     @Override
