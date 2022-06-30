@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.messages;
 import it.polimi.ingsw.controller.LobbyHandler;
 import it.polimi.ingsw.controller.LobbyPlayer;
 import it.polimi.ingsw.network.*;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.exceptions.FullLobbyException;
 
 import java.io.Serial;
@@ -33,8 +34,7 @@ public class CreateLobbyMessage extends ClientMessage {
             return StatusCode.WRONG_STATE;
         }
 
-        // We check whether max_players is 2 or 3?
-        if(max_players != 3 && max_players != 2) {
+        if(max_players < Constants.MIN_PLAYERS || max_players > Constants.MAX_PLAYERS) {
             menuManager.addErrorMessage(lobby_player, "Lobby size can be only 2 or 3! Given : " + max_players);
             return StatusCode.INVALID_ACTION;
         }
