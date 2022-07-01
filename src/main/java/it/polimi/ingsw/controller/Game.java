@@ -460,12 +460,6 @@ public class Game implements Serializable{
         }
         getCurrentPlayer().getSchoolBoard().setEntranceStudents(entrance_students);
         cloud.clear();
-
-        if(expert_mode){
-            for(Character character : characters){
-                character.deactivate(this);
-            }
-        }
     }
 
 
