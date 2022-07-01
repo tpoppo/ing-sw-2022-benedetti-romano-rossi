@@ -51,10 +51,10 @@ Extensive testing was performed on all parts of the software, both by writing un
 
 | Package    | Tested Class / Subpackage |   Coverage    |
 |:-----------|:--------------------------|:-------------:|
-| Controller | Game                      | 235/246 (95%) |
-| Model      | Global Package            | 359/394 (91%) |
+| Controller | Game                      | 231/242 (95%) |
+| Model      | Global Package            | 363/398 (91%) |
 | Model      | Board                     | 130/144 (90%) |
-| Model      | Characters                | 205/219 (93%) |
+| Model      | Characters                | 209/223 (93%) |
 
 ## Compile
 
