@@ -58,7 +58,7 @@ public class ConnectionCEO extends Thread {
                             .filter(player -> player.getUsername().equals(this.player.getUsername()))
                             .findFirst()
                             .ifPresent(player -> {
-                                this.player = player; // FIXME: is this ok?
+                                this.player = player;
 
                                 networkManager.subscribe(this);
                                 LOGGER.log(Level.INFO, "Player found and subscribed to networkManager {0}", networkManager);

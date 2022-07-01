@@ -140,6 +140,7 @@ public class GameController implements GUIController {
         if (view.getGameHandler().getModel().getExpertMode()) {
             setupNextTurnButton();
             setupCharacters();
+            showExpertModeComponents();
         } else {
             hideExpertModeComponents();
         }
@@ -211,7 +212,7 @@ public class GameController implements GUIController {
                     presentStudents.put(color, quantity);
             });
 
-            presentStudents.forEach((color, quantity) -> System.out.println(color + " " + quantity));
+            // presentStudents.forEach((color, quantity) -> System.out.println(color + " " + quantity));
 
             // adding towers
             int numTowers = island.getNumTowers();
@@ -219,18 +220,18 @@ public class GameController implements GUIController {
                 StackPane towerStackPane = new StackPane();
                 String towerColor = String.valueOf(playerTowerColorMap.get(island.getOwner())).toLowerCase();
 
-                ImageView towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
+                ImageView towerImage;
+
+                // if the demolisher is active, loads the broken version of the tower image
+                if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Demolisher)){
+                    towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + "_broken.png");
+                }else towerImage = new ImageView("graphics/pieces/towers/tower_" + towerColor + ".png");
+
                 towerImage = resizeImageView(towerImage, 35, 35);
                 towerImage.getStyleClass().add(PIECE_CLASS);
 
-                // if the demolisher is active, add a filter to the towers
-                if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Demolisher)){
-                    addLightEffect(towerImage);
-                }
-
                 Text towerNumber = new Text(String.valueOf(numTowers));
                 towerNumber.getStyleClass().add(BORDERED_TEXT);
-                // FIXME: resize text
 
                 towerStackPane.getChildren().add(towerImage);
                 towerStackPane.getChildren().add(towerNumber);
@@ -257,13 +258,16 @@ public class GameController implements GUIController {
                     studentImage = resizeImageView(studentImage, 30, 30);
                     studentImage.getStyleClass().add(PIECE_CLASS);
 
+                    // if colorblind character is active, make the inhibited students black and white
                     if(activeCharacter.isPresent() && (activeCharacter.get() instanceof Colorblind)){
-                        addLightEffect(studentImage);
+                        if(view.getGameHandler().getModel().getGameModifiers().getInhibitColor().equals(studentColor)) {
+                            studentImage.getStyleClass().remove(PIECE_CLASS);
+                            addBlackWhiteEffect(studentImage);
+                        }
                     }
 
                     Text studentNumber = new Text(String.valueOf(numStudents));
                     studentNumber.getStyleClass().add(BORDERED_TEXT);
-                    // FIXME: resize text
 
                     studentStackPane.setPrefSize(studentImage.getFitWidth(), studentImage.getFitHeight());
                     studentStackPane.getChildren().add(studentImage);
@@ -299,7 +303,7 @@ public class GameController implements GUIController {
                 double y = islandPane.getBoundsInParent().getHeight() / 2 - noEntryTilesPane.getBoundsInParent().getHeight() / 2;
 
                 noEntryTilesPane.setLayoutX(x);
-                noEntryTilesPane.setLayoutY(y + 60); // FIXME: check if this gets displayed correctly
+                noEntryTilesPane.setLayoutY(y + 60);
                 islandPane.getChildren().add(noEntryTilesPane);
             }
 
@@ -483,8 +487,10 @@ public class GameController implements GUIController {
         double islandX = 0;
         double islandY = 0;
 
-        System.out.println("center: " + centerX + " " + centerY);
-        System.out.println("island:" + islandX + " " + islandY);
+        /*
+            System.out.println("center: " + centerX + " " + centerY);
+            System.out.println("island:" + islandX + " " + islandY);
+         */
 
         motherNature.setLayoutX(lambda * centerX + (1-lambda) * islandX - motherNature.getBoundsInParent().getWidth()  / 2 + island.getBoundsInParent().getWidth() / 2);
         motherNature.setLayoutY(lambda * centerY + (1-lambda) * islandY - motherNature.getBoundsInParent().getHeight() / 2 + island.getBoundsInParent().getHeight() / 2);
@@ -996,6 +1002,15 @@ public class GameController implements GUIController {
     }
 
     /**
+     * It shows the components only used in the expert mode (characters, coins and next turn button).
+     */
+    private void showExpertModeComponents(){
+        charactersGrid.setVisible(true);
+        coinsPane.setVisible(true);
+        nextTurnButton.setVisible(true);
+    }
+
+    /**
      * It generates and initializes the schoolboard.
      */
     private void setupSchoolboard() {
@@ -1312,6 +1327,17 @@ public class GameController implements GUIController {
      */
     public void addLightEffect(Node node){
         node.setEffect(new ColorAdjust(0.0, 0.0, 0.5, 0.0));
+    }
+
+    /**
+     * It adds a black and white effect
+     * @param node target element
+     */
+    public void addBlackWhiteEffect(Node node) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setSaturation(-1);
+
+        node.setEffect(colorAdjust);
     }
 
     /**

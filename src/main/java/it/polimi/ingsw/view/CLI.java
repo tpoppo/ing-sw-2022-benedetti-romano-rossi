@@ -165,7 +165,6 @@ public class CLI {
                 }
 
                 this.view = client_socket.getView();
-                // FIXME: synchronized for view usage?
                 // if there's an error message, it overwrites the current one
                 if(view.getErrorMessage() != null)
                     this.errorMessage = view.getErrorMessage();
