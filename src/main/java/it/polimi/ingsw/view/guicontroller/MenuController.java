@@ -92,6 +92,7 @@ public class MenuController implements GUIController{
             alert.setTitle("Error");
             alert.setHeaderText("A player disconnected from the game");
             alert.show();
+            GUI.me.setup();
         }
 
         if(GUI.isCreatingLobby())

@@ -21,7 +21,7 @@ public class DemolisherTest {
      * Test that when the character Demolisher is activated towers do not count towards influence
      * @throws FullLobbyException if someone tries to join a lobby but the lobby has already three players
      * @throws EmptyBagException if someone tries to draw a student from the bag but the bag is empty
-     * @throws BadPlayerChoiceException if the choosen island is null
+     * @throws BadPlayerChoiceException if the chosen island is null
      */
     @Test
     public void Demolisher() throws FullLobbyException, EmptyBagException, BadPlayerChoiceException {

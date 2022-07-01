@@ -22,6 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
+    /**
+     * Check that the number of students is not negative
+     * @param students students to check
+     */
     void checkStudent(Students students){
         for(Color color : students.keySet()){
             assertTrue(students.get(color) >= 0);

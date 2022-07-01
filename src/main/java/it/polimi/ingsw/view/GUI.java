@@ -42,6 +42,11 @@ public class GUI extends Application {
     private static final String GAME = "/fxml/game.fxml";
 
     private final HashMap<Scene, GUIController> controllerMap = new HashMap<>();
+    public static GUI me;
+
+    public GUI(){
+        me = this;
+    }
 
     /**
      * It is used to start a new GUI
@@ -55,7 +60,7 @@ public class GUI extends Application {
     /**
      * It preloads the FXML scenes
      */
-    private void setup() {
+    public void setup() {
         List<String> fxmlList = new ArrayList<>(Arrays.asList(LOGIN, MENU, LOBBY, GAME));
         try {
             for (String path : fxmlList) {
