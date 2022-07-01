@@ -534,6 +534,12 @@ public class GameTest {
         }
     }
 
+    /**
+     * Check that after 8 rounds the clouds could not be filled
+     * @throws FullLobbyException should never happen
+     * @throws EmptyBagException should never happen
+     * @throws AssistantAlreadyPlayedException should never happen
+     */
     @RepeatedTest(100)
     public void PlanningPhaseException() throws FullLobbyException, EmptyBagException, AssistantAlreadyPlayedException {
         LobbyHandler lobby = new LobbyHandler(0, 3);
