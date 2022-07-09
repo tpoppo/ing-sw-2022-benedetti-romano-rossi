@@ -5,7 +5,9 @@ The "Prova Finale di Ingegneria del Software 2022" is the final test of the **So
 
 **Teacher**: Gianpaolo Cugola<br>
 **Group**: GC42<br>
-**AA.** 2021/22
+**AA:** 2021/22
+
+**Grade:** 30L
 
 ## Eriantys
 
